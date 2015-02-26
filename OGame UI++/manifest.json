@@ -1,0 +1,22 @@
+{
+   "content_scripts": [ {
+      "exclude_globs": [  ],
+      "exclude_matches": [  ],
+      "include_globs": [  ],
+      "js": [ "script.js" ],
+      "matches": [ "http://*.ogame.gameforge.com/game/*" ],
+      "run_at": "document_idle"
+   } ],
+   "converted_from_user_script": true,
+   "version": "1.2.7",
+   "name": "__MSG_appName__",
+   "description": "__MSG_appDesc__",
+   "default_locale": "en",
+   "manifest_version": 2,
+   "icons": {
+      "16": "metalmine.16.jpeg",
+      "48": "metalmine.48.jpeg",
+      "128": "metalmine.128.jpeg"
+   },
+   "author": "Eswak"
+}

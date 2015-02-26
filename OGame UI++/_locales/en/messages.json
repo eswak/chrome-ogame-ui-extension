@@ -1,0 +1,10 @@
+{
+  "appName": {
+    "message": "OGame UI++",
+    "description": "OGame UI++"
+  },
+  "appDesc": {
+    "message": "[EN][FR][ES] Improves the OGame interface by adding elements and menu entries.", 
+    "description":"[EN][FR][ES] Improves the OGame interface by adding elements and menu entries."
+  }
+}
