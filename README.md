@@ -2,6 +2,11 @@
 
 A Google Chrome extension (converted from user-script) that enhances the OGame interface by adding elements and menu entries.
 
+Available in-game languages :
+ - English
+ - French
+ - Spanish
+
 This extension improves the user interface by adding several features :
  - New tab : nearby idles (+ notes)
  - New tab : active neighbours (+ notes)
