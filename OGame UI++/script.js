@@ -1,8 +1,9 @@
 // ==UserScript==
+// @match http://*.ogame.gameforge.com/game/*
 // @match https://*.ogame.gameforge.com/game/*
 // @name OGame UI++
 // @author Eswak
-// @version 1.1.0
+// @version 1.3.0
 // @description	Améliore l'interface utilisateur d'OGame en y ajoutant des éléments.
 // @icon http://gf1.geo.gfsrv.net/cdn68/20da7e6c416e6cd5f8544a73f588e5.png
 // DESCRIPTION :
