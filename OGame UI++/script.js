@@ -1,5 +1,5 @@
 // ==UserScript==
-// @match http://*.ogame.gameforge.com/game/*
+// @match https://*.ogame.gameforge.com/game/*
 // @name OGame UI++
 // @author Eswak
 // @version 1.1.0
@@ -7,8 +7,8 @@
 // @icon http://gf1.geo.gfsrv.net/cdn68/20da7e6c416e6cd5f8544a73f588e5.png
 // DESCRIPTION :
 //  This userscript enhances the ogame UI to add some informations into it
-// HOW TO INSTALL (GOOGLE CHROME) : 
-//  Enable off-store extensions 
+// HOW TO INSTALL (GOOGLE CHROME) :
+//  Enable off-store extensions
 //  Browse to chrome://extensions
 //  Drop ogame.user.js file the webpage and click "accept"
 //  for more informations, google "how to install a userscript on [your browser]"
@@ -31,7 +31,7 @@
 var userscript = function() {
   // var
   var universe = $('[name="ogame-universe"]').attr('content');
-  var currentPlanet = $('[name="ogame-planet-coordinates"]').attr('content'); 
+  var currentPlanet = $('[name="ogame-planet-coordinates"]').attr('content');
   var serverLang = universe.split('-')[1].split('.')[0];
   var serverNum = universe.split('-')[0].replace('s', '');
   var playerName = $('[name="ogame-player-name"]').attr('content');
@@ -42,7 +42,7 @@ var userscript = function() {
 
   // gets config from local storage
   var config = getConfig() || {};
-  
+
   // translations
   var lang = (navigator.language || navigator.browserLanguage || 'en').substring(0,2);
   var traductions = {
@@ -194,11 +194,11 @@ var userscript = function() {
   $('#metal_box .value').append('<br><span class="enhancement storageleft">'+ prettyTime((resources.metal.max - resources.metal.now) / resources.metal.prod) + (prettyTime(resources.metal.max / resources.metal.prod).length > 0 ? ' (' + prettyTime(resources.metal.max / resources.metal.prod) + ')' : '') + '</span>');
   $('#crystal_box .value').append('<br><span class="enhancement storageleft">'+ prettyTime((resources.crystal.max - resources.crystal.now) / resources.crystal.prod) + (prettyTime(resources.crystal.max / resources.crystal.prod).length > 0 ? ' (' + prettyTime(resources.crystal.max / resources.crystal.prod) + ')' : '') + '</span>');
   $('#deuterium_box .value').append('<br><span class="enhancement storageleft">'+ prettyTime((resources.deuterium.max - resources.deuterium.now) / resources.deuterium.prod) + (prettyTime(resources.deuterium.max / resources.deuterium.prod).length > 0 ? ' (' + prettyTime(resources.deuterium.max / resources.deuterium.prod) + ')' : '') + '</span>');
-  
+
 
 
   setInterval(function() {
-  
+
     var times = {
       metal: 0,
       crystal: 0,
@@ -482,7 +482,7 @@ var userscript = function() {
     $('#contentWrapper').html(eventboxContent);
     $('#contentWrapper').append(wrapper);
   });
-  
+
   // Add a menu entry for statistics
   var statsSntry = $('<li class="stats enhanced"><span class="menu_icon"><div class="customMenuEntry2 menuImage empire"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">' + trad('MENU_STATS') + '</span></a></li>');
   $('#menuTable').append(statsSntry);
@@ -492,9 +492,9 @@ var userscript = function() {
     $('.menuImage.highlighted').removeClass('highlighted');
     $('.stats .menubutton').addClass('selected');
     $('.customMenuEntry2').addClass('highlighted');
-	
+
 	var wrapper = $('<div class="uiEnhancementWindow"></div>');
-	
+
 	var totalProd = {
 		metal: 0,
 		crystal: 0,
@@ -521,13 +521,13 @@ var userscript = function() {
 		totalProd.crystalLevel += (planet.resources.crystal.level || 0);
 		totalProd.deuteriumLevel += (planet.resources.deuterium.level || 0);
 		totalProd.planetCount++;
-		
+
 		wrapper.append(stats);
 	}
 	totalProd.metalLevel /= Object.keys(config.my.planets).length;
 	totalProd.crystalLevel /= Object.keys(config.my.planets).length;
 	totalProd.deuteriumLevel /= Object.keys(config.my.planets).length;
-	
+
 	// global stats
 	var stats = $('<div class="planetstats"></div>');
 	stats.append('<h3>' + trad('STATS_ALL') + '</h3>');
@@ -540,15 +540,15 @@ var userscript = function() {
 	stats.append($('<div>' + trad('STATS_RATIO') + trad('UNIT_DEUTERIUM') + ') : ' + Math.floor(100*totalProd.metal/totalProd.deuterium)/100 + ' / ' + Math.floor(100*totalProd.crystal/totalProd.deuterium)/100 + ' / 1</div>'));
 	stats.append($('<div class="spacer"></div>'));
 	//stats.append($('<div>Niveau moyen des mines : ' + Math.floor(10*totalProd.metalLevel)/10 + ' / ' + Math.floor(10*totalProd.crystalLevel)/10 + ' / ' + Math.floor(10*totalProd.deuteriumLevel)/10 + '</div>'));
-	
-	wrapper.prepend(stats);	
-		
+
+	wrapper.prepend(stats);
+
 	// insert html
     var eventboxContent = $('#eventboxContent');
     $('#contentWrapper').html(eventboxContent);
     $('#contentWrapper').append(wrapper);
   });
-  
+
   // Add a menu entry for neighbours
   var neighboursEntry = $('<li class="neighbours enhanced"><span class="menu_icon"><div class="customMenuEntry4 menuImage defense"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">' + trad('MENU_NEIGHBOURS_ACTIVE') + '</span></a></li>');
   $('#menuTable').append(neighboursEntry);
@@ -618,15 +618,15 @@ var userscript = function() {
     $('#contentWrapper').html(eventboxContent);
     $('#contentWrapper').append(wrapper);
   });
-  
+
   // Add a menu entry for fight simulator
   var statsSntry = $('<li class="sim enhanced"><span class="menu_icon"><div class="customMenuEntry3 menuImage fleet1"></div></span><a class="menubutton" href="http://websim.speedsim.net/" accesskey="" target="_blank"><span class="textlabel enhancement">' + trad('MENU_FIGHTSIM') + '</span></a></li>');
   $('#menuTable').append(statsSntry);
-  
+
   // Add a menu entry for war riders
   var warRidersEntry = $('<li class="sim enhanced"><span class="menu_icon"><div class="customMenuEntry3 menuImage fleet1"></div></span><a class="menubutton" href="http://www.war-riders.de/' + serverLang + '/' + serverNum + '/search/player/' + playerName + '" accesskey="" target="_blank"><span class="textlabel enhancement">WarRiders.de</span></a></li>');
   $('#menuTable').append(warRidersEntry);
-  
+
   window.spy = function(galaxy, system, position) {
     $.ajax('?page=minifleet&ajax=1', {
       data: {
@@ -715,11 +715,11 @@ var userscript = function() {
     ret += seconds + trad('TIME_SECOND') + ' ';
     return ret.trim();
   };
-  
+
   function prettyCount(count) {
 	return count.toString().dotify();
   };
-  
+
   String.prototype.dotify = function () {
 	return this.replace(/(^|[^\w.])(\d{4,})/g, function($0, $1, $2) {
 	  return $1 + $2.replace(/\d(?=(?:\d\d\d)+(?!\d))/g, '$&\.');
@@ -829,7 +829,7 @@ var userscript = function() {
     }
     return ret;
   }
-  
+
   function prettyNumber(num) {
     if (num > 1000000) {
       return Math.round(num*10/1000000)/10 + 'M'
@@ -839,7 +839,7 @@ var userscript = function() {
     }
     else return num;
   }
-  
+
   // refreshes the universe using the API once an hour
   if (!config.lastPlayersUpdate || config.lastPlayersUpdate < Date.now() - 3600000) {
     console.log('Mise à jour de la liste des joueurs...');
@@ -881,4 +881,3 @@ style.textContent += '.planetstats h3 { font-size: 1.2em; font-weight: bold; mar
 style.textContent += '.currentPlayer td { background: #444 !important; }';
 style.textContent += '.spacer { height: .3em }';
 (document.head || document.documentElement).appendChild(style);
-
