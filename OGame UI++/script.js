@@ -142,29 +142,31 @@ var userscript = function() {
       'STATS_FOR': 'Estadísticas para',
       'STATS_DAILY': 'Producción diaria',
       'STATS_RATIO': 'Ratio de producción (en comparación con'
-    }
+    }
   };
-  if (!traductions[lang]) lang = 'en';
+  if (!traductions[lang]) {
+    lang = 'en';
+  }
 
   // sets an empty resources object
   var resources = {
     metal: {
-    now: 0,
-    max: 0,
-    prod: 0,
-    worth: ((Math.min(tradeRate[0], tradeRate[1], tradeRate[2]) / tradeRate[0]) * Math.max(tradeRate[0], tradeRate[1], tradeRate[2]) * 100) / 100
+      now: 0,
+      max: 0,
+      prod: 0,
+      worth: ((Math.min(tradeRate[0], tradeRate[1], tradeRate[2]) / tradeRate[0]) * Math.max(tradeRate[0], tradeRate[1], tradeRate[2]) * 100) / 100
     },
     crystal: {
-    now: 0,
-    max: 0,
-    prod: 0,
-    worth: ((Math.min(tradeRate[0], tradeRate[1], tradeRate[2]) / tradeRate[1]) * Math.max(tradeRate[0], tradeRate[1], tradeRate[2]) * 100) / 100
+      now: 0,
+      max: 0,
+      prod: 0,
+      worth: ((Math.min(tradeRate[0], tradeRate[1], tradeRate[2]) / tradeRate[1]) * Math.max(tradeRate[0], tradeRate[1], tradeRate[2]) * 100) / 100
     },
     deuterium: {
-    now: 0,
-    max: 0,
-    prod: 0,
-    worth: ((Math.min(tradeRate[0], tradeRate[1], tradeRate[2]) / tradeRate[2]) * Math.max(tradeRate[0], tradeRate[1], tradeRate[2]) * 100) / 100
+      now: 0,
+      max: 0,
+      prod: 0,
+      worth: ((Math.min(tradeRate[0], tradeRate[1], tradeRate[2]) / tradeRate[2]) * Math.max(tradeRate[0], tradeRate[1], tradeRate[2]) * 100) / 100
     }
   };
 
@@ -290,7 +292,7 @@ var userscript = function() {
           metal: -1,
           crystal: -1,
           deuterium: -1
-        }
+        };
         availableIn.metal = Math.max(costs.metal - resources.metal.now, 0) / resources.metal.prod;
         availableIn.crystal = Math.max(costs.crystal - resources.crystal.now, 0) / resources.crystal.prod;
         availableIn.deuterium = Math.max(costs.deuterium - resources.deuterium.now, 0) / resources.deuterium.prod;
@@ -316,9 +318,9 @@ var userscript = function() {
       var maxCrystal = resources.crystal.now / costs.crystal;
       var maxDeuterium = resources.deuterium.now / costs.deuterium;
       var max = Math.floor(Math.min(maxMetal, maxCrystal, maxDeuterium));
-	  if (isFinite(max)) {
-		amount.append('<span class="enhancement"> (Max: ' + max + ')</span>');
-	  }
+      if (isFinite(max)) {
+        amount.append('<span class="enhancement"> (Max: ' + max + ')</span>');
+      }
       amount.addClass('enhanced');
     }
 
@@ -455,7 +457,9 @@ var userscript = function() {
     }
 
     //idles.sort(function(a, b){return Math.abs(a.coords[1]-myCoords[1])-Math.abs(b.coords[1]-myCoords[1])});
-    idles.sort(function(a, b){return a.position-b.position});
+    idles.sort(function(a, b) {
+      return a.position-b.position;
+    });
 
     var wrapper = $('<div class="uiEnhancementWindow"></div>');
     var table = $('<table><tr><th>' + trad('ECONOMY_SCORE') + '</th><th>' + trad('COORDINATES') + '</th><th>' + trad('PLAYER') + '</th><th>' + trad('NOTE') + '</th><th>' + trad('ACTIONS') + '</th></tr></table>');
@@ -466,11 +470,7 @@ var userscript = function() {
       el.append($('<td>' + idles[i].name + '</td>'));
       el.append($('<td width="100%"><input value="' + (config && config.planetNotes && config.planetNotes[idles[i].coords[0] + ':' + idles[i].coords[1] + ':' + idles[i].coords[2]] ? config.planetNotes[idles[i].coords[0] + ':' + idles[i].coords[1] + ':' + idles[i].coords[2]] : '') + '" onkeyup="editNote(' + idles[i].coords[0] + ',' + idles[i].coords[1] + ',' + idles[i].coords[2] + ',this.value);return false;" style="width:96.5%;" type="text"/></td>'));
       // sendShips(mission, galaxy, system, position, type, shipCount)
-      el.append($('<td>'
-        + '<a class="tooltip js_hideTipOnMobile espionage" title="" href="javascript:void(0);" onclick="spy(' + idles[i].coords[0] + ',' + idles[i].coords[1] + ',' + idles[i].coords[2] + ');return false;"><span class="icon icon_eye"></span></a>&nbsp;'
-        + '<a href="javascript:void(0);" onclick="toggleIgnorePlanet(' + idles[i].coords[0] + ',' + idles[i].coords[1] + ',' + idles[i].coords[2] + ')"><span class="icon icon_against"></span></a>&nbsp;'
-        + '<a href="?page=fleet1&galaxy=' + idles[i].coords[0] + '&system=' + idles[i].coords[1] + '&position=' + idles[i].coords[2] + '&type=1&mission=1" onclick="$(this).find(\'.icon\').removeClass(\'icon_fastforward\').addClass(\'icon_checkmark\');" target="_blank"><span class="icon icon_fastforward"></span></a>'
-        + '</td>'));
+      el.append($('<td><a class="tooltip js_hideTipOnMobile espionage" title="" href="javascript:void(0);" onclick="spy(' + idles[i].coords[0] + ',' + idles[i].coords[1] + ',' + idles[i].coords[2] + ');return false;"><span class="icon icon_eye"></span></a>&nbsp;<a href="javascript:void(0);" onclick="toggleIgnorePlanet(' + idles[i].coords[0] + ',' + idles[i].coords[1] + ',' + idles[i].coords[2] + ')"><span class="icon icon_against"></span></a>&nbsp;<a href="?page=fleet1&galaxy=' + idles[i].coords[0] + '&system=' + idles[i].coords[1] + '&position=' + idles[i].coords[2] + '&type=1&mission=1" onclick="$(this).find(\'.icon\').removeClass(\'icon_fastforward\').addClass(\'icon_checkmark\');" target="_blank"><span class="icon icon_fastforward"></span></a></td>'));
       if (config && config.ignoredPlanets && config.ignoredPlanets[idles[i].coords[0] + ':' + idles[i].coords[1] + ':'  + idles[i].coords[2]]) {
         el.addClass('ignore');
       }
@@ -494,57 +494,57 @@ var userscript = function() {
     $('.stats .menubutton').addClass('selected');
     $('.customMenuEntry2').addClass('highlighted');
 
-	var wrapper = $('<div class="uiEnhancementWindow"></div>');
+    var wrapper = $('<div class="uiEnhancementWindow"></div>');
 
-	var totalProd = {
-		metal: 0,
-		crystal: 0,
-		deuterium: 0,
-		metalLevel: 0,
-		crystalLevel: 0,
-		deuteriumLevel: 0,
-		planetCount: 0
-	};
-	for (var coords in config.my.planets) {
-		var planet = config.my.planets[coords];
-		var stats = $('<div class="planetstats"></div>');
-		stats.append('<h3>' + trad('STATS_FOR') + ' '+ planet.name + ' ' + coords + '</h3>');
-		stats.append($('<div>' + trad('STATS_DAILY') + ' (' + trad('UNIT_METAL') + ') : <span class="undermark">+'+ prettyCount(Math.floor(planet.resources.metal.prod*3600*24)) +'</span></div>'));
-		stats.append($('<div>' + trad('STATS_DAILY') + ' (' + trad('UNIT_CRYSTAL') + ') : <span class="undermark">+'+ prettyCount(Math.floor(planet.resources.crystal.prod*3600*24)) +'</span></div>'));
-		stats.append($('<div>' + trad('STATS_DAILY') + ' (' + trad('UNIT_DEUTERIUM') + ') : <span class="undermark">+'+ prettyCount(Math.floor(planet.resources.deuterium.prod*3600*24)) +'</span></div>'));
-		stats.append($('<div class="spacer"></div>'));
-		//stats.append($('<div>Niveau des mines : ' + planet.resources.metal.level + ' / ' + planet.resources.crystal.level + ' / ' + planet.resources.deuterium.level + '</div>'));
+    var totalProd = {
+      metal: 0,
+      crystal: 0,
+      deuterium: 0,
+      metalLevel: 0,
+      crystalLevel: 0,
+      deuteriumLevel: 0,
+      planetCount: 0
+    };
+    for (var coords in config.my.planets) {
+      var planet = config.my.planets[coords];
+      var stats = $('<div class="planetstats"></div>');
+      stats.append('<h3>' + trad('STATS_FOR') + ' '+ planet.name + ' ' + coords + '</h3>');
+      stats.append($('<div>' + trad('STATS_DAILY') + ' (' + trad('UNIT_METAL') + ') : <span class="undermark">+'+ prettyCount(Math.floor(planet.resources.metal.prod*3600*24)) +'</span></div>'));
+      stats.append($('<div>' + trad('STATS_DAILY') + ' (' + trad('UNIT_CRYSTAL') + ') : <span class="undermark">+'+ prettyCount(Math.floor(planet.resources.crystal.prod*3600*24)) +'</span></div>'));
+      stats.append($('<div>' + trad('STATS_DAILY') + ' (' + trad('UNIT_DEUTERIUM') + ') : <span class="undermark">+'+ prettyCount(Math.floor(planet.resources.deuterium.prod*3600*24)) +'</span></div>'));
+      stats.append($('<div class="spacer"></div>'));
+      //stats.append($('<div>Niveau des mines : ' + planet.resources.metal.level + ' / ' + planet.resources.crystal.level + ' / ' + planet.resources.deuterium.level + '</div>'));
 
-		totalProd.metal += planet.resources.metal.prod;
-		totalProd.crystal += planet.resources.crystal.prod;
-		totalProd.deuterium += planet.resources.deuterium.prod;
-		totalProd.metalLevel += (planet.resources.metal.level || 0);
-		totalProd.crystalLevel += (planet.resources.crystal.level || 0);
-		totalProd.deuteriumLevel += (planet.resources.deuterium.level || 0);
-		totalProd.planetCount++;
+      totalProd.metal += planet.resources.metal.prod;
+      totalProd.crystal += planet.resources.crystal.prod;
+      totalProd.deuterium += planet.resources.deuterium.prod;
+      totalProd.metalLevel += (planet.resources.metal.level || 0);
+      totalProd.crystalLevel += (planet.resources.crystal.level || 0);
+      totalProd.deuteriumLevel += (planet.resources.deuterium.level || 0);
+      totalProd.planetCount++;
 
-		wrapper.append(stats);
-	}
-	totalProd.metalLevel /= Object.keys(config.my.planets).length;
-	totalProd.crystalLevel /= Object.keys(config.my.planets).length;
-	totalProd.deuteriumLevel /= Object.keys(config.my.planets).length;
+      wrapper.append(stats);
+    }
+    totalProd.metalLevel /= Object.keys(config.my.planets).length;
+    totalProd.crystalLevel /= Object.keys(config.my.planets).length;
+    totalProd.deuteriumLevel /= Object.keys(config.my.planets).length;
 
-	// global stats
-	var stats = $('<div class="planetstats"></div>');
-	stats.append('<h3>' + trad('STATS_ALL') + '</h3>');
-	stats.append($('<div>' + trad('STATS_DAILY') + ' (' + trad('UNIT_METAL') + ') : <span class="undermark">+'+ prettyCount(Math.floor(totalProd.metal*3600*24)) +'</span></div>'));
-	stats.append($('<div>' + trad('STATS_DAILY') + ' (' + trad('UNIT_CRYSTAL') + ') : <span class="undermark">+'+ prettyCount(Math.floor(totalProd.crystal*3600*24)) +'</span></div>'));
-	stats.append($('<div>' + trad('STATS_DAILY') + ' (' + trad('UNIT_DEUTERIUM') + ') : <span class="undermark">+'+ prettyCount(Math.floor(totalProd.deuterium*3600*24)) +'</span></div>'));
-	stats.append($('<div class="spacer"></div>'));
-	stats.append($('<div>' + trad('STATS_RATIO') + trad('UNIT_METAL') + ') : 1 / ' + Math.floor(100*totalProd.crystal/totalProd.metal)/100 + ' / ' + Math.floor(100*totalProd.deuterium/totalProd.metal)/100 + '</div>'));
-	stats.append($('<div>' + trad('STATS_RATIO') + trad('UNIT_CRYSTAL') + ') : ' + Math.floor(100*totalProd.metal/totalProd.crystal)/100 + ' / 1 / ' + Math.floor(100*totalProd.deuterium/totalProd.crystal)/100 + '</div>'));
-	stats.append($('<div>' + trad('STATS_RATIO') + trad('UNIT_DEUTERIUM') + ') : ' + Math.floor(100*totalProd.metal/totalProd.deuterium)/100 + ' / ' + Math.floor(100*totalProd.crystal/totalProd.deuterium)/100 + ' / 1</div>'));
-	stats.append($('<div class="spacer"></div>'));
-	//stats.append($('<div>Niveau moyen des mines : ' + Math.floor(10*totalProd.metalLevel)/10 + ' / ' + Math.floor(10*totalProd.crystalLevel)/10 + ' / ' + Math.floor(10*totalProd.deuteriumLevel)/10 + '</div>'));
+    // global stats
+    var stats = $('<div class="planetstats"></div>');
+    stats.append('<h3>' + trad('STATS_ALL') + '</h3>');
+    stats.append($('<div>' + trad('STATS_DAILY') + ' (' + trad('UNIT_METAL') + ') : <span class="undermark">+'+ prettyCount(Math.floor(totalProd.metal*3600*24)) +'</span></div>'));
+    stats.append($('<div>' + trad('STATS_DAILY') + ' (' + trad('UNIT_CRYSTAL') + ') : <span class="undermark">+'+ prettyCount(Math.floor(totalProd.crystal*3600*24)) +'</span></div>'));
+    stats.append($('<div>' + trad('STATS_DAILY') + ' (' + trad('UNIT_DEUTERIUM') + ') : <span class="undermark">+'+ prettyCount(Math.floor(totalProd.deuterium*3600*24)) +'</span></div>'));
+    stats.append($('<div class="spacer"></div>'));
+    stats.append($('<div>' + trad('STATS_RATIO') + trad('UNIT_METAL') + ') : 1 / ' + Math.floor(100*totalProd.crystal/totalProd.metal)/100 + ' / ' + Math.floor(100*totalProd.deuterium/totalProd.metal)/100 + '</div>'));
+    stats.append($('<div>' + trad('STATS_RATIO') + trad('UNIT_CRYSTAL') + ') : ' + Math.floor(100*totalProd.metal/totalProd.crystal)/100 + ' / 1 / ' + Math.floor(100*totalProd.deuterium/totalProd.crystal)/100 + '</div>'));
+    stats.append($('<div>' + trad('STATS_RATIO') + trad('UNIT_DEUTERIUM') + ') : ' + Math.floor(100*totalProd.metal/totalProd.deuterium)/100 + ' / ' + Math.floor(100*totalProd.crystal/totalProd.deuterium)/100 + ' / 1</div>'));
+    stats.append($('<div class="spacer"></div>'));
+    //stats.append($('<div>Niveau moyen des mines : ' + Math.floor(10*totalProd.metalLevel)/10 + ' / ' + Math.floor(10*totalProd.crystalLevel)/10 + ' / ' + Math.floor(10*totalProd.deuteriumLevel)/10 + '</div>'));
 
-	wrapper.prepend(stats);
+    wrapper.prepend(stats);
 
-	// insert html
+    // insert html
     var eventboxContent = $('#eventboxContent');
     $('#contentWrapper').html(eventboxContent);
     $('#contentWrapper').append(wrapper);
@@ -568,8 +568,8 @@ var userscript = function() {
 
     var neighbours = [];
     for(var playerId in config.players) {
-    var player = config.players[playerId];
-	  if (player.status !== 'i' && player.status !== 'I') {
+      var player = config.players[playerId];
+      if (player.status !== 'i' && player.status !== 'I') {
         for (var i in player.planets) {
           var planet = player.planets[i];
           if (planet.coords[0] === myCoords[0] && Math.abs(planet.coords[1] - myCoords[1]) < 50) {
@@ -589,7 +589,9 @@ var userscript = function() {
     }
 
     //neighbours.sort(function(a, b){return Math.abs(a.coords[1]-myCoords[1])-Math.abs(b.coords[1]-myCoords[1])});
-    neighbours.sort(function(a, b){return b.militaryScore-a.militaryScore});
+    neighbours.sort(function(a, b) {
+      return b.militaryScore-a.militaryScore;
+    });
 
     var wrapper = $('<div class="uiEnhancementWindow"></div>');
     var table = $('<table><tr><th>' + trad('COORDINATES') + '</th><th>' + trad('ECONOMY_SCORE') + '</th><th>' + trad('MILITARY_SCORE') + '</th><th>' + trad('PLAYER') + '</th><th>' + trad('NOTE') + '</th><th>' + trad('ACTIONS') + '</th></tr></table>');
@@ -602,11 +604,7 @@ var userscript = function() {
       el.append($('<td class="tooltip js_hideTipOnMobile" title="' + neighbours[i].name + '">' + neighbours[i].name + '</td>'));
       el.append($('<td width="100%"><input value="' + (config && config.planetNotes && config.planetNotes[neighbours[i].coords[0] + ':' + neighbours[i].coords[1] + ':' + neighbours[i].coords[2]] ? config.planetNotes[neighbours[i].coords[0] + ':' + neighbours[i].coords[1] + ':' + neighbours[i].coords[2]] : '') + '" onkeyup="editNote(' + neighbours[i].coords[0] + ',' + neighbours[i].coords[1] + ',' + neighbours[i].coords[2] + ',this.value);return false;" style="width:96.5%;" type="text"/></td>'));
       // sendShips(mission, galaxy, system, position, type, shipCount)
-      el.append($('<td>'
-        + '<a espionage" href="javascript:void(0);" onclick="spy(' + neighbours[i].coords[0] + ',' + neighbours[i].coords[1] + ',' + neighbours[i].coords[2] + ');return false;"><span class="icon icon_eye"></span></a>&nbsp;'
-        + '<a href="javascript:void(0);" onclick="toggleIgnorePlanet(' + neighbours[i].coords[0] + ',' + neighbours[i].coords[1] + ',' + neighbours[i].coords[2] + ')"><span class="icon icon_against"></span></a>&nbsp;'
-        + '<a href="?page=fleet1&galaxy=' + neighbours[i].coords[0] + '&system=' + neighbours[i].coords[1] + '&position=' + neighbours[i].coords[2] + '&type=1&mission=1" onclick="$(this).find(\'.icon\').removeClass(\'icon_fastforward\').addClass(\'icon_checkmark\');" target="_blank"><span class="icon icon_fastforward"></span></a>'
-        + '</td>'));
+      el.append($('<td> <a espionage" href="javascript:void(0);" onclick="spy(' + neighbours[i].coords[0] + ',' + neighbours[i].coords[1] + ',' + neighbours[i].coords[2] + ');return false;"><span class="icon icon_eye"></span></a>&nbsp;<a href="javascript:void(0);" onclick="toggleIgnorePlanet(' + neighbours[i].coords[0] + ',' + neighbours[i].coords[1] + ',' + neighbours[i].coords[2] + ')"><span class="icon icon_against"></span></a>&nbsp; <a href="?page=fleet1&galaxy=' + neighbours[i].coords[0] + '&system=' + neighbours[i].coords[1] + '&position=' + neighbours[i].coords[2] + '&type=1&mission=1" onclick="$(this).find(\'.icon\').removeClass(\'icon_fastforward\').addClass(\'icon_checkmark\');" target="_blank"><span class="icon icon_fastforward"></span></a> </td>'));
       if (config && config.ignoredPlanets && config.ignoredPlanets[neighbours[i].coords[0] + ':' + neighbours[i].coords[1] + ':'  + neighbours[i].coords[2]]) {
         el.addClass('ignore');
       }
@@ -651,7 +649,7 @@ var userscript = function() {
   };
 
   window.toggleIgnorePlanet = function(galaxy, system, position) {
-    config.ignoredPlanets = config.ignoredPlanets || {};
+    config.ignoredPlanets = config.ignoredPlanets || {};
     var key = galaxy + ':' + system + ':'  +position;
     var el = $('#planet_' + galaxy + '_' + system + '_'  +position);
     if (config.ignoredPlanets[key]) {
@@ -666,7 +664,7 @@ var userscript = function() {
   };
 
   window.editNote = function(galaxy, system, position, text) {
-    config.planetNotes = config.planetNotes || {};
+    config.planetNotes = config.planetNotes || {};
     var key = galaxy + ':' + system + ':'  +position;
     config.planetNotes[key] = text;
     saveConfig(config);
@@ -689,7 +687,9 @@ var userscript = function() {
 
   // util functions
   function prettyTime(seconds) {
-    if (seconds <= 0 || isNaN(seconds) || !isFinite(seconds)) return '';
+    if (seconds <= 0 || isNaN(seconds) || !isFinite(seconds)) {
+      return '';
+    }
     seconds = Math.floor(seconds);
     var ret = '';
     var units = 0;
@@ -715,17 +715,17 @@ var userscript = function() {
     }
     ret += seconds + trad('TIME_SECOND') + ' ';
     return ret.trim();
-  };
+  }
 
   function prettyCount(count) {
-	return count.toString().dotify();
-  };
-
-  String.prototype.dotify = function () {
-	return this.replace(/(^|[^\w.])(\d{4,})/g, function($0, $1, $2) {
-	  return $1 + $2.replace(/\d(?=(?:\d\d\d)+(?!\d))/g, '$&\.');
-	});
+    return count.toString().dotify();
   }
+
+  String.prototype.dotify = function dotify() {
+    return this.replace(/(^|[^\w.])(\d{4,})/g, function($0, $1, $2) {
+      return $1 + $2.replace(/\d(?=(?:\d\d\d)+(?!\d))/g, '$&\.');
+    });
+  };
 
   function getConfig() {
     if(typeof(Storage) !== 'undefined') {
@@ -733,13 +733,13 @@ var userscript = function() {
     } else {
       return null;
     }
-  };
+  }
 
   function saveConfig(config) {
     if(typeof(Storage) !== 'undefined') {
       localStorage.setItem('og-enhancements', JSON.stringify(config));
     }
-  };
+  }
 
   function loadUniverseApi(cb) {
     $.ajax({
@@ -794,26 +794,26 @@ var userscript = function() {
                     players[id].economyScore = score;
                   }
                 });
-				$.ajax({
-				  url: '/api/highscore.xml?category=1&type=3',
-				  dataType: 'xml',
-				  success: function(data) {
-					var position, id, score, ships, el;
-					$('player', data).each(function() {
-					  el = $(this);
-					  position = el.attr('position');
-					  id = el.attr('id');
-					  score = el.attr('score');
-					  ships = el.attr('ships');
-					  if (players[id]) {
-						players[id].militaryPosition = position;
-						players[id].militaryScore = score;
-						players[id].ships = ships;
-					  }
-					});
-					cb && cb(players);
-				  }
-				});
+                $.ajax({
+                  url: '/api/highscore.xml?category=1&type=3',
+                  dataType: 'xml',
+                  success: function(data) {
+                    var position, id, score, ships, el;
+                    $('player', data).each(function() {
+                      el = $(this);
+                      position = el.attr('position');
+                      id = el.attr('id');
+                      score = el.attr('score');
+                      ships = el.attr('ships');
+                      if (players[id]) {
+                        players[id].militaryPosition = position;
+                        players[id].militaryScore = score;
+                        players[id].ships = ships;
+                      }
+                    });
+                    cb && cb(players);
+                  }
+                });
               }
             });
           }
@@ -849,7 +849,7 @@ var userscript = function() {
       config.players = players;
       config.lastPlayersUpdate = Date.now();
       saveConfig(config);
-	  console.log('players', players);
+      console.log('players', players);
     });
   }
 };
