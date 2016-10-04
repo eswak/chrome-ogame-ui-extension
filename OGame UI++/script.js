@@ -467,7 +467,7 @@ var userscript = function() {
     // keeps player coordinates
     var myCoords = new Array(3);
 
-    // finds nearby idles by checking whether player is newbie or not
+    // finds nearby players by checking whether player is newbie or not
     if($('.planetlink.active').length > 0)
       myCoords = $('.planetlink.active').find('.planet-koords').text().replace('[', '').replace(']', '').split(':');
     else
@@ -599,9 +599,15 @@ var userscript = function() {
     $('.neighbours .menubutton').addClass('selected');
     $('.customMenuEntry4').addClass('highlighted');
 
-    // finds nearby idle players
-    
-    var myCoords = $('.planetlink.active').find('.planet-koords').text().replace('[', '').replace(']', '').split(':');
+    // keeps player coordinates
+    var myCoords = new Array(3);
+
+    // finds nearby players by checking whether player is newbie or not
+    if($('.planetlink.active').length > 0)
+      myCoords = $('.planetlink.active').find('.planet-koords').text().replace('[', '').replace(']', '').split(':');
+    else
+      myCoords = $('.planetlink').find('.planet-koords').text().replace('[', '').replace(']', '').split(':');
+
     myCoords[0] = parseInt(myCoords[0]);
     myCoords[1] = parseInt(myCoords[1]);
     myCoords[2] = parseInt(myCoords[2]);
