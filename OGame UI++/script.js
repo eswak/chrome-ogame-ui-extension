@@ -142,7 +142,39 @@ var userscript = function() {
       'STATS_FOR': 'Estadísticas para',
       'STATS_DAILY': 'Producción diaria',
       'STATS_RATIO': 'Relación de producción (en comparación con'
-    }
+    },
+    'tr': {
+      'UNIT_METAL': 'Metal',
+      'UNIT_CRYSTAL': 'Kristal',
+      'UNIT_DEUTERIUM': 'Deuterium',
+      'UNIT_ENERGY': 'Enerji',
+      'TIME_SECOND': 'sn',
+      'TIME_MINUTE': 'd',
+      'TIME_HOUR': 's',
+      'TIME_DAY': 'g',
+      'ECONOMY_TIME': 'Gereken kaynak toplama zamanı (Tüccar ile): {time}',
+      'BUILDABLE_IN': 'Kurmak için gereken süre: {time}',
+      'BUILDABLE_NOW': 'Şu anda kurulabilir!',
+      'ROI': 'Yatırım dönüşü: {time} - Tüccar ile: {tradeRate}',
+      'ECONOMY_SCORE': 'Eko',
+      'ECONOMY_SCORE_LONG': 'Madene harcanan puan toplamı : {scoreEco}',
+      'MILITARY_SCORE': 'Askeri',
+      'MILITARY_SCORE_LONG': '{scoreMilitary} askeri puan ({ships} gemi)',
+      'COORDINATES': 'Pozisyon',
+      'PLAYER': 'Oyuncu',
+      'NOTE': 'Not',
+      'ACTIONS': 'Aksiyonlar',
+      'PLANET_DEFENDED': 'Gezegen korundu',
+      'PLANET_NEEDSPY': 'Casus raporu eksik',
+      'MENU_NEIGHBOURS_ACTIVE': 'Aktif Komşular',
+      'MENU_NEIGHBOURS_INACTIVE': 'İnaktif Komşular',
+      'MENU_STATS': 'İstatistik',
+      'MENU_FIGHTSIM': 'Savaş Simulatörü',
+      'STATS_ALL': 'İstatistik (Tümü)',
+      'STATS_FOR': 'İstatistik Bul',
+      'STATS_DAILY': 'Günlük Üretim',
+      'STATS_RATIO': 'Üretim Oranı (İlişki: '
+    },
   };
   if (!traductions[lang]) {
     lang = 'en';
@@ -568,6 +600,7 @@ var userscript = function() {
     $('.customMenuEntry4').addClass('highlighted');
 
     // finds nearby idle players
+    
     var myCoords = $('.planetlink.active').find('.planet-koords').text().replace('[', '').replace(']', '').split(':');
     myCoords[0] = parseInt(myCoords[0]);
     myCoords[1] = parseInt(myCoords[1]);
