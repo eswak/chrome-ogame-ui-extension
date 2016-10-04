@@ -149,7 +149,7 @@ var userscript = function() {
       'UNIT_DEUTERIUM': 'Deuterium',
       'UNIT_ENERGY': 'Enerji',
       'TIME_SECOND': 'sn',
-      'TIME_MINUTE': 'd',
+      'TIME_MINUTE': 'dk',
       'TIME_HOUR': 's',
       'TIME_DAY': 'g',
       'ECONOMY_TIME': 'Gereken kaynak toplama zamanı (Tüccar ile): {time}',
