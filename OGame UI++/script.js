@@ -171,7 +171,7 @@ var userscript = function() {
       'MENU_STATS': 'İstatistik',
       'MENU_FIGHTSIM': 'Savaş Simulatörü',
       'STATS_ALL': 'İstatistik (Tümü)',
-      'STATS_FOR': 'İstatistik Bul',
+      'STATS_FOR': 'İstatistik - ',
       'STATS_DAILY': 'Günlük Üretim',
       'STATS_RATIO': 'Üretim Oranı (İlişki: '
     },
@@ -718,16 +718,29 @@ var userscript = function() {
 
   if (!config.my) { config.my = {}; }
   if (!config.my.planets) { config.my.planets = {}; }
-  $('#planetList').children().each(function() {
-    var link = $(this).find('.planetlink');
+  
+  if($('#planetList').children().length==1){
+    var link = $($('#planetList').children()[0]).find('.planetlink');
     var planetName = link.find('.planet-name').text();
     var planetCoords = link.find('.planet-koords').text();
-    if (link.hasClass('active')) {
+    
       config.my.planets[planetCoords] = {};
       config.my.planets[planetCoords].name = planetName;
       config.my.planets[planetCoords].resources = resources;
-    }
-  });
+ }
+ else{
+    $('#planetList').children().each(function() {
+      var link = $(this).find('.planetlink');
+      var planetName = link.find('.planet-name').text();
+      var planetCoords = link.find('.planet-koords').text();
+      if (link.hasClass('active')) {
+        config.my.planets[planetCoords] = {};
+        config.my.planets[planetCoords].name = planetName;
+        config.my.planets[planetCoords].resources = resources;
+      }
+    });
+  }
+
   saveConfig(config);
   console.log('config.my', config.my);
 
