@@ -4,7 +4,7 @@
 // @name OGame UI++
 // @author Eswak
 // @version 1.3.0
-// @description	Améliore l'interface utilisateur d'OGame en y ajoutant des éléments.
+// @description Améliore l'interface utilisateur d'OGame en y ajoutant des éléments.
 // @icon http://gf1.geo.gfsrv.net/cdn68/20da7e6c416e6cd5f8544a73f588e5.png
 // DESCRIPTION :
 //  This userscript enhances the ogame UI to add some informations into it
@@ -432,8 +432,15 @@ var userscript = function() {
     $('.idles .menubutton').addClass('selected');
     $('.customMenuEntry').addClass('highlighted');
 
-    // finds nearby idle players
-    var myCoords = $('.planetlink.active').find('.planet-koords').text().replace('[', '').replace(']', '').split(':');
+    // keeps player coordinates
+    var myCoords = new Array(3);
+
+    // finds nearby idles by checking whether player is newbie or not
+    if($('.planetlink.active').length > 0)
+      myCoords = $('.planetlink.active').find('.planet-koords').text().replace('[', '').replace(']', '').split(':');
+    else
+      myCoords = $('.planetlink').find('.planet-koords').text().replace('[', '').replace(']', '').split(':');
+
     myCoords[0] = parseInt(myCoords[0]);
     myCoords[1] = parseInt(myCoords[1]);
     myCoords[2] = parseInt(myCoords[2]);
