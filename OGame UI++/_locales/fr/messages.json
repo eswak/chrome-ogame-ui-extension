@@ -4,7 +4,7 @@
     "description": "OGame UI++"
   },
   "appDesc": {
-    "message": "[FR][EN][ES] Améliore l'interface d'OGame en ajoutant des éléments à l'interface et en rajoutant des onglets dans le menu.", 
-    "description":"[FR][EN][ES] Améliore l'interface d'OGame en ajoutant des éléments à l'interface et en rajoutant des onglets dans le menu."
+    "message": "[FR][EN][ES][TR] Améliore l'interface d'OGame en ajoutant des éléments à l'interface et en rajoutant des onglets dans le menu.",
+    "description":"[FR][EN][ES][TR] Améliore l'interface d'OGame en ajoutant des éléments à l'interface et en rajoutant des onglets dans le menu."
   }
 }
