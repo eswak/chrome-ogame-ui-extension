@@ -77,7 +77,8 @@ var userscript = function() {
       'STATS_ALL': 'Statistiques pour toutes les planètes',
       'STATS_FOR': 'Statistiques pour',
       'STATS_DAILY': 'Production journalière',
-      'STATS_RATIO': 'Ratio de production (rapport au '
+      'STATS_RATIO': 'Ratio de production (rapport au ',
+      'RESET_STATS': 'Réinitialiser les statistiques'
     },
     'en': {
       'UNIT_METAL': 'Metal',
@@ -109,7 +110,8 @@ var userscript = function() {
       'STATS_ALL': 'Statistics for all planets',
       'STATS_FOR': 'Statistics for',
       'STATS_DAILY': 'Daily production',
-      'STATS_RATIO': 'Production ratio (relative to '
+      'STATS_RATIO': 'Production ratio (relative to ',
+      'RESET_STATS': 'Reset stats'
     },
     'es': {
       'UNIT_METAL': 'Metal',
@@ -141,7 +143,8 @@ var userscript = function() {
       'STATS_ALL ': 'Estadísticas para todos los planetas',
       'STATS_FOR': 'Estadísticas para',
       'STATS_DAILY': 'Producción diaria',
-      'STATS_RATIO': 'Relación de producción (en comparación con'
+      'STATS_RATIO': 'Relación de producción (en comparación con',
+      'RESET_STATS': 'Restaurar estadísticas'
     },
     'tr': {
       'UNIT_METAL': 'Metal',
@@ -173,7 +176,8 @@ var userscript = function() {
       'STATS_ALL': 'İstatistik (Tümü)',
       'STATS_FOR': 'İstatistik - ',
       'STATS_DAILY': 'Günlük Üretim',
-      'STATS_RATIO': 'Üretim Oranı (İlişki: '
+      'STATS_RATIO': 'Üretim Oranı (İlişki: ',
+      'RESET_STATS': 'Sıfırlama istatistikler'
     },
   };
   if (!traductions[lang]) {
@@ -480,7 +484,7 @@ var userscript = function() {
     var idles = [];
     for(var playerId in config.players) {
       var player = config.players[playerId];
-      if (player.status === 'i' || player.status === 'I') {
+      if (player.status === 'i' || player.status === 'I') {
         for (var i in player.planets) {
           var planet = player.planets[i];
           if (planet.coords[0] === myCoords[0] && Math.abs(planet.coords[1] - myCoords[1]) < 100) {
@@ -582,6 +586,15 @@ var userscript = function() {
     //stats.append($('<div>Niveau moyen des mines : ' + Math.floor(10*totalProd.metalLevel)/10 + ' / ' + Math.floor(10*totalProd.crystalLevel)/10 + ' / ' + Math.floor(10*totalProd.deuteriumLevel)/10 + '</div>'));
 
     wrapper.prepend(stats);
+
+    // add reset button
+    var resetStatsButton = $('<div style="text-align: right;padding-right: .5em;"><a href="#" class="btn_blue">' + trad('RESET_STATS') + '</a></div>');
+    wrapper.append(resetStatsButton);
+    resetStatsButton.click(function () {
+      delete config.my.planets;
+      saveConfig(config);
+      window.location.reload();
+    });
 
     // insert html
     var eventboxContent = $('#eventboxContent');
@@ -718,12 +731,12 @@ var userscript = function() {
 
   if (!config.my) { config.my = {}; }
   if (!config.my.planets) { config.my.planets = {}; }
-  
+
   if($('#planetList').children().length==1){
     var link = $($('#planetList').children()[0]).find('.planetlink');
     var planetName = link.find('.planet-name').text();
     var planetCoords = link.find('.planet-koords').text();
-    
+
       config.my.planets[planetCoords] = {};
       config.my.planets[planetCoords].name = planetName;
       config.my.planets[planetCoords].resources = resources;
