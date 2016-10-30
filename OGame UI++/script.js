@@ -505,7 +505,7 @@ var userscript = function() {
     for (var i = 0; i < idles.length; i++) {
       var el = $('<tr id="planet_' + idles[i].coords[0] + '_' + idles[i].coords[1] + '_' + idles[i].coords[2] + '"></tr>');
       el.append($('<td><a href="?page=highscore&searchRelId=' + idles[i].id + '&category=1&type=1">' + idles[i].position + '</a></td>'));
-      el.append($('<td><a href="javascript:showGalaxy(' + idles[i].coords[0] + ',' + idles[i].coords[1] + ',' + idles[i].coords[2] + ')">[' + idles[i].coords[0] + ':' + idles[i].coords[1] + ':' + idles[i].coords[2] + ']</a></td>'));
+      el.append($('<td><a href="/game/index.php?page=galaxy&galaxy='+ idles[i].coords[0] +'&system='+ idles[i].coords[1] +'&position='+ idles[i].coords[2] +'">[' + idles[i].coords[0] + ':' + idles[i].coords[1] + ':' + idles[i].coords[2] + ']</a></td>'));
       el.append($('<td>' + idles[i].name + '</td>'));
       el.append($('<td width="100%"><input value="' + (config && config.planetNotes && config.planetNotes[idles[i].coords[0] + ':' + idles[i].coords[1] + ':' + idles[i].coords[2]] ? config.planetNotes[idles[i].coords[0] + ':' + idles[i].coords[1] + ':' + idles[i].coords[2]] : '') + '" onkeyup="editNote(' + idles[i].coords[0] + ',' + idles[i].coords[1] + ',' + idles[i].coords[2] + ',this.value);return false;" style="width:96.5%;" type="text"/></td>'));
       // sendShips(mission, galaxy, system, position, type, shipCount)
@@ -644,7 +644,7 @@ var userscript = function() {
     var playerName = $('#playerName .textBeefy').text().trim();
     for (var i = 0; i < neighbours.length; i++) {
       var el = $('<tr class="'+(playerName === neighbours[i].name ? 'currentPlayer' : '')+'" id="planet_' + neighbours[i].coords[0] + '_' + neighbours[i].coords[1] + '_' + neighbours[i].coords[2] + '"></tr>');
-      el.append($('<td><a href="javascript:showGalaxy(' + neighbours[i].coords[0] + ',' + neighbours[i].coords[1] + ',' + neighbours[i].coords[2] + ')">[' + neighbours[i].coords[0] + ':' + neighbours[i].coords[1] + ':' + neighbours[i].coords[2] + ']</a></td>'));
+      el.append($('<td><a href="/game/index.php?page=galaxy&galaxy='+ neighbours[i].coords[0] +'&system='+ neighbours[i].coords[1] +'&position='+ neighbours[i].coords[2] +'">[' + neighbours[i].coords[0] + ':' + neighbours[i].coords[1] + ':' + neighbours[i].coords[2] + ']</a></td>'));
       el.append($('<td class="tooltip js_hideTipOnMobile" title="' + trad('ECONOMY_SCORE_LONG', { noBold: true, scoreEco: neighbours[i].economyScore }) + '"><a href="?page=highscore&searchRelId=' + neighbours[i].id + '&category=1&type=1">' + prettyNumber(neighbours[i].economyScore) + '</a></td>'));
       el.append($('<td class="tooltip js_hideTipOnMobile" title="' + trad('MILITARY_SCORE_LONG', { noBold: true, scoreMilitary: neighbours[i].militaryScore, ships: (neighbours[i].ships ? neighbours[i].ships : '0') }) + '"><a href="?page=highscore&searchRelId=' + neighbours[i].id + '&category=1&type=3">' + prettyNumber(neighbours[i].militaryScore) + ' (' + prettyNumber(neighbours[i].ships ? neighbours[i].ships : '0') + ')</a></td>'));
       el.append($('<td class="tooltip js_hideTipOnMobile" title="' + neighbours[i].name + '">' + neighbours[i].name + '</td>'));
@@ -665,7 +665,7 @@ var userscript = function() {
   });
 
   // Add a menu entry for fight simulator
-  var statsSntry = $('<li class="sim enhanced"><span class="menu_icon"><div class="customMenuEntry3 menuImage fleet1"></div></span><a class="menubutton" href="http://websim.speedsim.net/" accesskey="" target="_blank"><span class="textlabel enhancement">' + trad('MENU_FIGHTSIM') + '</span></a></li>');
+  var statsSntry = $('<li class="sim enhanced"><span class="menu_icon"><div class="customMenuEntry3 menuImage fleet1"></div></span><a class="menubutton" href="https://trashsim.universeview.be/" accesskey="" target="_blank"><span class="textlabel enhancement">' + trad('MENU_FIGHTSIM') + '</span></a></li>');
   $('#menuTable').append(statsSntry);
 
   // Add a menu entry for war riders
