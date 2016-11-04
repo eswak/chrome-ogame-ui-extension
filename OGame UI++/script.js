@@ -956,25 +956,32 @@ var userscript = function() {
 	  // If we are on the galaxy view.
 
   if(window.location.href.indexOf("galaxy") > -1) {
-  	$(window).bind("load", function() {
-  		console.log("im here");
-		$(".playername").mouseenter(function(){
-			console.log("DOING");
-			if($(this).attr("added") !== "1"){
-				$(this).attr("added","1");
-				var id = $(this).find('a').first().attr('rel');
-				if (id){
-					var id_filtered = id.replace('player','');
-					var planets = config.players[id_filtered].planets;
-					var string = ""
-					for (var i = 0; i < planets.length; i++){
-						string = string+'<td><a href="/game/index.php?page=galaxy&galaxy='+ planets[i].coords[0] +'&system='+ planets[i].coords[1] +'&position='+ planets[i].coords[2] +'">[' + planets[i].coords[0] + ':' + planets[i].coords[1] + ':' + planets[i].coords[2] + ']</a></td><br>'
+  	//window.location.reload();
+  	 var interval = setInterval(function() {
+	   if ($(".playername").length) {
+	   	console.log($(".playername").length);
+		  $(".playername").mouseenter(function(){
+				if($(this).attr("added") !== "1"){
+					$(this).attr("added","1");
+					var id = $(this).find('a').first().attr('rel');
+					if (id){
+						var id_filtered = id.replace('player','');
+						var planets = config.players[id_filtered].planets;
+						console.log(planets);
+						var string = ""
+						for (var i = 0; i < planets.length; i++){
+							string = string+'<td><a href="/game/index.php?page=galaxy&galaxy='+ planets[i].coords[0] +'&system='+ planets[i].coords[1] +'&position='+ planets[i].coords[2] +'">[' + planets[i].coords[0] + ':' + planets[i].coords[1] + ':' + planets[i].coords[2] + ']</a></td><br>'
+						}
+						$('#'+id).append(string);
 					}
-					$('#'+id).append(string);
 				}
-			}
-		});
-	});
+			});
+		  clearTimeout(interval);
+		}
+	   
+	}, 100); // check every 100ms
+  		
+
   }
 };
 
