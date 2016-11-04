@@ -628,7 +628,7 @@ var userscript = function() {
     var neighbours = [];
     for(var playerId in config.players) {
       var player = config.players[playerId];
-      if (player.status !== 'i' && player.status !== 'I') {
+      if (!player.status || !/[iv]/i.test(player.status)) {
         for (var i in player.planets) {
           var planet = player.planets[i];
           if (planet.coords[0] === myCoords[0] && Math.abs(planet.coords[1] - myCoords[1]) < 50) {
