@@ -812,6 +812,35 @@ var userscript = function() {
       localStorage.setItem('og-enhancements', JSON.stringify(config));
     }
   }
+  
+  window.getAllPlanets = function(player_id){
+  	$.ajax({
+      url : '/api/playerData.xml?id='+player_id,
+      dataType: 'xml',
+      success: function(data) {
+      	var player = player_id;
+      	if(config.players[player]){
+      		config.players[player].planets = [];
+      	}
+        $('planet', data).each(function() {
+              el = $(this);
+              name = el.attr('name');
+              coords = el.attr('coords').split(':');
+              coords[0] = parseInt(coords[0]);
+              coords[1] = parseInt(coords[1]);
+              coords[2] = parseInt(coords[2]);
+              if (config.players[player]) {
+                  config.players[player].planets.push({
+                  name: name,
+                  coords: coords
+                });
+              }
+         });
+        saveConfig(config);
+       	return config.players[player].planets;
+    	}
+	});
+  }
 
   function loadUniverseApi(cb) {
     $.ajax({
@@ -924,7 +953,31 @@ var userscript = function() {
       console.log('players', players);
     });
   }
+	  // If we are on the galaxy view.
+
+  if(window.location.href.indexOf("galaxy") > -1) {
+  	$(window).bind("load", function() {
+  		console.log("im here");
+		$(".playername").mouseenter(function(){
+			console.log("DOING");
+			if($(this).attr("added") !== "1"){
+				$(this).attr("added","1");
+				var id = $(this).find('a').first().attr('rel');
+				if (id){
+					var id_filtered = id.replace('player','');
+					var planets = config.players[id_filtered].planets;
+					var string = ""
+					for (var i = 0; i < planets.length; i++){
+						string = string+'<td><a href="/game/index.php?page=galaxy&galaxy='+ planets[i].coords[0] +'&system='+ planets[i].coords[1] +'&position='+ planets[i].coords[2] +'">[' + planets[i].coords[0] + ':' + planets[i].coords[1] + ':' + planets[i].coords[2] + ']</a></td><br>'
+					}
+					$('#'+id).append(string);
+				}
+			}
+		});
+	});
+  }
 };
+
 
 // inject user script into the document
 var script = document.createElement('script');
