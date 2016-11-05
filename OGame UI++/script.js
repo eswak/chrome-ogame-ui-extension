@@ -955,9 +955,8 @@ var userscript = function() {
   }
 	  // If we are on the galaxy view.
 
-  if(window.location.href.indexOf("galaxy") > -1) {
-  	//window.location.reload();
-  	 var interval = setInterval(function() {
+   window.setAllPlanets = function(){
+   	var interval = setInterval(function() {
 	   if ($(".playername").length) {
 	   	console.log($(".playername").length);
 		  $(".playername").mouseenter(function(){
@@ -970,7 +969,8 @@ var userscript = function() {
 						console.log(planets);
 						var string = ""
 						for (var i = 0; i < planets.length; i++){
-							string = string+'<td><a href="/game/index.php?page=galaxy&galaxy='+ planets[i].coords[0] +'&system='+ planets[i].coords[1] +'&position='+ planets[i].coords[2] +'">[' + planets[i].coords[0] + ':' + planets[i].coords[1] + ':' + planets[i].coords[2] + ']</a></td><br>'
+							console.log(planets[i].name);
+							string = string+'<tr><td>'+planets[i].name+'<a href="/game/index.php?page=galaxy&galaxy='+ planets[i].coords[0] +'&system='+ planets[i].coords[1] +'&position='+ planets[i].coords[2] +'">[' + planets[i].coords[0] + ':' + planets[i].coords[1] + ':' + planets[i].coords[2] + ']</a></td></tr>';
 						}
 						$('#'+id).append(string);
 					}
@@ -980,8 +980,20 @@ var userscript = function() {
 		}
 	   
 	}, 100); // check every 100ms
-  		
 
+   };
+
+  if(window.location.href.indexOf("galaxy") > -1) {
+//  	$(".galaxy_icons.next").attr("onclick","eval(wrapperFunc("+getParameter($(this).attr("onclick"))+"));");
+  	$(".galaxy_icons.next").each(function(){
+  		var funct = $(this).attr("onclick");
+  		$(this).attr("onclick",funct+"setTimeout(setAllPlanets,1000);");
+  	})
+  	$(".galaxy_icons.prev").each(function(){
+  		var funct = $(this).attr("onclick");
+  		$(this).attr("onclick",funct+"setTimeout(setAllPlanets,1000);");
+  	})
+  	setAllPlanets();
   }
 };
 
