@@ -953,7 +953,7 @@ var userscript = function() {
       console.log('players', players);
     });
   }
-	  // If we are on the galaxy view.
+	  
 
 
 // See all player planets on Galaxy view.
@@ -990,7 +990,8 @@ var userscript = function() {
       setTimeout(setAllPlanets,600);
     }
   }
-
+  
+  // If we are on the galaxy view.
   if(window.location.href.indexOf("galaxy") > -1) {
   	$(".galaxy_icons.next").each(function(){
   		var funct = $(this).attr("onclick");
