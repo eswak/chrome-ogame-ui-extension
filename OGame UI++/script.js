@@ -253,11 +253,11 @@ var userscript = function() {
 
       var cost = $(this).find('.cost').text().trim();
       if (cost.indexOf(',') === -1) {
-        cost = cost.replace('.','').replace('M', '000000');
+        cost = cost.replace('.','').replace('Mn', '000');
       }
       else {
-        cost = cost.replace(',', '.').replace('M', '');
-        cost = cost * 1000000;
+        cost = cost.replace(',', '.').replace('Mn', '');
+        cost = cost * 1000;
       }
       costs.metal = cost;
       var time = Math.ceil(cost / resources.metal.prod);
@@ -269,11 +269,11 @@ var userscript = function() {
     $('.crystal.tooltip:not(.enhanced)').each(function() {
       var cost = $(this).find('.cost').text().trim();
       if (cost.indexOf(',') === -1) {
-        cost = cost.replace('.','').replace('M', '000000');
+        cost = cost.replace('.','').replace('Mn', '000');
       }
       else {
-        cost = cost.replace(',', '.').replace('M', '');
-        cost = cost * 1000000;
+        cost = cost.replace(',', '.').replace('Mn', '');
+        cost = cost * 1000;
       }
       costs.crystal = cost;
       var time = Math.ceil(cost / resources.crystal.prod);
@@ -285,11 +285,11 @@ var userscript = function() {
     $('.deuterium.tooltip:not(.enhanced)').each(function() {
       var cost = $(this).find('.cost').text().trim();
       if (cost.indexOf(',') === -1) {
-        cost = cost.replace('.','').replace('M', '000000');
+        cost = cost.replace('.','').replace('Mn', '000');
       }
       else {
-        cost = cost.replace(',', '.').replace('M', '');
-        cost = cost * 1000000;
+        cost = cost.replace(',', '.').replace('Mn', '');
+        cost = cost * 1000;
       }
       costs.deuterium = cost;
       var time = Math.ceil(cost / resources.deuterium.prod);
