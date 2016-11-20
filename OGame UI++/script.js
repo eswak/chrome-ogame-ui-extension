@@ -954,7 +954,18 @@ var userscript = function() {
     });
   }
 	  
-
+function nFormatter(num) {
+     if (num >= 1000000000) {
+        return (num / 1000000000).toFixed(1).replace(/\.0$/, '') + 'G';
+     }
+     if (num >= 1000000) {
+        return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+     }
+     if (num >= 1000) {
+        return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+     }
+     return num;
+}
 
 // See all player planets on Galaxy view.
    window.setAllPlanets = function(){
@@ -962,8 +973,19 @@ var userscript = function() {
    	var interval = setInterval(function() {
      var already = []
 	   if ($(".playername").length && ($("#galaxyLoading").css("display") === "none")) {
+      // Set debris for planets
+      $("[id^=debris]").each(function(){
+        var info = $(this).find("ul.ListLinks").children("li");
+        var location = $(this).attr("id").replace("debris","");
+        var metal = nFormatter(parseInt(info[0].textContent.replace(".","").split(" ")[1]));
+        var cristal = nFormatter(parseInt(info[1].textContent.replace(".","").split(" ")[1]));
+        var escombros = $(".js_debris"+location + " > a > div");
+        escombros.css("background-image","none");
+        escombros.html("<p>"+ metal + "</p><p>" + cristal+"</p>");
+        console.log(escombros);
+      });
+      // Set planets for players
       $(".playername").each(function(){
-        console.log("Executing");
           var id = $(this).find('a').first().attr('rel');
           if(!(already.indexOf(id) != -1)){
             if (id){
