@@ -1007,11 +1007,15 @@ function nFormatter(num) {
 	}, 100); // check every 100ms
   };
 
-  window.setPlanetOnEnter = function(event){
-    if (window.event.keyCode == 13){
-      setTimeout(setAllPlanets,600);
+  // Hook key press, Enter, up, down, rigth, left.
+  window.addEventListener("keydown", function(e){
+    var numbers = [39,37,40,38,13];
+    if(window.location.href.indexOf("galaxy") > -1){
+      if (numbers.indexOf(e.keyCode) !== -1){
+         setTimeout(setAllPlanets,600);
+       }
     }
-  }
+  });
   
   // If we are on the galaxy view.
   if(window.location.href.indexOf("galaxy") > -1) {
@@ -1026,14 +1030,6 @@ function nFormatter(num) {
     $(".btn_blue").each(function(){
       var funct = $(this).attr("onclick");
       $(this).attr("onclick",funct+"setTimeout(setAllPlanets,600);");
-    })
-    $("#system_input").each(function(){
-      var funct = $(this).attr("onkeypress");
-      $(this).attr("onkeypress","setPlanetOnEnter(event);"+funct);
-    })
-    $("#galaxy_input").each(function(){
-      var funct = $(this).attr("onkeypress");
-      $(this).attr("onkeypress","setPlanetOnEnter(event);"+funct);
     })
   	setAllPlanets();
   }
