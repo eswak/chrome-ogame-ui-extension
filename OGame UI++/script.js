@@ -913,6 +913,31 @@ var userscript = function() {
     else return num;
   }
 
+  function loadMessages(){
+    $.get("index.php", { page : "messages", tab : "20", ajax: "1"}).done(
+        function(data){
+          var object = $.parseHTML(data);
+          var curPage = $($(object).find(".curPage")[0]).text();
+          var current = curPage.split("/")[0];
+          var max = curPage.split("/")[1];
+
+          var messages = $(object).find("li.msg");
+          $(messages).each( function(){
+              var from = $(".msg_sender",$(this)).text();
+              var planet = $('.msg_title > a',$(this)).text().split(" ").pop();
+              var player = $('.msg_content > .compacting:first > span:eq(1)',$(this)).text().trim();
+              if( from === "Fleet Command"){
+                console.log(from + " " + planet + " " +player);
+                
+              }
+            }
+          );
+
+        }
+    );
+  }
+  //loadMessages();
+
   // refreshes the universe using the API once an hour
   if (!config.lastPlayersUpdate || config.lastPlayersUpdate < Date.now() - 3600000) {
     console.log('Mise à jour de la liste des joueurs...');
