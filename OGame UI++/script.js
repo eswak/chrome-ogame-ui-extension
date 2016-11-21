@@ -928,18 +928,32 @@ var userscript = function() {
               var planet = $('.msg_title > a',$(this)).text().split(" ").pop();
               var player = $('.msg_content > .compacting:first > span:eq(1)',$(this)).text().trim();
               if( from === "Fleet Command"){
-                console.log(from + " " + planet + " " +player);
-                console.log(this);
-                message_arr.push(this);
+                var stringr = $(this).wrap('<p/>').parent().html()
+                message_arr.push(stringr);
               }
             }
           );
           config.messages = message_arr;
           saveConfig(config);
+          console.log(message_arr[0]);
         }
+
     );
   }
-  loadMessages();
+  //loadMessages();
+
+  window.filterMessages = function() {
+    var name = $("#Player").val();
+    var wrapper = $("#messageBit").html(name);
+    for (var i = 0; i < config.messages.length; i++) {
+      var player = $('.msg_content > .compacting:first > span:eq(1)',$(config.messages[i])).text().trim();
+      var planet = $('.msg_title > a',$(config.messages[i])).text().split(" ").pop();
+      if (player.toUpperCase().indexOf(name.toUpperCase()) !== -1 || planet.indexOf(name) !== -1){
+        var el = $(config.messages[i]);
+        wrapper.append(el);
+      }
+    }
+  };
 
   // Add a menu entry for neighbours
   var messagesTab = $('<li class="neighbours enhanced"><span class="menu_icon"><div class="customMenuEntry4 menuImage defense"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">' + "Messages" + '</span></a></li>');
@@ -950,21 +964,19 @@ var userscript = function() {
     $('.menuImage.highlighted').removeClass('highlighted');
     $('.neighbours .menubutton').addClass('selected');
     $('.customMenuEntry4').addClass('highlighted');
-
-    var wrapper = $('<div class="uiEnhancementWindow"></div>');
+    var adder = $('<div class="addFav"> <a>Player</a><input value="" id="Player" style="width:20%;" type="text"> <a onclick="filterMessages()">Filter</a></div>');
+    var wrapper = $('<div id="messageBit" class="uiEnhancementWindow"></div>');
     for (var i = 0; i < config.messages.length; i++) {
-      var el = $(config.messages[i]);
-      wrapper.append(el);
+      var el = config.messages[i];
+      wrapper.append($(el));
     }
     
     // insert html
     var eventboxContent = $('#eventboxContent');
     $('#contentWrapper').html(eventboxContent);
+    $('#contentWrapper').append(adder);
     $('#contentWrapper').append(wrapper);
   });
-
-
-  
 
   // refreshes the universe using the API once an hour
   if (!config.lastPlayersUpdate || config.lastPlayersUpdate < Date.now() - 3600000) {
