@@ -922,21 +922,49 @@ var userscript = function() {
           var max = curPage.split("/")[1];
 
           var messages = $(object).find("li.msg");
+          var message_arr = []
           $(messages).each( function(){
               var from = $(".msg_sender",$(this)).text();
               var planet = $('.msg_title > a',$(this)).text().split(" ").pop();
               var player = $('.msg_content > .compacting:first > span:eq(1)',$(this)).text().trim();
               if( from === "Fleet Command"){
                 console.log(from + " " + planet + " " +player);
-                
+                console.log(this);
+                message_arr.push(this);
               }
             }
           );
-
+          config.messages = message_arr;
+          saveConfig(config);
         }
     );
   }
-  //loadMessages();
+  loadMessages();
+
+  // Add a menu entry for neighbours
+  var messagesTab = $('<li class="neighbours enhanced"><span class="menu_icon"><div class="customMenuEntry4 menuImage defense"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">' + "Messages" + '</span></a></li>');
+  $('#menuTable').append(messagesTab);
+  messagesTab.click(function() {
+    // ui changes
+    $('.menubutton.selected').removeClass('selected');
+    $('.menuImage.highlighted').removeClass('highlighted');
+    $('.neighbours .menubutton').addClass('selected');
+    $('.customMenuEntry4').addClass('highlighted');
+
+    var wrapper = $('<div class="uiEnhancementWindow"></div>');
+    for (var i = 0; i < config.messages.length; i++) {
+      var el = $(config.messages[i]);
+      wrapper.append(el);
+    }
+    
+    // insert html
+    var eventboxContent = $('#eventboxContent');
+    $('#contentWrapper').html(eventboxContent);
+    $('#contentWrapper').append(wrapper);
+  });
+
+
+  
 
   // refreshes the universe using the API once an hour
   if (!config.lastPlayersUpdate || config.lastPlayersUpdate < Date.now() - 3600000) {
