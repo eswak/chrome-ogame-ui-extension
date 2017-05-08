@@ -46,7 +46,7 @@ var userscript = function() {
 
     // translations
     var lang = (navigator.language || navigator.browserLanguage || 'en').substring(0, 2);
-    var traductions = {
+    var translations = {
         'fr': {
             'UNIT_METAL': 'Métal',
             'UNIT_CRYSTAL': 'Cristal',
@@ -213,7 +213,7 @@ var userscript = function() {
             'RESET_STATS': 'Statistik zurücksetzen'
         }
     };
-    if(!traductions[lang]) {
+    if(!translations[lang]) {
         lang = 'en';
     }
 
@@ -655,7 +655,7 @@ var userscript = function() {
                 for(var i in player.planets) {
                     var planet = player.planets[i];
                     if(planet.coords[0] === myCoords[0] && Math.abs(planet.coords[1] - myCoords[1]) < 50) {
-                        console.log('voisin', player);
+                        console.debug('voisin', player);
                         neighbours.push({
                             id: playerId,
                             name: player.name,
@@ -776,7 +776,7 @@ var userscript = function() {
     }
 
     saveConfig(config);
-    console.log('config.my', config.my);
+    console.debug('config.my', config.my);
 
     // util functions
     function prettyTime(seconds) {
@@ -916,7 +916,7 @@ var userscript = function() {
     };
 
     function trad(key, args) {
-        var ret = traductions[lang][key] || '';
+        var ret = translations[lang][key] || '';
         for(var k in args) {
             if(args['noBold']) ret = ret.replace('{' + k + '}', args[k]);
             else ret = ret.replace('{' + k + '}', '<span class="boldy">' + args[k] + '</span>');
@@ -934,13 +934,13 @@ var userscript = function() {
 
     // refreshes the universe using the API once an hour
     if(!config.lastPlayersUpdate || config.lastPlayersUpdate < Date.now() - 3600000) {
-        console.log('Mise à jour de la liste des joueurs...');
+        console.debug('Mise à jour de la liste des joueurs...');
         loadUniverseApi(function(players) {
-            console.log('Liste des joueurs mise à jour.');
+            console.debug('Liste des joueurs mise à jour.');
             config.players = players;
             config.lastPlayersUpdate = Date.now();
             saveConfig(config);
-            console.log('players', players);
+            console.debug('players', players);
         });
     }
 };
