@@ -179,7 +179,7 @@ var userscript = function() {
             'STATS_RATIO': 'Üretim Oranı (İlişki: ',
             'RESET_STATS': 'Sıfırlama istatistikler'
         },
-        'fr': {
+        'de': {
             'UNIT_METAL': 'Metall',
             'UNIT_CRYSTAL': 'Kristall',
             'UNIT_DEUTERIUM': 'Deuterium',
