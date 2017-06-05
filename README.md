@@ -7,6 +7,7 @@ Available in-game languages :
  - :fr: French
  - :es: Spanish
  - :tr: Turkish
+ - :de: German
 
 This extension improves the user interface by adding several features :
  - New tab : nearby idles (+ notes)

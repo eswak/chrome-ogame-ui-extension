@@ -1,10 +1,10 @@
 {
-  "appName": {
-    "message": "OGame UI++",
-    "description": "OGame UI++"
-  },
-  "appDesc": {
-    "message": "[ES][EN][FR][TR] Mejora la interfaz de OGame añadiendo elementos y entradas de menú.",
-    "description":"[ES][EN][FR][TR] Mejora la interfaz de OGame añadiendo elementos y entradas de menú."
-  }
+    "appName": {
+        "message": "OGame UI++",
+        "description": "OGame UI++"
+    },
+    "appDesc": {
+        "message": "[ES][EN][FR][TR][DE] Mejora la interfaz de OGame añadiendo elementos y entradas de menú.",
+        "description": "[ES][EN][FR][TR][DE] Mejora la interfaz de OGame añadiendo elementos y entradas de menú."
+    }
 }
