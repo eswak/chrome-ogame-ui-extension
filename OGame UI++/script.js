@@ -46,6 +46,9 @@ var userscript = function() {
 
     // translations
     var lang = (navigator.language || navigator.browserLanguage || 'en').substring(0, 2);
+    var ogameLang = window.constants ? window.constants.language : null;
+    lang = ogameLang || lang;
+
     var translations = {
         'fr': {
             'UNIT_METAL': 'Métal',
