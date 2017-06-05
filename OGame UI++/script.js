@@ -284,16 +284,40 @@ var userscript = function() {
             crystal: 0,
             deuterium: 0
         };
+
+        function _getCost(cost) {
+          // note: this won't work over 1000 billions
+          var millionChar = window.gfNumberGetHumanReadable(1e6, true).replace('1', '');
+          var billionChar = window.gfNumberGetHumanReadable(1e9, true).replace('1', '');
+
+          var flags = {
+            thousand: cost.indexOf('.') !== -1 || cost.indexOf(',') !== -1,
+            million: cost.indexOf(millionChar) !== -1,
+            billion: cost.indexOf(billionChar) !== -1
+          };
+          cost = cost.replace(billionChar, '').replace(millionChar, '');
+          var decimalRegex = /[\.\,]/g;
+          cost = cost.replace(decimalRegex, '.');
+          var decimalMatches = cost.match(decimalRegex);
+
+          if (decimalMatches && decimalMatches.length > 1) {
+            cost = cost.replace(decimalRegex, '');
+          }
+          cost = Number(cost);
+          if (flags.billion) {
+            return cost * 1e9;
+          } else if (flags.million) {
+            return cost * 1e6;
+          } else if (flags.thousand) {
+            return cost * 1e3;
+          } else {
+            return cost;
+          }
+        }
+
         // enhance metal tooltips
         $('.metal.tooltip:not(.enhanced)').each(function() {
-
-            var cost = $(this).find('.cost').text().trim();
-            if(cost.indexOf(',') === -1) {
-                cost = cost.replace('.', '').replace('M', '000000');
-            } else {
-                cost = cost.replace(',', '.').replace('M', '');
-                cost = cost * 1000000;
-            }
+            var cost = _getCost($(this).find('.cost').text().trim());
             costs.metal = cost;
             var time = Math.ceil(cost / resources.metal.prod);
             $(this).append('<div class="enhancement">' + prettyTime(time) + '</div>');
@@ -302,13 +326,7 @@ var userscript = function() {
         });
         // enhance crystal tooltips
         $('.crystal.tooltip:not(.enhanced)').each(function() {
-            var cost = $(this).find('.cost').text().trim();
-            if(cost.indexOf(',') === -1) {
-                cost = cost.replace('.', '').replace('M', '000000');
-            } else {
-                cost = cost.replace(',', '.').replace('M', '');
-                cost = cost * 1000000;
-            }
+            var cost = _getCost($(this).find('.cost').text().trim());
             costs.crystal = cost;
             var time = Math.ceil(cost / resources.crystal.prod);
             $(this).append('<div class="enhancement">' + prettyTime(time) + '</div>');
@@ -317,13 +335,7 @@ var userscript = function() {
         });
         // enhance deuterium tooltips
         $('.deuterium.tooltip:not(.enhanced)').each(function() {
-            var cost = $(this).find('.cost').text().trim();
-            if(cost.indexOf(',') === -1) {
-                cost = cost.replace('.', '').replace('M', '000000');
-            } else {
-                cost = cost.replace(',', '.').replace('M', '');
-                cost = cost * 1000000;
-            }
+            var cost = _getCost($(this).find('.cost').text().trim());
             costs.deuterium = cost;
             var time = Math.ceil(cost / resources.deuterium.prod);
             $(this).append('<div class="enhancement">' + prettyTime(time) + '</div>');
