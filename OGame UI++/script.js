@@ -929,6 +929,35 @@ var userscript = function () {
       localStorage.setItem('og-enhancements', JSON.stringify(config));
     }
   }
+  
+  window.getAllPlanets = function(player_id){
+  	$.ajax({
+      url : '/api/playerData.xml?id='+player_id,
+      dataType: 'xml',
+      success: function(data) {
+      	var player = player_id;
+      	if(config.players[player]){
+      		config.players[player].planets = [];
+      	}
+        $('planet', data).each(function() {
+              el = $(this);
+              name = el.attr('name');
+              coords = el.attr('coords').split(':');
+              coords[0] = parseInt(coords[0]);
+              coords[1] = parseInt(coords[1]);
+              coords[2] = parseInt(coords[2]);
+              if (config.players[player]) {
+                  config.players[player].planets.push({
+                  name: name,
+                  coords: coords
+                });
+              }
+         });
+        saveConfig(config);
+       	return config.players[player].planets;
+    	}
+	});
+  }
 
   function loadUniverseApi(cb) {
     $.ajax({
@@ -1060,7 +1089,70 @@ var userscript = function () {
       console.debug('players', players);
     });
   }
+	  
+
+
+// See all player planets on Galaxy view.
+   window.setAllPlanets = function(){
+    console.log("YES");
+   	var interval = setInterval(function() {
+     var already = []
+	   if ($(".playername").length && ($("#galaxyLoading").css("display") === "none")) {
+      $(".playername").each(function(){
+        console.log("Executing");
+          var id = $(this).find('a').first().attr('rel');
+          if(!(already.indexOf(id) != -1)){
+            if (id){
+            already.push(id);
+            var id_filtered = id.replace('player','');
+            var planets = config.players[id_filtered].planets;
+            var string = ""
+            for (var i = 0; i < planets.length; i++){
+              string = string+'<tr><td>'+planets[i].name+'<a href="/game/index.php?page=galaxy&galaxy='+ planets[i].coords[0] +'&system='+ planets[i].coords[1] +'&position='+ planets[i].coords[2] +'">[' + planets[i].coords[0] + ':' + planets[i].coords[1] + ':' + planets[i].coords[2] + ']</a></td></tr>';
+            }
+            $('[id='+id+']').append(string);
+          }
+          }
+        }
+      );
+		  clearTimeout(interval);
+		}
+	   
+	}, 100); // check every 100ms
+  };
+
+  window.setPlanetOnEnter = function(event){
+    if (window.event.keyCode == 13){
+      setTimeout(setAllPlanets,600);
+    }
+  }
+  
+  // If we are on the galaxy view.
+  if(window.location.href.indexOf("galaxy") > -1) {
+  	$(".galaxy_icons.next").each(function(){
+  		var funct = $(this).attr("onclick");
+  		$(this).attr("onclick",funct+"setTimeout(setAllPlanets,600);");
+  	})
+  	$(".galaxy_icons.prev").each(function(){
+  		var funct = $(this).attr("onclick");
+  		$(this).attr("onclick",funct+"setTimeout(setAllPlanets,600);");
+  	})
+    $(".btn_blue").each(function(){
+      var funct = $(this).attr("onclick");
+      $(this).attr("onclick",funct+"setTimeout(setAllPlanets,600);");
+    })
+    $("#system_input").each(function(){
+      var funct = $(this).attr("onkeypress");
+      $(this).attr("onkeypress","setPlanetOnEnter(event);"+funct);
+    })
+    $("#galaxy_input").each(function(){
+      var funct = $(this).attr("onkeypress");
+      $(this).attr("onkeypress","setPlanetOnEnter(event);"+funct);
+    })
+  	setAllPlanets();
+  }
 };
+
 
 // inject user script into the document
 var script = document.createElement('script');
