@@ -27,6 +27,7 @@
 //  - Adds the remaining time before being able to construct an unit when viewing it
 //  - Adds maximum buildable units for an unit when viewing it
 //  - Adds rentability time when viewing details of a mine and plasma technology
+//  - Adds players planets in galaxy view
 // ==/UserScript==
 var userscript = function () {
   'use strict';
@@ -474,6 +475,28 @@ var userscript = function () {
       }) + '</li>');
       $('#research_122_large').addClass('enhanced');
     }
+
+    // Add player's planets in galaxy view
+    $('.htmlTooltip.galaxyTooltip:not(.enhanced)').each(function () {
+      var $el = $(this);
+      $el.addClass('enhanced');
+
+      var id = $el.attr('id');
+      if (id.indexOf('player') === -1) {
+        return;
+      }
+
+      var playerId = id.replace('player', '');
+      var playerPlanets = config.players[playerId].planets;
+      if (playerPlanets.length) {
+        $el.append($('<div style="float:right;"><ul>' + playerPlanets.map(function (planet) {
+          return '<li class="enhancement">[<a href="/game/index.php?page=galaxy&galaxy=' + planet.coords[0] + '&system=' + planet.coords[1] + '&position=' + planet.coords[2] + '">' +
+            planet.coords[0] + ':' + planet.coords[1] + ':' + planet.coords[2] + '</a>] ' +
+            planet.name +
+            '</li>';
+        }).join('') + '</ul></div>'));
+      }
+    });
 
     // scan spy reports (only for french)
     var $message = $('.ui-dialog');
