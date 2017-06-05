@@ -1049,6 +1049,108 @@ var userscript = function () {
     } else return num;
   }
 
+  function loadMessages(page = 1, limit = 1){
+    if ( page > limit ) {
+      return;
+    }
+    console.log("Requesting page: " + page);
+    $.post("index.php?page=messages", { messageId : "-1", pagination: page, tabid : "20", ajax: "1", action: "107"}).done(
+        function(data){
+          var object = $.parseHTML(data);
+          var curPage = $($(object).find(".curPage")[0]).text();
+          var current = curPage.split("/")[0];
+          var max = curPage.split("/")[1];
+          var conti = true;
+          var messages = $(object).find("li.msg");
+          var message_arr = []
+          $(messages).each( function(){
+              var id = $(this).attr("data-msg-id");
+              if ( config.messages.length > 0 && config.messages[0].id_message == id){
+                conti = false;
+                return false;
+              }
+              var from = $(".msg_sender",$(this)).text();
+              var planet = $('.msg_title > a',$(this)).text().split(" ").pop();
+              var player = $('.msg_content > .compacting:first > span:eq(1)',$(this)).text().trim();
+              if( from === "Fleet Command"){
+                var stringr = $(this).wrap('<p/>').parent().html()
+                console.log("ID: " + id);
+                message_arr.push(
+                  {id_message: id,
+                   message: stringr,
+                   planet: planet,
+                   player: player}
+                  );
+              }
+            }
+          );
+          if (conti){
+            config.messages = config.messages.concat(message_arr);
+            loadMessages(page+1, max);
+            saveConfig(config);
+          }
+          
+        }
+    );
+  }
+  //loadMessages();
+
+  window.filterMessages = function() {
+    var name = $("#Player").val();
+    var wrapper = $("#messageBit").html(name);
+    for (var i = 0; i < config.messages.length; i++) {
+      var player = config.messages[i].player;
+      var planet = config.messages[i].planet;
+      if (player.toUpperCase().indexOf(name.toUpperCase()) !== -1 || planet.indexOf(name) !== -1){
+        var el = $(config.messages[i].message);
+        wrapper.append(el);
+      }
+    }
+  };
+
+  function extractResources(a){
+    var resources = $(".msg_content > .compacting:nth-of-type(2) > span:nth-of-type(2)",$(a)).text().split(" ")[1];
+      resources = resources.replace("Mn","000");
+      resources = resources.replace(".","");
+    return resources;
+  }
+
+  function sortMessagesResources(a,b){
+    var resa = extractResources(a.message);
+    var resb = extractResources(b.message);
+    console.log(resa + " " + resb);
+    return resb-resa;
+  }
+
+  // Add a menu entry for neighbours
+  var messagesTab = $('<li class="neighbours enhanced"><span class="menu_icon"><div class="customMenuEntry4 menuImage defense"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">' + "Messages" + '</span></a></li>');
+  $('#menuTable').append(messagesTab);
+  messagesTab.click(function() {
+    // ui changes
+    $('.menubutton.selected').removeClass('selected');
+    $('.menuImage.highlighted').removeClass('highlighted');
+    $('.neighbours .menubutton').addClass('selected');
+    $('.customMenuEntry4').addClass('highlighted');
+    var adder = $('<div class="addFav"> <a>Player</a><input value="" id="Player" style="width:20%;" type="text"> <a onclick="filterMessages()">Filter</a><select class="dropdown currentlySelected" style="visibility:visible" name="order"> <option value="1"> Date </option> <option value="2"> Resources </option> <option value="3">Fleet</option> <option value="4">Defense</option>  <option value="5">Metal</option>  <option value="6">Cristal</option>  <option value="7">Deuterium</option></select></div>');
+    //var orderer = $('<select name="order"> <option value="1"> Date </option> <option value="2"> Resources </option> <option value="3">Fleet</option> <option value="4">Defense</option>  <option value="5">Metal</option>  <option value="6">Cristal</option>  <option value="7">Deuterium</option></select>');
+    var wrapper = $('<div id="messageBit" class="uiEnhancementWindow tab_inner"></div>');
+    config.messages.sort(sortMessagesResources);
+    for (var i = 0; i < config.messages.length; i++) {
+      var resources = $(".msg_content > .compacting:nth-of-type(2) > span:nth-of-type(2)",$(config.messages[i].message)).text().split(" ")[1];
+      resources = resources.replace("Mn","000");
+      resources = resources.replace(".","");
+      var el = config.messages[i].message;
+      wrapper.append($(el));
+    }
+    
+    // insert html
+    var eventboxContent = $('#eventboxContent');
+    $('#contentWrapper').html(eventboxContent);
+    $('#contentWrapper').append(adder);
+    // $('#contentWrapper').append(orderer);
+    $('#contentWrapper').append(wrapper);
+  });
+
   // refreshes the universe using the API once an hour
   if (!config.lastPlayersUpdate || config.lastPlayersUpdate < Date.now() - 3600000) {
     console.debug('Mise à jour de la liste des joueurs...');
