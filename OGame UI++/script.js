@@ -929,6 +929,35 @@ var userscript = function () {
       localStorage.setItem('og-enhancements', JSON.stringify(config));
     }
   }
+  
+  window.getAllPlanets = function(player_id){
+  	$.ajax({
+      url : '/api/playerData.xml?id='+player_id,
+      dataType: 'xml',
+      success: function(data) {
+      	var player = player_id;
+      	if(config.players[player]){
+      		config.players[player].planets = [];
+      	}
+        $('planet', data).each(function() {
+              el = $(this);
+              name = el.attr('name');
+              coords = el.attr('coords').split(':');
+              coords[0] = parseInt(coords[0]);
+              coords[1] = parseInt(coords[1]);
+              coords[2] = parseInt(coords[2]);
+              if (config.players[player]) {
+                  config.players[player].planets.push({
+                  name: name,
+                  coords: coords
+                });
+              }
+         });
+        saveConfig(config);
+       	return config.players[player].planets;
+    	}
+	});
+  }
 
   function loadUniverseApi(cb) {
     $.ajax({
@@ -1060,7 +1089,88 @@ var userscript = function () {
       console.debug('players', players);
     });
   }
+	  
+function nFormatter(num) {
+     if (num >= 1000000000) {
+        return (num / 1000000000).toFixed(1).replace(/\.0$/, '') + 'G';
+     }
+     if (num >= 1000000) {
+        return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+     }
+     if (num >= 1000) {
+        return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+     }
+     return num;
+}
+
+// See all player planets on Galaxy view.
+   window.setAllPlanets = function(){
+    console.log("YES");
+   	var interval = setInterval(function() {
+     var already = []
+	   if ($(".playername").length && ($("#galaxyLoading").css("display") === "none")) {
+      // Set debris for planets
+      $("[id^=debris]").each(function(){
+        var info = $(this).find("ul.ListLinks").children("li");
+        var location = $(this).attr("id").replace("debris","");
+        var metal = nFormatter(parseInt(info[0].textContent.replace(".","").split(" ")[1]));
+        var cristal = nFormatter(parseInt(info[1].textContent.replace(".","").split(" ")[1]));
+        var escombros = $(".js_debris"+location + " > a > div");
+        escombros.css("background-image","none");
+        escombros.html("<p>"+ metal + "</p><p>" + cristal+"</p>");
+        console.log(escombros);
+      });
+      // Set planets for players
+      $(".playername").each(function(){
+          var id = $(this).find('a').first().attr('rel');
+          if(!(already.indexOf(id) != -1)){
+            if (id){
+            already.push(id);
+            var id_filtered = id.replace('player','');
+            var planets = config.players[id_filtered].planets;
+            var string = ""
+            for (var i = 0; i < planets.length; i++){
+              string = string+'<tr><td>'+planets[i].name+'<a href="/game/index.php?page=galaxy&galaxy='+ planets[i].coords[0] +'&system='+ planets[i].coords[1] +'&position='+ planets[i].coords[2] +'">[' + planets[i].coords[0] + ':' + planets[i].coords[1] + ':' + planets[i].coords[2] + ']</a></td></tr>';
+            }
+            $('[id='+id+']').append(string);
+          }
+          }
+        }
+      );
+		  clearTimeout(interval);
+		}
+	   
+	}, 100); // check every 100ms
+  };
+
+  // Hook key press, Enter, up, down, rigth, left.
+  window.addEventListener("keydown", function(e){
+    var numbers = [39,37,40,38,13];
+    if(window.location.href.indexOf("galaxy") > -1){
+      if (numbers.indexOf(e.keyCode) !== -1){
+         setTimeout(setAllPlanets,600);
+       }
+    }
+  });
+  
+  // If we are on the galaxy view.
+  if(window.location.href.indexOf("galaxy") > -1) {
+  	$(".galaxy_icons.next").each(function(){
+  		var funct = $(this).attr("onclick");
+  		$(this).attr("onclick",funct+"setTimeout(setAllPlanets,600);");
+  	})
+  	$(".galaxy_icons.prev").each(function(){
+  		var funct = $(this).attr("onclick");
+  		$(this).attr("onclick",funct+"setTimeout(setAllPlanets,600);");
+  	})
+    $(".btn_blue").each(function(){
+      var funct = $(this).attr("onclick");
+      $(this).attr("onclick",funct+"setTimeout(setAllPlanets,600);");
+    })
+  	setAllPlanets();
+  }
 };
+
 
 // inject user script into the document
 var script = document.createElement('script');
