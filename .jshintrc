@@ -6,7 +6,11 @@
   "forin": false,
   "freeze": true,
   "futurehostile": true,
-  "globals": {},
+  "globals": {
+    "window": true,
+    "document": true,
+    "$": true
+  },
   "latedef": false,
   "maxcomplexity": 20,
   "maxdepth": 3,
