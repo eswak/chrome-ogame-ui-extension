@@ -32,11 +32,21 @@ var fn = function () {
       };
 
       var planetStatsHtml = '';
+      var rentabilityTimes = [];
       for (var coords in config.my.planets) {
         var planet = config.my.planets[coords];
         if (!planet.resources) {
           continue;
         }
+
+        // add rentability times to array
+        ['metal', 'crystal', 'deuterium'].forEach(function (resource) {
+          rentabilityTimes.push({
+            coords: planet.coords,
+            resource: resource,
+            time: _getRentabilityTime(resource, planet.resources[resource].prod, planet.resources[resource].level)
+          });
+        });
 
         var currentPlanetResources = {
           metal: Math.round(planet.resources.metal.now + planet.resources.metal.prod * ((Date.now() - planet.resources.lastUpdate) / 1000)),
@@ -79,7 +89,7 @@ var fn = function () {
             '</td>',
             ['metal', 'crystal', 'deuterium'].map(function (resource) {
               return [
-                '<td>',
+                '<td id="stat-' + planet.coords.join('-') + '-' + resource + '">',
                   '<div class="resourceIcon ' + resource + '" style="font-size: 20px; line-height: 32px; text-shadow: ' + textShadow + '">' + planet.resources[resource].level + '</div>',
                   '<div style="float:left; width: 100px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
                     '<div class="font-weight: bold; padding-bottom: 1px;">' + _num(currentPlanetResources[resource], planet.resources[resource].prod) + '</div>',
@@ -125,6 +135,20 @@ var fn = function () {
       ].join('') + planetStatsHtml;
 
       $wrapper.append($('<table style="background:black">' + planetStatsHtml + '</table>'));
+
+      // outline most rentable upgrades
+      setTimeout(function () {
+        rentabilityTimes = rentabilityTimes.sort(function (a, b) {
+          return a.time - b.time;
+        });
+
+        var colors = ['#fff', '#c5c5c5', '#aaa', '#757575', '#555'];
+        colors.forEach(function (color, i) {
+          if (rentabilityTimes[i]) {
+            $('#stat-' + rentabilityTimes[i].coords.join('-') + '-' + rentabilityTimes[i].resource).css('border', '1px dotted ' + color);
+          }
+        });
+      });
 
       // add reset button
       var $resetStatsButton = $('<div style="margin-top: 10px; text-align: right;padding-right: .5em;"><a href="#" class="btn_blue">' + _translate('RESET_STATS') + '</a></div>');
