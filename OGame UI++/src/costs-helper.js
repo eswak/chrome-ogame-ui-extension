@@ -22,7 +22,7 @@ var fn = function () {
       return {
         metal: Math.ceil(costs.metal / resources.metal.prod) || 0,
         crystal: Math.ceil(costs.crystal / resources.crystal.prod) || 0,
-        deuterium: Math.ceil(costs.deuterium / resources.metal.deuterium) || 0
+        deuterium: Math.ceil(costs.deuterium / resources.deuterium.prod) || 0
       };
     }
 
