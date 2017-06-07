@@ -14,6 +14,7 @@
         "src/utils/load-universe-api.js",
         "src/utils/persistent-config.js",
         "src/utils/refresh-universe-data.js",
+        "src/utils/rentability-time.js",
         "src/utils/send-spy-probes.js",
         "src/utils/set-config-my-planets.js",
         "src/utils/set-config-trade-rate.js",
