@@ -14,8 +14,6 @@ style.textContent += '.uiEnhancementWindow table td { background: black; border-
 style.textContent += '.uiEnhancementWindow a { color:white; text-decoration:none; }';
 style.textContent += '.uiEnhancementWindow tr.ignore { opacity:.15; }';
 style.textContent += '.icon.icon_eye.disabled:hover { background-position: 0 -48px; }';
-style.textContent += '.planetstats { background: rgba(0,0,0,0.6); padding: 1em; line-height: 1.4em; border-radius: 5px; margin: .5em; }';
-style.textContent += '.planetstats h3 { font-size: 1.2em; font-weight: bold; margin-bottom: .5em; }';
 style.textContent += '.currentPlayer td { background: #444 !important; }';
 style.textContent += '.spacer { height: .3em }';
 (document.head || document.documentElement).appendChild(style);
