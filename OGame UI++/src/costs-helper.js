@@ -128,12 +128,7 @@ var fn = function () {
 
       // if we are viewing a metal mine, computes rentability time
       if ($('#resources_1_large:not(.enhanced)').length > 0) {
-        var calculatedProduction = 30 * resources.metal.level * Math.pow(1.1, resources.metal.level) + 30;
-        var ratio = resources.metal.prod * 3600 / calculatedProduction;
-        var calculatedNextLevelproduction = ratio * 30 * (resources.metal.level + 1) * Math.pow(1.1, resources.metal.level + 1) + 30;
-        var productionDiff = calculatedNextLevelproduction / 3600 - resources.metal.prod;
-        var convertedProductionCost = costs.metal * 1.0 + costs.crystal * (resources.crystal.worth / resources.metal.worth);
-        var rentabilityTime = convertedProductionCost / productionDiff;
+        var rentabilityTime = _getRentabilityTime('metal', resources.metal.prod, resources.metal.level);
         $('#content .production_info').append('<li class="enhancement">' + _translate('ROI', {
           time: _time(rentabilityTime),
           tradeRate: tradeRateStr
@@ -143,12 +138,7 @@ var fn = function () {
 
       // if we are viewing a crystal mine, computes rentability time
       else if ($('#resources_2_large:not(.enhanced)').length > 0) {
-        var calculatedProduction = 20 * resources.crystal.level * Math.pow(1.1, resources.crystal.level) + 15;
-        var ratio = resources.crystal.prod * 3600 / calculatedProduction;
-        var calculatedNextLevelproduction = ratio * 20 * (resources.crystal.level + 1) * Math.pow(1.1, resources.crystal.level + 1) + 15;
-        var productionDiff = calculatedNextLevelproduction / 3600 - resources.crystal.prod;
-        var convertedProductionCost = costs.metal * (resources.metal.worth / resources.crystal.worth) + costs.crystal * 1.0;
-        var rentabilityTime = convertedProductionCost / productionDiff;
+        var rentabilityTime = _getRentabilityTime('crystal', resources.crystal.prod, resources.crystal.level);
         $('#content .production_info').append('<li class="enhancement">' + _translate('ROI', {
           time: _time(rentabilityTime),
           tradeRate: tradeRateStr
@@ -158,12 +148,7 @@ var fn = function () {
 
       // if we are viewing a deuterium mine, computes rentability time
       else if ($('#resources_3_large:not(.enhanced)').length > 0) {
-        var calculatedProduction = 10 * resources.deuterium.level * Math.pow(1.1, resources.deuterium.level);
-        var ratio = resources.deuterium.prod * 3600 / calculatedProduction;
-        var calculatedNextLevelproduction = ratio * 10 * (resources.deuterium.level + 1) * Math.pow(1.1, resources.deuterium.level + 1);
-        var productionDiff = calculatedNextLevelproduction / 3600 - resources.deuterium.prod;
-        var convertedProductionCost = costs.metal * (resources.metal.worth / resources.deuterium.worth) + costs.crystal * (resources.crystal.worth / resources.deuterium.worth);
-        var rentabilityTime = convertedProductionCost / productionDiff;
+        var rentabilityTime = _getRentabilityTime('deuterium', resources.deuterium.prod, resources.deuterium.level);
         $('#content .production_info').append('<li class="enhancement">' + _translate('ROI', {
           time: _time(rentabilityTime),
           tradeRate: tradeRateStr
@@ -173,17 +158,8 @@ var fn = function () {
 
       // if we are viewing a plasma technology, computes rentability time
       else if ($('#research_122_large:not(.enhanced)').length > 0) {
-        var currentProd = 0;
-        var nextLevelProd = 0;
-        for (var coords in config.my.planets) {
-          var planet = config.my.planets[coords];
-          currentProd += planet.resources.metal.prod * planet.resources.metal.worth + planet.resources.crystal.prod * planet.resources.crystal.worth + planet.resources.deuterium.prod * planet.resources.deuterium.worth;
-          nextLevelProd += planet.resources.metal.prod * planet.resources.metal.worth * 1.01 + planet.resources.crystal.prod * planet.resources.crystal.worth * 1.0066 + planet.resources.deuterium.prod * planet.resources.deuterium.worth;
-        }
-
-        var prodDiff = nextLevelProd - currentProd;
-        var totalPrice = costs.metal * resources.metal.worth + costs.crystal * resources.crystal.worth + costs.deuterium * resources.deuterium.worth;
-        var rentabilityTime = totalPrice / prodDiff;
+        var technologyLevel = Number($('#content span.level').text().trim().split(' ').pop()) || 0;
+        var rentabilityTime = _getRentabilityTime('plasma', null, technologyLevel);
         $('#content .production_info').append('<li class="enhancement">' + _translate('ROI', {
           time: _time(rentabilityTime),
           tradeRate: tradeRateStr
