@@ -31,7 +31,6 @@ var fn = function () {
       MENU_STATS: 'Statistiques',
       MENU_FIGHTSIM: 'Sim. Combat',
       STATS_ALL: 'Statistiques pour toutes les planètes',
-      STATS_FOR: 'Statistiques pour',
       STATS_DAILY: 'Production journalière',
       STATS_RATIO: 'Ratio de production (rapport au ',
       RESET_STATS: 'Réinitialiser les statistiques'
@@ -64,7 +63,6 @@ var fn = function () {
       MENU_STATS: 'Statistics',
       MENU_FIGHTSIM: 'Fight simulator',
       STATS_ALL: 'Statistics for all planets',
-      STATS_FOR: 'Statistics for',
       STATS_DAILY: 'Daily production',
       STATS_RATIO: 'Production ratio (relative to ',
       RESET_STATS: 'Reset stats'
@@ -97,7 +95,6 @@ var fn = function () {
       MENU_STATS: 'Estadísticas',
       MENU_FIGHTSIM: 'Sim. Combate ',
       'STATS_ALL ': 'Estadísticas para todos los planetas',
-      STATS_FOR: 'Estadísticas para',
       STATS_DAILY: 'Producción diaria',
       STATS_RATIO: 'Relación de producción (en comparación con',
       RESET_STATS: 'Restaurar estadísticas'
@@ -130,7 +127,6 @@ var fn = function () {
       MENU_STATS: 'İstatistik',
       MENU_FIGHTSIM: 'Savaş Simulatörü',
       STATS_ALL: 'İstatistik (Tümü)',
-      STATS_FOR: 'İstatistik - ',
       STATS_DAILY: 'Günlük Üretim',
       STATS_RATIO: 'Üretim Oranı (İlişki: ',
       RESET_STATS: 'Sıfırlama istatistikler'
@@ -163,7 +159,6 @@ var fn = function () {
       MENU_STATS: 'Statistiken',
       MENU_FIGHTSIM: 'Kampfsimulator',
       STATS_ALL: 'Statistik über alle Planeten',
-      STATS_FOR: 'Statistik für',
       STATS_DAILY: 'Tägliche Produktion',
       STATS_RATIO: 'Produktionsverhältnis (relativ zu ',
       RESET_STATS: 'Statistik zurücksetzen'

@@ -14,18 +14,20 @@ var fn = function () {
       var planetName = link.find('.planet-name').text();
       var planetCoords = link.find('.planet-koords').text();
 
-      config.my.planets[planetCoords] = config.my.planets[planetCoords] || {
-        name: planetName
-      };
+      config.my.planets[planetCoords] = config.my.planets[planetCoords] || {};
+      config.my.planets[planetCoords].name = planetName;
+      config.my.planets[planetCoords].coords = planetCoords.replace(/[\[\]]/g, '').split(':').map(Number);
+      config.my.planets[planetCoords].href = link.attr('href');
     } else {
       $('#planetList').children().each(function () {
         var link = $(this).find('.planetlink');
         var planetName = link.find('.planet-name').text();
         var planetCoords = link.find('.planet-koords').text();
         if (link.hasClass('active')) {
-          config.my.planets[planetCoords] = config.my.planets[planetCoords] || {
-            name: planetName
-          };
+          config.my.planets[planetCoords] = config.my.planets[planetCoords] || {};
+          config.my.planets[planetCoords].name = planetName;
+          config.my.planets[planetCoords].coords = planetCoords.replace(/[\[\]]/g, '').split(':').map(Number);
+          config.my.planets[planetCoords].href = link.attr('href');
         }
       });
     }

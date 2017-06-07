@@ -12,64 +12,122 @@ var fn = function () {
 
       var $wrapper = $('<div class="uiEnhancementWindow"></div>');
 
-      var totalProd = {
-        metal: 0,
-        crystal: 0,
-        deuterium: 0,
-        metalLevel: 0,
-        crystalLevel: 0,
-        deuteriumLevel: 0,
+      var globalStats = {
+        prod: {
+          metal: 0,
+          crystal: 0,
+          deuterium: 0
+        },
+        level: {
+          metal: 0,
+          crystal: 0,
+          deuterium: 0
+        },
+        current: {
+          metal: 0,
+          crystal: 0,
+          deuterium: 0
+        },
         planetCount: 0
       };
 
+      var planetStatsHtml = '';
       for (var coords in config.my.planets) {
         var planet = config.my.planets[coords];
         if (!planet.resources) {
           continue;
         }
 
-        var $stats = $('<div class="planetstats"></div>');
-        $stats.append('<h3>' + _translate('STATS_FOR') + ' ' + planet.name + ' ' + coords + '</h3>');
-        $stats.append($('<div>' + _translate('STATS_DAILY') + ' (' + _translate('UNIT_METAL') + ') : <span class="undermark">+' + _num(Math.floor(planet.resources.metal.prod * 3600 * 24)) + '</span></div>'));
-        $stats.append($('<div>' + _translate('STATS_DAILY') + ' (' + _translate('UNIT_CRYSTAL') + ') : <span class="undermark">+' + _num(Math.floor(planet.resources.crystal.prod * 3600 * 24)) + '</span></div>'));
-        $stats.append($('<div>' + _translate('STATS_DAILY') + ' (' + _translate('UNIT_DEUTERIUM') + ') : <span class="undermark">+' + _num(Math.floor(planet.resources.deuterium.prod * 3600 * 24)) + '</span></div>'));
-        $stats.append($('<div class="spacer"></div>'));
+        var currentPlanetResources = {
+          metal: Math.round(planet.resources.metal.now + planet.resources.metal.prod * ((Date.now() - planet.resources.lastUpdate) / 1000)),
+          crystal: Math.round(planet.resources.crystal.now + planet.resources.crystal.prod * ((Date.now() - planet.resources.lastUpdate) / 1000)),
+          deuterium: Math.round(planet.resources.deuterium.now + planet.resources.deuterium.prod * ((Date.now() - planet.resources.lastUpdate) / 1000))
+        };
 
-        //$stats.append($('<div>Niveau des mines : ' + planet.resources.metal.level + ' / ' + planet.resources.crystal.level + ' / ' + planet.resources.deuterium.level + '</div>'));
+        // add production to global stats
+        globalStats.prod.metal += planet.resources.metal.prod;
+        globalStats.prod.crystal += planet.resources.crystal.prod;
+        globalStats.prod.deuterium += planet.resources.deuterium.prod;
 
-        totalProd.metal += planet.resources.metal.prod;
-        totalProd.crystal += planet.resources.crystal.prod;
-        totalProd.deuterium += planet.resources.deuterium.prod;
-        totalProd.metalLevel += (planet.resources.metal.level || 0);
-        totalProd.crystalLevel += (planet.resources.crystal.level || 0);
-        totalProd.deuteriumLevel += (planet.resources.deuterium.level || 0);
-        totalProd.planetCount++;
+        // add mines level to global stats
+        globalStats.level.metal += (planet.resources.metal.level || 0);
+        globalStats.level.crystal += (planet.resources.crystal.level || 0);
+        globalStats.level.deuterium += (planet.resources.deuterium.level || 0);
 
-        $wrapper.append($stats);
+        // add current resources to global stats
+        globalStats.current.metal += currentPlanetResources.metal;
+        globalStats.current.crystal += currentPlanetResources.crystal;
+        globalStats.current.deuterium += currentPlanetResources.deuterium;
+
+        globalStats.planetCount++;
+
+        // add planet stats html
+        var textShadow = [
+          '0 0 2px black',
+          '0 0 2px black',
+          '0 0 2px black',
+          '0 0 2px black',
+          '0 0 2px black',
+          '0 0 2px black',
+          '0 0 2px black'
+        ].join(',');
+
+        planetStatsHtml += [
+          '<tr>',
+            '<td style="width: 80px">',
+              '<a href="' + planet.href + '">' + coords + '</a>',
+            '</td>',
+            ['metal', 'crystal', 'deuterium'].map(function (resource) {
+              return [
+                '<td>',
+                  '<div class="resourceIcon ' + resource + '" style="font-size: 20px; line-height: 32px; text-shadow: ' + textShadow + '">' + planet.resources[resource].level + '</div>',
+                  '<div style="float:left; width: 100px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
+                    '<div class="font-weight: bold; padding-bottom: 1px;">' + _num(currentPlanetResources[resource], planet.resources[resource].prod) + '</div>',
+                    '<div><span class="undermark">+' + _num(Math.floor(planet.resources[resource].prod * 3600)) + '</span> /' + _translate('TIME_HOUR') + '</div>',
+                    '<div><span class="undermark">+' + _num(Math.floor(planet.resources[resource].prod * 3600 * 24)) + '</span> /' + _translate('TIME_DAY') + '</div>',
+                  '</div>',
+                '</td>'
+              ].join('');
+            }).join(''),
+          '</tr>'
+        ].join('');
       }
 
-      totalProd.metalLevel /= Object.keys(config.my.planets).length;
-      totalProd.crystalLevel /= Object.keys(config.my.planets).length;
-      totalProd.deuteriumLevel /= Object.keys(config.my.planets).length;
+      // glogal stats
+      globalStats.level.metal /= globalStats.planetCount;
+      globalStats.level.crystal /= globalStats.planetCount;
+      globalStats.level.deuterium /= globalStats.planetCount;
 
-      // global stats
-      var $stats = $('<div class="planetstats"></div>');
-      $stats.append('<h3>' + _translate('STATS_ALL') + '</h3>');
-      $stats.append($('<div>' + _translate('STATS_DAILY') + ' (' + _translate('UNIT_METAL') + ') : <span class="undermark">+' + _num(Math.floor(totalProd.metal * 3600 * 24)) + '</span></div>'));
-      $stats.append($('<div>' + _translate('STATS_DAILY') + ' (' + _translate('UNIT_CRYSTAL') + ') : <span class="undermark">+' + _num(Math.floor(totalProd.crystal * 3600 * 24)) + '</span></div>'));
-      $stats.append($('<div>' + _translate('STATS_DAILY') + ' (' + _translate('UNIT_DEUTERIUM') + ') : <span class="undermark">+' + _num(Math.floor(totalProd.deuterium * 3600 * 24)) + '</span></div>'));
-      $stats.append($('<div class="spacer"></div>'));
-      $stats.append($('<div>' + _translate('STATS_RATIO') + _translate('UNIT_METAL') + ') : 1 / ' + Math.floor(100 * totalProd.crystal / totalProd.metal) / 100 + ' / ' + Math.floor(100 * totalProd.deuterium / totalProd.metal) / 100 + '</div>'));
-      $stats.append($('<div>' + _translate('STATS_RATIO') + _translate('UNIT_CRYSTAL') + ') : ' + Math.floor(100 * totalProd.metal / totalProd.crystal) / 100 + ' / 1 / ' + Math.floor(100 * totalProd.deuterium / totalProd.crystal) / 100 + '</div>'));
-      $stats.append($('<div>' + _translate('STATS_RATIO') + _translate('UNIT_DEUTERIUM') + ') : ' + Math.floor(100 * totalProd.metal / totalProd.deuterium) / 100 + ' / ' + Math.floor(100 * totalProd.crystal / totalProd.deuterium) / 100 + ' / 1</div>'));
-      $stats.append($('<div class="spacer"></div>'));
+      var productionRatio = {
+        metal: '1 / ' + Math.floor(100 * globalStats.prod.crystal / globalStats.prod.metal) / 100 + ' / ' + Math.floor(100 * globalStats.prod.deuterium / globalStats.prod.metal) / 100,
+        crystal: Math.floor(100 * globalStats.prod.metal / globalStats.prod.crystal) / 100 + ' / 1 / ' + Math.floor(100 * globalStats.prod.deuterium / globalStats.prod.crystal) / 100,
+        deuterium: Math.floor(100 * globalStats.prod.metal / globalStats.prod.deuterium) / 100 + ' / ' + Math.floor(100 * globalStats.prod.crystal / globalStats.prod.deuterium) / 100 + ' / 1'
+      };
 
-      //$stats.append($('<div>Niveau moyen des mines : ' + Math.floor(10*totalProd.metalLevel)/10 + ' / ' + Math.floor(10*totalProd.crystalLevel)/10 + ' / ' + Math.floor(10*totalProd.deuteriumLevel)/10 + '</div>'));
+      planetStatsHtml = [
+        '<tr>',
+          '<td style="width: 80px"></td>',
+          ['metal', 'crystal', 'deuterium'].map(function (resource) {
+            return [
+              '<td>',
+                '<div class="resourceIcon ' + resource + '" style="font-size: 20px; line-height: 32px; text-shadow: ' + textShadow + '">' + Math.floor(10 * globalStats.level[resource]) / 10 + '</div>',
+                '<div style="float:left; width: 100px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em; padding-bottom: 3px">',
+                  '<div class="font-weight: bold; padding-bottom: 1px;">' + _num(globalStats.current[resource], globalStats.prod[resource]) + '</div>',
+                  '<div><span class="undermark">+' + _num(Math.floor(globalStats.prod[resource] * 3600)) + '</span> /' + _translate('TIME_HOUR') + '</div>',
+                  '<div><span class="undermark">+' + _num(Math.floor(globalStats.prod[resource] * 3600 * 24)) + '</span> /' + _translate('TIME_DAY') + '</div>',
+                  '<div style="font-size: 8px; padding-top: 5px;">' + productionRatio[resource] + '</div>',
+                '</div>',
+              '</td>'
+            ].join('');
+          }).join(''),
+        '</tr>',
+        '<tr><td style="height:10px"></td></tr>'
+      ].join('') + planetStatsHtml;
 
-      $wrapper.prepend($stats);
+      $wrapper.append($('<table style="background:black">' + planetStatsHtml + '</table>'));
 
       // add reset button
-      var $resetStatsButton = $('<div style="text-align: right;padding-right: .5em;"><a href="#" class="btn_blue">' + _translate('RESET_STATS') + '</a></div>');
+      var $resetStatsButton = $('<div style="margin-top: 10px; text-align: right;padding-right: .5em;"><a href="#" class="btn_blue">' + _translate('RESET_STATS') + '</a></div>');
       $wrapper.append($resetStatsButton);
       $resetStatsButton.click(function () {
         delete config.my.planets;
