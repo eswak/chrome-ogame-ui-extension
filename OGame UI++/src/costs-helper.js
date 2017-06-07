@@ -99,7 +99,7 @@ var fn = function () {
         $el.append('<li class="enhancement">' + _translate('BUILDABLE_NOW') + '</li>');
       } else {
         $el.append('<li class="enhancement">' + _translate('BUILDABLE_IN', {
-          time: _time(availableIn)
+          time: _time(availableIn, -1)
         }) + '</li>');
       }
     }
