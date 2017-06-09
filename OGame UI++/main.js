@@ -12,6 +12,7 @@ var userscript = function () {
   _addTabNeighbors();
   _addTabSimulator();
   _addTabWarRiders();
+  _addTabSettings();
 
   // Add static helpers
   _addCurrentPlanetStorageHelper();

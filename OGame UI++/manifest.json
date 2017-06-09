@@ -25,6 +25,7 @@
         "src/spy-reports-scanner.js",
         "src/tab-idle-players.js",
         "src/tab-neighbors.js",
+        "src/tab-settings.js",
         "src/tab-simulator.js",
         "src/tab-stats.js",
         "src/tab-war-riders.js",

@@ -4,6 +4,9 @@ var fn = function () {
 
   var translations = {
     fr: {
+      TRADE_RATE: 'Taux d\'échange',
+      RESET_ALL_TEXT: 'Si vous rencontrez des bugs, ou si vous souhaitez rétablir les paramètres par défaut, cliquez sur le bouton ci-dessous pour nettoyer les données de l\'extension. Vous devrez revisiter la page des ressources de toutes vos planètes afin d\'obtenir une page de statistiques complète, et vous perdrez toutes les annotations faites sur les planètes de vos voisins.',
+      RESET_ALL: 'Réinitialiser toutes les données de l\'extension OGame UI++',
       UNIT_METAL: 'Métal',
       UNIT_CRYSTAL: 'Cristal',
       UNIT_DEUTERIUM: 'Deutérium',
@@ -36,6 +39,9 @@ var fn = function () {
       RESET_STATS: 'Réinitialiser les statistiques'
     },
     en: {
+      TRADE_RATE: 'Trade rate',
+      RESET_ALL_TEXT: 'If you encounter bugs using this extension, or if you want to restore default settings, click on the button below to clean up all this extension\'s data. You will need to revisit all your planet\'s resources page in order to get a properly-filled statistics page, and you will also lose all your neighbours annotations.',
+      RESET_ALL: 'Reset all OGame UI++ extension data',
       UNIT_METAL: 'Metal',
       UNIT_CRYSTAL: 'Crystal',
       UNIT_DEUTERIUM: 'Deuterium',
@@ -68,6 +74,9 @@ var fn = function () {
       RESET_STATS: 'Reset stats'
     },
     es: {
+      TRADE_RATE: 'Trade rate',
+      RESET_ALL_TEXT: 'If you encounter bugs using this extension, or if you want to restore default settings, click on the button below to clean up all this extension\'s data. You will need to revisit all your planet\'s resources page in order to get a properly-filled statistics page, and you will also lose all your neighbours annotations.',
+      RESET_ALL: 'Reset all OGame UI++ extension data',
       UNIT_METAL: 'Metal',
       UNIT_CRYSTAL: 'Cristal',
       UNIT_DEUTERIUM: 'Deuterio',
@@ -100,6 +109,9 @@ var fn = function () {
       RESET_STATS: 'Restaurar estadísticas'
     },
     tr: {
+      TRADE_RATE: 'Trade rate',
+      RESET_ALL_TEXT: 'If you encounter bugs using this extension, or if you want to restore default settings, click on the button below to clean up all this extension\'s data. You will need to revisit all your planet\'s resources page in order to get a properly-filled statistics page, and you will also lose all your neighbours annotations.',
+      RESET_ALL: 'Reset all OGame UI++ extension data',
       UNIT_METAL: 'Metal',
       UNIT_CRYSTAL: 'Kristal',
       UNIT_DEUTERIUM: 'Deuterium',
@@ -132,6 +144,9 @@ var fn = function () {
       RESET_STATS: 'Sıfırlama istatistikler'
     },
     de: {
+      TRADE_RATE: 'Trade rate',
+      RESET_ALL_TEXT: 'If you encounter bugs using this extension, or if you want to restore default settings, click on the button below to clean up all this extension\'s data. You will need to revisit all your planet\'s resources page in order to get a properly-filled statistics page, and you will also lose all your neighbours annotations.',
+      RESET_ALL: 'Reset all OGame UI++ extension data',
       UNIT_METAL: 'Metall',
       UNIT_CRYSTAL: 'Kristall',
       UNIT_DEUTERIUM: 'Deuterium',
@@ -169,7 +184,7 @@ var fn = function () {
   }
 
   window._translate = function _translate(key, args) {
-    var ret = translations[lang][key] || '';
+    var ret = translations[lang][key] || key;
     for (var k in args) {
       if (args.noBold) {
         ret = ret.replace('{' + k + '}', args[k]);
