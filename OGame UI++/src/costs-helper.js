@@ -108,7 +108,6 @@ var fn = function () {
       var $amount = $('#content .amount:not(.enhanced)');
       if ($amount.length > 0) {
         var resources = _getCurrentPlanetResources();
-        var costs = _getCostTimes(costs);
 
         var maxMetal = resources.metal.now / costs.metal;
         var maxCrystal = resources.crystal.now / costs.crystal;
