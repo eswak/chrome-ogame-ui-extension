@@ -35,7 +35,6 @@ var fn = function () {
                 id: playerId,
                 name: player.name,
                 coords: planet.coords,
-                militaryPosition: player.militaryPosition,
                 militaryScore: player.militaryScore,
                 economyScore: player.economyScore,
                 ships: player.ships
