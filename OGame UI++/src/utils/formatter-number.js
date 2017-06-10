@@ -21,6 +21,25 @@ var fn = function () {
 
     return '<span id="number-' + id + '"></span>';
   };
+  window.uipp_scoreHumanReadable = function(num) {
+    var sign = 1;
+    if (num<0) {
+        num = -num;
+        sign = -1;
+    } else if (num===0)
+        return 0;
+    var n = Math.max(0, Math.ceil(Math.log10(num))-1);
+    var prefixes = ['','k','M','B','T','P','E','Z','Y'];
+    var dividers = [1,1e3,1e6,1e9,1e12,1e15,1e18,1e21,1e24];
+    var idx = Math.floor(n/3);
+    var mul = ([100,10,1])[n%3];
+    if (n >= prefixes.length*3) {
+        mul = 1;
+        idx = prefixes.length-1;
+    }
+    var pref = prefixes[idx];
+    return Math.round(num/dividers[idx]*mul)/mul*sign + pref;
+  };
 };
 
 var script = document.createElement('script');
