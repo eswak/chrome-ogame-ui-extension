@@ -58,12 +58,12 @@ var fn = function () {
         $el.append($('<td class="tooltip js_hideTipOnMobile" title="' + _translate('ECONOMY_SCORE_LONG', {
           noBold: true,
           scoreEco: neighbours[i].economyScore
-        }) + '"><a href="?page=highscore&searchRelId=' + neighbours[i].id + '&category=1&type=1">' + _num(neighbours[i].economyScore) + '</a></td>'));
+        }) + '"><a href="?page=highscore&searchRelId=' + neighbours[i].id + '&category=1&type=1">' + uipp_scoreHumanReadable(neighbours[i].economyScore) + '</a></td>'));
         $el.append($('<td class="tooltip js_hideTipOnMobile" title="' + _translate('MILITARY_SCORE_LONG', {
           noBold: true,
           scoreMilitary: neighbours[i].militaryScore,
           ships: (neighbours[i].ships ? neighbours[i].ships : '0')
-        }) + '"><a href="?page=highscore&searchRelId=' + neighbours[i].id + '&category=1&type=3">' + _num(neighbours[i].militaryScore) + ' (' + _num(neighbours[i].ships ? neighbours[i].ships : '0') + ')</a></td>'));
+        }) + '"><a href="?page=highscore&searchRelId=' + neighbours[i].id + '&category=1&type=3">' + uipp_scoreHumanReadable(neighbours[i].militaryScore) + ' (' + _num(neighbours[i].ships ? neighbours[i].ships : '0') + ')</a></td>'));
         $el.append($('<td class="tooltip js_hideTipOnMobile" title="' + neighbours[i].name + '">' + neighbours[i].name + '</td>'));
         $el.append($('<td width="100%"><input value="' + (config && config.planetNotes && config.planetNotes[neighbours[i].coords[0] + ':' + neighbours[i].coords[1] + ':' + neighbours[i].coords[2]] ? config.planetNotes[neighbours[i].coords[0] + ':' + neighbours[i].coords[1] + ':' + neighbours[i].coords[2]] : '') + '" onkeyup="_editNote(' + neighbours[i].coords[0] + ',' + neighbours[i].coords[1] + ',' + neighbours[i].coords[2] + ',this.value);return false;" style="width:96.5%;" type="text"/></td>'));
         $el.append($('<td> <a espionage" href="javascript:void(0);" onclick="_spy(' + neighbours[i].coords[0] + ',' + neighbours[i].coords[1] + ',' + neighbours[i].coords[2] + ');return false;"><span class="icon icon_eye"></span></a>&nbsp;<a href="javascript:void(0);" onclick="_toggleIgnorePlanet(' + neighbours[i].coords[0] + ',' + neighbours[i].coords[1] + ',' + neighbours[i].coords[2] + ')"><span class="icon icon_against"></span></a>&nbsp; <a href="?page=fleet1&galaxy=' + neighbours[i].coords[0] + '&system=' + neighbours[i].coords[1] + '&position=' + neighbours[i].coords[2] + '&type=1&mission=1" onclick="$(this).find(\'.icon\').removeClass(\'icon_fastforward\').addClass(\'icon_checkmark\');" target="_blank"><span class="icon icon_fastforward"></span></a> </td>'));
