@@ -23,6 +23,7 @@
         "src/current-planet-storage-helper.js",
         "src/galaxy-players-planets.js",
         "src/spy-reports-scanner.js",
+        "src/tab-alliance.js",
         "src/tab-idle-players.js",
         "src/tab-neighbors.js",
         "src/tab-settings.js",

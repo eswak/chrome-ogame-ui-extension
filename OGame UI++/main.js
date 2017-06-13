@@ -7,6 +7,7 @@ var userscript = function () {
   _setConfigMyPlanets();
 
   // Add tabs in the left menu
+  _addTabAlliance();
   _addTabIdlePlayers();
   _addTabStats();
   _addTabNeighbors();
