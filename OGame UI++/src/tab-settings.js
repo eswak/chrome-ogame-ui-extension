@@ -40,7 +40,7 @@ var fn = function () {
       var $resetAllButton = $('<div style="margin-top: 200px; text-align: center;"><i>' + _translate('RESET_ALL_TEXT') + '</i><br><br><a href="#" class="btn_blue">' + _translate('RESET_ALL') + '</a></div>');
       $wrapper.append($resetAllButton);
       $resetAllButton.click(function () {
-        localStorage.removeItem('og-enhancements');
+        _resetConfig();
         window.location.reload();
       });
 
