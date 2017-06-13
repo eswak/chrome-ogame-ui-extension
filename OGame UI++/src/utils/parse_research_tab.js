@@ -9,7 +9,7 @@ var fn = function () {
 	if ($d115.length > 0) {
 		var $combustionDrive = $d115[0].innerText.match(/\d+/g)
 		if ($combustionDrive.length > 0) {
-			var combustionDrive = $combustionDrive[0]
+			var combustionDrive = parseInt($combustionDrive[0]);
 			if (!config.combustionDrive || config.combustionDrive !== combustionDrive) {
 				config.combustionDrive = combustionDrive;
 				_saveConfig(config);

@@ -87,7 +87,14 @@ var fn = function () {
                       }
                     });
 
-                    cb && cb(players);
+                    $.ajax({
+                      url: '/api/serverData.xml',
+                      dataType: 'xml',
+                      success: function (data) {
+                        var universe = xml2json(data).serverData;
+                        cb && cb(players, universe);
+                      }
+                    });
                   }
                 });
               }

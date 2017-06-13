@@ -7,9 +7,10 @@ var fn = function () {
     }
 
     console.debug('Updating universe data...');
-    _loadUniverseApi(function (players) {
+    _loadUniverseApi(function (players, universe) {
       console.debug('Universe data updated.');
       config.players = players;
+	  config.universe = universe;
       config.lastPlayersUpdate = Date.now();
       _saveConfig(config);
       console.debug('OGame UI++ add-on config :', config);
