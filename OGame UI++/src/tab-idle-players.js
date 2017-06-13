@@ -37,6 +37,10 @@ var fn = function () {
       myCoords[1] = parseInt(myCoords[1]);
       myCoords[2] = parseInt(myCoords[2]);
 
+	  if (!config.cumbustionDrive)
+		  config.cumbustionDrive = 0;
+	  var V = 7500 * (1 + 0.1*config.cumbustionDrive);
+	  
       var idles = [];
       for (var playerId in config.players) {
         var player = config.players[playerId];
@@ -50,7 +54,6 @@ var fn = function () {
 				distance = 2700 + 95*Math.abs(planet.coords[1] - myCoords[1]);
 			else 
 				distance = 1000 + 5*Math.abs(planet.coords[2] - myCoords[2]);
-			var V = 7500;
 			var flighTime = (10 + 3500*Math.sqrt(10*distance/V) ) / 3600;
 			
             if (flighTime >= timeMin && flighTime <= timeMax /*hours*/) {
