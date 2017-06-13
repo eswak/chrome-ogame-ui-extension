@@ -37,9 +37,9 @@ var fn = function () {
       myCoords[1] = parseInt(myCoords[1]);
       myCoords[2] = parseInt(myCoords[2]);
 
-	  if (!config.cumbustionDrive)
-		  config.cumbustionDrive = 0;
-	  var V = 7500 * (1 + 0.1*config.cumbustionDrive);
+	  if (!config.combustionDrive)
+		  config.combustionDrive = 0;
+	  var V = 7500 * (1 + 0.1*config.combustionDrive);
 	  
       var idles = [];
       for (var playerId in config.players) {

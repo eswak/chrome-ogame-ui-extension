@@ -7,13 +7,13 @@ var fn = function () {
 
 	var $d115 = $('#details115 span.level');
 	if ($d115.length > 0) {
-		var $cumbustionDrive = $d115[0].innerText.match(/\d+/g)
-		if ($cumbustionDrive.length > 0) {
-			var cumbustionDrive = $cumbustionDrive[0]
-			if (!config.cumbustionDrive || config.cumbustionDrive !== cumbustionDrive) {
-				config.cumbustionDrive = cumbustionDrive;
+		var $combustionDrive = $d115[0].innerText.match(/\d+/g)
+		if ($combustionDrive.length > 0) {
+			var combustionDrive = $combustionDrive[0]
+			if (!config.combustionDrive || config.combustionDrive !== combustionDrive) {
+				config.combustionDrive = combustionDrive;
 				_saveConfig(config);
-				console.log('saving cumbustionDrive='+cumbustionDrive);
+				console.log('saving combustionDrive='+combustionDrive);
 			};
 		};
 	};
