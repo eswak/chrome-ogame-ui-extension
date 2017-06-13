@@ -11,9 +11,13 @@ var fn = function () {
         _addRessourceCountTimeHelper(costs);
         _addLimitingReagentHelper(costs);
         _addProductionEconomyTimeTextHelper(costs);
-        _addProductionBuildableInTextHelper(costs);
-        _addProductionMaximumBuildableTextHelper(costs);
         _addProductionRentabilityTimeTextHelper(costs);
+
+        // for non-commanders only
+        if ($('.commander.on').length === 0) {
+          _addProductionBuildableInTextHelper(costs);
+          _addProductionMaximumBuildableTextHelper(costs);
+        }
       }
     }, 100);
 
