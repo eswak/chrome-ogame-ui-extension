@@ -25,6 +25,9 @@ var userscript = function () {
 
   // Refresh universe data (config.players)
   _refreshUniverseData();
+
+  // Add historical point logger
+  _logHistoryData();
 };
 
 // inject user script into the document
