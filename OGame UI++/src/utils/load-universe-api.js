@@ -1,6 +1,7 @@
 var fn = function () {
   'use strict';
   window._loadUniverseApi = function _loadUniverseApi(cb) {
+    console.log('OGame UI++ : loading universe data from OGame API...');
     $.ajax({
       url: '/api/players.xml',
       dataType: 'xml',
@@ -9,16 +10,20 @@ var fn = function () {
         var id;
         var status;
         var name;
+        var alliance;
         var $el;
         $('player', data).each(function () {
           $el = $(this);
           id = $el.attr('id');
           status = $el.attr('status');
           name = $el.attr('name');
+          alliance = $el.attr('alliance') || null;
           players[id] = {
+            id: id,
             status: status,
             name: name,
-            planets: []
+            planets: [],
+            alliance: alliance
           };
         });
 
@@ -66,33 +71,55 @@ var fn = function () {
                 });
 
                 $.ajax({
-                  url: '/api/highscore.xml?category=1&type=3',
+                  url: '/api/highscore.xml?category=1&type=0',
                   dataType: 'xml',
                   success: function (data) {
                     var position;
                     var id;
                     var score;
-                    var ships;
                     var $el;
                     $('player', data).each(function () {
                       $el = $(this);
                       position = $el.attr('position');
                       id = $el.attr('id');
                       score = $el.attr('score');
-                      ships = $el.attr('ships');
                       if (players[id]) {
-                        players[id].militaryPosition = position;
-                        players[id].militaryScore = score;
-                        players[id].ships = ships;
+                        players[id].globalPosition = position;
+                        players[id].globalScore = score;
                       }
                     });
 
                     $.ajax({
-                      url: '/api/serverData.xml',
+                      url: '/api/highscore.xml?category=1&type=3',
                       dataType: 'xml',
                       success: function (data) {
-                        var universe = xml2json(data).serverData;
-                        cb && cb(players, universe);
+                        var position;
+                        var id;
+                        var score;
+                        var ships;
+                        var $el;
+                        $('player', data).each(function () {
+                          $el = $(this);
+                          position = $el.attr('position');
+                          id = $el.attr('id');
+                          score = $el.attr('score');
+                          ships = $el.attr('ships');
+                          if (players[id]) {
+                            players[id].militaryPosition = position;
+                            players[id].militaryScore = score;
+                            players[id].ships = ships;
+                          }
+                        });
+
+	                    $.ajax({
+	                      url: '/api/serverData.xml',
+	                      dataType: 'xml',
+	                      success: function (data) {
+	                        var universe = xml2json(data).serverData;
+	                        console.log('OGame UI++ : loaded universe data.');
+	                        cb && cb(players, universe);
+	                      }
+	                    });
                       }
                     });
                   }

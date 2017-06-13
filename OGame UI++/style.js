@@ -16,4 +16,8 @@ style.textContent += '.uiEnhancementWindow tr.ignore { opacity:.15; }';
 style.textContent += '.icon.icon_eye.disabled:hover { background-position: 0 -48px; }';
 style.textContent += '.currentPlayer td { background: #444 !important; }';
 style.textContent += '.spacer { height: .3em }';
+style.textContent += '.uipp-table { font-size: 11px; width: 100%; background: black; text-align: center; }';
+style.textContent += '.uipp-table th { font-size: 14px; font-weight: bold; cursor: pointer; padding: 10px; }';
+style.textContent += '.uipp-table td { padding: 5px; }';
+style.textContent += '#highscoreContent .navButton.uipp-score { display: inline-block; transform: scale(0.5); margin: -23px; float: none; }';
 (document.head || document.documentElement).appendChild(style);
