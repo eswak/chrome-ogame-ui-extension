@@ -16,6 +16,8 @@ var fn = function () {
       success: function (a) {
         if (a.response.success) {
           $('#planet_' + galaxy + '_' + system + '_' + position + ' .icon_eye').addClass('disabled');
+        } else {
+          fadeBox(a.response.message, true);
         }
 
         window.miniFleetToken = a.newToken;

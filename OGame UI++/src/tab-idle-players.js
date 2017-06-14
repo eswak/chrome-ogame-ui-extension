@@ -43,38 +43,67 @@ var fn = function () {
         }
       }
 
-      idles.sort(function (a, b) {
-        return b.economyScore - a.economyScore;
-      });
-
-      var $wrapper = $('<div class="uiEnhancementWindow"></div>');
-      var $table = $('<table><tr><th>' + _translate('COORDINATES') + '</th><th>' + _translate('ECONOMY_SCORE') + '</th><th>' + _translate('MILITARY_SCORE') + '</th><th>' + _translate('PLAYER') + '</th><th>' + _translate('NOTE') + '</th><th>' + _translate('ACTIONS') + '</th></tr></table>');
+      var $wrapper = $('<div></div>');
+      var $table = $('<table class="uipp-table"><thead id="highscoreContent"><tr><th>' + _translate('COORDINATES') + '</th>' + /*'<th><img src="https://gf2.geo.gfsrv.net/cdna2/89624964d4b06356842188dba05b1b.gif" style="transform:scale(1.6);margin-bottom:-4px;"/></th>' +*/ '<th><span class="navButton uipp-score" id="economy"></span></th><th><span class="navButton uipp-score" id="fleet"></span></th><th>' + _translate('PLAYER') + '</th><th>' + _translate('NOTE') + '</th><th>' + _translate('ACTIONS') + '</th></tr></thead><tbody></tbody></table>');
       for (var i = 0; i < idles.length; i++) {
         var $el = $('<tr id="planet_' + idles[i].coords[0] + '_' + idles[i].coords[1] + '_' + idles[i].coords[2] + '"></tr>');
         $el.append($('<td><a href="/game/index.php?page=galaxy&galaxy=' + idles[i].coords[0] + '&system=' + idles[i].coords[1] + '&position=' + idles[i].coords[2] + '">[' + idles[i].coords[0] + ':' + idles[i].coords[1] + ':' + idles[i].coords[2] + ']</a></td>'));
+        /*var distanceInSeconds = 15 * 60 + Math.floor(Math.random() * 3600);
+        $el.append($('<td style="white-space:nowrap" data-value="' + distanceInSeconds + '">' + _time(distanceInSeconds) + '</td>'));*/
         $el.append($('<td><a class="tooltip js_hideTipOnMobile" href="?page=highscore&searchRelId=' + idles[i].id + '&category=1&type=1" title="' + _translate('ECONOMY_SCORE_LONG', {
           noBold: true,
           scoreEco: idles[i].economyScore
         }) + '">' + uipp_scoreHumanReadable(idles[i].economyScore) + '</a></td>'));
-        $el.append($('<td class="tooltip js_hideTipOnMobile" title="' + _translate('MILITARY_SCORE_LONG', {
+        $el.append($('<td class="tooltip js_hideTipOnMobile" data-value="' + idles[i].militaryScore + '" title="' + _translate('MILITARY_SCORE_LONG', {
           noBold: true,
           scoreMilitary: idles[i].militaryScore,
           ships: (idles[i].ships ? idles[i].ships : '0')
-        }) + '"><a href="?page=highscore&searchRelId=' + idles[i].id + '&category=1&type=3">' + uipp_scoreHumanReadable(idles[i].militaryScore) + ' (' + _num(idles[i].ships ? idles[i].ships : '0') + ')</a></td>'));
+        }) + '" style="white-space: nowrap"><a href="?page=highscore&searchRelId=' + idles[i].id + '&category=1&type=3">' + uipp_scoreHumanReadable(idles[i].militaryScore) + ' (' + uipp_scoreHumanReadable(idles[i].ships ? idles[i].ships : '0') + ')</a></td>'));
         $el.append($('<td class="tooltip js_hideTipOnMobile" title="' + idles[i].name + '">' + idles[i].name + '</td>'));
-        $el.append($('<td width="100%"><input value="' + (config && config.planetNotes && config.planetNotes[idles[i].coords[0] + ':' + idles[i].coords[1] + ':' + idles[i].coords[2]] ? config.planetNotes[idles[i].coords[0] + ':' + idles[i].coords[1] + ':' + idles[i].coords[2]] : '') + '" onkeyup="_editNote(' + idles[i].coords[0] + ',' + idles[i].coords[1] + ',' + idles[i].coords[2] + ',this.value);return false;" style="width:96.5%;" type="text"/></td>'));
+        $el.append($('<td style="width: 260px"><input value="' + (config && config.planetNotes && config.planetNotes[idles[i].coords[0] + ':' + idles[i].coords[1] + ':' + idles[i].coords[2]] ? config.planetNotes[idles[i].coords[0] + ':' + idles[i].coords[1] + ':' + idles[i].coords[2]] : '') + '" onkeyup="_editNote(' + idles[i].coords[0] + ',' + idles[i].coords[1] + ',' + idles[i].coords[2] + ',this.value);return false;" style="width:96.5%;" type="text"/></td>'));
         $el.append($('<td><a class="tooltip js_hideTipOnMobile espionage" title="" href="javascript:void(0);" onclick="_spy(' + idles[i].coords[0] + ',' + idles[i].coords[1] + ',' + idles[i].coords[2] + ');return false;"><span class="icon icon_eye"></span></a>&nbsp;<a href="javascript:void(0);" onclick="_toggleIgnorePlanet(' + idles[i].coords[0] + ',' + idles[i].coords[1] + ',' + idles[i].coords[2] + ')"><span class="icon icon_against"></span></a>&nbsp;<a href="?page=fleet1&galaxy=' + idles[i].coords[0] + '&system=' + idles[i].coords[1] + '&position=' + idles[i].coords[2] + '&type=1&mission=1" onclick="$(this).find(\'.icon\').removeClass(\'icon_fastforward\').addClass(\'icon_checkmark\');" target="_blank"><span class="icon icon_fastforward"></span></a></td>'));
         if (config && config.ignoredPlanets && config.ignoredPlanets[idles[i].coords[0] + ':' + idles[i].coords[1] + ':' + idles[i].coords[2]]) {
           $el.addClass('ignore');
         }
 
-        $table.append($el);
+        $table.find('tbody').append($el);
       }
 
       $wrapper.append($table);
 
       if (idles.length === 0) {
         $wrapper.append($('<div style="text-align: center; font-size: 16px; padding-top: 1em;">No idles yet</div>'));
+      } else {
+        setTimeout(function () {
+          $.tablesorter.addParser({
+            id: 'attr-data-value',
+            is: function (s) { return false; },
+            type: 'numeric',
+            format: function (s, table, cell) {
+              return Number($(cell).attr('data-value') || '0');
+            }
+          });
+          $.tablesorter.addParser({
+            id: 'coordinate',
+            is: function (s) { return false; },
+            type: 'numeric',
+            format: function (s, table, cell) {
+              var coordinates = $(cell).text().replace('[', '').replace(']', '').split(':').map(Number);
+              return coordinates[0] * 1e6 + coordinates[1] * 1e3 + coordinates[2];
+            }
+          });
+          $('table.uipp-table').tablesorter({
+            cancelSelection: true,
+            //sortList: [[2, 1]],
+            sortList: [[1, 1]],
+            headers: {
+              0: { sorter: 'coordinate' },
+              /*1: { sorter: 'attr-data-value' },
+              3: { sorter: 'attr-data-value' }*/
+              2: { sorter: 'attr-data-value' }
+            }
+          });
+        }, 10);
       }
 
       // insert html
