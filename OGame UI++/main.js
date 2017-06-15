@@ -5,6 +5,7 @@ var userscript = function () {
   window.config = _getConfig();
   _setConfigTradeRate();
   _setConfigMyPlanets();
+  _parseResearchTab();
 
   // Add tabs in the left menu
   _addTabAlliance();

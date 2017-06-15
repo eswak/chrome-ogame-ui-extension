@@ -1,5 +1,6 @@
 var fn = function () {
   'use strict';
+  
   window._loadUniverseApi = function _loadUniverseApi(cb) {
     console.log('OGame UI++ : loading universe data from OGame API...');
     $.ajax({
@@ -111,8 +112,15 @@ var fn = function () {
                           }
                         });
 
-                        console.log('OGame UI++ : loaded universe data.');
-                        cb && cb(players);
+                        $.ajax({
+                          url: '/api/serverData.xml',
+                          dataType: 'xml',
+                          success: function (data) {
+                            var universe = xml2json(data).serverData;
+                            console.log('OGame UI++ : loaded universe data.');
+                            cb && cb(players, universe);
+                          }
+                        });
                       }
                     });
                   }
