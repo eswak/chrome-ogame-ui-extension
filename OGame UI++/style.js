@@ -20,5 +20,8 @@ style.textContent += '.uipp-table { font-size: 11px; width: 100%; background: bl
 style.textContent += '.uipp-table th { font-size: 14px; font-weight: bold; cursor: pointer; padding: 10px; }';
 style.textContent += '.uipp-table td { padding: 5px; }';
 style.textContent += '.uipp-table a { color: inherit; text-decoration: none; }';
+style.textContent += '.uipp-filter { cursor: pointer; display: inline-block; font-size: 11px; background: black; padding: 3px 5px; vertical-align: 3px; border-radius: 3px; margin-left: 2px; color: #AB7AFF; }';
+style.textContent += '.uipp-filter.active { background: #694d98; color: white; }';
+style.textContent += '.uipp-filterbar { padding: 5px 0; }';
 style.textContent += '#highscoreContent .navButton.uipp-score { display: inline-block; transform: scale(0.5); margin: -23px; float: none; }';
 (document.head || document.documentElement).appendChild(style);

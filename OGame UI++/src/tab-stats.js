@@ -91,7 +91,7 @@ var fn = function () {
               return [
                 '<td id="stat-' + planet.coords.join('-') + '-' + resource + '">',
                   '<div class="resourceIcon ' + resource + '" style="font-size: 20px; line-height: 32px; text-shadow: ' + textShadow + '">' + planet.resources[resource].level + '</div>',
-                  '<div style="float:left; width: 100px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
+                  '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
                     '<div class="font-weight: bold; padding-bottom: 1px;">' + _num(currentPlanetResources[resource], planet.resources[resource].prod) + '</div>',
                     '<div><span class="undermark">+' + _num(Math.floor(planet.resources[resource].prod * 3600)) + '</span> /' + _translate('TIME_HOUR') + '</div>',
                     '<div><span class="undermark">+' + _num(Math.floor(planet.resources[resource].prod * 3600 * 24)) + '</span> /' + _translate('TIME_DAY') + '</div>',
@@ -121,7 +121,7 @@ var fn = function () {
             return [
               '<td>',
                 '<div class="resourceIcon ' + resource + '" style="font-size: 20px; line-height: 32px; text-shadow: ' + textShadow + '">' + Math.floor(10 * globalStats.level[resource]) / 10 + '</div>',
-                '<div style="float:left; width: 100px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em; padding-bottom: 3px">',
+                '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em; padding-bottom: 3px">',
                   '<div class="font-weight: bold; padding-bottom: 1px;">' + _num(globalStats.current[resource], globalStats.prod[resource]) + '</div>',
                   '<div><span class="undermark">+' + _num(Math.floor(globalStats.prod[resource] * 3600)) + '</span> /' + _translate('TIME_HOUR') + '</div>',
                   '<div><span class="undermark">+' + _num(Math.floor(globalStats.prod[resource] * 3600 * 24)) + '</span> /' + _translate('TIME_DAY') + '</div>',
