@@ -4,6 +4,7 @@ var fn = function () {
 
   var translations = {
     fr: {
+      RETURN_TRIP_DURATION: 'Durée d\'un aller-retour avec des grands transporteurs',
       TRADE_RATE: 'Taux d\'échange',
       RESET_ALL_TEXT: 'Si vous rencontrez des bugs, ou si vous souhaitez rétablir les paramètres par défaut, cliquez sur le bouton ci-dessous pour nettoyer les données de l\'extension. Vous devrez revisiter la page des ressources de toutes vos planètes afin d\'obtenir une page de statistiques complète, et vous perdrez toutes les annotations faites sur les planètes de vos voisins.',
       RESET_ALL: 'Réinitialiser toutes les données de l\'extension OGame UI++',
@@ -40,6 +41,7 @@ var fn = function () {
       RESET_STATS: 'Réinitialiser les statistiques'
     },
     en: {
+      RETURN_TRIP_DURATION: 'Duration of a return trip with Large Cargo Ship',
       TRADE_RATE: 'Trade rate',
       RESET_ALL_TEXT: 'If you encounter bugs using this extension, or if you want to restore default settings, click on the button below to clean up all this extension\'s data. You will need to revisit all your planet\'s resources page in order to get a properly-filled statistics page, and you will also lose all your neighbours annotations.',
       RESET_ALL: 'Reset all OGame UI++ extension data',
@@ -76,6 +78,7 @@ var fn = function () {
       RESET_STATS: 'Reset stats'
     },
     es: {
+      RETURN_TRIP_DURATION: 'Duration of a return trip with Large Cargo Ship',
       TRADE_RATE: 'Trade rate',
       RESET_ALL_TEXT: 'If you encounter bugs using this extension, or if you want to restore default settings, click on the button below to clean up all this extension\'s data. You will need to revisit all your planet\'s resources page in order to get a properly-filled statistics page, and you will also lose all your neighbours annotations.',
       RESET_ALL: 'Reset all OGame UI++ extension data',
@@ -112,6 +115,7 @@ var fn = function () {
       RESET_STATS: 'Restaurar estadísticas'
     },
     tr: {
+      RETURN_TRIP_DURATION: 'Duration of a return trip with Large Cargo Ship',
       TRADE_RATE: 'Trade rate',
       RESET_ALL_TEXT: 'If you encounter bugs using this extension, or if you want to restore default settings, click on the button below to clean up all this extension\'s data. You will need to revisit all your planet\'s resources page in order to get a properly-filled statistics page, and you will also lose all your neighbours annotations.',
       RESET_ALL: 'Reset all OGame UI++ extension data',
@@ -148,6 +152,7 @@ var fn = function () {
       RESET_STATS: 'Sıfırlama istatistikler'
     },
     de: {
+      RETURN_TRIP_DURATION: 'Duration of a return trip with Large Cargo Ship',
       TRADE_RATE: 'Trade rate',
       RESET_ALL_TEXT: 'If you encounter bugs using this extension, or if you want to restore default settings, click on the button below to clean up all this extension\'s data. You will need to revisit all your planet\'s resources page in order to get a properly-filled statistics page, and you will also lose all your neighbours annotations.',
       RESET_ALL: 'Reset all OGame UI++ extension data',
