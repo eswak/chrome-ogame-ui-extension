@@ -1,5 +1,6 @@
 var fn = function () {
   'use strict';
+
   window._addTabNeighbors = function _addTabNeighbors() {
     var $neighboursEntry = $('<li class="neighbours enhanced"><span class="menu_icon"><div class="customMenuEntry4 menuImage defense"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">' + _translate('MENU_NEIGHBOURS_ACTIVE') + '</span></a></li>');
     $('#menuTable').append($neighboursEntry);
@@ -35,7 +36,9 @@ var fn = function () {
                 id: playerId,
                 name: player.name,
                 coords: planet.coords,
+                globalScore: player.militaryScore,
                 militaryScore: player.militaryScore,
+                militaryPosition: player.militaryPosition,
                 economyScore: player.economyScore,
                 ships: player.ships
               });
@@ -44,27 +47,22 @@ var fn = function () {
         }
       }
 
-      //neighbours.sort(function(a, b){return Math.abs(a.coords[1]-myCoords[1])-Math.abs(b.coords[1]-myCoords[1])});
-      neighbours.sort(function (a, b) {
-        return b.militaryScore - a.militaryScore;
-      });
-
-      var $wrapper = $('<div class="uiEnhancementWindow"></div>');
-      var $table = $('<table><tr><th>' + _translate('COORDINATES') + '</th><th>' + _translate('ECONOMY_SCORE') + '</th><th>' + _translate('MILITARY_SCORE') + '</th><th>' + _translate('PLAYER') + '</th><th>' + _translate('NOTE') + '</th><th>' + _translate('ACTIONS') + '</th></tr></table>');
-      var playerName = $('#playerName .textBeefy').text().trim();
+      var $wrapper = $('<div></div>');
+      var $table = $('<table class="uipp-table"><thead id="highscoreContent"><tr><th>' + _translate('COORDINATES') + '</th><th><span class="navButton uipp-score" id="economy"></th><th><span class="navButton uipp-score" id="fleet"></th><th>' + _translate('PLAYER') + '</th><th>' + _translate('NOTE') + '</th><th>' + _translate('ACTIONS') + '</th></tr></thead><tbody></tbody></table>');
+      var playerName = $('[name=ogame-player-name]').attr('content');
       for (var i = 0; i < neighbours.length; i++) {
-        var $el = $('<tr class="' + (playerName === neighbours[i].name ? 'currentPlayer' : '') + '" id="planet_' + neighbours[i].coords[0] + '_' + neighbours[i].coords[1] + '_' + neighbours[i].coords[2] + '"></tr>');
+        var $el = $('<tr id="planet_' + neighbours[i].coords[0] + '_' + neighbours[i].coords[1] + '_' + neighbours[i].coords[2] + '"></tr>');
         $el.append($('<td><a href="/game/index.php?page=galaxy&galaxy=' + neighbours[i].coords[0] + '&system=' + neighbours[i].coords[1] + '&position=' + neighbours[i].coords[2] + '">[' + neighbours[i].coords[0] + ':' + neighbours[i].coords[1] + ':' + neighbours[i].coords[2] + ']</a></td>'));
         $el.append($('<td class="tooltip js_hideTipOnMobile" title="' + _translate('ECONOMY_SCORE_LONG', {
           noBold: true,
           scoreEco: neighbours[i].economyScore
-        }) + '"><a href="?page=highscore&searchRelId=' + neighbours[i].id + '&category=1&type=1">' + uipp_scoreHumanReadable(neighbours[i].economyScore) + '</a></td>'));
+        }) + '" data-value="' + neighbours[i].economyScore + '"><a href="?page=highscore&searchRelId=' + neighbours[i].id + '&category=1&type=1">' + uipp_scoreHumanReadable(neighbours[i].economyScore) + '</a></td>'));
         $el.append($('<td class="tooltip js_hideTipOnMobile" title="' + _translate('MILITARY_SCORE_LONG', {
           noBold: true,
           scoreMilitary: neighbours[i].militaryScore,
           ships: (neighbours[i].ships ? neighbours[i].ships : '0')
-        }) + '"><a href="?page=highscore&searchRelId=' + neighbours[i].id + '&category=1&type=3">' + uipp_scoreHumanReadable(neighbours[i].militaryScore) + ' (' + _num(neighbours[i].ships ? neighbours[i].ships : '0') + ')</a></td>'));
-        $el.append($('<td class="tooltip js_hideTipOnMobile" title="' + neighbours[i].name + '">' + neighbours[i].name + '</td>'));
+        }) + '" style="white-space:nowrap" data-value="' + neighbours[i].militaryScore + '"><a href="?page=highscore&searchRelId=' + neighbours[i].id + '&category=1&type=3">' + uipp_scoreHumanReadable(neighbours[i].militaryScore) + ' (' + uipp_scoreHumanReadable(neighbours[i].ships ? neighbours[i].ships : '0') + ')</a></td>'));
+        $el.append($('<td class="tooltip js_hideTipOnMobile" title="' + neighbours[i].name + '"><span class="' + (playerName === neighbours[i].name ? 'enhancement' : '') + '">' + neighbours[i].name + '</span></td>'));
         $el.append($('<td width="100%"><input value="' + (config && config.planetNotes && config.planetNotes[neighbours[i].coords[0] + ':' + neighbours[i].coords[1] + ':' + neighbours[i].coords[2]] ? config.planetNotes[neighbours[i].coords[0] + ':' + neighbours[i].coords[1] + ':' + neighbours[i].coords[2]] : '') + '" onkeyup="_editNote(' + neighbours[i].coords[0] + ',' + neighbours[i].coords[1] + ',' + neighbours[i].coords[2] + ',this.value);return false;" style="width:96.5%;" type="text"/></td>'));
         $el.append($('<td> <a espionage" href="javascript:void(0);" onclick="_spy(' + neighbours[i].coords[0] + ',' + neighbours[i].coords[1] + ',' + neighbours[i].coords[2] + ');return false;"><span class="icon icon_eye"></span></a>&nbsp;<a href="javascript:void(0);" onclick="_toggleIgnorePlanet(' + neighbours[i].coords[0] + ',' + neighbours[i].coords[1] + ',' + neighbours[i].coords[2] + ')"><span class="icon icon_against"></span></a>&nbsp; <a href="?page=fleet1&galaxy=' + neighbours[i].coords[0] + '&system=' + neighbours[i].coords[1] + '&position=' + neighbours[i].coords[2] + '&type=1&mission=1" onclick="$(this).find(\'.icon\').removeClass(\'icon_fastforward\').addClass(\'icon_checkmark\');" target="_blank"><span class="icon icon_fastforward"></span></a> </td>'));
         if (config && config.ignoredPlanets && config.ignoredPlanets[neighbours[i].coords[0] + ':' + neighbours[i].coords[1] + ':' + neighbours[i].coords[2]]) {
@@ -73,10 +71,39 @@ var fn = function () {
 
         // note : we could use sendShips(mission, galaxy, system, position, type, shipCount)
 
-        $table.append($el);
+        $table.find('tbody').append($el);
       }
 
       $wrapper.append($table);
+
+      setTimeout(function () {
+        $.tablesorter.addParser({
+          id: 'attr-data-value',
+          is: function (s) { return false; },
+          type: 'numeric',
+          format: function (s, table, cell) {
+            return Number($(cell).attr('data-value') || '0');
+          }
+        });
+        $.tablesorter.addParser({
+          id: 'coordinate',
+          is: function (s) { return false; },
+          type: 'numeric',
+          format: function (s, table, cell) {
+            var coordinates = $(cell).text().replace('[', '').replace(']', '').split(':').map(Number);
+            return coordinates[0] * 1e6 + coordinates[1] * 1e3 + coordinates[2];
+          }
+        });
+        $('table.uipp-table').tablesorter({
+          cancelSelection: true,
+          sortList: [[2, 1]],
+          headers: {
+            0: { sorter: 'coordinate' },
+            1: { sorter: 'attr-data-value' },
+            2: { sorter: 'attr-data-value' }
+          }
+        });
+      }, 10);
 
       // insert html
       var $eventboxContent = $('#eventboxContent');

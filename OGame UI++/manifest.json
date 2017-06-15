@@ -21,6 +21,7 @@
         "src/utils/toggle-ignore-planet.js",
         "src/utils/parse_research_tab.js",
 		"src/utils/xml2json.js",
+        "src/utils/formulas.js",
         "src/costs-helper.js",
         "src/current-planet-storage-helper.js",
         "src/galaxy-players-planets.js",
@@ -43,7 +44,7 @@
       "run_at": "document_idle"
    } ],
    "converted_from_user_script": true,
-   "version": "1.11.0",
+   "version": "1.12.0",
    "name": "__MSG_appName__",
    "description": "__MSG_appDesc__",
    "default_locale": "en",

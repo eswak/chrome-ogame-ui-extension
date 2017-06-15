@@ -1,5 +1,6 @@
 var fn = function () {
   'use strict';
+  
   window._refreshUniverseData = function _refreshUniverseData() {
     // refreshes the universe using the API once an hour
     if (config.lastPlayersUpdate && config.lastPlayersUpdate > Date.now() - 3600000) {
@@ -10,7 +11,7 @@ var fn = function () {
     _loadUniverseApi(function (players, universe) {
       console.debug('Universe data updated.');
       config.players = players;
-	  config.universe = universe;
+      config.universe = universe;
       config.lastPlayersUpdate = Date.now();
       _saveConfig(config);
       console.debug('OGame UI++ add-on config :', config);
