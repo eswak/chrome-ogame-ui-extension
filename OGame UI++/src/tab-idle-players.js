@@ -132,6 +132,14 @@ var fn = function () {
               return coordinates[0] * 1e6 + coordinates[1] * 1e3 + coordinates[2];
             }
           });
+          $.tablesorter.addParser({
+            id: 'input-data-value',
+            is: function (s) { return false; },
+            type: 'text',
+            format: function (s, table, cell) {
+              return $(cell).find('input').attr('value');
+            }
+          });
           $('table.uipp-table').tablesorter({
             cancelSelection: true,
             sortList: [[2, 1]],
@@ -139,7 +147,8 @@ var fn = function () {
               0: { sorter: 'coordinate' },
               1: { sorter: 'attr-data-value' },
               2: { sorter: 'attr-data-value' },
-              3: { sorter: 'attr-data-value' }
+              3: { sorter: 'attr-data-value' },
+              5: { sorter: 'input-data-value' }
             }
           });
         }, 0);
