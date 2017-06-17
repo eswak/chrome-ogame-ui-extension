@@ -1,9 +1,10 @@
 var fn = function () {
   'use strict';
+  
   window._addTabStats = function _addTabStats() {
-    var $statsEntry = $('<li class="stats enhanced"><span class="menu_icon"><div class="customMenuEntry2 menuImage empire"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">' + _translate('MENU_STATS') + '</span></a></li>');
-    $('#menuTable').append($statsEntry);
-    $statsEntry.click(function () {
+    var $entry = $('<li class="stats enhanced"><span class="menu_icon"><div class="customMenuEntry2 menuImage empire"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">' + _translate('MENU_STATS') + '</span></a></li>');
+    $('#menuTable').append($entry);
+    $entry.click(function () {
       // ui changes
       $('.menubutton.selected').removeClass('selected');
       $('.menuImage.highlighted').removeClass('highlighted');
@@ -35,7 +36,7 @@ var fn = function () {
       var rentabilityTimes = [];
       for (var coords in config.my.planets) {
         var planet = config.my.planets[coords];
-        if (!planet.resources) {
+        if (!planet.resources || !planet.coords) {
           continue;
         }
 
@@ -84,17 +85,20 @@ var fn = function () {
 
         planetStatsHtml += [
           '<tr>',
-            '<td style="width: 80px">',
-              '<a href="' + planet.href + '">' + coords + '</a>',
+            '<td>',
+              '<div style="float:left; text-align: left;">',
+                '<div  style="padding-bottom: 5px">' + planet.name + '</div>',
+                '<div style="font-size: 10px"><a href="' + planet.href + '">' + coords + '</a></div>',
+              '</div>',
             '</td>',
             ['metal', 'crystal', 'deuterium'].map(function (resource) {
               return [
                 '<td id="stat-' + planet.coords.join('-') + '-' + resource + '">',
-                  '<div class="resourceIcon ' + resource + '" style="font-size: 20px; line-height: 32px; text-shadow: ' + textShadow + '">' + planet.resources[resource].level + '</div>',
+                  '<div class="resourceIcon ' + resource + '" style="font-size: 20px; text-shadow: ' + textShadow + ';padding-top:10px">' + planet.resources[resource].level + '</div>',
                   '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
-                    '<div class="font-weight: bold; padding-bottom: 1px;">' + _num(currentPlanetResources[resource], planet.resources[resource].prod) + '</div>',
-                    '<div><span class="undermark">+' + _num(Math.floor(planet.resources[resource].prod * 3600)) + '</span> /' + _translate('TIME_HOUR') + '</div>',
-                    '<div><span class="undermark">+' + _num(Math.floor(planet.resources[resource].prod * 3600 * 24)) + '</span> /' + _translate('TIME_DAY') + '</div>',
+                    '<div style="font-weight: bold; padding-bottom: 1px;">' + uipp_formatResource(currentPlanetResources[resource], planet.resources[resource].prod) + '</div>',
+                    '<div><span class="undermark">+' + uipp_formatResource(Math.floor(planet.resources[resource].prod * 3600)) + '</span> /' + _translate('TIME_HOUR') + '</div>',
+                    '<div><span class="undermark">+' + uipp_formatResource(Math.floor(planet.resources[resource].prod * 3600 * 24)) + '</span> /' + _translate('TIME_DAY') + '</div>',
                   '</div>',
                 '</td>'
               ].join('');
@@ -116,15 +120,15 @@ var fn = function () {
 
       planetStatsHtml = [
         '<tr>',
-          '<td style="width: 80px"></td>',
+          '<td style="width: 80px; text-align: left; font-weight: bold;">Total</td>',
           ['metal', 'crystal', 'deuterium'].map(function (resource) {
             return [
               '<td>',
                 '<div class="resourceIcon ' + resource + '" style="font-size: 20px; line-height: 32px; text-shadow: ' + textShadow + '">' + Math.floor(10 * globalStats.level[resource]) / 10 + '</div>',
                 '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em; padding-bottom: 3px">',
-                  '<div class="font-weight: bold; padding-bottom: 1px;">' + _num(globalStats.current[resource], globalStats.prod[resource]) + '</div>',
-                  '<div><span class="undermark">+' + _num(Math.floor(globalStats.prod[resource] * 3600)) + '</span> /' + _translate('TIME_HOUR') + '</div>',
-                  '<div><span class="undermark">+' + _num(Math.floor(globalStats.prod[resource] * 3600 * 24)) + '</span> /' + _translate('TIME_DAY') + '</div>',
+                  '<div style="font-weight: bold; padding-bottom: 1px;">' + uipp_formatResource(globalStats.current[resource], globalStats.prod[resource]) + '</div>',
+                  '<div><span class="undermark">+' + uipp_formatResource(Math.floor(globalStats.prod[resource] * 3600)) + '</span> /' + _translate('TIME_HOUR') + '</div>',
+                  '<div><span class="undermark">+' + uipp_formatResource(Math.floor(globalStats.prod[resource] * 3600 * 24)) + '</span> /' + _translate('TIME_DAY') + '</div>',
                   '<div style="font-size: 8px; padding-top: 5px;">' + productionRatio[resource] + '</div>',
                 '</div>',
               '</td>'
