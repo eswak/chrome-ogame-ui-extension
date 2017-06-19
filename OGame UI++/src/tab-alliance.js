@@ -24,14 +24,19 @@ var fn = function () {
     }
 
     var tabhtml = [
-      '<div>',
-        '<table class="uipp-table">',
+      '<div style="float: left; margin-top: 2em;">',
+        '<table class="uipp-table bordered">',
           '<thead id="highscoreContent">',
             '<tr>',
               '<th>' + _translate('PLAYER') + '</th>',
               '<th><span class="navButton uipp-score" id="points"></span></th>',
+              '<th>⇵</th>',
               '<th><span class="navButton uipp-score" id="fleet"></span></th>',
+              '<th>⇵</th>',
+              '<th class="menu_icon"><span class="menuImage active fleet1" style="height: 27px; width: 27px; display: inline-block; margin-bottom: -5px;"></span></th>',
+              '<th>⇵</th>',
               '<th><span class="navButton uipp-score" id="economy"></span></th>',
+              '<th>⇵</th>',
               '<th>' + _translate('PLANETS') + '</th>',
             '</tr>',
           '</thead>',
@@ -39,14 +44,15 @@ var fn = function () {
             alliancePlayers.map(function (player, i) {
               return [
                 '<tr>',
-                  '<td class="' + ($('[name=ogame-player-id]').attr('content') === player.id ? 'enhancement' : '') + '">' + player.name + '</td>',
-                  '<td>' + player.globalScore + '</td>',
-                  '<td class="tooltip js_hideTipOnMobile" title="' + _translate('MILITARY_SCORE_LONG', {
-                    noBold: true,
-                    scoreMilitary: player.militaryScore,
-                    ships: (player.ships ? player.ships : '0')
-                  }) + '">' + player.militaryScore + '</td>',
-                  '<td>' + player.economyScore + '</td>',
+                  '<td id="player-id-' + player.id + '" class="' + ($('[name=ogame-player-id]').attr('content') === player.id ? 'enhancement' : '') + '">' + player.name + '</td>',
+                  '<td data-value="' + player.globalScore + '">' + uipp_scoreHumanReadable(player.globalScore) + '</td>',
+                  '<td data-value="' + _getPlayerScoreTrend(player.id, 'g').n + '">' + _getPlayerScoreTrend(player.id, 'g').html + '</td>',
+                  '<td data-value="' + player.militaryScore + '">' + uipp_scoreHumanReadable(player.militaryScore) + '</td>',
+                  '<td data-value="' + _getPlayerScoreTrend(player.id, 'm').n + '">' + _getPlayerScoreTrend(player.id, 'm').html + '</td>',
+                  '<td data-value="' + (player.ships || 0) + '">' + uipp_scoreHumanReadable(player.ships || 0) + '</td>',
+                  '<td data-value="' + _getPlayerScoreTrend(player.id, 's').n + '">' + _getPlayerScoreTrend(player.id, 's').html + '</td>',
+                  '<td data-value="' + player.economyScore + '">' + uipp_scoreHumanReadable(player.economyScore) + '</td>',
+                  '<td data-value="' + _getPlayerScoreTrend(player.id, 'e').n + '">' + _getPlayerScoreTrend(player.id, 'e').html + '</td>',
                   '<td>',
                     player.planets.map(function (planet) {
                       return '<a href="/game/index.php?page=galaxy&galaxy=' + planet.coords[0] + '&system=' + planet.coords[1] + '&position=' + planet.coords[2] + '">[' + planet.coords.join(':') + ']</a>';
@@ -65,8 +71,30 @@ var fn = function () {
     $el.append($(tabhtml));
 
     setTimeout(function () {
-      $('table.uipp-table').tablesorter({ cancelSelection: true, sortList: [[1, 1]] });
-    }, 100);
+      $.tablesorter.addParser({
+        id: 'attr-data-value',
+        is: function (s) { return false; },
+        type: 'numeric',
+        format: function (s, table, cell) {
+          return Number($(cell).attr('data-value') || '0');
+        }
+      });
+
+      $('table.uipp-table').tablesorter({
+        cancelSelection: true,
+        sortList: [[1, 1]],
+        headers: {
+          1: { sorter: 'attr-data-value' },
+          2: { sorter: 'attr-data-value' },
+          3: { sorter: 'attr-data-value' },
+          4: { sorter: 'attr-data-value' },
+          5: { sorter: 'attr-data-value' },
+          6: { sorter: 'attr-data-value' },
+          7: { sorter: 'attr-data-value' },
+          8: { sorter: 'attr-data-value' }
+        }
+      });
+    });
   };
 };
 
