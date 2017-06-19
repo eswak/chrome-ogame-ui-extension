@@ -24,4 +24,7 @@ style.textContent += '.uipp-filterbar { padding: 5px 0; }';
 style.textContent += '.uipp-score { height: 17px; width: 50px; display: inline-block; vertical-align: -3px; }';
 style.textContent += '.uipp-score-bar { background: #694d98; display: inline-block; border-right: 1px solid black; }';
 style.textContent += '#highscoreContent .navButton.uipp-score { display: inline-block; transform: scale(0.5); margin: -18px; float: none; }';
+style.textContent += '.uiEnhancementWindow .halfsection { float: left; width: calc(50% - 18px); padding: 5px; margin: 3px; border: 1px dotted #555; border-radius: 4px; font-size: 10px }';
+style.textContent += '.halfsection h3 { text-align: center; color: white; font-size: 15px; font-weight: bold; padding-bottom: 10px; }';
+style.textContent += '.halfsection table td { text-align: left; }';
 (document.head || document.documentElement).appendChild(style);

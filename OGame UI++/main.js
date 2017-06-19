@@ -11,6 +11,7 @@ var userscript = function () {
   _addTabAlliance();
   _addTabIdlePlayers();
   _addTabStats();
+  _addTabTopflop();
   _addTabNeighbors();
   _addTabSimulator();
   _addTabWarRiders();
