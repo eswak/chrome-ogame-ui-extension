@@ -10,6 +10,7 @@
         "src/utils/get-current-planet-coordinates.js",
         "src/utils/get-current-planet-resources.js",
         "src/utils/gf-number-to-js-number.js",
+        "src/utils/history-utils.js",
         "src/utils/i18n.js",
         "src/utils/load-universe-api.js",
         "src/utils/persistent-config.js",
