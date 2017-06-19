@@ -134,7 +134,7 @@ var fn = function () {
         '<tr><td style="height:10px"></td></tr>'
       ].join('') + planetStatsHtml;
 
-      $wrapper.append($('<table style="background:black">' + planetStatsHtml + '</table>'));
+      $wrapper.append($('<table class="uipp-table">' + planetStatsHtml + '</table>'));
 
       // outline most rentable upgrades
       setTimeout(function () {
