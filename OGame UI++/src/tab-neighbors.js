@@ -53,7 +53,7 @@ var fn = function () {
       var tbody = '';
       for (var i = 0; i < neighbours.length; i++) {
         var tr = '<tr id="planet_' + neighbours[i].coords[0] + '_' + neighbours[i].coords[1] + '_' + neighbours[i].coords[2] + '">';
-        
+
         var td = '';
         td += '<td><a href="/game/index.php?page=galaxy&galaxy=' + neighbours[i].coords[0] + '&system=' + neighbours[i].coords[1] + '&position=' + neighbours[i].coords[2] + '">[' + neighbours[i].coords[0] + ':' + neighbours[i].coords[1] + ':' + neighbours[i].coords[2] + ']</a></td>';
         td += '<td class="tooltip js_hideTipOnMobile" title="' + _translate('ECONOMY_SCORE_LONG', {
@@ -68,9 +68,9 @@ var fn = function () {
         td += '<td class="tooltip js_hideTipOnMobile" title="' + neighbours[i].name + '"><span class="' + (playerName === neighbours[i].name ? 'enhancement' : '') + '">' + neighbours[i].name + '</span></td>';
         td += '<td width="100%"><input value="' + (config && config.planetNotes && config.planetNotes[neighbours[i].coords[0] + ':' + neighbours[i].coords[1] + ':' + neighbours[i].coords[2]] ? config.planetNotes[neighbours[i].coords[0] + ':' + neighbours[i].coords[1] + ':' + neighbours[i].coords[2]] : '') + '" onkeyup="_editNote(' + neighbours[i].coords[0] + ',' + neighbours[i].coords[1] + ',' + neighbours[i].coords[2] + ',this.value);return false;" style="width:96.5%;" type="text"/></td>';
         td += '<td> <a espionage" href="javascript:void(0);" onclick="_spy(' + neighbours[i].coords[0] + ',' + neighbours[i].coords[1] + ',' + neighbours[i].coords[2] + ');return false;"><span class="icon icon_eye"></span></a>&nbsp;<a href="javascript:void(0);" onclick="_toggleIgnorePlanet(' + neighbours[i].coords[0] + ',' + neighbours[i].coords[1] + ',' + neighbours[i].coords[2] + ')"><span class="icon icon_against"></span></a>&nbsp; <a href="?page=fleet1&galaxy=' + neighbours[i].coords[0] + '&system=' + neighbours[i].coords[1] + '&position=' + neighbours[i].coords[2] + '&type=1&mission=1" onclick="$(this).find(\'.icon\').removeClass(\'icon_fastforward\').addClass(\'icon_checkmark\');" target="_blank"><span class="icon icon_fastforward"></span></a> </td>';
-        
+
         tr += td + '</tr>';
-        if (config && config.ignoredPlanets && config.ignoredPlanets[neighbours[i].coords[0] + ':' + neighbours[i].coords[1] + ':' + neighbours[i].coords[2]]) {          
+        if (config && config.ignoredPlanets && config.ignoredPlanets[neighbours[i].coords[0] + ':' + neighbours[i].coords[1] + ':' + neighbours[i].coords[2]]) {
           tr = $(tr).addClass('ignore').wrapAll('<div>').parent().html();
         }
 
@@ -100,13 +100,27 @@ var fn = function () {
             return coordinates[0] * 1e6 + coordinates[1] * 1e3 + coordinates[2];
           }
         });
+        $.tablesorter.addParser({
+          id: 'input-value',
+          is: function (s) { return false; },
+          type: 'text',
+          format: function (s, table, cell) {
+            var value = $(cell).find('input').attr('value');
+            if (value) {
+              return value;
+            } else {
+              return null;
+            }
+          }
+        });
         $('table.uipp-table').tablesorter({
           cancelSelection: true,
           sortList: [[2, 1]],
           headers: {
             0: { sorter: 'coordinate' },
             1: { sorter: 'attr-data-value' },
-            2: { sorter: 'attr-data-value' }
+            2: { sorter: 'attr-data-value' },
+            4: { sorter: 'input-value' }
           }
         });
       }, 10);

@@ -1,6 +1,6 @@
 var fn = function () {
   'use strict';
-  
+
   window._addTabIdlePlayers = function _addTabIdlePlayers() {
     var $entry = $('<li class="idles enhanced"><span class="menu_icon"><div class="customMenuEntry menuImage galaxy"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">' + _translate('MENU_NEIGHBOURS_INACTIVE') + '</span></a></li>');
     $('#menuTable').append($entry);
@@ -133,11 +133,16 @@ var fn = function () {
             }
           });
           $.tablesorter.addParser({
-            id: 'input-data-value',
+            id: 'input-value',
             is: function (s) { return false; },
             type: 'text',
             format: function (s, table, cell) {
-              return $(cell).find('input').attr('value');
+              var value = $(cell).find('input').attr('value');
+              if (value) {
+                return value;
+              } else {
+                return null;
+              }
             }
           });
           $('table.uipp-table').tablesorter({
@@ -148,7 +153,7 @@ var fn = function () {
               1: { sorter: 'attr-data-value' },
               2: { sorter: 'attr-data-value' },
               3: { sorter: 'attr-data-value' },
-              5: { sorter: 'input-data-value' }
+              5: { sorter: 'input-value' }
             }
           });
         }, 0);
