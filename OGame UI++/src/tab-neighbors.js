@@ -48,7 +48,7 @@ var fn = function () {
       }
 
       var $wrapper = $('<div></div>');
-      var $table = $('<table class="uipp-table"><thead id="highscoreContent"><tr><th>' + _translate('COORDINATES') + '</th><th><span class="navButton uipp-score" id="economy"></th><th><span class="navButton uipp-score" id="fleet"></th><th>' + _translate('PLAYER') + '</th><th>' + _translate('NOTE') + '</th><th>' + _translate('ACTIONS') + '</th></tr></thead><tbody></tbody></table>');
+      var $table = $('<table class="uipp-table"><thead id="highscoreContent"><tr><th>' + _translate('COORDINATES') + '</th><th><span class="navButton uipp-score" id="points"></th><th><span class="navButton uipp-score" id="economy"></th><th><span class="navButton uipp-score" id="fleet"></th><th>' + _translate('PLAYER') + '</th><th>' + _translate('NOTE') + '</th><th>' + _translate('ACTIONS') + '</th></tr></thead><tbody></tbody></table>');
       var playerName = $('[name=ogame-player-name]').attr('content');
       var tbody = '';
       for (var i = 0; i < neighbours.length; i++) {
@@ -56,6 +56,7 @@ var fn = function () {
 
         var td = '';
         td += '<td><a href="/game/index.php?page=galaxy&galaxy=' + neighbours[i].coords[0] + '&system=' + neighbours[i].coords[1] + '&position=' + neighbours[i].coords[2] + '">[' + neighbours[i].coords[0] + ':' + neighbours[i].coords[1] + ':' + neighbours[i].coords[2] + ']</a></td>';
+        td += '<td data-value="' + _getPlayerScoreTrend(neighbours[i].id, 'g').n + '">' + _getPlayerScoreTrend(neighbours[i].id, 'g').html + '</td>';
         td += '<td class="tooltip js_hideTipOnMobile" title="' + _translate('ECONOMY_SCORE_LONG', {
           noBold: true,
           scoreEco: neighbours[i].economyScore
@@ -120,7 +121,8 @@ var fn = function () {
             0: { sorter: 'coordinate' },
             1: { sorter: 'attr-data-value' },
             2: { sorter: 'attr-data-value' },
-            4: { sorter: 'input-value' }
+            3: { sorter: 'attr-data-value' },
+            5: { sorter: 'input-value' }
           }
         });
       }, 10);
