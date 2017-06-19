@@ -21,7 +21,21 @@ var fn = function () {
 
     return '<span id="number-' + id + '"></span>';
   };
-  window.uipp_scoreHumanReadable = function(num) {
+
+  window.uipp_diff = function (diff, isPercent, colored) {
+    if (colored !== false) {
+      colored = true;
+    }
+    
+    var str = diff.toString();
+    if (str[0] === '-') {
+      return '<span' + (colored ? ' style="color:#d43635"' : '') + '>' + str + (isPercent ? '%' : '') + '</span>';
+    } else {
+      return '<span' + (colored ? ' style="color:#9c0"' : '') + '>+' + str + (isPercent ? '%' : '') + '</span>';
+    }
+  };
+
+  window.uipp_scoreHumanReadable = function (num) {
     var sign = 1;
     if (num<0) {
         num = -num;
