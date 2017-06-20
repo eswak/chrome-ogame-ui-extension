@@ -1,6 +1,6 @@
 var fn = function () {
   'use strict';
-  
+
   window._loadUniverseApi = function _loadUniverseApi(cb) {
     console.log('OGame UI++ : loading universe data from OGame API...');
     $.ajax({
@@ -113,12 +113,33 @@ var fn = function () {
                         });
 
                         $.ajax({
-                          url: '/api/serverData.xml',
+                          url: '/api/highscore.xml?category=1&type=2',
                           dataType: 'xml',
                           success: function (data) {
-                            var universe = xml2json(data).serverData;
-                            console.log('OGame UI++ : loaded universe data.');
-                            cb && cb(players, universe);
+                            var position;
+                            var id;
+                            var score;
+                            var $el;
+                            $('player', data).each(function () {
+                              $el = $(this);
+                              position = $el.attr('position');
+                              id = $el.attr('id');
+                              score = $el.attr('score');
+                              if (players[id]) {
+                                players[id].researchPosition = position;
+                                players[id].researchScore = score;
+                              }
+                            });
+
+                            $.ajax({
+                              url: '/api/serverData.xml',
+                              dataType: 'xml',
+                              success: function (data) {
+                                var universe = xml2json(data).serverData;
+                                console.log('OGame UI++ : loaded universe data.');
+                                cb && cb(players, universe);
+                              }
+                            });
                           }
                         });
                       }
