@@ -40,6 +40,11 @@ var fn = function () {
     var pref = prefixes[idx];
     return Math.round(num/dividers[idx]*mul)/mul*sign + pref;
   };
+  
+  // Format number to format like 11.222.333 
+  window.uipp_formatResource = function(res) {
+    return Math.round(res).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
 };
 
 var script = document.createElement('script');
