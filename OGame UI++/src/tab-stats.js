@@ -150,6 +150,96 @@ var fn = function () {
         });
       });
 
+      var hasEnoughHistory = _getPlayerScoreTrend($('[name=ogame-player-id]').attr('content'), 'g', 2).abs;
+      if (hasEnoughHistory) {
+        var playerId = $('[name=ogame-player-id]').attr('content');
+        var current = config.players[playerId];
+        var history = config.history[playerId];
+
+        $wrapper.append($([
+          '<div class="clearfix" style="margin-top:50px;">',
+            '<div id="chart-history" style="width:70%;height:200px;float:left;"></div>',
+            '<div id="chart-pie" style="width:30%;height:170px;float:left;margin-top:5px;position:relative;">',
+              '<span id="highscoreContent" style="font-size:11px;">',
+                '<span id="economy" class="navButton" style="position:absolute;transform:scale(0.35);top:25px;left:50px;"></span>',
+                '<span id="research" class="navButton" style="position:absolute;transform:scale(0.35);top:55px;left:50px;"></span>',
+                '<span id="fleet" class="navButton" style="position:absolute;transform:scale(0.35);top:85px;left:50px;"></span>',
+                '<span style="position:absolute;top:45px;left:90px;">',
+                  _getPlayerScoreTrend(playerId, 'e', 2, 10).html,
+                '</span>',
+                '<span style="position:absolute;top:75px;left:90px;">',
+                  _getPlayerScoreTrend(playerId, 'r', 2, 10).html,
+                '</span>',
+                '<span style="position:absolute;top:105px;left:90px;">',
+                  _getPlayerScoreTrend(playerId, 'm', 2, 10).html,
+                '</span>',
+              '</span>',
+            '</div>',
+          '</div>'
+        ].join('')));
+        setTimeout(function () {
+          var labels = Object.keys(history);
+          var series = [
+            {
+              name: 'economy',
+              data: []
+            },
+            {
+              name: 'research',
+              data: []
+            },
+            {
+              name: 'military',
+              data: []
+            },
+            {
+              name: 'general',
+              data: []
+            }
+          ];
+          labels.forEach(function (day) {
+            series[0].data.push({ x: history[day].t, y: (history[day].e || 0) + (history[day].r || 0) + (history[day].m || 0) });
+            series[1].data.push({ x: history[day].t, y: (history[day].r || 0) + (history[day].m || 0) });
+            series[2].data.push({ x: history[day].t, y: (history[day].m || 0) });
+          });
+
+          new Chartist.Line('#chart-history', {
+            labels: labels,
+            series: series
+          }, {
+            axisX: {
+              type: Chartist.FixedScaleAxis,
+              divisor: 5,
+              labelInterpolationFnc: function(value) {
+                var dayOfMonthStr = new Date(value).toISOString().split('T')[0].split('-')[2];
+                var monthStr = new Date(value).toISOString().split('T')[0].split('-')[1];
+                return dayOfMonthStr + '/' + monthStr;
+              }
+            },
+            axisY: {
+              type: Chartist.FixedScaleAxis,
+              divisor: 5,
+              labelInterpolationFnc: function(value) {
+                return uipp_scoreHumanReadable(value);
+              }
+            },
+            showArea: true,
+            showLine: false,
+            showPoint: false,
+            low: 0
+          });
+
+          new Chartist.Pie('#chart-pie', {
+            series: [current.economyScore, current.researchScore, current.militaryScore]
+          }, {
+            donut: true,
+            donutWidth: 15,
+            donutSolid: false,
+            startAngle: 0,
+            showLabel: false
+          });
+        });
+      }
 
       // insert html
       var $eventboxContent = $('#eventboxContent');
