@@ -84,8 +84,11 @@ var fn = function () {
 
         planetStatsHtml += [
           '<tr>',
-            '<td style="width: 80px">',
-              '<a href="' + planet.href + '">' + coords + '</a>',
+            '<td style="max-width: 80px; overflow: hidden; text-overflow: ellipsis;">',
+              '<a href="' + planet.href + '">',
+                planet.name + '<br>',
+                '<span style="vertical-align: -1px; opacity: .7;">' + coords + '</span>',
+              '</a>',
             '</td>',
             ['metal', 'crystal', 'deuterium'].map(function (resource) {
               return [
