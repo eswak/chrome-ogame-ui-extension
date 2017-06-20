@@ -150,14 +150,6 @@ var fn = function () {
         });
       });
 
-      // add reset button
-      var $resetStatsButton = $('<div style="margin-top: 10px; text-align: right;padding-right: .5em;"><a href="#" class="btn_blue">' + _translate('RESET_STATS') + '</a></div>');
-      $wrapper.append($resetStatsButton);
-      $resetStatsButton.click(function () {
-        delete config.my.planets;
-        _saveConfig(config);
-        window.location.reload();
-      });
 
       // insert html
       var $eventboxContent = $('#eventboxContent');
