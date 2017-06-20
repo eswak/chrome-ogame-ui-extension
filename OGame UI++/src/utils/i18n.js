@@ -37,8 +37,7 @@ var fn = function () {
       MENU_FIGHTSIM: 'Sim. Combat',
       STATS_ALL: 'Statistiques pour toutes les planètes',
       STATS_DAILY: 'Production journalière',
-      STATS_RATIO: 'Ratio de production (rapport au ',
-      RESET_STATS: 'Réinitialiser les statistiques'
+      STATS_RATIO: 'Ratio de production (rapport au '
     },
     en: {
       RETURN_TRIP_DURATION: 'Duration of a return trip with Large Cargo Ship',
@@ -74,8 +73,7 @@ var fn = function () {
       MENU_FIGHTSIM: 'Fight simulator',
       STATS_ALL: 'Statistics for all planets',
       STATS_DAILY: 'Daily production',
-      STATS_RATIO: 'Production ratio (relative to ',
-      RESET_STATS: 'Reset stats'
+      STATS_RATIO: 'Production ratio (relative to '
     },
     es: {
       RETURN_TRIP_DURATION: 'Duration of a return trip with Large Cargo Ship',
@@ -111,8 +109,7 @@ var fn = function () {
       MENU_FIGHTSIM: 'Sim. Combate ',
       'STATS_ALL ': 'Estadísticas para todos los planetas',
       STATS_DAILY: 'Producción diaria',
-      STATS_RATIO: 'Relación de producción (en comparación con',
-      RESET_STATS: 'Restaurar estadísticas'
+      STATS_RATIO: 'Relación de producción (en comparación con'
     },
     tr: {
       RETURN_TRIP_DURATION: 'Duration of a return trip with Large Cargo Ship',
@@ -148,8 +145,7 @@ var fn = function () {
       MENU_FIGHTSIM: 'Savaş Simulatörü',
       STATS_ALL: 'İstatistik (Tümü)',
       STATS_DAILY: 'Günlük Üretim',
-      STATS_RATIO: 'Üretim Oranı (İlişki: ',
-      RESET_STATS: 'Sıfırlama istatistikler'
+      STATS_RATIO: 'Üretim Oranı (İlişki: '
     },
     de: {
       RETURN_TRIP_DURATION: 'Duration of a return trip with Large Cargo Ship',
@@ -185,8 +181,7 @@ var fn = function () {
       MENU_FIGHTSIM: 'Kampfsimulator',
       STATS_ALL: 'Statistik über alle Planeten',
       STATS_DAILY: 'Tägliche Produktion',
-      STATS_RATIO: 'Produktionsverhältnis (relativ zu ',
-      RESET_STATS: 'Statistik zurücksetzen'
+      STATS_RATIO: 'Produktionsverhältnis (relativ zu '
     }
   };
   if (!translations[lang]) {
