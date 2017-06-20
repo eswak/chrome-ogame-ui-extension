@@ -1,3 +1,15 @@
+// inject libs
+var libs = [
+  'lib/chartist.min.js'
+];
+libs.forEach(function (path) {
+  var script = document.createElement('script');
+  script.src = chrome.extension.getURL(path);
+  (document.head || document.documentElement).appendChild(script);
+  script.parentNode.removeChild(script);
+});
+
+// inject main script
 var userscript = function () {
   'use strict';
 
