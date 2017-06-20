@@ -1,8 +1,14 @@
 {
+  "web_accessible_resources": [
+    "lib/chartist.min.js"
+  ],
    "content_scripts": [ {
       "exclude_globs": [  ],
       "exclude_matches": [  ],
       "include_globs": [  ],
+      "css": [
+        "lib/chartist.min.css",
+      ],
       "js": [
         "src/utils/edit-note.js",
         "src/utils/formatter-number.js",
