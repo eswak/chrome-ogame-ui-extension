@@ -3,26 +3,29 @@ var fn = function () {
   window._getConfig = getConfig;
   window._saveConfig = saveConfig;
   window._resetConfig = resetConfig;
+  var playerId = $('[name=ogame-player-id]').attr('content');
+
+  // config used to be stored in 'og-enhancements',
+  // now it is stored in 'og-enhancement-1003000' (playerId)
+  var configKey = 'og-enhancements';
+  var oldConfig = localStorage.getItem(configKey);
+  if (oldConfig) {
+    localStorage.removeItem(configKey);
+    localStorage.setItem(configKey + '-' + playerId, oldConfig);
+  }
+  configKey += '-' + playerId;
 
   function saveConfig(config) {
-    if (typeof (Storage) !== 'undefined') {
-      localStorage.setItem('og-enhancements', JSON.stringify(config));
-    }
+    localStorage.setItem(configKey, JSON.stringify(config));
   }
 
   function getConfig() {
-    if (typeof (Storage) !== 'undefined') {
-      return JSON.parse(localStorage.getItem('og-enhancements') || '{}');
-    } else {
-      return null;
-    }
+    return JSON.parse(localStorage.getItem(configKey) || '{}');
   }
 
   function resetConfig() {
-    if (typeof (Storage) !== 'undefined') {
-      localStorage.setItem('og-enhancements', '{}');
-      config = {};
-    }
+    localStorage.setItem(configKey, '{}');
+    config = {};
   }
 };
 
