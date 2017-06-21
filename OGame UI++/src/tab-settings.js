@@ -24,7 +24,7 @@ var fn = function () {
 
       // trade rate config
       $wrapper.append($([
-        '<div style="padding: 10px 0">',
+        '<div style="padding: 10px 0" class="clearfix">',
           '<div style="float: left; line-height: 32px;padding-right: 10px;">' + _translate('TRADE_RATE') + ' : ' + '</div>',
           '<div>',
             '<div class="resourceIcon metal" style="margin-top: -3px"></div>',
@@ -37,8 +37,25 @@ var fn = function () {
         '</div>'
       ].join('')));
 
+      // add donation button
+      var $donateButton = $([
+        '<div style="margin-top:50px;text-align:center">',
+          '<p>' + _translate('DONATE_TEXT') + '<br><br></p>',
+          '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">',
+            '<input type="hidden" name="cmd" value="_s-xclick">',
+            '<input type="hidden" name="hosted_button_id" value="BZ4XL4R9QRW3Y">',
+            '<input type="image" src="https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal, le réflexe sécurité pour payer en ligne">',
+            '<img alt="" border="0" src="https://www.paypalobjects.com/fr_FR/i/scr/pixel.gif" width="1" height="1">',
+          '</form>',
+        '</div>'
+      ].join(''));
+      $wrapper.append($donateButton);
+      $donateButton.click(function () {
+        uipp_analytics('uipp-donate', 1);
+      });
+
       // add reset ALL button
-      var $resetAllButton = $('<div style="margin-top: 200px; text-align: center;"><i>' + _translate('RESET_ALL_TEXT') + '</i><br><br><a href="#" class="btn_blue" style="width:625px">' + _translate('RESET_ALL') + '</a></div>');
+      var $resetAllButton = $('<div style="margin-top: 50px; text-align: center;"><i>' + _translate('RESET_ALL_TEXT') + '</i><br><br><a href="#" class="btn_blue" style="width:625px">' + _translate('RESET_ALL') + '</a></div>');
       $wrapper.append($resetAllButton);
       $resetAllButton.click(function () {
         uipp_analytics('uipp-data-reset', 'all');
