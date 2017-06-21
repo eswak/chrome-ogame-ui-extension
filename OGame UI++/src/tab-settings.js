@@ -37,10 +37,47 @@ var fn = function () {
       ].join('')));
 
       // add reset ALL button
-      var $resetAllButton = $('<div style="margin-top: 200px; text-align: center;"><i>' + _translate('RESET_ALL_TEXT') + '</i><br><br><a href="#" class="btn_blue">' + _translate('RESET_ALL') + '</a></div>');
+      var $resetAllButton = $('<div style="margin-top: 200px; text-align: center;"><i>' + _translate('RESET_ALL_TEXT') + '</i><br><br><a href="#" class="btn_blue" style="width:625px">' + _translate('RESET_ALL') + '</a></div>');
       $wrapper.append($resetAllButton);
       $resetAllButton.click(function () {
         _resetConfig();
+        window.location.reload();
+      });
+
+      // add reset history button
+      var $resetHistory = $('<div style="text-align:center;margin-top:10px"><a href="#" class="btn_blue" style="width:625px">' + _translate('RESET_HISTORY') + '</a></div>');
+      $wrapper.append($resetHistory);
+      $resetHistory.click(function () {
+        delete config.history;
+        _saveConfig(config);
+        window.location.reload();
+      });
+
+      // add reset notes button
+      var $resetPlanetNotes = $('<div style="text-align:center;margin-top:10px"><a href="#" class="btn_blue" style="width:625px">' + _translate('RESET_NOTES') + '</a></div>');
+      $wrapper.append($resetPlanetNotes);
+      $resetPlanetNotes.click(function () {
+        delete config.planetNotes;
+        _saveConfig(config);
+        window.location.reload();
+      });
+
+      // add reset planet info button
+      var $resetPlanetInfos = $('<div style="text-align:center;margin-top:10px"><a href="#" class="btn_blue" style="width:625px">' + _translate('RESET_PLANETINFO') + '</a></div>');
+      $wrapper.append($resetPlanetInfos);
+      $resetPlanetInfos.click(function () {
+        delete config.my.planets;
+        _saveConfig(config);
+        window.location.reload();
+      });
+
+      // add reset universe button
+      var $resetUniverse = $('<div style="text-align:center;margin-top:10px"><a href="#" class="btn_blue" style="width:625px">' + _translate('RESET_UNIVERSE') + '</a></div>');
+      $wrapper.append($resetUniverse);
+      $resetUniverse.click(function () {
+        delete config.players;
+        config.lastPlayersUpdate = 0;
+        _saveConfig(config);
         window.location.reload();
       });
 
