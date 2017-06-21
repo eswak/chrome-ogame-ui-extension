@@ -4,6 +4,7 @@ var fn = function () {
     var $statsEntry = $('<li class="stats enhanced"><span class="menu_icon"><div class="customMenuEntry2 menuImage empire"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">' + _translate('MENU_STATS') + '</span></a></li>');
     $('#menuTable').append($statsEntry);
     $statsEntry.click(function () {
+      uipp_analytics('uipp-tab-click', 'statistics');
       // ui changes
       $('.menubutton.selected').removeClass('selected');
       $('.menuImage.highlighted').removeClass('highlighted');

@@ -6,7 +6,7 @@ var fn = function () {
     var serverNum = universe.split('-')[0].replace('s', '');
     var playerName = $('[name="ogame-player-name"]').attr('content');
 
-    var $warRidersEntry = $('<li class="sim enhanced"><span class="menu_icon"><div class="customMenuEntry3 menuImage fleet1"></div></span><a class="menubutton" href="http://www.war-riders.de/' + serverLang + '/' + serverNum + '/search/player/' + playerName + '" accesskey="" target="_blank"><span class="textlabel enhancement">WarRiders.de</span></a></li>');
+    var $warRidersEntry = $('<li class="sim enhanced"><span class="menu_icon"><div class="customMenuEntry3 menuImage fleet1"></div></span><a class="menubutton" href="http://www.war-riders.de/' + serverLang + '/' + serverNum + '/search/player/' + playerName + '" accesskey="" target="_blank" onclick="uipp_analytics(\'uipp-tab-click\', \'war-riders\');"><span class="textlabel enhancement">WarRiders.de</span></a></li>');
     $('#menuTable').append($warRidersEntry);
   };
 };
