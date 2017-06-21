@@ -2,9 +2,10 @@ var fn = function () {
   'use strict';
 
   window._addTabIdlePlayers = function _addTabIdlePlayers() {
-    var $entry = $('<li class="idles enhanced"><span class="menu_icon"><div class="customMenuEntry menuImage galaxy"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">' + _translate('MENU_NEIGHBOURS_INACTIVE') + '</span></a></li>');
+    var $entry = $('<li class="idles enhanced"><span class="menu_icon"><div class="customMenuEntry menuImage galaxy"></div></span><a class="menubutton" href="#" accesskey="" target="_self" ><span class="textlabel enhancement">' + _translate('MENU_NEIGHBOURS_INACTIVE') + '</span></a></li>');
     $('#menuTable').append($entry);
     $entry.click(function () {
+      uipp_analytics('uipp-tab-click', 'idle-players');
       // ui changes
       $('.menubutton.selected').removeClass('selected');
       $('.menuImage.highlighted').removeClass('highlighted');
@@ -50,7 +51,22 @@ var fn = function () {
       }
 
       var $wrapper = $('<div id="highscoreContent"></div>');
-      var $table = $('<table class="uipp-table"><thead><tr><th>' + _translate('COORDINATES') + '</th><th class="tooltip" title="' + _translate('RETURN_TRIP_DURATION') + '"><img src="https://gf2.geo.gfsrv.net/cdna2/89624964d4b06356842188dba05b1b.gif" style="transform:scale(1.6);margin-bottom:-4px;"/></th><th><span class="navButton uipp-score" id="economy"></span></th><th><span class="navButton uipp-score" id="fleet"></span></th><th>' + _translate('PLAYER') + '</th><th>' + _translate('NOTE') + '</th><th>' + _translate('ACTIONS') + '</th></tr></thead><tbody></tbody></table>');
+      var $table = $([
+        '<table class="uipp-table">',
+          '<thead>',
+            '<tr>',
+              '<th onclick="uipp_analytics(\'uipp-sort\', \'coordinates\');">' + _translate('COORDINATES') + '</th>',
+              '<th onclick="uipp_analytics(\'uipp-sort\', \'flight-time\');" class="tooltip" title="' + _translate('RETURN_TRIP_DURATION') + '"><img src="https://gf2.geo.gfsrv.net/cdna2/89624964d4b06356842188dba05b1b.gif" style="transform:scale(1.6);margin-bottom:-4px;"/></th>',
+              '<th onclick="uipp_analytics(\'uipp-sort\', \'economy-score\');"><span class="navButton uipp-score" id="economy"></span></th>',
+              '<th onclick="uipp_analytics(\'uipp-sort\', \'military-score\');"><span class="navButton uipp-score" id="fleet"></span></th>',
+              '<th onclick="uipp_analytics(\'uipp-sort\', \'player-name\');">' + _translate('PLAYER') + '</th>',
+              '<th onclick="uipp_analytics(\'uipp-sort\', \'note\');">' + _translate('NOTE') + '</th>',
+              '<th>' + _translate('ACTIONS') + '</th>',
+            '</tr>',
+          '</thead>',
+          '<tbody></tbody>',
+        '</table>'
+      ].join(''));
       var tbody = '';
       for (var i = 0; i < idles.length; i++) {
         var tr = '<tr id="planet_' + idles[i].coords[0] + '_' + idles[i].coords[1] + '_' + idles[i].coords[2] + '"  data-filter-flight-time="' + idles[i].flightTime + '" data-filter-economy-score="' + idles[i].economyScore + '" data-filter-military-score="' + idles[i].militaryScore + '">';
@@ -69,8 +85,7 @@ var fn = function () {
         }) + '" style="white-space: nowrap"><a href="?page=highscore&searchRelId=' + idles[i].id + '&category=1&type=3">' + uipp_scoreHumanReadable(idles[i].militaryScore) + ' (' + uipp_scoreHumanReadable(idles[i].ships ? idles[i].ships : '0') + ')</a></td>';
         td += '<td class="tooltip js_hideTipOnMobile" title="' + idles[i].name + '">' + idles[i].name + '</td>';
         td += '<td style="width: 260px"><input value="' + (config && config.planetNotes && config.planetNotes[idles[i].coords[0] + ':' + idles[i].coords[1] + ':' + idles[i].coords[2]] ? config.planetNotes[idles[i].coords[0] + ':' + idles[i].coords[1] + ':' + idles[i].coords[2]] : '') + '" onkeyup="_editNote(' + idles[i].coords[0] + ',' + idles[i].coords[1] + ',' + idles[i].coords[2] + ',this.value);return false;" style="width:96.5%;" type="text"/></td>';
-        td += '<td><a class="tooltip js_hideTipOnMobile espionage" title="" href="javascript:void(0);" onclick="_spy(' + idles[i].coords[0] + ',' + idles[i].coords[1] + ',' + idles[i].coords[2] + ');return false;"><span class="icon icon_eye"></span></a>&nbsp;<a href="javascript:void(0);" onclick="_toggleIgnorePlanet(' + idles[i].coords[0] + ',' + idles[i].coords[1] + ',' + idles[i].coords[2] + ')"><span class="icon icon_against"></span></a>&nbsp;<a href="?page=fleet1&galaxy=' + idles[i].coords[0] + '&system=' + idles[i].coords[1] + '&position=' + idles[i].coords[2] + '&type=1&mission=1" onclick="$(this).find(\'.icon\').removeClass(\'icon_fastforward\').addClass(\'icon_checkmark\');" target="_blank"><span class="icon icon_fastforward"></span></a></td>';
-
+        td += '<td><a class="tooltip js_hideTipOnMobile espionage" title="" href="javascript:void(0);" onclick="_spy(' + idles[i].coords[0] + ',' + idles[i].coords[1] + ',' + idles[i].coords[2] + ');return false;"><span class="icon icon_eye"></span></a>&nbsp;<a href="javascript:void(0);" onclick="_toggleIgnorePlanet(' + idles[i].coords[0] + ',' + idles[i].coords[1] + ',' + idles[i].coords[2] + ')"><span class="icon icon_against"></span></a>&nbsp;<a href="?page=fleet1&galaxy=' + idles[i].coords[0] + '&system=' + idles[i].coords[1] + '&position=' + idles[i].coords[2] + '&type=1&mission=1" onclick="$(this).find(\'.icon\').removeClass(\'icon_fastforward\').addClass(\'icon_checkmark\');uipp_analytics(\'uipp-attack-idle\', 1);" target="_blank"><span class="icon icon_fastforward"></span></a></td>';
         tr += td + '</tr>';
         if (config && config.ignoredPlanets && config.ignoredPlanets[idles[i].coords[0] + ':' + idles[i].coords[1] + ':' + idles[i].coords[2]]) {
           tr = $(tr).addClass('ignore').wrapAll('<div>').parent().html();
@@ -85,27 +100,27 @@ var fn = function () {
           // flight duration filters
           '<span>',
           '<img src="https://gf2.geo.gfsrv.net/cdna2/89624964d4b06356842188dba05b1b.gif"/>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'flight-time\', null, 3600)">\<1h</div>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'flight-time\', null, 2 * 3600)">\<2h</div>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'flight-time\', null, 5 * 3600)">\<5h</div>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'flight-time\', null, 8 * 3600)">\<8h</div>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'flight-time\', 8 * 3600, null)">\>8h</div>',
+            '<div class="uipp-filter" onclick="filterTable(this, \'flight-time\', null, 3600);uipp_analytics(\'uipp-filter-flight-time\', \'less-than-1-hour\');">\<1h</div>',
+            '<div class="uipp-filter" onclick="filterTable(this, \'flight-time\', null, 2 * 3600);uipp_analytics(\'uipp-filter-flight-time\', \'less-than-2-hour\');">\<2h</div>',
+            '<div class="uipp-filter" onclick="filterTable(this, \'flight-time\', null, 5 * 3600);uipp_analytics(\'uipp-filter-flight-time\', \'less-than-5-hour\');">\<5h</div>',
+            '<div class="uipp-filter" onclick="filterTable(this, \'flight-time\', null, 8 * 3600);uipp_analytics(\'uipp-filter-flight-time\', \'less-than-8-hour\');">\<8h</div>',
+            '<div class="uipp-filter" onclick="filterTable(this, \'flight-time\', 8 * 3600, null);uipp_analytics(\'uipp-filter-flight-time\', \'more-than-8-hour\');">\>8h</div>',
           '</span>',
 
           // economy score filters
           '<span>',
             '<span class="navButton uipp-score" id="economy" style="margin: -25px -18px -19px 100px; transform: scale(0.33);"></span>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 0, 0)">=0</div>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 1, null)">\>0</div>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 100, null)">\>100</div>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 1000, null)">\>1000</div>',
+            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 0, 0);uipp_analytics(\'uipp-filter-economy-score\', \'equal-0\');">=0</div>',
+            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 1, null);uipp_analytics(\'uipp-filter-economy-score\', \'more-than-0\');">\>0</div>',
+            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 100, null);uipp_analytics(\'uipp-filter-economy-score\', \'more-than-100\');">\>100</div>',
+            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 1000, null);uipp_analytics(\'uipp-filter-economy-score\', \'more-than-1000\');">\>1000</div>',
           '</span>',
 
           // military score filters
           '<span>',
             '<span class="navButton uipp-score" id="fleet" style="margin: -25px -18px -19px 104px; transform: scale(0.33);"></span>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'military-score\', 0, 0)">=0</div>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'military-score\', 1, null)">\>0</div>',
+            '<div class="uipp-filter" onclick="filterTable(this, \'military-score\', 0, 0);uipp_analytics(\'uipp-filter-military-score\', \'more-than-0\');">=0</div>',
+            '<div class="uipp-filter" onclick="filterTable(this, \'military-score\', 1, null);uipp_analytics(\'uipp-filter-military-score\', \'equal-0\');">\>0</div>',
           '</span>',
         '</div>'
       ].join('')));

@@ -5,6 +5,7 @@ var fn = function () {
     var $neighboursEntry = $('<li class="neighbours enhanced"><span class="menu_icon"><div class="customMenuEntry4 menuImage defense"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">' + _translate('MENU_NEIGHBOURS_ACTIVE') + '</span></a></li>');
     $('#menuTable').append($neighboursEntry);
     $neighboursEntry.click(function () {
+      uipp_analytics('uipp-tab-click', 'nearby-neighbors');
       // ui changes
       $('.menubutton.selected').removeClass('selected');
       $('.menuImage.highlighted').removeClass('highlighted');

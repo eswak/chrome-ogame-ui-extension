@@ -10,6 +10,7 @@ var fn = function () {
     }
 
     $menuEntry.click(function () {
+      uipp_analytics('uipp-tab-click', 'topflop');
       // ui changes
       $('.menubutton.selected').removeClass('selected');
       $('.menuImage.highlighted').removeClass('highlighted');

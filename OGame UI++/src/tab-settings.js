@@ -13,6 +13,7 @@ var fn = function () {
     var $menuEntry = $('<li class="settings enhanced"><span class="menu_icon"><div class="customMenuEntrySettings menuImage alliance"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">OGame UI++</span></a></li>');
     $('#menuTable').append($menuEntry);
     $menuEntry.click(function () {
+      uipp_analytics('uipp-tab-click', 'settings');
       // ui changes
       $('.menubutton.selected').removeClass('selected');
       $('.menuImage.highlighted').removeClass('highlighted');
@@ -40,6 +41,7 @@ var fn = function () {
       var $resetAllButton = $('<div style="margin-top: 200px; text-align: center;"><i>' + _translate('RESET_ALL_TEXT') + '</i><br><br><a href="#" class="btn_blue" style="width:625px">' + _translate('RESET_ALL') + '</a></div>');
       $wrapper.append($resetAllButton);
       $resetAllButton.click(function () {
+        uipp_analytics('uipp-data-reset', 'all');
         _resetConfig();
         window.location.reload();
       });
@@ -48,6 +50,7 @@ var fn = function () {
       var $resetHistory = $('<div style="text-align:center;margin-top:10px"><a href="#" class="btn_blue" style="width:625px">' + _translate('RESET_HISTORY') + '</a></div>');
       $wrapper.append($resetHistory);
       $resetHistory.click(function () {
+        uipp_analytics('uipp-data-reset', 'history');
         delete config.history;
         _saveConfig(config);
         window.location.reload();
@@ -57,6 +60,7 @@ var fn = function () {
       var $resetPlanetNotes = $('<div style="text-align:center;margin-top:10px"><a href="#" class="btn_blue" style="width:625px">' + _translate('RESET_NOTES') + '</a></div>');
       $wrapper.append($resetPlanetNotes);
       $resetPlanetNotes.click(function () {
+        uipp_analytics('uipp-data-reset', 'notes');
         delete config.planetNotes;
         _saveConfig(config);
         window.location.reload();
@@ -66,6 +70,7 @@ var fn = function () {
       var $resetPlanetInfos = $('<div style="text-align:center;margin-top:10px"><a href="#" class="btn_blue" style="width:625px">' + _translate('RESET_PLANETINFO') + '</a></div>');
       $wrapper.append($resetPlanetInfos);
       $resetPlanetInfos.click(function () {
+        uipp_analytics('uipp-data-reset', 'planet-info');
         delete config.my.planets;
         _saveConfig(config);
         window.location.reload();
@@ -75,6 +80,7 @@ var fn = function () {
       var $resetUniverse = $('<div style="text-align:center;margin-top:10px"><a href="#" class="btn_blue" style="width:625px">' + _translate('RESET_UNIVERSE') + '</a></div>');
       $wrapper.append($resetUniverse);
       $resetUniverse.click(function () {
+        uipp_analytics('uipp-data-reset', 'universe');
         delete config.players;
         config.lastPlayersUpdate = 0;
         _saveConfig(config);

@@ -16,8 +16,10 @@ var fn = function () {
       success: function (a) {
         if (a.response.success) {
           $('#planet_' + galaxy + '_' + system + '_' + position + ' .icon_eye').addClass('disabled');
+          uipp_analytics('uipp-spy', 'success');
         } else {
           fadeBox(a.response.message, true);
+          uipp_analytics('uipp-spy', 'failed');
         }
 
         window.miniFleetToken = a.newToken;
