@@ -114,7 +114,6 @@ var fn = function () {
       if (idles.length === 0) {
         $wrapper.append($('<div style="text-align: center; font-size: 16px; padding-top: 1em;">No idles yet</div>'));
       } else {
-        setTimeout(function () {
           $.tablesorter.addParser({
             id: 'attr-data-value',
             is: function (s) { return false; },
@@ -123,6 +122,7 @@ var fn = function () {
               return Number($(cell).attr('data-value') || '0');
             }
           });
+
           $.tablesorter.addParser({
             id: 'coordinate',
             is: function (s) { return false; },
@@ -132,6 +132,7 @@ var fn = function () {
               return coordinates[0] * 1e6 + coordinates[1] * 1e3 + coordinates[2];
             }
           });
+
           $.tablesorter.addParser({
             id: 'input-value',
             is: function (s) { return false; },
@@ -145,7 +146,8 @@ var fn = function () {
               }
             }
           });
-          $('table.uipp-table').tablesorter({
+
+          $wrapper.find('table.uipp-table').tablesorter({
             cancelSelection: true,
             sortList: [[2, 1]],
             headers: {
@@ -156,7 +158,6 @@ var fn = function () {
               5: { sorter: 'input-value' }
             }
           });
-        }, 0);
       }
 
       // insert html
