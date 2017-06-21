@@ -4,6 +4,7 @@ var fn = function () {
 
   var translations = {
     fr: {
+      DONATE_TEXT: 'Vous aimez cette extension ? Vous souhaitez me remercier en m\'offrant un café ?<br>Faire un petit don  m\'incite à maintenir cette extension, et à ajouter de nouvelles fonctionnalités !<br><i>Le café coûte 0.55€ à mon travail. Je dis ça, je dis rien. ;-)<i>',
       RETURN_TRIP_DURATION: 'Durée d\'un aller-retour avec des grands transporteurs',
       TRADE_RATE: 'Taux d\'échange',
       RESET_ALL_TEXT: 'Si vous rencontrez des bugs, ou si vous souhaitez rétablir les paramètres par défaut, cliquez sur le bouton ci-dessous pour nettoyer les données de l\'extension. Vous devrez revisiter la page des ressources de toutes vos planètes afin d\'obtenir une page de statistiques complète, et vous perdrez toutes les annotations faites sur les planètes de vos voisins.',
@@ -44,6 +45,7 @@ var fn = function () {
       STATS_RATIO: 'Ratio de production (rapport au '
     },
     en: {
+      DONATE_TEXT: 'You like this extension ? You\'d like to say "thank you" by offering me a coffee ?<br>Making a little donation motivates me to keep this extension up-to-date, and add new features !<br><i>The coffee costs 0.55€ at my work. Just saying.</i>',
       RETURN_TRIP_DURATION: 'Duration of a return trip with Large Cargo Ship',
       TRADE_RATE: 'Trade rate',
       RESET_ALL_TEXT: 'If you encounter bugs using this extension, or if you want to restore default settings, click on the button below to clean up all this extension\'s data. You will need to revisit all your planet\'s resources page in order to get a properly-filled statistics page, and you will also lose all your neighbours annotations.',
