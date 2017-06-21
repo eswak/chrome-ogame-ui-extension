@@ -7,7 +7,7 @@
       "exclude_matches": [  ],
       "include_globs": [  ],
       "css": [
-        "lib/chartist.min.css",
+        "lib/chartist.min.css"
       ],
       "js": [
         "src/utils/edit-note.js",
