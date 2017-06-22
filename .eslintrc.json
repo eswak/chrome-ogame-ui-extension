@@ -1,0 +1,33 @@
+{
+  "extends": "eslint:recommended",
+
+  "env": {
+    "node": true,
+    "browser": true,
+    "mocha": true,
+    "mongo": true,
+    "jquery": true
+  },
+
+  "rules": {
+    "linebreak-style": 0,
+    "no-underscore-dangle": 0,
+    "indent": ["error", 2, { "MemberExpression": 1 }],
+    "eqeqeq": ["error", "always", { "null": "ignore" }],
+    "no-console": ["warn"],
+    "quotes": ["error", "single"],
+    "no-shadow": ["error", {
+      "builtinGlobals": false,
+      "hoist": "all",
+      "allow": ["done", "cb", "err"]
+    }],
+    "max-len": ["error", {
+      "code": 120
+    }],
+    "padding-line-between-statements": [
+      "error",
+      { "blankLine": "always", "prev": "multiline-block-like", "next": "*" },
+      { "blankLine": "always", "prev": "*", "next": "return" }
+    ]
+  }
+}
