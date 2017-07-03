@@ -53,18 +53,18 @@ var fn = function () {
       var $wrapper = $('<div id="highscoreContent"></div>');
       var $table = $([
         '<table class="uipp-table">',
-          '<thead>',
-            '<tr>',
-              '<th onclick="uipp_analytics(\'uipp-sort\', \'coordinates\');">' + _translate('COORDINATES') + '</th>',
-              '<th onclick="uipp_analytics(\'uipp-sort\', \'flight-time\');" class="tooltip" title="' + _translate('RETURN_TRIP_DURATION') + '"><img src="https://gf2.geo.gfsrv.net/cdna2/89624964d4b06356842188dba05b1b.gif" style="transform:scale(1.6);margin-bottom:-4px;"/></th>',
-              '<th onclick="uipp_analytics(\'uipp-sort\', \'economy-score\');"><span class="navButton uipp-score" id="economy"></span></th>',
-              '<th onclick="uipp_analytics(\'uipp-sort\', \'military-score\');"><span class="navButton uipp-score" id="fleet"></span></th>',
-              '<th onclick="uipp_analytics(\'uipp-sort\', \'player-name\');">' + _translate('PLAYER') + '</th>',
-              '<th onclick="uipp_analytics(\'uipp-sort\', \'note\');">' + _translate('NOTE') + '</th>',
-              '<th>' + _translate('ACTIONS') + '</th>',
-            '</tr>',
-          '</thead>',
-          '<tbody></tbody>',
+        '<thead>',
+        '<tr>',
+        '<th onclick="uipp_analytics(\'uipp-sort\', \'coordinates\');">' + _translate('COORDINATES') + '</th>',
+        '<th onclick="uipp_analytics(\'uipp-sort\', \'flight-time\');" class="tooltip" title="' + _translate('RETURN_TRIP_DURATION') + '"><img src="https://gf2.geo.gfsrv.net/cdna2/89624964d4b06356842188dba05b1b.gif" style="transform:scale(1.6);margin-bottom:-4px;"/></th>',
+        '<th onclick="uipp_analytics(\'uipp-sort\', \'economy-score\');"><span class="navButton uipp-score" id="economy"></span></th>',
+        '<th onclick="uipp_analytics(\'uipp-sort\', \'military-score\');"><span class="navButton uipp-score" id="fleet"></span></th>',
+        '<th onclick="uipp_analytics(\'uipp-sort\', \'player-name\');">' + _translate('PLAYER') + '</th>',
+        '<th onclick="uipp_analytics(\'uipp-sort\', \'note\');">' + _translate('NOTE') + '</th>',
+        '<th>' + _translate('ACTIONS') + '</th>',
+        '</tr>',
+        '</thead>',
+        '<tbody></tbody>',
         '</table>'
       ].join(''));
       var tbody = '';
@@ -94,88 +94,129 @@ var fn = function () {
       }
       $table.find('tbody').append(tbody);
 
-      $wrapper.append($([
+      var $filterBar = $([
         '<div class="uipp-filterbar">',
 
-          // flight duration filters
-          '<span>',
-          '<img src="https://gf2.geo.gfsrv.net/cdna2/89624964d4b06356842188dba05b1b.gif"/>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'flight-time\', null, 3600);uipp_analytics(\'uipp-filter-flight-time\', \'less-than-1-hour\');">\<1h</div>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'flight-time\', null, 2 * 3600);uipp_analytics(\'uipp-filter-flight-time\', \'less-than-2-hour\');">\<2h</div>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'flight-time\', null, 5 * 3600);uipp_analytics(\'uipp-filter-flight-time\', \'less-than-5-hour\');">\<5h</div>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'flight-time\', null, 8 * 3600);uipp_analytics(\'uipp-filter-flight-time\', \'less-than-8-hour\');">\<8h</div>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'flight-time\', 8 * 3600, null);uipp_analytics(\'uipp-filter-flight-time\', \'more-than-8-hour\');">\>8h</div>',
-          '</span>',
+        // flight duration filters
+        '<span data-filter="flight-time">',
+        '<img src="https://gf2.geo.gfsrv.net/cdna2/89624964d4b06356842188dba05b1b.gif"/>',
+        [
+          [null, 3600, '<1h'],
+          [null, 2 * 3600, '<2h'],
+          [null, 5 * 3600, '<5h'],
+          [null, 8 * 3600, '<8h'],
+          [8 * 3600, null, '>8h'],
+        ].map(function (filter) {
+          return [
+            '<div class="uipp-filter" ',
+            'onclick="filterTable(\'flight-time\', ' + filter[0] + ', ' + filter[1] + ');"',
+            'data-attr="flight-time" data-min="' + filter[0] + '" data-max="' + filter[1] + '"',
+            '>' + filter[2] + '</div>'
+          ].join('');
+        }).join(''),
+        '</span>',
 
-          // economy score filters
-          '<span>',
-            '<span class="navButton uipp-score" id="economy" style="margin: -25px -18px -19px 40px; transform: scale(0.33);"></span>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 0, 0);uipp_analytics(\'uipp-filter-economy-score\', \'equal-0\');">=0</div>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 1, null);uipp_analytics(\'uipp-filter-economy-score\', \'more-than-0\');">\>0</div>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 100, null);uipp_analytics(\'uipp-filter-economy-score\', \'more-than-100\');">\>100</div>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 1000, null);uipp_analytics(\'uipp-filter-economy-score\', \'more-than-1k\');">\>1k</div>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 10000, null);uipp_analytics(\'uipp-filter-economy-score\', \'more-than-10k\');">\>10k</div>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 100000, null);uipp_analytics(\'uipp-filter-economy-score\', \'more-than-100k\');">\>100k</div>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 1000000, null);uipp_analytics(\'uipp-filter-economy-score\', \'more-than-1M\');">\>1M</div>',
-          '</span>',
+        // economy score filters
+        '<span data-filter="economy-score">',
+        '<span class="navButton uipp-score" id="economy" style="margin: -25px -18px -19px 40px; transform: scale(0.33);"></span>',
+        [
+          [0, 0, '0'],
+          [1, null, '>0'],
+          [1e2, null, '>100'],
+          [1e3, null, '>1k'],
+          [1e4, null, '>10k'],
+          [1e5, null, '>100k'],
+          [1e6, null, '>1M']
+        ].map(function (filter) {
+          return [
+            '<div class="uipp-filter" ',
+            'onclick="filterTable(\'economy-score\', ' + filter[0] + ', ' + filter[1] + ');"',
+            'data-attr="economy-score" data-min="' + filter[0] + '" data-max="' + filter[1] + '"',
+            '>' + filter[2] + '</div>'
+          ].join('');
+        }).join(''),
+        '</span>',
 
-          // military score filters
-          '<span>',
-            '<span class="navButton uipp-score" id="fleet" style="margin: -25px -18px -19px 40px; transform: scale(0.33);"></span>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'military-score\', 0, 0);uipp_analytics(\'uipp-filter-military-score\', \'more-than-0\');">=0</div>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'military-score\', 1, null);uipp_analytics(\'uipp-filter-military-score\', \'equal-0\');">\>0</div>',
-          '</span>',
+        // military score filters
+        '<span data-filter="military-score">',
+        '<span class="navButton uipp-score" id="fleet" style="margin: -25px -18px -19px 40px; transform: scale(0.33);"></span>',
+        [
+          [0, 0, '0'],
+          [1, null, '>0']
+        ].map(function (filter) {
+          return [
+            '<div class="uipp-filter" ',
+            'onclick="filterTable(\'military-score\', ' + filter[0] + ', ' + filter[1] + ');"',
+            'data-attr="military-score" data-min="' + filter[0] + '" data-max="' + filter[1] + '"',
+            '>' + filter[2] + '</div>'
+          ].join('');
+        }).join(''),
+        '</span>',
+
         '</div>'
-      ].join('')));
+      ].join(''));
+
+      $wrapper.append($filterBar);
+
+      // persistent filters
+      window.config.idleFilters = window.config.idleFilters || {
+        'flight-time': [null, 5 * 3600],
+        'economy-score': [1, null]
+      };
+      for (var key in window.config.idleFilters) {
+        window.filterTable(key, window.config.idleFilters[key][0], window.config.idleFilters[key][1], $table, $filterBar);
+      }
+
       $wrapper.append($table);
+
 
       if (idles.length === 0) {
         $wrapper.append($('<div style="text-align: center; font-size: 16px; padding-top: 1em;">No idles yet</div>'));
       } else {
-          $.tablesorter.addParser({
-            id: 'attr-data-value',
-            is: function (s) { return false; },
-            type: 'numeric',
-            format: function (s, table, cell) {
-              return Number($(cell).attr('data-value') || '0');
-            }
-          });
+        $.tablesorter.addParser({
+          id: 'attr-data-value',
+          is: function (s) { return false; },
+          type: 'numeric',
+          format: function (s, table, cell) {
+            return Number($(cell).attr('data-value') || '0');
+          }
+        });
 
-          $.tablesorter.addParser({
-            id: 'coordinate',
-            is: function (s) { return false; },
-            type: 'numeric',
-            format: function (s, table, cell) {
-              var coordinates = $(cell).text().replace('[', '').replace(']', '').split(':').map(Number);
-              return coordinates[0] * 1e6 + coordinates[1] * 1e3 + coordinates[2];
-            }
-          });
+        $.tablesorter.addParser({
+          id: 'coordinate',
+          is: function (s) { return false; },
+          type: 'numeric',
+          format: function (s, table, cell) {
+            var coordinates = $(cell).text().replace('[', '').replace(']', '').split(':').map(Number);
+            return coordinates[0] * 1e6 + coordinates[1] * 1e3 + coordinates[2];
+          }
+        });
 
-          $.tablesorter.addParser({
-            id: 'input-value',
-            is: function (s) { return false; },
-            type: 'text',
-            format: function (s, table, cell) {
-              var value = $(cell).find('input').attr('value');
-              if (value) {
-                return value;
-              } else {
-                return null;
-              }
+        $.tablesorter.addParser({
+          id: 'input-value',
+          is: function (s) { return false; },
+          type: 'text',
+          format: function (s, table, cell) {
+            var value = $(cell).find('input').attr('value');
+            if (value) {
+              return value;
+            } else {
+              return null;
             }
-          });
+          }
+        });
 
-          $wrapper.find('table.uipp-table').tablesorter({
-            cancelSelection: true,
-            sortList: [[2, 1]],
-            headers: {
-              0: { sorter: 'coordinate' },
-              1: { sorter: 'attr-data-value' },
-              2: { sorter: 'attr-data-value' },
-              3: { sorter: 'attr-data-value' },
-              5: { sorter: 'input-value' }
-            }
-          });
+        $wrapper.find('table.uipp-table').tablesorter({
+          cancelSelection: true,
+          sortList: [[2, 1]],
+          headers: {
+            0: { sorter: 'coordinate' },
+            1: { sorter: 'attr-data-value' },
+            2: { sorter: 'attr-data-value' },
+            3: { sorter: 'attr-data-value' },
+            5: { sorter: 'input-value' }
+          }
+        });
       }
 
       // insert html
@@ -184,14 +225,26 @@ var fn = function () {
       $('#contentWrapper').append($wrapper);
     });
 
-    window.filterTable = function filterTable(button, attribute, minValue, maxValue) {
-      $(button).parent().find('.uipp-filter').removeClass('active');
-      $(button).addClass('active');
+    window.filterTable = function filterTable(attribute, minValue, maxValue, $table, $filterBar) {
+      if (!$table || !$table.length) {
+        $table = $('.uipp-table');
+      }
+      if (!$filterBar || !$filterBar.length) {
+        $filterBar = $('.uipp-filterbar');
+      }
+
+      window.config.idleFilters[attribute] = [minValue, maxValue];
+      window._saveConfig(window.config);
+
+      $filterBar.find('[data-filter="' + attribute + '"] .uipp-filter').removeClass('active');
+      $filterBar.find(
+        '.uipp-filter[data-attr="' + attribute + '"][data-min="' + minValue + '"][data-max="' + maxValue + '"]'
+      ).addClass('active');
 
       minValue = minValue == null ? -Infinity : minValue;
       maxValue = maxValue == null ? Infinity : maxValue;
 
-      $('.uipp-table tr[data-filter-' + attribute + ']').each(function () {
+      $table.find('tr[data-filter-' + attribute + ']').each(function () {
         var $row = $(this);
         var attributes = '';
         for (var i in this.attributes) {
