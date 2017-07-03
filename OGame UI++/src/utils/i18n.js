@@ -4,6 +4,13 @@ var fn = function () {
 
   var translations = {
     fr: {
+      NEXT_MOST_RENTABLE_BUILDS: 'Prochaines actions les plus rentables',
+      NEXT_MOST_RENTABLE_BUILDS_DESCRIPTION: 'Le temps de rentabilité est calculé à partir de l\'achèvement d\'une construction. Par conséquent, si la 2ème action vous coûte beaucoup moins cher que la 1ère, ou si elle se construit beaucoup plus vite, il peut tout de même être rentable de ne pas commencer par la première action.',
+      RENTABILITY_ASTRO: 'Montez astrophysique niveau {level}, et colonisez.<br>Montez les mines niveau : {mineLevel}<br><br>Temps d\'économies pour Astrophysique : {astroTime}<br>Temps de rentabilité des mines de la nouvelle colonie : {mineTime}',
+      RENTABILITY_MINE_METAL: 'Montez votre mine de métal niveau {level} sur {coords}.',
+      RENTABILITY_MINE_CRYSTAL: 'Montez votre mine de cristal niveau {level} sur {coords}.',
+      RENTABILITY_MINE_DEUTERIUM: 'Montez votre synthétiseur de deutérium niveau {level} sur {coords}.',
+      RENTABILITY_PLASMA: 'Montez la technologies plasma au niveau {level}.',
       DONATE_TEXT: 'Vous aimez cette extension ? Vous souhaitez me remercier en m\'offrant un café ?<br>Faire un petit don  m\'incite à maintenir cette extension, et à ajouter de nouvelles fonctionnalités !<br><i>Le café coûte 0.55€ à mon travail. Je dis ça, je dis rien. ;-)<i>',
       RETURN_TRIP_DURATION: 'Durée d\'un aller-retour avec des grands transporteurs',
       TRADE_RATE: 'Taux d\'échange',
@@ -45,6 +52,13 @@ var fn = function () {
       STATS_RATIO: 'Ratio de production (rapport au '
     },
     en: {
+      NEXT_MOST_RENTABLE_BUILDS: 'Next best ROI',
+      NEXT_MOST_RENTABLE_BUILDS_DESCRIPTION: 'The ROI time is based on the ending time of the construction. Thus, if the 2nd action costs much less than the first, or if it\'s way faster to build, the 2nd action may actually have the best "real ROI".',
+      RENTABILITY_ASTRO: 'Level up astrophysics to level {level}, and make a new colony.<br>Level up the new colony\'s mines to {mineLevel}<br><br>Time for resource-gathering of astrophysics : {astroTime}<br>New colony mines ROI : {mineTime}',
+      RENTABILITY_MINE_METAL: 'Level up your metal mine to level {level} on {coords}',
+      RENTABILITY_MINE_CRYSTAL: 'Level up your crystal mine to level {level} on {coords}',
+      RENTABILITY_MINE_DEUTERIUM: 'Level up your deuterium synthetizer to level {level} on {coords}',
+      RENTABILITY_PLASMA: 'Level up your plasma tech to level {level}',
       DONATE_TEXT: 'You like this extension ? You\'d like to say "thank you" by offering me a coffee ?<br>Making a little donation motivates me to keep this extension up-to-date, and add new features !<br><i>The coffee costs 0.55€ at my work. Just saying.</i>',
       RETURN_TRIP_DURATION: 'Duration of a return trip with Large Cargo Ship',
       TRADE_RATE: 'Trade rate',
