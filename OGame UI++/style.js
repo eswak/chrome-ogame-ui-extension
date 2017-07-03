@@ -27,4 +27,5 @@ style.textContent += '#highscoreContent .navButton.uipp-score { display: inline-
 style.textContent += '.uiEnhancementWindow .halfsection { float: left; width: calc(50% - 18px); padding: 5px; margin: 3px; border: 1px dotted #555; border-radius: 4px; font-size: 10px }';
 style.textContent += '.halfsection h3 { text-align: center; color: white; font-size: 15px; font-weight: bold; padding-bottom: 10px; }';
 style.textContent += '.halfsection table td { text-align: left; }';
+style.textContent += '.shadowed { text-shadow: 0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black }';
 (document.head || document.documentElement).appendChild(style);
