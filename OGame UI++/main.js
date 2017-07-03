@@ -9,6 +9,19 @@ libs.forEach(function (path) {
   script.parentNode.removeChild(script);
 });
 
+// add image url object
+var uipp_images = {
+  metal: chrome.extension.getURL('img/mine-metal.png'),
+  crystal: chrome.extension.getURL('img/mine-crystal.png'),
+  deuterium: chrome.extension.getURL('img/mine-deuterium.png'),
+  astrophysics: chrome.extension.getURL('img/tech-astro.png'),
+  plasma: chrome.extension.getURL('img/tech-plasma.png')
+};
+var imgScript = document.createElement('script');
+imgScript.innerHTML = 'var uipp_images = ' + JSON.stringify(uipp_images) + ';';
+(document.head || document.documentElement).appendChild(imgScript);
+imgScript.parentNode.removeChild(imgScript);
+
 // inject main script
 var userscript = function () {
   'use strict';
