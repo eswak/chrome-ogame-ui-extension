@@ -113,9 +113,10 @@ var fn = function () {
             '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 0, 0);uipp_analytics(\'uipp-filter-economy-score\', \'equal-0\');">=0</div>',
             '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 1, null);uipp_analytics(\'uipp-filter-economy-score\', \'more-than-0\');">\>0</div>',
             '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 100, null);uipp_analytics(\'uipp-filter-economy-score\', \'more-than-100\');">\>100</div>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 1000, null);uipp_analytics(\'uipp-filter-economy-score\', \'more-than-1000\');">\>1000</div>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 10000, null);uipp_analytics(\'uipp-filter-economy-score\', \'more-than-10000\');">\>10000</div>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 100000, null);uipp_analytics(\'uipp-filter-economy-score\', \'more-than-100000\');">\>100000</div>',
+            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 1000, null);uipp_analytics(\'uipp-filter-economy-score\', \'more-than-1k\');">\>1k</div>',
+            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 10000, null);uipp_analytics(\'uipp-filter-economy-score\', \'more-than-10k\');">\>10k</div>',
+            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 100000, null);uipp_analytics(\'uipp-filter-economy-score\', \'more-than-100k\');">\>100k</div>',
+            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 1000000, null);uipp_analytics(\'uipp-filter-economy-score\', \'more-than-1M\');">\>1M</div>',
           '</span>',
 
           // military score filters
