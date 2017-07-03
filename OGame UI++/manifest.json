@@ -1,6 +1,11 @@
 {
   "web_accessible_resources": [
-    "lib/chartist.min.js"
+    "lib/chartist.min.js",
+    "img/mine-metal.png",
+    "img/mine-crystal.png",
+    "img/mine-deuterium.png",
+    "img/tech-astro.png",
+    "img/tech-plasma.png"
   ],
   "content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'",
   "content_scripts": [ {
