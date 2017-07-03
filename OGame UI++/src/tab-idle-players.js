@@ -109,16 +109,19 @@ var fn = function () {
 
           // economy score filters
           '<span>',
-            '<span class="navButton uipp-score" id="economy" style="margin: -25px -18px -19px 100px; transform: scale(0.33);"></span>',
+            '<span class="navButton uipp-score" id="economy" style="margin: -25px -18px -19px 40px; transform: scale(0.33);"></span>',
             '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 0, 0);uipp_analytics(\'uipp-filter-economy-score\', \'equal-0\');">=0</div>',
             '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 1, null);uipp_analytics(\'uipp-filter-economy-score\', \'more-than-0\');">\>0</div>',
             '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 100, null);uipp_analytics(\'uipp-filter-economy-score\', \'more-than-100\');">\>100</div>',
-            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 1000, null);uipp_analytics(\'uipp-filter-economy-score\', \'more-than-1000\');">\>1000</div>',
+            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 1000, null);uipp_analytics(\'uipp-filter-economy-score\', \'more-than-1k\');">\>1k</div>',
+            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 10000, null);uipp_analytics(\'uipp-filter-economy-score\', \'more-than-10k\');">\>10k</div>',
+            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 100000, null);uipp_analytics(\'uipp-filter-economy-score\', \'more-than-100k\');">\>100k</div>',
+            '<div class="uipp-filter" onclick="filterTable(this, \'economy-score\', 1000000, null);uipp_analytics(\'uipp-filter-economy-score\', \'more-than-1M\');">\>1M</div>',
           '</span>',
 
           // military score filters
           '<span>',
-            '<span class="navButton uipp-score" id="fleet" style="margin: -25px -18px -19px 104px; transform: scale(0.33);"></span>',
+            '<span class="navButton uipp-score" id="fleet" style="margin: -25px -18px -19px 40px; transform: scale(0.33);"></span>',
             '<div class="uipp-filter" onclick="filterTable(this, \'military-score\', 0, 0);uipp_analytics(\'uipp-filter-military-score\', \'more-than-0\');">=0</div>',
             '<div class="uipp-filter" onclick="filterTable(this, \'military-score\', 1, null);uipp_analytics(\'uipp-filter-military-score\', \'equal-0\');">\>0</div>',
           '</span>',
