@@ -1,15 +1,15 @@
 var fn = function () {
   'use strict';
 
-  window._getPlayerScoreTrend = function _getPlayerScoreTrend(playerId, type, minEntries, maxEntries) {
+  window._getPlayerScoreTrend = function _getPlayerScoreTrend (playerId, type, minEntries, maxEntries) {
     minEntries = minEntries || 3;
     maxEntries = maxEntries || minEntries;
-    config.history = config.history || {};
+    window.config.history = window.config.history || {};
     var playerScores = [];
-    for (var day in config.history[playerId]) {
+    for (var day in window.config.history[playerId]) {
       playerScores.push({
         t: day,
-        v: config.history[playerId][day][type] || -1
+        v: window.config.history[playerId][day][type] || -1
       });
     }
 
@@ -23,18 +23,18 @@ var fn = function () {
 
     playerScores = playerScores.slice(Math.max(playerScores.length - maxEntries, 0), playerScores.length);
 
-    var trend = playerScores.reduce(function (trend, score) {
-      if (score.t < trend.firstDay || trend.firstDay === null) {
-        trend.firstDay = score.t;
-        trend.firstScore = score.v;
+    var trend = playerScores.reduce(function (trendAcc, score) {
+      if (score.t < trendAcc.firstDay || trendAcc.firstDay === null) {
+        trendAcc.firstDay = score.t;
+        trendAcc.firstScore = score.v;
       }
 
-      if (score.t > trend.lastDay || trend.lastDay === null) {
-        trend.lastDay = score.t;
-        trend.lastScore = score.v;
+      if (score.t > trendAcc.lastDay || trendAcc.lastDay === null) {
+        trendAcc.lastDay = score.t;
+        trendAcc.lastScore = score.v;
       }
 
-      return trend;
+      return trendAcc;
     }, { firstDay: null, lastDay: null, firstScore: null, lastScore: null });
 
     var timespan = (new Date(trend.lastDay).getTime() - new Date(trend.firstDay).getTime()) / (24 * 36e5) + 1;
@@ -50,7 +50,7 @@ var fn = function () {
       str = '<span style="color:#888;">' + '0%' + '</span>';
     }
 
-    var title = Math.round(100 * diff) + '% / ' + timespan + ' ' + _translate('TIME_DAY') + '<br><br>';
+    var title = Math.round(100 * diff) + '% / ' + timespan + ' ' + window._translate('TIME_DAY') + '<br><br>';
     title += playerScores.map(function (score) {
       return score.t + ' : ' + score.v;
     }).join('<br>');
@@ -68,12 +68,12 @@ var fn = function () {
     };
   };
 
-  window._getPlayerHistoryChart = function _getPlayerHistoryChart(playerId, type) {
+  window._getPlayerHistoryChart = function _getPlayerHistoryChart (playerId, type) {
     var playerScores = [];
-    for (var day in config.history[playerId]) {
+    for (var day in window.config.history[playerId]) {
       playerScores.push({
         t: day,
-        v: config.history[playerId][day][type]
+        v: window.config.history[playerId][day][type]
       });
     }
 
@@ -87,9 +87,14 @@ var fn = function () {
 
     return [
       '<div class="uipp-score">',
-        playerScores.map(function (score) {
-          return '<div class="uipp-score-bar tooltip" style="width: calc(' + (100 / playerScores.length) + '% - 1px); height:' + (score.v / maxScore) * 100 + '%" title="' + score.t + ' : ' + score.v + '"></div>';
-        }).join(''),
+      playerScores.map(function (score) {
+        return [
+          '<div class="uipp-score-bar tooltip"',
+          'style="width: calc(' + (100 / playerScores.length) + '% - 1px); height:' + (score.v / maxScore) * 100 + '%"',
+          'title="' + score.t + ' : ' + score.v + '"',
+          '></div>'
+        ].join('');
+      }).join(''),
       '</div>'
     ].join('');
   };

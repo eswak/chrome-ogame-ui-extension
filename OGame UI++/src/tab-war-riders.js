@@ -1,6 +1,6 @@
 var fn = function () {
   'use strict';
-  window._addTabWarRiders = function _addTabWarRiders() {
+  window._addTabWarRiders = function _addTabWarRiders () {
     var universe = $('[name="ogame-universe"]').attr('content');
     var serverLang = universe.split('-')[1].split('.')[0];
     var serverNum = universe.split('-')[0].replace('s', '');

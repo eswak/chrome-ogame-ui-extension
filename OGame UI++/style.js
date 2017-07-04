@@ -1,31 +1,93 @@
 var style = document.createElement('style');
-style.textContent = '.enhancement { color: #AB7AFF; }';
-style.textContent += 'ul.production_info { height: 66px; padding: .5em 1em; }';
-style.textContent += 'ul.production_info li { line-height: 1.4em; }';
-style.textContent += '.limitingreagent { outline: 1px dotted #AB7AFF; outline-offset: 2px; }';
-style.textContent += '.costs_wrap #costs { margin: 5px 0 0 0; }';
-style.textContent += '.storageleft { position: absolute; bottom: -11px; left: -35%; width: 170%; }';
-style.textContent += '.boldy { font-weight: bold; }';
-style.textContent += '.resourcesgt { border-bottom:1px dotted #AB7AFF; position: absolute; bottom: 50px; left: -150%; width: 400%; font-size: 1.1em; padding-bottom: 1px; }';
-style.textContent += '.uiEnhancementWindow { padding: 1em; background: black; }';
-style.textContent += '.uiEnhancementWindow a { color:white; text-decoration:none; }';
-style.textContent += '.uipp-table tr.ignore { opacity:.25; }';
-style.textContent += '.icon.icon_eye.disabled:hover { background-position: 0 -48px; }';
-style.textContent += '.currentPlayer td { background: #444 !important; }';
-style.textContent += '.spacer { height: .3em }';
-style.textContent += '.uipp-table { font-size: 11px; width: 100%; background: black; text-align: center; color: white }';
-style.textContent += '.uipp-table th { font-size: 14px; font-weight: bold; cursor: pointer; padding: 10px; }';
-style.textContent += '.uipp-table td { padding: 5px }';
-style.textContent += '.uipp-table.bordered td { border-top: 1px solid rgba(255, 255, 255, 0.3) }';
-style.textContent += '.uipp-table a { color: inherit !important; text-decoration: none; }';
-style.textContent += '.uipp-filter { cursor: pointer; display: inline-block; font-size: 11px; background: black; padding: 3px 5px; vertical-align: 3px; border-radius: 3px; margin-left: 2px; color: #AB7AFF; }';
-style.textContent += '.uipp-filter.active { background: #694d98; color: white; }';
-style.textContent += '.uipp-filterbar { padding: 5px 0; }';
-style.textContent += '.uipp-score { height: 17px; width: 50px; display: inline-block; vertical-align: -3px; }';
-style.textContent += '.uipp-score-bar { background: #694d98; display: inline-block; border-right: 1px solid black; }';
-style.textContent += '#highscoreContent .navButton.uipp-score { display: inline-block; transform: scale(0.5); margin: -18px; float: none; }';
-style.textContent += '.uiEnhancementWindow .halfsection { float: left; width: calc(50% - 18px); padding: 5px; margin: 3px; border: 1px dotted #555; border-radius: 4px; font-size: 10px }';
-style.textContent += '.halfsection h3 { text-align: center; color: white; font-size: 15px; font-weight: bold; padding-bottom: 10px; }';
-style.textContent += '.halfsection table td { text-align: left; }';
-style.textContent += '.shadowed { text-shadow: 0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black }';
+style.textContent = [
+  '.enhancement {',
+  '  color: #AB7AFF;',
+  '}',
+  'ul.production_info {',
+  '  height: 66px; padding: .5em 1em;',
+  '}',
+  'ul.production_info li {',
+  '  line-height: 1.4em;',
+  '}',
+  '.limitingreagent {',
+  '  outline: 1px dotted #AB7AFF; outline-offset: 2px;',
+  '}',
+  '.costs_wrap #costs {',
+  '  margin: 5px 0 0 0;',
+  '}',
+  '.storageleft {',
+  '  position: absolute; bottom: -11px; left: -35%; width: 170%;',
+  '}',
+  '.boldy {',
+  '  font-weight: bold;',
+  '}',
+  '.resourcesgt {border-bottom:1px dotted #AB7AFF; position: absolute; bottom: 50px;',
+  'left: -150%; width: 400%; font-size: 1.1em; padding-bottom: 1px;',
+  '}',
+  '.uiEnhancementWindow {',
+  '  padding: 1em; background: black;',
+  '}',
+  '.uiEnhancementWindow a {',
+  '  color:white; text-decoration:none;',
+  '}',
+  '.uipp-table tr.ignore {',
+  '  opacity:.25;',
+  '}',
+  '.icon.icon_eye.disabled:hover {',
+  '  background-position: 0 -48px;',
+  '}',
+  '.currentPlayer td {',
+  '  background: #444 !important;',
+  '}',
+  '.spacer {',
+  '  height: .3em',
+  '}',
+  '.uipp-table {',
+  '  font-size: 11px; width: 100%; background: black; text-align: center; color: white',
+  '}',
+  '.uipp-table th {',
+  '  font-size: 14px; font-weight: bold; cursor: pointer; padding: 10px;',
+  '}',
+  '.uipp-table td {',
+  '  padding: 5px',
+  '}',
+  '.uipp-table.bordered td {',
+  '  border-top: 1px solid rgba(255, 255, 255, 0.3)',
+  '}',
+  '.uipp-table a {',
+  '  color: inherit !important; text-decoration: none;',
+  '}',
+  '.uipp-filter {',
+  '  cursor: pointer; display: inline-block; font-size: 11px; background: black;',
+  '  padding: 3px 5px; vertical-align: 3px; border-radius: 3px; margin-left: 2px; color: #AB7AFF;',
+  '}',
+  '.uipp-filter.active {',
+  '  background: #694d98; color: white;',
+  '}',
+  '.uipp-filterbar {',
+  '  padding: 5px 0;',
+  '}',
+  '.uipp-score {',
+  '  height: 17px; width: 50px; display: inline-block; vertical-align: -3px;',
+  '}',
+  '.uipp-score-bar {',
+  '  background: #694d98; display: inline-block; border-right: 1px solid black;',
+  '}',
+  '#highscoreContent .navButton.uipp-score {',
+  '  display: inline-block; transform: scale(0.5); margin: -18px; float: none;',
+  '}',
+  '.uiEnhancementWindow .halfsection {',
+  '  float: left; width: calc(50% - 18px); padding: 5px; margin: 3px; border: 1px dotted #555;',
+  '  border-radius: 4px; font-size: 10px',
+  '}',
+  '.halfsection h3 {',
+  '  text-align: center; color: white; font-size: 15px; font-weight: bold; padding-bottom: 10px;',
+  '}',
+  '.halfsection table td {',
+  '  text-align: left;',
+  '}',
+  '.shadowed {',
+  '  text-shadow: 0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black',
+  '}',
+].join('\n');
 (document.head || document.documentElement).appendChild(style);

@@ -5,12 +5,14 @@
     "node": true,
     "browser": true,
     "mocha": true,
-    "mongo": true,
     "jquery": true
   },
 
+  "globals": {
+    "chrome": true
+  },
+
   "rules": {
-    "camelcase": "error",
     "semi": ["error", "always"],
     "space-before-function-paren": ["error", "always"],
     "space-in-parens": ["error", "never"],
@@ -45,12 +47,8 @@
       "hoist": "all",
       "allow": ["done", "cb", "err"]
     }],
-    "max-len": ["error", {
-      "code": 120
-    }],
-    "padding-line-between-statements": [
-      "error",
-      { "blankLine": "always", "prev": "multiline-block-like", "next": "*" }
-    ]
+    "max-len": ["warn", {
+      "code": 130
+    }]
   }
 }

@@ -1,22 +1,22 @@
 var fn = function () {
   'use strict';
-  window._logHistoryData = function _logHistoryData() {
-    config.history = config.history || {};
-    for (var playerId in config.players) {
-      config.history[playerId] = config.history[playerId] || {};
+  window._logHistoryData = function _logHistoryData () {
+    window.config.history = window.config.history || {};
+    for (var playerId in window.config.players) {
+      window.config.history[playerId] = window.config.history[playerId] || {};
       var dayString = new Date().toISOString().split('T')[0];
-      config.history[playerId][dayString] = {
+      window.config.history[playerId][dayString] = {
         t: Date.now(),
-        e: Number(config.players[playerId].economyScore) || 0,
-        ep: Number(config.players[playerId].economyPosition) || 0,
-        m: Number(config.players[playerId].militaryScore) || 0,
-        mp: Number(config.players[playerId].militaryPosition) || 0,
-        r: Number(config.players[playerId].researchScore) || 0,
-        rp: Number(config.players[playerId].researchPosition) || 0,
-        g: Number(config.players[playerId].globalScore) || 0,
-        gp: Number(config.players[playerId].globalPosition) || 0,
-        s: Number(config.players[playerId].ships) || 0,
-        p: config.players[playerId].planets.length
+        e: Number(window.config.players[playerId].economyScore) || 0,
+        ep: Number(window.config.players[playerId].economyPosition) || 0,
+        m: Number(window.config.players[playerId].militaryScore) || 0,
+        mp: Number(window.config.players[playerId].militaryPosition) || 0,
+        r: Number(window.config.players[playerId].researchScore) || 0,
+        rp: Number(window.config.players[playerId].researchPosition) || 0,
+        g: Number(window.config.players[playerId].globalScore) || 0,
+        gp: Number(window.config.players[playerId].globalPosition) || 0,
+        s: Number(window.config.players[playerId].ships) || 0,
+        p: window.config.players[playerId].planets.length
       };
 
       // keep max. MAX_ENTRIES days of stats
@@ -25,15 +25,15 @@ var fn = function () {
       if (playerId === $('[name=ogame-player-id]').attr('content')) {
         continue;
       }
-      var historyEntryKeys = Object.keys(config.history[playerId]).sort();
+      var historyEntryKeys = Object.keys(window.config.history[playerId]).sort();
       if (historyEntryKeys.length > MAX_ENTRIES) {
         for (var i = 0; i < historyEntryKeys.length - MAX_ENTRIES; i++) {
-          delete config.history[playerId][historyEntryKeys[i]];
+          delete window.config.history[playerId][historyEntryKeys[i]];
         }
       }
     }
 
-    _saveConfig(config);
+    window._saveConfig();
   };
 };
 

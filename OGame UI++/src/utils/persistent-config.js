@@ -5,7 +5,7 @@ var fn = function () {
   window._resetConfig = resetConfig;
   var playerId = $('[name=ogame-player-id]').attr('content');
 
-  // config used to be stored in 'og-enhancements',
+  // window.config used to be stored in 'og-enhancements',
   // now it is stored in 'og-enhancement-1003000' (playerId)
   var configKey = 'og-enhancements';
   var oldConfig = localStorage.getItem(configKey);
@@ -15,17 +15,17 @@ var fn = function () {
   }
   configKey += '-' + playerId;
 
-  function saveConfig(config) {
-    localStorage.setItem(configKey, JSON.stringify(config));
+  function saveConfig () {
+    localStorage.setItem(configKey, JSON.stringify(window.config));
   }
 
-  function getConfig() {
+  function getConfig () {
     return JSON.parse(localStorage.getItem(configKey) || '{}');
   }
 
-  function resetConfig() {
+  function resetConfig () {
     localStorage.setItem(configKey, '{}');
-    config = {};
+    window.config = {};
   }
 };
 

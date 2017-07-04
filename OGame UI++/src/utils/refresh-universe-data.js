@@ -1,20 +1,20 @@
 var fn = function () {
   'use strict';
-  
-  window._refreshUniverseData = function _refreshUniverseData() {
+
+  window._refreshUniverseData = function _refreshUniverseData () {
     // refreshes the universe using the API once an hour
-    if (config.lastPlayersUpdate && config.lastPlayersUpdate > Date.now() - 3600000) {
+    if (window.config.lastPlayersUpdate && window.config.lastPlayersUpdate > Date.now() - 3600000) {
       return;
     }
 
     console.debug('Updating universe data...');
-    _loadUniverseApi(function (players, universe) {
+    window._loadUniverseApi(function (players, universe) {
       console.debug('Universe data updated.');
-      config.players = players;
-      config.universe = universe;
-      config.lastPlayersUpdate = Date.now();
-      _saveConfig(config);
-      console.debug('OGame UI++ add-on config :', config);
+      window.config.players = players;
+      window.config.universe = universe;
+      window.config.lastPlayersUpdate = Date.now();
+      window._saveConfig();
+      console.debug('OGame UI++ add-on window.config :', window.config);
     });
   };
 };

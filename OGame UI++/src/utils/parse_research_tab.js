@@ -1,7 +1,7 @@
 var fn = function () {
   'use strict';
 
-  window._parseResearchTab = function _parseResearchTab() {
+  window._parseResearchTab = function _parseResearchTab () {
     if (document.location.href.indexOf('research') === -1) {
       return;
     }
@@ -10,7 +10,7 @@ var fn = function () {
     window.config.plasmaTech = Number($('[ref=122] .level').text().match(/\d+/g)[0]);
     window.config.astroTech = Number($('[ref=124] .level').text().match(/\d+/g)[0]);
 
-    window._saveConfig(window.config);
+    window._saveConfig();
   };
 };
 

@@ -3,10 +3,10 @@ var libs = [
   'lib/chartist.min.js'
 ];
 libs.forEach(function (path) {
-  var script = document.createElement('script');
-  script.src = chrome.extension.getURL(path);
-  (document.head || document.documentElement).appendChild(script);
-  script.parentNode.removeChild(script);
+  var lib = document.createElement('script');
+  lib.src = chrome.extension.getURL(path);
+  (document.head || document.documentElement).appendChild(lib);
+  lib.parentNode.removeChild(lib);
 });
 
 // add image url object
@@ -28,36 +28,39 @@ imgScript.parentNode.removeChild(imgScript);
 var userscript = function () {
   'use strict';
 
-  // config default values
-  window.config = _getConfig();
-  _setConfigTradeRate();
-  _setConfigMyPlanets();
-  _parseResearchTab();
+  // window.config default values
+  window.config = window._getConfig();
+  window._setConfigTradeRate();
+  window._setConfigMyPlanets();
+  window._parseResearchTab();
 
   // Add tabs in the left menu
-  _addTabAlliance();
-  _addTabIdlePlayers();
-  _addTabStats();
-  _addTabTopflop();
-  _addTabNeighbors();
-  _addTabSimulator();
-  _addTabWarRiders();
-  _addTabSettings();
+  window._addTabAlliance();
+  window._addTabIdlePlayers();
+  window._addTabStats();
+  window._addTabTopflop();
+  window._addTabNeighbors();
+  window._addTabSimulator();
+  window._addTabWarRiders();
+  window._addTabSettings();
 
   // Add static helpers
-  _addCurrentPlanetStorageHelper();
-  _addPlanetFleetShortcuts();
+  window._addCurrentPlanetStorageHelper();
+  window._addPlanetFleetShortcuts();
 
   // Add interval checkers
-  _addSpyReportsScannerInterval();
-  _addGalaxyPlayersPlanetsInterval();
-  _addCostsHelperInterval();
+  window._addSpyReportsScannerInterval();
+  window._addGalaxyPlayersPlanetsInterval();
+  window._addCostsHelperInterval();
 
   // Refresh universe data (config.players)
-  _refreshUniverseData();
+  window._refreshUniverseData();
 
   // Add historical point logger
-  _logHistoryData();
+  window._logHistoryData();
+
+  // Tracking code
+  window._setupAnalytics();
 };
 
 // inject user script into the document

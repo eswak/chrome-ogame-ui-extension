@@ -1,10 +1,10 @@
 var fn = function () {
   'use strict';
-  window._editNote = function _editNote(galaxy, system, position, text) {
-    config.planetNotes = config.planetNotes || {};
+  window._editNote = function _editNote (galaxy, system, position, text) {
+    window.config.planetNotes = window.config.planetNotes || {};
     var key = galaxy + ':' + system + ':' + position;
-    config.planetNotes[key] = text;
-    _saveConfig(config);
+    window.config.planetNotes[key] = text;
+    window._saveConfig();
   };
 };
 

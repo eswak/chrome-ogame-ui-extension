@@ -1,6 +1,6 @@
 var fn = function () {
   'use strict';
-  window._addGalaxyPlayersPlanetsInterval = function _addGalaxyPlayersPlanetsInterval() {
+  window._addGalaxyPlayersPlanetsInterval = function _addGalaxyPlayersPlanetsInterval () {
     if (document.location.href.indexOf('galaxy') === -1) {
       return;
     }
@@ -15,7 +15,7 @@ var fn = function () {
         }
 
         var playerId = id.replace('player', '');
-        var player = config.players[playerId];
+        var player = window.config.players[playerId];
         if (!player) {
           return;
         }

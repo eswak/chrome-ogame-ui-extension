@@ -1,8 +1,8 @@
 var fn = function () {
   'use strict';
-  window._setConfigTradeRate = function _setConfigTradeRate() {
-    config.tradeRate = config.tradeRate || [2.0, 1.5, 1.0];
-    _saveConfig(config);
+  window._setConfigTradeRate = function _setConfigTradeRate () {
+    window.config.tradeRate = window.config.tradeRate || [2.0, 1.5, 1.0];
+    window._saveConfig();
   };
 };
 
