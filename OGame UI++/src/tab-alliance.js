@@ -1,6 +1,6 @@
 var fn = function () {
   'use strict';
-  window._addTabAlliance = function _addTabAlliance() {
+  window._addTabAlliance = function _addTabAlliance () {
     if (document.location.href.indexOf('page=alliance') === -1) {
       return;
     }
@@ -15,8 +15,8 @@ var fn = function () {
 
     var alliancePlayers = [];
     var myAllianceId = $('[name=ogame-alliance-id]').attr('content');
-    for (var key in config.players) {
-      var player = config.players[key];
+    for (var key in window.config.players) {
+      var player = window.config.players[key];
       player.id = key;
       if (player.alliance && player.alliance === myAllianceId) {
         alliancePlayers.push(player);
@@ -25,46 +25,46 @@ var fn = function () {
 
     var tabhtml = [
       '<div style="float: left; margin-top: 2em;">',
-        '<table class="uipp-table bordered">',
-          '<thead id="highscoreContent">',
-            '<tr>',
-              '<th>' + _translate('PLAYER') + '</th>',
-              '<th><span class="navButton uipp-score" id="points"></span></th>',
-              '<th>⇵</th>',
-              '<th><span class="navButton uipp-score" id="fleet"></span></th>',
-              '<th>⇵</th>',
-              '<th class="menu_icon"><span class="menuImage active fleet1" style="height: 27px; width: 27px; display: inline-block; margin-bottom: -5px;"></span></th>',
-              '<th>⇵</th>',
-              '<th><span class="navButton uipp-score" id="economy"></span></th>',
-              '<th>⇵</th>',
-              '<th>' + _translate('PLANETS') + '</th>',
-            '</tr>',
-          '</thead>',
-          '<tbody>',
-            alliancePlayers.map(function (player, i) {
-              return [
-                '<tr>',
-                  '<td id="player-id-' + player.id + '" class="' + ($('[name=ogame-player-id]').attr('content') === player.id ? 'enhancement' : '') + '">' + player.name + '</td>',
-                  '<td data-value="' + player.globalScore + '">' + uipp_scoreHumanReadable(player.globalScore) + '</td>',
-                  '<td data-value="' + _getPlayerScoreTrend(player.id, 'g').n + '">' + _getPlayerScoreTrend(player.id, 'g').html + '</td>',
-                  '<td data-value="' + player.militaryScore + '">' + uipp_scoreHumanReadable(player.militaryScore) + '</td>',
-                  '<td data-value="' + _getPlayerScoreTrend(player.id, 'm').n + '">' + _getPlayerScoreTrend(player.id, 'm').html + '</td>',
-                  '<td data-value="' + (player.ships || 0) + '">' + uipp_scoreHumanReadable(player.ships || 0) + '</td>',
-                  '<td data-value="' + _getPlayerScoreTrend(player.id, 's').n + '">' + _getPlayerScoreTrend(player.id, 's').html + '</td>',
-                  '<td data-value="' + player.economyScore + '">' + uipp_scoreHumanReadable(player.economyScore) + '</td>',
-                  '<td data-value="' + _getPlayerScoreTrend(player.id, 'e').n + '">' + _getPlayerScoreTrend(player.id, 'e').html + '</td>',
-                  '<td>',
-                    player.planets.map(function (planet) {
-                      return '<a href="/game/index.php?page=galaxy&galaxy=' + planet.coords[0] + '&system=' + planet.coords[1] + '&position=' + planet.coords[2] + '">[' + planet.coords.join(':') + ']</a>';
-                    }).join(' '),
+      '<table class="uipp-table bordered">',
+      '<thead id="highscoreContent">',
+      '<tr>',
+      '<th>' + window._translate('PLAYER') + '</th>',
+      '<th><span class="navButton uipp-score" id="points"></span></th>',
+      '<th>⇵</th>',
+      '<th><span class="navButton uipp-score" id="fleet"></span></th>',
+      '<th>⇵</th>',
+      '<th class="menu_icon"><span class="menuImage active fleet1" style="height: 27px; width: 27px; display: inline-block; margin-bottom: -5px;"></span></th>',
+      '<th>⇵</th>',
+      '<th><span class="navButton uipp-score" id="economy"></span></th>',
+      '<th>⇵</th>',
+      '<th>' + window._translate('PLANETS') + '</th>',
+      '</tr>',
+      '</thead>',
+      '<tbody>',
+      alliancePlayers.map(function (alliancePlayer) {
+        return [
+          '<tr>',
+          '<td id="player-id-' + alliancePlayer.id + '" class="' + ($('[name=ogame-player-id]').attr('content') === alliancePlayer.id ? 'enhancement' : '') + '">' + alliancePlayer.name + '</td>',
+          '<td data-value="' + alliancePlayer.globalScore + '">', window.uipp_scoreHumanReadable(alliancePlayer.globalScore) + '</td>',
+          '<td data-value="' + window._getPlayerScoreTrend(alliancePlayer.id, 'g').n + '">' + window._getPlayerScoreTrend(alliancePlayer.id, 'g').html + '</td>',
+          '<td data-value="' + alliancePlayer.militaryScore + '">', window.uipp_scoreHumanReadable(alliancePlayer.militaryScore) + '</td>',
+          '<td data-value="' + window._getPlayerScoreTrend(alliancePlayer.id, 'm').n + '">' + window._getPlayerScoreTrend(alliancePlayer.id, 'm').html + '</td>',
+          '<td data-value="' + (alliancePlayer.ships || 0) + '">', window.uipp_scoreHumanReadable(alliancePlayer.ships || 0) + '</td>',
+          '<td data-value="' + window._getPlayerScoreTrend(alliancePlayer.id, 's').n + '">' + window._getPlayerScoreTrend(alliancePlayer.id, 's').html + '</td>',
+          '<td data-value="' + alliancePlayer.economyScore + '">', window.uipp_scoreHumanReadable(alliancePlayer.economyScore) + '</td>',
+          '<td data-value="' + window._getPlayerScoreTrend(alliancePlayer.id, 'e').n + '">' + window._getPlayerScoreTrend(alliancePlayer.id, 'e').html + '</td>',
+          '<td>',
+          alliancePlayer.planets.map(function (planet) {
+            return '<a href="/game/index.php?page=galaxy&galaxy=' + planet.coords[0] + '&system=' + planet.coords[1] + '&position=' + planet.coords[2] + '">[' + planet.coords.join(':') + ']</a>';
+          }).join(' '),
 
-                  '</td>',
-                '</tr>'
-              ].join('');
-            }).join(''),
+          '</td>',
+          '</tr>'
+        ].join('');
+      }).join(''),
 
-          '</tbody>',
-        '</table>',
+      '</tbody>',
+      '</table>',
       '</div>'
     ].join('');
 
@@ -73,7 +73,7 @@ var fn = function () {
     setTimeout(function () {
       $.tablesorter.addParser({
         id: 'attr-data-value',
-        is: function (s) { return false; },
+        is: function () { return false; },
         type: 'numeric',
         format: function (s, table, cell) {
           return Number($(cell).attr('data-value') || '0');

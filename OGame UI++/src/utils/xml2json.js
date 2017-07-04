@@ -8,16 +8,16 @@ var fn = function () {
           var item = xml.children.item(i);
           var nodeName = item.nodeName;
 
-          if (typeof (obj[nodeName]) == "undefined") {
-            obj[nodeName] = xml2json(item);
+          if (typeof (obj[nodeName]) === 'undefined') {
+            obj[nodeName] = window.xml2json(item);
           } else {
-            if (typeof (obj[nodeName].push) == "undefined") {
+            if (typeof (obj[nodeName].push) === 'undefined') {
               var old = obj[nodeName];
 
               obj[nodeName] = [];
               obj[nodeName].push(old);
             }
-            obj[nodeName].push(xml2json(item));
+            obj[nodeName].push(window.xml2json(item));
           }
         }
       } else {
@@ -25,10 +25,10 @@ var fn = function () {
       }
       return obj;
     } catch (e) {
-        console.log(e.message);
+      console.log(e.message);
     }
-  }
-}
+  };
+};
 
 
 var script = document.createElement('script');

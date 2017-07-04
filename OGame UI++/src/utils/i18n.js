@@ -265,7 +265,7 @@ var fn = function () {
     lang = 'en';
   }
 
-  window._translate = function _translate(key, args) {
+  window._translate = function _translate (key, args) {
     var ret = translations[lang][key] || key;
     for (var k in args) {
       if (args.noBold) {

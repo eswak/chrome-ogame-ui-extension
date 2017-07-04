@@ -1,20 +1,20 @@
 var fn = function () {
   'use strict';
-  window._toggleIgnorePlanet = function _toggleIgnorePlanet(galaxy, system, position) {
-    config.ignoredPlanets = config.ignoredPlanets || {};
+  window._toggleIgnorePlanet = function _toggleIgnorePlanet (galaxy, system, position) {
+    window.config.ignoredPlanets = window.config.ignoredPlanets || {};
     var key = galaxy + ':' + system + ':' + position;
     var $el = $('#planet_' + galaxy + '_' + system + '_' + position);
-    if (config.ignoredPlanets[key]) {
-      config.ignoredPlanets[key] = false;
-      uipp_analytics('uipp-ignore-planet', 'restore');
+    if (window.config.ignoredPlanets[key]) {
+      window.config.ignoredPlanets[key] = false;
+      window.uipp_analytics('uipp-ignore-planet', 'restore');
       $el.removeClass('ignore');
     } else {
-      config.ignoredPlanets[key] = true;
-      uipp_analytics('uipp-ignore-planet', 'ignore');
+      window.config.ignoredPlanets[key] = true;
+      window.uipp_analytics('uipp-ignore-planet', 'ignore');
       $el.addClass('ignore');
     }
 
-    _saveConfig(config);
+    window._saveConfig();
   };
 };
 

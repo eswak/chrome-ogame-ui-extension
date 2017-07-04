@@ -1,6 +1,6 @@
 var fn = function () {
   'use strict';
-  window._addSpyReportsScannerInterval = function _addSpyReportsScannerInterval() {
+  window._addSpyReportsScannerInterval = function _addSpyReportsScannerInterval () {
     if (document.location.href.indexOf('messages') === -1) {
       return;
     }

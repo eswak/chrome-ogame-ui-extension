@@ -1,11 +1,11 @@
 var fn = function () {
   'use strict';
 
-  window._addTabNeighbors = function _addTabNeighbors() {
-    var $neighboursEntry = $('<li class="neighbours enhanced"><span class="menu_icon"><div class="customMenuEntry4 menuImage defense"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">' + _translate('MENU_NEIGHBOURS_ACTIVE') + '</span></a></li>');
+  window._addTabNeighbors = function _addTabNeighbors () {
+    var $neighboursEntry = $('<li class="neighbours enhanced"><span class="menu_icon"><div class="customMenuEntry4 menuImage defense"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">' + window._translate('MENU_NEIGHBOURS_ACTIVE') + '</span></a></li>');
     $('#menuTable').append($neighboursEntry);
     $neighboursEntry.click(function () {
-      uipp_analytics('uipp-tab-click', 'nearby-neighbors');
+      window.uipp_analytics('uipp-tab-click', 'nearby-neighbors');
       // ui changes
       $('.menubutton.selected').removeClass('selected');
       $('.menuImage.highlighted').removeClass('highlighted');
@@ -27,8 +27,8 @@ var fn = function () {
       myCoords[2] = parseInt(myCoords[2]);
 
       var neighbours = [];
-      for (var playerId in config.players) {
-        var player = config.players[playerId];
+      for (var playerId in window.config.players) {
+        var player = window.config.players[playerId];
         if (!player.status || !/[iv]/i.test(player.status)) {
           for (var i in player.planets) {
             var planet = player.planets[i];
@@ -49,37 +49,39 @@ var fn = function () {
       }
 
       var $wrapper = $('<div></div>');
-      var $table = $('<table class="uipp-table"><thead id="highscoreContent"><tr><th>' + _translate('COORDINATES') + '</th><th><span class="navButton uipp-score" id="points"></th><th><span class="navButton uipp-score" id="economy"></th><th><span class="navButton uipp-score" id="fleet"></th><th>' + _translate('PLAYER') + '</th><th>' + _translate('NOTE') + '</th><th>' + _translate('ACTIONS') + '</th></tr></thead><tbody></tbody></table>');
+      var $table = $('<table class="uipp-table"><thead id="highscoreContent"><tr><th>' + window._translate('COORDINATES') + '</th><th><span class="navButton uipp-score" id="points"></th><th><span class="navButton uipp-score" id="economy"></th><th><span class="navButton uipp-score" id="fleet"></th><th>' + window._translate('PLAYER') + '</th><th>' + window._translate('NOTE') + '</th><th>' + window._translate('ACTIONS') + '</th></tr></thead><tbody></tbody></table>');
       var playerName = $('[name=ogame-player-name]').attr('content');
+
       var tbody = '';
-      for (var i = 0; i < neighbours.length; i++) {
-        var tr = '<tr id="planet_' + neighbours[i].coords[0] + '_' + neighbours[i].coords[1] + '_' + neighbours[i].coords[2] + '">';
+      neighbours.forEach(function (neighbour) {
+        var tr = '<tr id="planet_' + neighbour.coords[0] + '_' + neighbour.coords[1] + '_' + neighbour.coords[2] + '">';
 
         var td = '';
-        td += '<td><a href="/game/index.php?page=galaxy&galaxy=' + neighbours[i].coords[0] + '&system=' + neighbours[i].coords[1] + '&position=' + neighbours[i].coords[2] + '">[' + neighbours[i].coords[0] + ':' + neighbours[i].coords[1] + ':' + neighbours[i].coords[2] + ']</a></td>';
-        td += '<td data-value="' + _getPlayerScoreTrend(neighbours[i].id, 'g').n + '">' + _getPlayerScoreTrend(neighbours[i].id, 'g').html + '</td>';
-        td += '<td class="tooltip js_hideTipOnMobile" title="' + _translate('ECONOMY_SCORE_LONG', {
+        td += '<td><a href="/game/index.php?page=galaxy&galaxy=' + neighbour.coords[0] + '&system=' + neighbour.coords[1] + '&position=' + neighbour.coords[2] + '">[' + neighbour.coords[0] + ':' + neighbour.coords[1] + ':' + neighbour.coords[2] + ']</a></td>';
+        td += '<td data-value="' + window._getPlayerScoreTrend(neighbour.id, 'g').n + '">' + window._getPlayerScoreTrend(neighbour.id, 'g').html + '</td>';
+        td += '<td class="tooltip js_hideTipOnMobile" title="' + window._translate('ECONOMY_SCORE_LONG', {
           noBold: true,
-          scoreEco: neighbours[i].economyScore
-        }) + '" data-value="' + neighbours[i].economyScore + '"><a href="?page=highscore&searchRelId=' + neighbours[i].id + '&category=1&type=1">' + uipp_scoreHumanReadable(neighbours[i].economyScore) + '</a></td>';
-        td += '<td class="tooltip js_hideTipOnMobile" title="' + _translate('MILITARY_SCORE_LONG', {
+          scoreEco: neighbour.economyScore
+        }) + '" data-value="' + neighbour.economyScore + '"><a href="?page=highscore&searchRelId=' + neighbour.id + '&category=1&type=1">' + window.uipp_scoreHumanReadable(neighbour.economyScore) + '</a></td>';
+        td += '<td class="tooltip js_hideTipOnMobile" title="' + window._translate('MILITARY_SCORE_LONG', {
           noBold: true,
-          scoreMilitary: neighbours[i].militaryScore,
-          ships: (neighbours[i].ships ? neighbours[i].ships : '0')
-        }) + '" style="white-space:nowrap" data-value="' + neighbours[i].militaryScore + '"><a href="?page=highscore&searchRelId=' + neighbours[i].id + '&category=1&type=3">' + uipp_scoreHumanReadable(neighbours[i].militaryScore) + ' (' + uipp_scoreHumanReadable(neighbours[i].ships ? neighbours[i].ships : '0') + ')</a></td>';
-        td += '<td class="tooltip js_hideTipOnMobile" title="' + neighbours[i].name + '"><span class="' + (playerName === neighbours[i].name ? 'enhancement' : '') + '">' + neighbours[i].name + '</span></td>';
-        td += '<td width="100%"><input value="' + (config && config.planetNotes && config.planetNotes[neighbours[i].coords[0] + ':' + neighbours[i].coords[1] + ':' + neighbours[i].coords[2]] ? config.planetNotes[neighbours[i].coords[0] + ':' + neighbours[i].coords[1] + ':' + neighbours[i].coords[2]] : '') + '" onkeyup="_editNote(' + neighbours[i].coords[0] + ',' + neighbours[i].coords[1] + ',' + neighbours[i].coords[2] + ',this.value);return false;" style="width:96.5%;" type="text"/></td>';
-        td += '<td> <a espionage" href="javascript:void(0);" onclick="_spy(' + neighbours[i].coords[0] + ',' + neighbours[i].coords[1] + ',' + neighbours[i].coords[2] + ');return false;"><span class="icon icon_eye"></span></a>&nbsp;<a href="javascript:void(0);" onclick="_toggleIgnorePlanet(' + neighbours[i].coords[0] + ',' + neighbours[i].coords[1] + ',' + neighbours[i].coords[2] + ')"><span class="icon icon_against"></span></a>&nbsp; <a href="?page=fleet1&galaxy=' + neighbours[i].coords[0] + '&system=' + neighbours[i].coords[1] + '&position=' + neighbours[i].coords[2] + '&type=1&mission=1" onclick="$(this).find(\'.icon\').removeClass(\'icon_fastforward\').addClass(\'icon_checkmark\');" target="_blank"><span class="icon icon_fastforward"></span></a> </td>';
+          scoreMilitary: neighbour.militaryScore,
+          ships: (neighbour.ships ? neighbour.ships : '0')
+        }) + '" style="white-space:nowrap" data-value="' + neighbour.militaryScore + '"><a href="?page=highscore&searchRelId=' + neighbour.id + '&category=1&type=3">' + window.uipp_scoreHumanReadable(neighbour.militaryScore) + ' (' + window.uipp_scoreHumanReadable(neighbour.ships ? neighbour.ships : '0') + ')</a></td>';
+        td += '<td class="tooltip js_hideTipOnMobile" title="' + neighbour.name + '"><span class="' + (playerName === neighbour.name ? 'enhancement' : '') + '">' + neighbour.name + '</span></td>';
+        td += '<td width="100%"><input value="' + (window.config && window.config.planetNotes && window.config.planetNotes[neighbour.coords[0] + ':' + neighbour.coords[1] + ':' + neighbour.coords[2]] ? window.config.planetNotes[neighbour.coords[0] + ':' + neighbour.coords[1] + ':' + neighbour.coords[2]] : '') + '" onkeyup="_editNote(' + neighbour.coords[0] + ',' + neighbour.coords[1] + ',' + neighbour.coords[2] + ',this.value);return false;" style="width:96.5%;" type="text"/></td>';
+        td += '<td> <a espionage" href="javascript:void(0);" onclick="_spy(' + neighbour.coords[0] + ',' + neighbour.coords[1] + ',' + neighbour.coords[2] + ');return false;"><span class="icon icon_eye"></span></a>&nbsp;<a href="javascript:void(0);" onclick="_toggleIgnorePlanet(' + neighbour.coords[0] + ',' + neighbour.coords[1] + ',' + neighbour.coords[2] + ')"><span class="icon icon_against"></span></a>&nbsp; <a href="?page=fleet1&galaxy=' + neighbour.coords[0] + '&system=' + neighbour.coords[1] + '&position=' + neighbour.coords[2] + '&type=1&mission=1" onclick="$(this).find(\'.icon\').removeClass(\'icon_fastforward\').addClass(\'icon_checkmark\');" target="_blank"><span class="icon icon_fastforward"></span></a> </td>';
 
         tr += td + '</tr>';
-        if (config && config.ignoredPlanets && config.ignoredPlanets[neighbours[i].coords[0] + ':' + neighbours[i].coords[1] + ':' + neighbours[i].coords[2]]) {
+        if (window.config && window.config.ignoredPlanets && window.config.ignoredPlanets[neighbour.coords[0] + ':' + neighbour.coords[1] + ':' + neighbour.coords[2]]) {
           tr = $(tr).addClass('ignore').wrapAll('<div>').parent().html();
         }
 
         // note : we could use sendShips(mission, galaxy, system, position, type, shipCount)
 
         tbody += tr;
-      }
+      });
+
       $table.find('tbody').append(tbody);
 
       $wrapper.append($table);
@@ -87,7 +89,7 @@ var fn = function () {
       setTimeout(function () {
         $.tablesorter.addParser({
           id: 'attr-data-value',
-          is: function (s) { return false; },
+          is: function () { return false; },
           type: 'numeric',
           format: function (s, table, cell) {
             return Number($(cell).attr('data-value') || '0');
@@ -95,7 +97,7 @@ var fn = function () {
         });
         $.tablesorter.addParser({
           id: 'coordinate',
-          is: function (s) { return false; },
+          is: function () { return false; },
           type: 'numeric',
           format: function (s, table, cell) {
             var coordinates = $(cell).text().replace('[', '').replace(']', '').split(':').map(Number);
@@ -104,7 +106,7 @@ var fn = function () {
         });
         $.tablesorter.addParser({
           id: 'input-value',
-          is: function (s) { return false; },
+          is: function () { return false; },
           type: 'text',
           format: function (s, table, cell) {
             var value = $(cell).find('input').attr('value');

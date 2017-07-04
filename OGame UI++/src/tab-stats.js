@@ -1,10 +1,10 @@
 var fn = function () {
   'use strict';
-  window._addTabStats = function _addTabStats() {
-    var $statsEntry = $('<li class="stats enhanced"><span class="menu_icon"><div class="customMenuEntry2 menuImage empire"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">' + _translate('MENU_STATS') + '</span></a></li>');
+  window._addTabStats = function _addTabStats () {
+    var $statsEntry = $('<li class="stats enhanced"><span class="menu_icon"><div class="customMenuEntry2 menuImage empire"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">' + window._translate('MENU_STATS') + '</span></a></li>');
     $('#menuTable').append($statsEntry);
     $statsEntry.click(function () {
-      uipp_analytics('uipp-tab-click', 'statistics');
+      window.uipp_analytics('uipp-tab-click', 'statistics');
       // ui changes
       $('.menubutton.selected').removeClass('selected');
       $('.menuImage.highlighted').removeClass('highlighted');
@@ -34,8 +34,8 @@ var fn = function () {
 
       var planetStatsHtml = '';
       var rentabilityTimes = [];
-      for (var coords in config.my.planets) {
-        var planet = config.my.planets[coords];
+      for (var coords in window.config.my.planets) {
+        var planet = window.config.my.planets[coords];
         if (!planet.resources) {
           continue;
         }
@@ -45,12 +45,12 @@ var fn = function () {
           rentabilityTimes.push({
             coords: planet.coords,
             resource: resource,
-            time: _getRentabilityTime(resource, planet.resources[resource].prod, planet.resources[resource].level),
+            time: window._getRentabilityTime(resource, planet.resources[resource].prod, planet.resources[resource].level),
             level: planet.resources[resource].level + 1
           });
         });
 
-        var currentPlanetResources = {
+        var currentRealtimePlanetResources = {
           metal: Math.round(planet.resources.metal.now + planet.resources.metal.prod * ((Date.now() - planet.resources.lastUpdate) / 1000)),
           crystal: Math.round(planet.resources.crystal.now + planet.resources.crystal.prod * ((Date.now() - planet.resources.lastUpdate) / 1000)),
           deuterium: Math.round(planet.resources.deuterium.now + planet.resources.deuterium.prod * ((Date.now() - planet.resources.lastUpdate) / 1000))
@@ -67,9 +67,9 @@ var fn = function () {
         globalStats.level.deuterium += (planet.resources.deuterium.level || 0);
 
         // add current resources to global stats
-        globalStats.current.metal += currentPlanetResources.metal;
-        globalStats.current.crystal += currentPlanetResources.crystal;
-        globalStats.current.deuterium += currentPlanetResources.deuterium;
+        globalStats.current.metal += currentRealtimePlanetResources.metal;
+        globalStats.current.crystal += currentRealtimePlanetResources.crystal;
+        globalStats.current.deuterium += currentRealtimePlanetResources.deuterium;
 
         globalStats.planetCount++;
 
@@ -86,24 +86,24 @@ var fn = function () {
 
         planetStatsHtml += [
           '<tr>',
-            '<td style="max-width: 80px; overflow: hidden; text-overflow: ellipsis;">',
-              '<a href="' + planet.href + '">',
-                planet.name + '<br>',
-                '<span style="vertical-align: -1px; opacity: .7;">' + coords + '</span>',
-              '</a>',
-            '</td>',
-            ['metal', 'crystal', 'deuterium'].map(function (resource) {
-              return [
-                '<td id="stat-' + planet.coords.join('-') + '-' + resource + '">',
-                  '<div class="resourceIcon ' + resource + '" style="font-size: 20px; line-height: 32px; text-shadow: ' + textShadow + '">' + planet.resources[resource].level + '</div>',
-                  '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
-                    '<div class="font-weight: bold; padding-bottom: 1px;">' + _num(currentPlanetResources[resource], planet.resources[resource].prod) + '</div>',
-                    '<div><span class="undermark">+' + _num(Math.floor(planet.resources[resource].prod * 3600)) + '</span> /' + _translate('TIME_HOUR') + '</div>',
-                    '<div><span class="undermark">+' + _num(Math.floor(planet.resources[resource].prod * 3600 * 24)) + '</span> /' + _translate('TIME_DAY') + '</div>',
-                  '</div>',
-                '</td>'
-              ].join('');
-            }).join(''),
+          '<td style="max-width: 80px; overflow: hidden; text-overflow: ellipsis;">',
+          '<a href="' + planet.href + '">',
+          planet.name + '<br>',
+          '<span style="vertical-align: -1px; opacity: .7;">' + coords + '</span>',
+          '</a>',
+          '</td>',
+          ['metal', 'crystal', 'deuterium'].map(function (resource) {
+            return [
+              '<td id="stat-' + planet.coords.join('-') + '-' + resource + '">',
+              '<div class="resourceIcon ' + resource + '" style="font-size: 20px; line-height: 32px; text-shadow: ' + textShadow + '">' + planet.resources[resource].level + '</div>',
+              '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
+              '<div class="font-weight: bold; padding-bottom: 1px;">' + window._num(currentRealtimePlanetResources[resource], planet.resources[resource].prod) + '</div>',
+              '<div><span class="undermark">+' + window._num(Math.floor(planet.resources[resource].prod * 3600)) + '</span> /' + window._translate('TIME_HOUR') + '</div>',
+              '<div><span class="undermark">+' + window._num(Math.floor(planet.resources[resource].prod * 3600 * 24)) + '</span> /' + window._translate('TIME_DAY') + '</div>',
+              '</div>',
+              '</td>'
+            ].join('');
+          }).join(''),
           '</tr>'
         ].join('');
       }
@@ -121,51 +121,51 @@ var fn = function () {
 
       planetStatsHtml = [
         '<tr>',
-          '<td style="width: 80px"></td>',
-          ['metal', 'crystal', 'deuterium'].map(function (resource) {
-            return [
-              '<td>',
-                '<div class="resourceIcon ' + resource + '" style="font-size: 20px; line-height: 32px; text-shadow: ' + textShadow + '">' + Math.floor(10 * globalStats.level[resource]) / 10 + '</div>',
-                '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em; padding-bottom: 3px">',
-                  '<div class="font-weight: bold; padding-bottom: 1px;">' + _num(globalStats.current[resource], globalStats.prod[resource]) + '</div>',
-                  '<div><span class="undermark">+' + _num(Math.floor(globalStats.prod[resource] * 3600)) + '</span> /' + _translate('TIME_HOUR') + '</div>',
-                  '<div><span class="undermark">+' + _num(Math.floor(globalStats.prod[resource] * 3600 * 24)) + '</span> /' + _translate('TIME_DAY') + '</div>',
-                  '<div style="font-size: 8px; padding-top: 5px;">' + productionRatio[resource] + '</div>',
-                '</div>',
-              '</td>'
-            ].join('');
-          }).join(''),
+        '<td style="width: 80px"></td>',
+        ['metal', 'crystal', 'deuterium'].map(function (resource) {
+          return [
+            '<td>',
+            '<div class="resourceIcon ' + resource + '" style="font-size: 20px; line-height: 32px; text-shadow: ' + textShadow + '">' + Math.floor(10 * globalStats.level[resource]) / 10 + '</div>',
+            '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em; padding-bottom: 3px">',
+            '<div class="font-weight: bold; padding-bottom: 1px;">' + window._num(globalStats.current[resource], globalStats.prod[resource]) + '</div>',
+            '<div><span class="undermark">+' + window._num(Math.floor(globalStats.prod[resource] * 3600)) + '</span> /' + window._translate('TIME_HOUR') + '</div>',
+            '<div><span class="undermark">+' + window._num(Math.floor(globalStats.prod[resource] * 3600 * 24)) + '</span> /' + window._translate('TIME_DAY') + '</div>',
+            '<div style="font-size: 8px; padding-top: 5px;">' + productionRatio[resource] + '</div>',
+            '</div>',
+            '</td>'
+          ].join('');
+        }).join(''),
         '</tr>',
         '<tr><td style="height:10px"></td></tr>'
       ].join('') + planetStatsHtml;
 
       $wrapper.append($('<table class="uipp-table">' + planetStatsHtml + '</table>'));
 
-      var hasEnoughHistory = _getPlayerScoreTrend($('[name=ogame-player-id]').attr('content'), 'g', 2).abs;
+      var hasEnoughHistory = window._getPlayerScoreTrend($('[name=ogame-player-id]').attr('content'), 'g', 2).abs;
       if (hasEnoughHistory) {
         var playerId = $('[name=ogame-player-id]').attr('content');
-        var current = config.players[playerId];
-        var history = config.history[playerId];
+        var current = window.config.players[playerId];
+        var history = window.config.history[playerId];
 
         $wrapper.append($([
           '<div class="clearfix" style="margin-top:50px;">',
-            '<div id="chart-history" style="width:70%;height:200px;float:left;"></div>',
-            '<div id="chart-pie" style="width:30%;height:170px;float:left;margin-top:5px;position:relative;">',
-              '<span id="highscoreContent" style="font-size:11px;">',
-                '<span id="economy" class="navButton" style="position:absolute;transform:scale(0.35);top:25px;left:50px;"></span>',
-                '<span id="research" class="navButton" style="position:absolute;transform:scale(0.35);top:55px;left:50px;"></span>',
-                '<span id="fleet" class="navButton" style="position:absolute;transform:scale(0.35);top:85px;left:50px;"></span>',
-                '<span style="position:absolute;top:45px;left:90px;">',
-                  _getPlayerScoreTrend(playerId, 'e', 2, 10).html,
-                '</span>',
-                '<span style="position:absolute;top:75px;left:90px;">',
-                  _getPlayerScoreTrend(playerId, 'r', 2, 10).html,
-                '</span>',
-                '<span style="position:absolute;top:105px;left:90px;">',
-                  _getPlayerScoreTrend(playerId, 'm', 2, 10).html,
-                '</span>',
-              '</span>',
-            '</div>',
+          '<div id="chart-history" style="width:70%;height:200px;float:left;"></div>',
+          '<div id="chart-pie" style="width:30%;height:170px;float:left;margin-top:5px;position:relative;">',
+          '<span id="highscoreContent" style="font-size:11px;">',
+          '<span id="economy" class="navButton" style="position:absolute;transform:scale(0.35);top:25px;left:50px;"></span>',
+          '<span id="research" class="navButton" style="position:absolute;transform:scale(0.35);top:55px;left:50px;"></span>',
+          '<span id="fleet" class="navButton" style="position:absolute;transform:scale(0.35);top:85px;left:50px;"></span>',
+          '<span style="position:absolute;top:45px;left:90px;">',
+          window._getPlayerScoreTrend(playerId, 'e', 2, 10).html,
+          '</span>',
+          '<span style="position:absolute;top:75px;left:90px;">',
+          window._getPlayerScoreTrend(playerId, 'r', 2, 10).html,
+          '</span>',
+          '<span style="position:absolute;top:105px;left:90px;">',
+          window._getPlayerScoreTrend(playerId, 'm', 2, 10).html,
+          '</span>',
+          '</span>',
+          '</div>',
           '</div>'
         ].join('')));
         setTimeout(function () {
@@ -194,24 +194,24 @@ var fn = function () {
             series[2].data.push({ x: history[day].t, y: (history[day].m || 0) });
           });
 
-          new Chartist.Line('#chart-history', {
+          new window.Chartist.Line('#chart-history', {
             labels: labels,
             series: series
           }, {
             axisX: {
-              type: Chartist.FixedScaleAxis,
+              type: window.Chartist.FixedScaleAxis,
               divisor: 5,
-              labelInterpolationFnc: function(value) {
+              labelInterpolationFnc: function (value) {
                 var dayOfMonthStr = new Date(value).toISOString().split('T')[0].split('-')[2];
                 var monthStr = new Date(value).toISOString().split('T')[0].split('-')[1];
                 return dayOfMonthStr + '/' + monthStr;
               }
             },
             axisY: {
-              type: Chartist.FixedScaleAxis,
+              type: window.Chartist.FixedScaleAxis,
               divisor: 5,
-              labelInterpolationFnc: function(value) {
-                return uipp_scoreHumanReadable(value);
+              labelInterpolationFnc: function (value) {
+                return window.uipp_scoreHumanReadable(value);
               }
             },
             showArea: true,
@@ -220,7 +220,7 @@ var fn = function () {
             low: 0
           });
 
-          new Chartist.Pie('#chart-pie', {
+          new window.Chartist.Pie('#chart-pie', {
             series: [current.economyScore, current.researchScore, current.militaryScore]
           }, {
             donut: true,
@@ -258,20 +258,7 @@ var fn = function () {
 
         var astroTime = astroCostWorth / globalProdWorth;
 
-        var lowestMineLevels = {
-          metal: Infinity,
-          crystal: Infinity,
-          deuterium: Infinity
-        };
-        for (var key in window.config.my.planets) {
-          var planet = window.config.my.planets[key];
-          ['metal', 'crystal', 'deuterium'].forEach(function (res) {
-            if (planet.resources[res].level < lowestMineLevels[res]) {
-              lowestMineLevels[res] = planet.resources[res].level;
-            }
-          });
-        }
-
+        var lowestMineLevels = _getMyLowestMineLevels();
         var cummulativeLowestMineCosts = {
           metal: window.uipp_getCummulativeCost('metal', 0, lowestMineLevels.metal),
           crystal: window.uipp_getCummulativeCost('crystal', 0, lowestMineLevels.crystal),
@@ -285,7 +272,6 @@ var fn = function () {
         cummulativeLowestMineCostsWorth += cummulativeLowestMineCosts.crystal[1] * currentPlanetResources.crystal.worth;
         cummulativeLowestMineCostsWorth += cummulativeLowestMineCosts.deuterium[0] * currentPlanetResources.metal.worth;
         cummulativeLowestMineCostsWorth += cummulativeLowestMineCosts.deuterium[1] * currentPlanetResources.crystal.worth;
-
 
         var newPlanetProductionWorth = 0;
         newPlanetProductionWorth += window.uipp_getProduction('metal', lowestMineLevels.metal) / 3600;
@@ -394,6 +380,23 @@ var fn = function () {
       $('#contentWrapper').html($eventboxContent);
       $('#contentWrapper').append($wrapper);
     });
+
+    function _getMyLowestMineLevels () {
+      var lowestMineLevels = {
+        metal: Infinity,
+        crystal: Infinity,
+        deuterium: Infinity
+      };
+      for (var key in window.config.my.planets) {
+        var myPlanet = window.config.my.planets[key];
+        ['metal', 'crystal', 'deuterium'].forEach(function (res) {
+          if (myPlanet.resources[res].level < lowestMineLevels[res]) {
+            lowestMineLevels[res] = myPlanet.resources[res].level;
+          }
+        });
+      }
+      return lowestMineLevels;
+    }
   };
 };
 

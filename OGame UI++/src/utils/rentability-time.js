@@ -1,51 +1,42 @@
 var fn = function () {
   'use strict';
-  window._getRentabilityTime = function _getRentabilityTime(type, currentProd, level) {
-    var resources = _getCurrentPlanetResources();
+  window._getRentabilityTime = function _getRentabilityTime (type, currentProd, level) {
+    var currentHourlyProd = currentProd * 3600;
+    var resources = window._getCurrentPlanetResources();
     var rentabilityTime = 0;
 
-    if (type === 'metal') {
-      var calculatedProduction = 30 * level * Math.pow(1.1, level) + 30;
-      var ratio = currentProd * 3600 / calculatedProduction;
-      var calculatedNextLevelproduction = ratio * 30 * (level + 1) * Math.pow(1.1, level + 1) + 30;
-      var productionDiff = calculatedNextLevelproduction / 3600 - currentProd;
-      var metalCost = 60 * Math.pow(1.5, level);
-      var crystalCost = 15 * Math.pow(1.5, level);
-      var convertedProductionCost = metalCost * 1.0 + crystalCost * (resources.crystal.worth / resources.metal.worth);
-      rentabilityTime = convertedProductionCost / productionDiff;
-    } else if (type === 'crystal') {
-      var calculatedProduction = 20 * level * Math.pow(1.1, level) + 15;
-      var ratio = currentProd * 3600 / calculatedProduction;
-      var calculatedNextLevelproduction = ratio * 20 * (level + 1) * Math.pow(1.1, level + 1) + 15;
-      var productionDiff = calculatedNextLevelproduction / 3600 - currentProd;
-      var metalCost = 48 * Math.pow(1.6, level);
-      var crystalCost = 24 * Math.pow(1.6, level);
-      var convertedProductionCost = metalCost * (resources.metal.worth / resources.crystal.worth) + crystalCost * 1.0;
-      rentabilityTime = convertedProductionCost / productionDiff;
-    } else if (type === 'deuterium') {
-      var calculatedProduction = 10 * level * Math.pow(1.1, level);
-      var ratio = currentProd * 3600 / calculatedProduction;
-      var calculatedNextLevelproduction = ratio * 10 * (level + 1) * Math.pow(1.1, level + 1);
-      var productionDiff = calculatedNextLevelproduction / 3600 - currentProd;
-      var metalCost = 225 * Math.pow(1.5, level);
-      var crystalCost = 75 * Math.pow(1.5, level);
-      var convertedProductionCost = metalCost * (resources.metal.worth / resources.deuterium.worth) + crystalCost * (resources.crystal.worth / resources.deuterium.worth);
-      rentabilityTime = convertedProductionCost / productionDiff;
-    } else if (type === 'plasma') {
-      var currentProd = 0;
-      var nextLevelProd = 0;
-      for (var coords in config.my.planets) {
-        var planet = config.my.planets[coords];
-        currentProd += planet.resources.metal.prod * planet.resources.metal.worth + planet.resources.crystal.prod * planet.resources.crystal.worth + planet.resources.deuterium.prod * planet.resources.deuterium.worth;
-        nextLevelProd += planet.resources.metal.prod * planet.resources.metal.worth * 1.01 + planet.resources.crystal.prod * planet.resources.crystal.worth * 1.0066 + planet.resources.deuterium.prod * planet.resources.deuterium.worth * 1.0033;
+    switch(type) {
+    case 'metal':
+    case 'crystal':
+    case 'deuterium':
+      var calculatedProduction = window.uipp_getProduction(type, level);
+      var ratio = currentHourlyProd / calculatedProduction; // used for boosts, deuterium temperature, etc
+      var calculatedNextLevelproduction = window.uipp_getProduction(type, level + 1) * ratio;
+      var productionDiff = calculatedNextLevelproduction - currentHourlyProd;
+      var productionDiffWorth = productionDiff * resources[type].worth;
+      var costs = window.uipp_getCost(type, level);
+      var productionCostWorth = costs[0] * resources.metal.worth + costs[1] * resources.crystal.worth;
+      rentabilityTime = (productionCostWorth / productionDiffWorth) * 3600; // in seconds
+      break;
+    case 'plasma':
+      var currentGlobalProdWorth = 0;
+      var nextLevelGlobalProdWorth = 0;
+      for (var coords in window.config.my.planets) {
+        var planet = window.config.my.planets[coords];
+        currentGlobalProdWorth += planet.resources.metal.prod * resources.metal.worth +
+          planet.resources.crystal.prod * resources.crystal.worth +
+          planet.resources.deuterium.prod * resources.deuterium.worth;
+        nextLevelGlobalProdWorth += planet.resources.metal.prod * resources.metal.worth * 1.01 +
+          planet.resources.crystal.prod * resources.crystal.worth * 1.0066 +
+          planet.resources.deuterium.prod * resources.deuterium.worth * 1.0033;
       }
 
-      var prodDiff = nextLevelProd - currentProd;
-      var metalCost = 2000 * Math.pow(2, level);
-      var crystalCost = 4000 * Math.pow(2, level);
-      var deuteriumCost = 1000 * Math.pow(2, level);
-      var totalPrice = metalCost * resources.metal.worth + crystalCost * resources.crystal.worth + deuteriumCost * resources.deuterium.worth;
-      rentabilityTime = totalPrice / prodDiff;
+      var plasmaCosts = window.uipp_getCost('plasma', level);
+      var plasmaCostsWorth = plasmaCosts[0] * resources.metal.worth +
+        plasmaCosts[1] * resources.crystal.worth +
+        plasmaCosts[2] * resources.deuterium.worth;
+      rentabilityTime = plasmaCostsWorth / (nextLevelGlobalProdWorth - currentGlobalProdWorth);
+      break;
     }
 
     return Math.floor(rentabilityTime);

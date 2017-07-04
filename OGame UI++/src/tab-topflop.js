@@ -1,16 +1,16 @@
 var fn = function () {
   'use strict';
 
-  window._addTabTopflop = function _addTabTopflop() {
+  window._addTabTopflop = function _addTabTopflop () {
     var $menuEntry = $('<li class="topflop enhanced"><span class="menu_icon"><div class="customMenuEntrySettings menuImage overview"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">Top / Flop</span></a></li>');
 
-    var hasEnoughHistory = _getPlayerScoreTrend($('[name=ogame-player-id]').attr('content'), 'g', 2).abs;
+    var hasEnoughHistory = window._getPlayerScoreTrend($('[name=ogame-player-id]').attr('content'), 'g', 2).abs;
     if (hasEnoughHistory) {
       $('#menuTable').append($menuEntry);
     }
 
     $menuEntry.click(function () {
-      uipp_analytics('uipp-tab-click', 'topflop');
+      window.uipp_analytics('uipp-tab-click', 'topflop');
       // ui changes
       $('.menubutton.selected').removeClass('selected');
       $('.menuImage.highlighted').removeClass('highlighted');
@@ -18,15 +18,15 @@ var fn = function () {
       $('.customMenuEntrySettings').addClass('highlighted');
 
       var N_ENTRIES = 15;
-      var PLAYER_POOL = config.history;
+      var PLAYER_POOL = window.config.history;
 
       var $wrapper = $('<div class="uiEnhancementWindow clearfix"></div>');
 
       ['globalScore', 'economyScore', 'militaryScore'].forEach(function (scoreType) {
         var entries = [];
         for (var playerId in PLAYER_POOL) {
-          var current = Number((config.players[playerId] || {})[scoreType] || 0);
-          var diff = _getPlayerScoreTrend(playerId, scoreType[0], 2).abs || 0;
+          var current = Number((window.config.players[playerId] || {})[scoreType] || 0);
+          var diff = window._getPlayerScoreTrend(playerId, scoreType[0], 2).abs || 0;
           var diffPercent = Math.round(100 * ((current / (current - diff)) - 1));
 
           if (current) {
@@ -60,29 +60,29 @@ var fn = function () {
         for (var key in topflop) {
           $wrapper.append($([
             '<div class="halfsection">',
-              '<table class="uipp-table">',
-                topflop[key].map(function (entry) {
-                  return [
-                    '<tr>',
-                      '<td>',
-                        config.players[entry.playerId] ? ('(' + config.players[entry.playerId][scoreType.replace('Score', 'Position')] + ')') : '',
-                      '</td>',
-                      '<td>',
-                        ((config.players[entry.playerId] || {}).name || _translate('DELETED_PLAYER')),
-                      '</td>',
-                      '<td>',
-                        uipp_scoreHumanReadable(entry.current),
-                      '</td>',
-                      '<td>',
-                        uipp_diff(uipp_scoreHumanReadable(entry.diff)),
-                      '</td>',
-                      '<td>',
-                        '(' + uipp_diff(entry.diffPercent, true, false) + ')',
-                      '</td>',
-                    '</tr>'
-                  ].join('');
-                }).join(''),
-              '</table>',
+            '<table class="uipp-table">',
+            topflop[key].map(function (entry) {
+              return [
+                '<tr>',
+                '<td>',
+                window.config.players[entry.playerId] ? ('(' + window.config.players[entry.playerId][scoreType.replace('Score', 'Position')] + ')') : '',
+                '</td>',
+                '<td>',
+                ((window.config.players[entry.playerId] || {}).name || window._translate('DELETED_PLAYER')),
+                '</td>',
+                '<td>',
+                window.uipp_scoreHumanReadable(entry.current),
+                '</td>',
+                '<td>',
+                window.uipp_diff(window.uipp_scoreHumanReadable(entry.diff)),
+                '</td>',
+                '<td>',
+                '(' + window.uipp_diff(entry.diffPercent, true, false) + ')',
+                '</td>',
+                '</tr>'
+              ].join('');
+            }).join(''),
+            '</table>',
             '</div>'
           ].join('')));
         }

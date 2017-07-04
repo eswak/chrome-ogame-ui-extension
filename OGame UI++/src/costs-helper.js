@@ -1,11 +1,11 @@
 var fn = function () {
   'use strict';
-  window._addCostsHelperInterval = function _addCostsHelperInterval() {
+  window._addCostsHelperInterval = function _addCostsHelperInterval () {
     setInterval(function () {
       var costs = {
-        metal: _gfNumberToJsNumber($('.metal.tooltip .cost').text().trim()),
-        crystal: _gfNumberToJsNumber($('.crystal.tooltip .cost').text().trim()),
-        deuterium: _gfNumberToJsNumber($('.deuterium.tooltip .cost').text().trim())
+        metal: window._gfNumberToJsNumber($('.metal.tooltip .cost').text().trim()),
+        crystal: window._gfNumberToJsNumber($('.crystal.tooltip .cost').text().trim()),
+        deuterium: window._gfNumberToJsNumber($('.deuterium.tooltip .cost').text().trim())
       };
       if (costs.metal || costs.crystal || costs.deuterium) {
         _addRessourceCountTimeHelper(costs);
@@ -21,8 +21,8 @@ var fn = function () {
       }
     }, 100);
 
-    function _getCostTimes(costs) {
-      var resources = _getCurrentPlanetResources();
+    function _getCostTimes (costs) {
+      var resources = window._getCurrentPlanetResources();
       return {
         metal: Math.ceil(costs.metal / resources.metal.prod) || 0,
         crystal: Math.ceil(costs.crystal / resources.crystal.prod) || 0,
@@ -30,23 +30,23 @@ var fn = function () {
       };
     }
 
-    function _addRessourceCountTimeHelper(costs) {
+    function _addRessourceCountTimeHelper (costs) {
       var times = _getCostTimes(costs);
 
       var $metalElement = $('.metal.tooltip:not(.enhanced)');
-      $metalElement.append('<div class="enhancement">' + _time(times.metal) + '</div>');
+      $metalElement.append('<div class="enhancement">' + window._time(times.metal) + '</div>');
       $metalElement.addClass('enhanced');
 
       var $crystalElement = $('.crystal.tooltip:not(.enhanced)');
-      $crystalElement.append('<div class="enhancement">' + _time(times.crystal) + '</div>');
+      $crystalElement.append('<div class="enhancement">' + window._time(times.crystal) + '</div>');
       $crystalElement.addClass('enhanced');
 
       var $deuteriumElement = $('.deuterium.tooltip:not(.enhanced)');
-      $deuteriumElement.append('<div class="enhancement">' + _time(times.deuterium) + '</div>');
+      $deuteriumElement.append('<div class="enhancement">' + window._time(times.deuterium) + '</div>');
       $deuteriumElement.addClass('enhanced');
     }
 
-    function _getLimitingReagent(costs) {
+    function _getLimitingReagent (costs) {
       var times = _getCostTimes(costs);
       var limitingreagent = null;
       if (times.metal > 0 || times.crystal > 0 || times.deuterium > 0) {
@@ -62,7 +62,7 @@ var fn = function () {
       return limitingreagent;
     }
 
-    function _addLimitingReagentHelper(costs) {
+    function _addLimitingReagentHelper (costs) {
       var limitingreagent = _getLimitingReagent(costs);
 
       if (limitingreagent) {
@@ -70,24 +70,28 @@ var fn = function () {
       }
     }
 
-    function _addProductionEconomyTimeTextHelper(costs) {
+    function _addProductionEconomyTimeTextHelper (costs) {
       var $el = $('#content .production_info:not(.enhanced-economy-time)');
       $el.addClass('enhanced-economy-time');
 
-      var resources = _getCurrentPlanetResources();
-      var totalPrice = costs.metal * resources.metal.worth + costs.crystal * resources.crystal.worth + costs.deuterium * resources.deuterium.worth;
-      var totalProd = resources.metal.prod * resources.metal.worth + resources.crystal.prod * resources.crystal.worth + resources.deuterium.prod * resources.deuterium.worth;
+      var resources = window._getCurrentPlanetResources();
+      var totalPrice = costs.metal * resources.metal.worth
+        + costs.crystal * resources.crystal.worth
+        + costs.deuterium * resources.deuterium.worth;
+      var totalProd = resources.metal.prod * resources.metal.worth
+        + resources.crystal.prod * resources.crystal.worth
+        + resources.deuterium.prod * resources.deuterium.worth;
 
-      $el.append('<li class="enhancement">' + _translate('ECONOMY_TIME', {
-        time: _time(totalPrice / totalProd)
+      $el.append('<li class="enhancement">' + window._translate('ECONOMY_TIME', {
+        time: window._time(totalPrice / totalProd)
       }) + '</li>');
     }
 
-    function _addProductionBuildableInTextHelper(costs) {
+    function _addProductionBuildableInTextHelper (costs) {
       var $el = $('#content .production_info:not(.enhanced-buildable-in)');
       $el.addClass('enhanced-buildable-in');
 
-      var resources = _getCurrentPlanetResources();
+      var resources = window._getCurrentPlanetResources();
       var availableIn = {
         metal: Math.max(costs.metal - resources.metal.now, 0) / resources.metal.prod,
         crystal: Math.max(costs.crystal - resources.crystal.now, 0) / resources.crystal.prod,
@@ -100,18 +104,18 @@ var fn = function () {
       availableIn = Math.max(availableIn.metal, availableIn.crystal, availableIn.deuterium);
 
       if (availableIn === 0) {
-        $el.append('<li class="enhancement">' + _translate('BUILDABLE_NOW') + '</li>');
+        $el.append('<li class="enhancement">' + window._translate('BUILDABLE_NOW') + '</li>');
       } else {
-        $el.append('<li class="enhancement">' + _translate('BUILDABLE_IN', {
-          time: _time(availableIn, -1)
+        $el.append('<li class="enhancement">' + window._translate('BUILDABLE_IN', {
+          time: window._time(availableIn, -1)
         }) + '</li>');
       }
     }
 
-    function _addProductionMaximumBuildableTextHelper(costs) {
+    function _addProductionMaximumBuildableTextHelper (costs) {
       var $amount = $('#content .amount:not(.enhanced)');
       if ($amount.length > 0) {
-        var resources = _getCurrentPlanetResources();
+        var resources = window._getCurrentPlanetResources();
 
         var maxMetal = resources.metal.now / costs.metal;
         var maxCrystal = resources.crystal.now / costs.crystal;
@@ -125,15 +129,14 @@ var fn = function () {
       }
     }
 
-    function _addProductionRentabilityTimeTextHelper(costs) {
-      var resources = _getCurrentPlanetResources();
-      var tradeRateStr = config.tradeRate.map(String).join(' / ');
+    function _addProductionRentabilityTimeTextHelper () {
+      var resources = window._getCurrentPlanetResources();
+      var tradeRateStr = window.config.tradeRate.map(String).join(' / ');
 
       // if we are viewing a metal mine, computes rentability time
       if ($('#resources_1_large:not(.enhanced)').length > 0) {
-        var rentabilityTime = _getRentabilityTime('metal', resources.metal.prod, resources.metal.level);
-        $('#content .production_info').append('<li class="enhancement">' + _translate('ROI', {
-          time: _time(rentabilityTime),
+        $('#content .production_info').append('<li class="enhancement">' + window._translate('ROI', {
+          time: window._time(window._getRentabilityTime('metal', resources.metal.prod, resources.metal.level)),
           tradeRate: tradeRateStr
         }) + '</li>');
         $('#resources_1_large').addClass('enhanced');
@@ -141,9 +144,8 @@ var fn = function () {
 
       // if we are viewing a crystal mine, computes rentability time
       else if ($('#resources_2_large:not(.enhanced)').length > 0) {
-        var rentabilityTime = _getRentabilityTime('crystal', resources.crystal.prod, resources.crystal.level);
-        $('#content .production_info').append('<li class="enhancement">' + _translate('ROI', {
-          time: _time(rentabilityTime),
+        $('#content .production_info').append('<li class="enhancement">' + window._translate('ROI', {
+          time: window._time(window._getRentabilityTime('crystal', resources.crystal.prod, resources.crystal.level)),
           tradeRate: tradeRateStr
         }) + '</li>');
         $('#resources_2_large').addClass('enhanced');
@@ -151,9 +153,8 @@ var fn = function () {
 
       // if we are viewing a deuterium mine, computes rentability time
       else if ($('#resources_3_large:not(.enhanced)').length > 0) {
-        var rentabilityTime = _getRentabilityTime('deuterium', resources.deuterium.prod, resources.deuterium.level);
-        $('#content .production_info').append('<li class="enhancement">' + _translate('ROI', {
-          time: _time(rentabilityTime),
+        $('#content .production_info').append('<li class="enhancement">' + window._translate('ROI', {
+          time: window._time(window._getRentabilityTime('deuterium', resources.deuterium.prod, resources.deuterium.level)),
           tradeRate: tradeRateStr
         }) + '</li>');
         $('#resources_3_large').addClass('enhanced');
@@ -162,9 +163,9 @@ var fn = function () {
       // if we are viewing a plasma technology, computes rentability time
       else if ($('#research_122_large:not(.enhanced)').length > 0) {
         var technologyLevel = Number($('#content span.level').text().trim().split(' ').pop()) || 0;
-        var rentabilityTime = _getRentabilityTime('plasma', null, technologyLevel);
-        $('#content .production_info').append('<li class="enhancement">' + _translate('ROI', {
-          time: _time(rentabilityTime),
+        var rentabilityTime = window._getRentabilityTime('plasma', null, technologyLevel);
+        $('#content .production_info').append('<li class="enhancement">' + window._translate('ROI', {
+          time: window._time(rentabilityTime),
           tradeRate: tradeRateStr
         }) + '</li>');
         $('#research_122_large').addClass('enhanced');

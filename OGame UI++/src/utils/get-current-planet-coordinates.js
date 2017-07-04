@@ -1,6 +1,6 @@
 var fn = function () {
   'use strict';
-  window._getCurrentPlanetCoordinates = function _getCurrentPlanetCoordinates() {
+  window._getCurrentPlanetCoordinates = function _getCurrentPlanetCoordinates () {
     var coordinates = new Array(3);
 
     if ($('.planetlink.active').length > 0) {
