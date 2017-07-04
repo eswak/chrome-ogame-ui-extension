@@ -1,6 +1,8 @@
 {
   "web_accessible_resources": [
     "lib/chartist.min.js",
+    "img/mission-stay.jpg",
+    "img/mission-ship.jpg",
     "img/mine-metal.png",
     "img/mine-crystal.png",
     "img/mine-deuterium.png",
@@ -40,6 +42,7 @@
       "src/current-planet-storage-helper.js",
       "src/galaxy-players-planets.js",
       "src/history-logger.js",
+      "src/planet-fleet-shortcuts.js",
       "src/spy-reports-scanner.js",
       "src/tab-alliance.js",
       "src/tab-idle-players.js",

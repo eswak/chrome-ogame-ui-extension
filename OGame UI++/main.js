@@ -11,6 +11,8 @@ libs.forEach(function (path) {
 
 // add image url object
 var uipp_images = {
+  stay: chrome.extension.getURL('img/mission-stay.jpg'),
+  ship: chrome.extension.getURL('img/mission-ship.jpg'),
   metal: chrome.extension.getURL('img/mine-metal.png'),
   crystal: chrome.extension.getURL('img/mine-crystal.png'),
   deuterium: chrome.extension.getURL('img/mine-deuterium.png'),
@@ -44,6 +46,7 @@ var userscript = function () {
 
   // Add static helpers
   _addCurrentPlanetStorageHelper();
+  _addPlanetFleetShortcuts();
 
   // Add interval checkers
   _addSpyReportsScannerInterval();
