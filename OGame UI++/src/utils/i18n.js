@@ -5,7 +5,6 @@ var fn = function () {
   var translations = {
     fr: {
       NEXT_MOST_RENTABLE_BUILDS: 'Prochaines actions les plus rentables',
-      NEXT_MOST_RENTABLE_BUILDS_DESCRIPTION: 'Le temps de rentabilité est calculé à partir de l\'achèvement d\'une construction. Par conséquent, si la 2ème action vous coûte beaucoup moins cher que la 1ère, ou si elle se construit beaucoup plus vite, il peut tout de même être rentable de ne pas commencer par la première action.',
       RENTABILITY_ASTRO: 'Montez astrophysique niveau {level}, et colonisez.<br>Montez les mines niveau : {mineLevel}<br><br>Temps d\'économies pour Astrophysique : {astroTime}<br>Temps de rentabilité des mines de la nouvelle colonie : {mineTime}',
       RENTABILITY_MINE_METAL: 'Montez votre mine de métal niveau {level} sur {coords}.',
       RENTABILITY_MINE_CRYSTAL: 'Montez votre mine de cristal niveau {level} sur {coords}.',
@@ -53,7 +52,6 @@ var fn = function () {
     },
     en: {
       NEXT_MOST_RENTABLE_BUILDS: 'Next best ROI',
-      NEXT_MOST_RENTABLE_BUILDS_DESCRIPTION: 'The ROI time is based on the ending time of the construction. Thus, if the 2nd action costs much less than the first, or if it\'s way faster to build, the 2nd action may actually have the best "real ROI".',
       RENTABILITY_ASTRO: 'Level up astrophysics to level {level}, and make a new colony.<br>Level up the new colony\'s mines to {mineLevel}<br><br>Time for resource-gathering of astrophysics : {astroTime}<br>New colony mines ROI : {mineTime}',
       RENTABILITY_MINE_METAL: 'Level up your metal mine to level {level} on {coords}',
       RENTABILITY_MINE_CRYSTAL: 'Level up your crystal mine to level {level} on {coords}',

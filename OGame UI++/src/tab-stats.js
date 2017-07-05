@@ -311,9 +311,6 @@ var fn = function () {
       $wrapper.append($([
         '<div style="margin-top:50px;text-align: center;;font-size: 15px;padding-bottom: 10px;">',
         window._translate('NEXT_MOST_RENTABLE_BUILDS'),
-        '<div style="text-align:center; font-size: 11px;">',
-        '<i>' + window._translate('NEXT_MOST_RENTABLE_BUILDS_DESCRIPTION') + '</i>',
-        '</div>',
         '</div>'
       ].join('')));
       var $rentabilityWrapper = $('<div style="text-align:center"></div>');
