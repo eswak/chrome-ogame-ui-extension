@@ -32,6 +32,12 @@ var fn = function () {
       });
     }
 
+    for (var key in window.config.my.planets) {
+      if (!window.config.my.planets[key].coords) {
+        delete window.config.my.planets[key];
+      }
+    }
+
     window._saveConfig();
   };
 };
