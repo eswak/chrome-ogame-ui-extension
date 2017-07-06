@@ -218,6 +218,13 @@ var fn = function () {
       STATS_RATIO: 'Produktionsverhältnis (relativ zu '
     },
     pl: {
+      NEXT_MOST_RENTABLE_BUILDS: 'Następna najlepsza inwestycja',
+      NEXT_MOST_RENTABLE_BUILDS_DESCRIPTION: 'Czas zwrotu inwestycji oparty jest na czasie ukończenia konstrukcji. Nie brany jest tu pod uwagę czas zbierania surowców na tę konstrukcję.',
+      RENTABILITY_ASTRO: 'Ulepsz Astrofizykę to poziomu {level} i załóż nową kolonię.<br>Ulepsz Kopalnię metalu nowej kolonii do poziomu {mineLevel}<br><br>Czas zbierania surowców dla Astrofizyki : {astroTime}<br>Czas zwrotu inwestycji nowej kolonii : {mineTime}',
+      RENTABILITY_MINE_METAL: 'Ulepsz Kopalnię metalu do poziomu {level} na {coords}',
+      RENTABILITY_MINE_CRYSTAL: 'Ulepsz Kopalnię krzyształu do poziomu {level} na {coords}',
+      RENTABILITY_MINE_DEUTERIUM: 'Ulepsz Eksstraktor deuteru do poziomu {level} on {coords}',
+      RENTABILITY_PLASMA: 'Ulepsz Technologię plazmową do poziomu {level}',
       DONATE_TEXT: 'Podoba Ci się to rozszerzenie? Chciałbyś powiedzieć "Dziękuję!" częstując mnie kawą? <br>Wykonując małą wpłatę motywujesz mnie do ciągłego uaktualniania oraz dodawania nowych i ciekawych funkcji !<br><i>Kawa to 0.55€ w mojej pracy. Tak tylko mówię.</i>',
       RETURN_TRIP_DURATION: 'Czas podróży w obie strony Dużym Transporterem.',
       TRADE_RATE: 'Kurs wymiany',
