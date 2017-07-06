@@ -15,18 +15,19 @@ var fn = function () {
       $(planet).css('position', 'relative');
 
       var transportLink = [
-        '<a style="position:absolute;right:-20px;top:3px;width:15px;height:15px;display:inline-block;z-index:999"',
+        '<a class="transDeployLink"',
+        ' style="position:absolute;left:-17px;top:0px;width:15px;height:15px;padding:3px;display:inline-block;z-index:999;"',
         ' href="' + transportLinkUrl + '">',
         '<img src="' + window.uipp_images.ship + '" style="height:100%;width:100%;"/>',
         '</a>'
       ].join('');
       var deploymentLink = [
-        '<a style="position:absolute;right:-20px;top:23px;width:15px;height:15px;display:inline-block;z-index:999"',
+        '<a class="transDeployLink"',
+        ' style="position:absolute;left:-17px;top:20px;width:15px;height:15px;padding:3px;display:inline-block;z-index:999;"',
         ' href="' + deploymentLinkUrl + '">',
         '<img src="' + window.uipp_images.stay + '" style="height:100%;width:100%;"/>',
         '</a>'
       ].join('');
-
       $(planet).append(deploymentLink);
       $(planet).append(transportLink);
     });
