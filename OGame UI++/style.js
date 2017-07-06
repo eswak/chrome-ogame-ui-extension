@@ -89,5 +89,11 @@ style.textContent = [
   '.shadowed {',
   '  text-shadow: 0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black',
   '}',
+  'div#planetList > .smallplanet .transDeployLink {',
+  '  opacity: 0;',
+  '}',
+  'div#planetList > .smallplanet:hover .transDeployLink {',
+  '  opacity: 1;',
+  '}'
 ].join('\n');
 (document.head || document.documentElement).appendChild(style);
