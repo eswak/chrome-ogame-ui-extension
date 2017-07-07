@@ -43,7 +43,7 @@ var fn = function () {
     } else if (num === 0)
       return 0;
     var n = Math.max(0, Math.ceil(Math.log10(num)) - 1);
-    var prefixes = ['','k','M','B','T','P','E','Z','Y'];
+    var prefixes = ['','k','M','G','T','P','E','Z','Y'];
     var dividers = [1,1e3,1e6,1e9,1e12,1e15,1e18,1e21,1e24];
     var idx = Math.floor(n / 3);
     var mul = ([100,10,1])[n % 3];
