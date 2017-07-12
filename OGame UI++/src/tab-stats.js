@@ -229,6 +229,26 @@ var fn = function () {
         });
       }
 
+      var currentPlanetResources = window._getCurrentPlanetResources();
+      var globalProdWorth = 0;
+      globalProdWorth += globalStats.prod.metal * currentPlanetResources.metal.worth;
+      globalProdWorth += globalStats.prod.crystal * currentPlanetResources.crystal.worth;
+      globalProdWorth += globalStats.prod.deuterium * currentPlanetResources.deuterium.worth;
+
+      rentabilityTimes = rentabilityTimes.map(function (rentability) {
+        var costs = window.uipp_getCost(rentability.resource, rentability.level - 1);
+        var costsWorth = 0;
+        costsWorth += costs[0] * currentPlanetResources.metal.worth;
+        costsWorth += costs[1] * currentPlanetResources.crystal.worth;
+        var economyTime = costsWorth / globalProdWorth;
+
+        rentability.economyTime = economyTime;
+        rentability.time += economyTime;
+        rentability.totalCost = costs;
+
+        return rentability;
+      });
+
       // add astrophysics to rentability times
       var astroLevel = window.config.astroTech;
       if (astroLevel) {
@@ -242,16 +262,10 @@ var fn = function () {
           nextAstroLevelForPlanetUnlock++;
         }
 
-        var currentPlanetResources = window._getCurrentPlanetResources();
         var astroCostWorth = 0;
         astroCostWorth += astroCost[0] * currentPlanetResources.metal.worth;
         astroCostWorth += astroCost[1] * currentPlanetResources.crystal.worth;
         astroCostWorth += astroCost[2] * currentPlanetResources.deuterium.worth;
-
-        var globalProdWorth = 0;
-        globalProdWorth += globalStats.prod.metal * currentPlanetResources.metal.worth;
-        globalProdWorth += globalStats.prod.crystal * currentPlanetResources.crystal.worth;
-        globalProdWorth += globalStats.prod.deuterium * currentPlanetResources.deuterium.worth;
 
         var astroTime = astroCostWorth / globalProdWorth;
 
@@ -276,13 +290,21 @@ var fn = function () {
         newPlanetProductionWorth += window.uipp_getProduction('deuterium', lowestMineLevels.deuterium) / 3600;
 
         var mineRentabilityTime = cummulativeLowestMineCostsWorth / newPlanetProductionWorth;
+        var mineEconomyTime = cummulativeLowestMineCostsWorth / globalProdWorth;
         rentabilityTimes.push({
           coords: [],
           resource: 'astrophysics',
           level: nextAstroLevelForPlanetUnlock,
-          time: astroTime + mineRentabilityTime,
+          time: astroTime + mineEconomyTime + mineRentabilityTime,
           astroTime: astroTime,
+          mineEconomyTime: mineEconomyTime,
           mineRentabilityTime: mineRentabilityTime,
+          astroCost: astroCost,
+          mineCost: [
+            cummulativeLowestMineCosts.metal[0] + cummulativeLowestMineCosts.crystal[0] + cummulativeLowestMineCosts.deuterium[0],
+            cummulativeLowestMineCosts.metal[1] + cummulativeLowestMineCosts.crystal[1] + cummulativeLowestMineCosts.deuterium[1],
+            0
+          ],
           metalLevel: lowestMineLevels.metal,
           crystalLevel: lowestMineLevels.crystal,
           deuteriumLevel: lowestMineLevels.deuterium
@@ -296,7 +318,8 @@ var fn = function () {
           coords: [],
           resource: 'plasma',
           level: (window.config.plasmaTech || 0) + 1,
-          time: plasmaRentabilityTime
+          time: plasmaRentabilityTime,
+          totalCost: window.uipp_getCost('plasma', window.config.plasmaTech)
         });
       }
 
@@ -319,7 +342,10 @@ var fn = function () {
             tradeRate: window.config.tradeRate.join(' / ')
           });
           tooltip += '<br>';
-          tooltip += '<br>' + window._translate('RENTABILITY_PLASMA', { level: rentability.level });
+          tooltip += '<br>' + window._translate('RENTABILITY_PLASMA', {
+            level: rentability.level,
+            totalCost: window._num(rentability.totalCost).join(' / ')
+          });
           tooltip = tooltip.replace(/<\/?span[^>]*>/g, '');
           $rentabilityWrapper.append($([
             '<span class="tooltip" title="' + tooltip + '" style="display:inline-block;margin:5px;position:relative">',
@@ -337,7 +363,10 @@ var fn = function () {
             level: rentability.level,
             mineLevel: rentability.metalLevel + ' / ' + rentability.crystalLevel + ' / ' + rentability.deuteriumLevel,
             astroTime: window._time(rentability.astroTime),
-            mineTime: window._time(rentability.mineRentabilityTime)
+            mineEconomyTime: window._time(rentability.mineEconomyTime),
+            mineTime: window._time(rentability.mineRentabilityTime),
+            mineCost: window._num(rentability.mineCost).join(' / '),
+            astroCost: window._num(rentability.astroCost).join(' / ')
           });
           tooltip = tooltip.replace(/<\/?span[^>]*>/g, '');
           $rentabilityWrapper.append($([
@@ -354,7 +383,9 @@ var fn = function () {
           tooltip += '<br>';
           tooltip += '<br>' + window._translate('RENTABILITY_MINE_' + rentability.resource.toUpperCase(), {
             level: rentability.level,
-            coords: '[' + rentability.coords.join(':') + ']'
+            economyTime: window._time(rentability.economyTime),
+            coords: '[' + rentability.coords.join(':') + ']',
+            totalCost: window._num(rentability.totalCost).join(' / ')
           });
           tooltip = tooltip.replace(/<\/?span[^>]*>/g, '');
           $rentabilityWrapper.append($([

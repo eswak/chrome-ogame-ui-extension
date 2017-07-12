@@ -1,6 +1,12 @@
 var fn = function () {
   'use strict';
   window._num = function _num (n, increment) {
+    if (n && n.map) {
+      return n.map(function (num) {
+        return window._num(num);
+      });
+    }
+
     // ogame number formatter
     if (!increment) {
       return window.gfNumberGetHumanReadable(n, true, 3);
