@@ -32,14 +32,21 @@ var fn = function () {
         planetCount: 0
       };
 
+      var myPlanets = [];
+      for (var coords in window.config.my.planets) {
+        if (window.config.my.planets[coords].resources) {
+          myPlanets.push(window.config.my.planets[coords]);
+        }
+      }
+
+      var planetOrder = $('#planetList .planet-koords').text();
+      myPlanets = myPlanets.sort(function (a, b) {
+        return planetOrder.indexOf(a.coords.join(':')) > planetOrder.indexOf(b.coords.join(':')) ? 1 : -1;
+      });
+
       var planetStatsHtml = '';
       var rentabilityTimes = [];
-      for (var coords in window.config.my.planets) {
-        var planet = window.config.my.planets[coords];
-        if (!planet.resources) {
-          continue;
-        }
-
+      myPlanets.forEach(function (planet) {
         // add rentability times to array
         ['metal', 'crystal', 'deuterium'].forEach(function (resource) {
           rentabilityTimes.push({
@@ -106,7 +113,7 @@ var fn = function () {
           }).join(''),
           '</tr>'
         ].join('');
-      }
+      });
 
       // glogal stats
       globalStats.level.metal /= globalStats.planetCount;
