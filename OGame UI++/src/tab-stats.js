@@ -81,28 +81,18 @@ var fn = function () {
         globalStats.planetCount++;
 
         // add planet stats html
-        var textShadow = [
-          '0 0 2px black',
-          '0 0 2px black',
-          '0 0 2px black',
-          '0 0 2px black',
-          '0 0 2px black',
-          '0 0 2px black',
-          '0 0 2px black'
-        ].join(',');
-
         planetStatsHtml += [
           '<tr>',
           '<td style="max-width: 80px; overflow: hidden; text-overflow: ellipsis;">',
           '<a href="' + planet.href + '">',
           planet.name + '<br>',
-          '<span style="vertical-align: -1px; opacity: .7;">' + coords + '</span>',
+          '<span style="vertical-align: -1px; opacity: .7;">[' + planet.coords.join(':') + ']</span>',
           '</a>',
           '</td>',
           ['metal', 'crystal', 'deuterium'].map(function (resource) {
             return [
               '<td id="stat-' + planet.coords.join('-') + '-' + resource + '">',
-              '<div class="resourceIcon ' + resource + '" style="font-size: 20px; line-height: 32px; text-shadow: ' + textShadow + '">' + planet.resources[resource].level + '</div>',
+              '<div class="shadowed resourceIcon ' + resource + '" style="font-size: 20px; line-height: 32px;">' + planet.resources[resource].level + '</div>',
               '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
               '<div class="font-weight: bold; padding-bottom: 1px;">' + window._num(currentRealtimePlanetResources[resource], planet.resources[resource].prod) + '</div>',
               '<div><span class="undermark">+' + window._num(Math.floor(planet.resources[resource].prod * 3600)) + '</span> /' + window._translate('TIME_HOUR') + '</div>',
@@ -132,7 +122,7 @@ var fn = function () {
         ['metal', 'crystal', 'deuterium'].map(function (resource) {
           return [
             '<td>',
-            '<div class="resourceIcon ' + resource + '" style="font-size: 20px; line-height: 32px; text-shadow: ' + textShadow + '">' + Math.floor(10 * globalStats.level[resource]) / 10 + '</div>',
+            '<div class="shadowed resourceIcon ' + resource + '" style="font-size: 20px; line-height: 32px;">' + Math.floor(10 * globalStats.level[resource]) / 10 + '</div>',
             '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em; padding-bottom: 3px">',
             '<div class="font-weight: bold; padding-bottom: 1px;">' + window._num(globalStats.current[resource], globalStats.prod[resource]) + '</div>',
             '<div><span class="undermark">+' + window._num(Math.floor(globalStats.prod[resource] * 3600)) + '</span> /' + window._translate('TIME_HOUR') + '</div>',
