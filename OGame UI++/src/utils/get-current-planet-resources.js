@@ -7,6 +7,10 @@ var fn = function () {
       return _cachedResources;
     }
 
+    if ($('meta[name=ogame-planet-type]').attr('content') === 'moon') {
+      return null;
+    }
+
     var currentPlanetCoordinatesStr = '[' + window._getCurrentPlanetCoordinates().join(':') + ']';
     var currentPlanet = window.config.my.planets[currentPlanetCoordinatesStr];
     var tradeRate = window.config.tradeRate;
