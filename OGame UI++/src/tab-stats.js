@@ -11,6 +11,8 @@ var fn = function () {
       $('.stats .menubutton').addClass('selected');
       $('.customMenuEntry2').addClass('highlighted');
 
+      var worth = window.uipp_getResourcesWorth();
+
       var $wrapper = $('<div class="uiEnhancementWindow"></div>');
 
       var globalStats = {
@@ -231,15 +233,15 @@ var fn = function () {
 
       var currentPlanetResources = window._getCurrentPlanetResources();
       var globalProdWorth = 0;
-      globalProdWorth += globalStats.prod.metal * currentPlanetResources.metal.worth;
-      globalProdWorth += globalStats.prod.crystal * currentPlanetResources.crystal.worth;
-      globalProdWorth += globalStats.prod.deuterium * currentPlanetResources.deuterium.worth;
+      globalProdWorth += globalStats.prod.metal * worth.metal;
+      globalProdWorth += globalStats.prod.crystal * worth.crystal;
+      globalProdWorth += globalStats.prod.deuterium * worth.deuterium;
 
       rentabilityTimes = rentabilityTimes.map(function (rentability) {
         var costs = window.uipp_getCost(rentability.resource, rentability.level - 1);
         var costsWorth = 0;
-        costsWorth += costs[0] * currentPlanetResources.metal.worth;
-        costsWorth += costs[1] * currentPlanetResources.crystal.worth;
+        costsWorth += costs[0] * worth.metal;
+        costsWorth += costs[1] * worth.crystal;
         var economyTime = costsWorth / globalProdWorth;
 
         rentability.economyTime = economyTime;
@@ -263,9 +265,9 @@ var fn = function () {
         }
 
         var astroCostWorth = 0;
-        astroCostWorth += astroCost[0] * currentPlanetResources.metal.worth;
-        astroCostWorth += astroCost[1] * currentPlanetResources.crystal.worth;
-        astroCostWorth += astroCost[2] * currentPlanetResources.deuterium.worth;
+        astroCostWorth += astroCost[0] * worth.metal;
+        astroCostWorth += astroCost[1] * worth.crystal;
+        astroCostWorth += astroCost[2] * worth.deuterium;
 
         var astroTime = astroCostWorth / globalProdWorth;
 
@@ -277,12 +279,12 @@ var fn = function () {
         };
 
         var cummulativeLowestMineCostsWorth = 0;
-        cummulativeLowestMineCostsWorth += cummulativeLowestMineCosts.metal[0] * currentPlanetResources.metal.worth;
-        cummulativeLowestMineCostsWorth += cummulativeLowestMineCosts.metal[1] * currentPlanetResources.crystal.worth;
-        cummulativeLowestMineCostsWorth += cummulativeLowestMineCosts.crystal[0] * currentPlanetResources.metal.worth;
-        cummulativeLowestMineCostsWorth += cummulativeLowestMineCosts.crystal[1] * currentPlanetResources.crystal.worth;
-        cummulativeLowestMineCostsWorth += cummulativeLowestMineCosts.deuterium[0] * currentPlanetResources.metal.worth;
-        cummulativeLowestMineCostsWorth += cummulativeLowestMineCosts.deuterium[1] * currentPlanetResources.crystal.worth;
+        cummulativeLowestMineCostsWorth += cummulativeLowestMineCosts.metal[0] * worth.metal;
+        cummulativeLowestMineCostsWorth += cummulativeLowestMineCosts.metal[1] * worth.crystal;
+        cummulativeLowestMineCostsWorth += cummulativeLowestMineCosts.crystal[0] * worth.metal;
+        cummulativeLowestMineCostsWorth += cummulativeLowestMineCosts.crystal[1] * worth.crystal;
+        cummulativeLowestMineCostsWorth += cummulativeLowestMineCosts.deuterium[0] * worth.metal;
+        cummulativeLowestMineCostsWorth += cummulativeLowestMineCosts.deuterium[1] * worth.crystal;
 
         var newPlanetProductionWorth = 0;
         newPlanetProductionWorth += window.uipp_getProduction('metal', lowestMineLevels.metal) / 3600;

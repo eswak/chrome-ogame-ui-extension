@@ -1,6 +1,13 @@
 var fn = function () {
   'use strict';
   window._addCostsHelperInterval = function _addCostsHelperInterval () {
+    var worth = window.uipp_getResourcesWorth();
+    var resources = window._getCurrentPlanetResources();
+
+    if (!resources) {
+      return;
+    }
+
     setInterval(function () {
       var costs = {
         metal: window._gfNumberToJsNumber($('.metal.tooltip .cost').text().trim()),
@@ -22,7 +29,6 @@ var fn = function () {
     }, 100);
 
     function _getCostTimes (costs) {
-      var resources = window._getCurrentPlanetResources();
       return {
         metal: Math.ceil(costs.metal / resources.metal.prod) || 0,
         crystal: Math.ceil(costs.crystal / resources.crystal.prod) || 0,
@@ -74,13 +80,12 @@ var fn = function () {
       var $el = $('#content .production_info:not(.enhanced-economy-time)');
       $el.addClass('enhanced-economy-time');
 
-      var resources = window._getCurrentPlanetResources();
-      var totalPrice = costs.metal * resources.metal.worth
-        + costs.crystal * resources.crystal.worth
-        + costs.deuterium * resources.deuterium.worth;
-      var totalProd = resources.metal.prod * resources.metal.worth
-        + resources.crystal.prod * resources.crystal.worth
-        + resources.deuterium.prod * resources.deuterium.worth;
+      var totalPrice = costs.metal * worth.metal
+        + costs.crystal * worth.crystal
+        + costs.deuterium * worth.deuterium;
+      var totalProd = resources.metal.prod * worth.metal
+        + resources.crystal.prod * worth.crystal
+        + resources.deuterium.prod * worth.deuterium;
 
       $el.append('<li class="enhancement">' + window._translate('ECONOMY_TIME', {
         time: window._time(totalPrice / totalProd)
@@ -91,7 +96,6 @@ var fn = function () {
       var $el = $('#content .production_info:not(.enhanced-buildable-in)');
       $el.addClass('enhanced-buildable-in');
 
-      var resources = window._getCurrentPlanetResources();
       var availableIn = {
         metal: Math.max(costs.metal - resources.metal.now, 0) / resources.metal.prod,
         crystal: Math.max(costs.crystal - resources.crystal.now, 0) / resources.crystal.prod,
@@ -115,8 +119,6 @@ var fn = function () {
     function _addProductionMaximumBuildableTextHelper (costs) {
       var $amount = $('#content .amount:not(.enhanced)');
       if ($amount.length > 0) {
-        var resources = window._getCurrentPlanetResources();
-
         var maxMetal = resources.metal.now / costs.metal;
         var maxCrystal = resources.crystal.now / costs.crystal;
         var maxDeuterium = resources.deuterium.now / costs.deuterium;
@@ -130,7 +132,6 @@ var fn = function () {
     }
 
     function _addProductionRentabilityTimeTextHelper () {
-      var resources = window._getCurrentPlanetResources();
       var tradeRateStr = window.config.tradeRate.map(String).join(' / ');
 
       // if we are viewing a metal mine, computes rentability time
