@@ -52,6 +52,7 @@ var userscript = function () {
   window._addSpyReportsScannerInterval();
   window._addGalaxyPlayersPlanetsInterval();
   window._addCostsHelperInterval();
+  window._addSolarSatHelperInterval();
 
   // Refresh universe data (config.players)
   window._refreshUniverseData();
