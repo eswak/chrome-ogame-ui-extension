@@ -6,12 +6,6 @@ var fn = function () {
 
     function msg (str) {
       window.fadeBox(str, false);
-      log('msg:' + str);
-    }
-
-    function log (str) {
-      str;
-      // window.console.log((Date.now() - window._startTime) + ': ' + str);
     }
 
     function Spy (coords) {
@@ -36,7 +30,6 @@ var fn = function () {
           setColor('250,0,0');
         }
         _this.status = status;
-        log(_this.coordsStr + ' status: ' + status);
       };
 
       _this.eq = function (coords1) {
@@ -73,12 +66,10 @@ var fn = function () {
           success: function (a) {
             if (a.response.success) {
               _this.setStatus('end');
-              log('success ' + _this.coordsStr);
               processSpyQueue();
               window.uipp_analytics('uipp-spy', 'success');
             } else {
               _this.setStatus('delay');
-              log(a.response.message);
               window.uipp_analytics('uipp-spy', 'failed');
               if (a.response.coordinates) {
                 // wait for free mission slot
@@ -107,15 +98,13 @@ var fn = function () {
           $(res).find('tr.eventFleet').each(function () {
             var t = $(this).attr('data-arrival-time');
             if (t && $(this).attr('data-return-flight') === 'true') {
-              log('data-arrival-time: ' + t);
               timeTab.push(t);
             }
           });
           if (timeTab.length > 0) {
             timeTab.sort(function (a, b) {return a - b;});
-            log('timeTab: ' + Date.now() / 1000 + ' ' + JSON.stringify(timeTab));
             var waitTime = Math.round(timeTab[0] - Date.now() / 1000) + 10 * Math.random();
-            msg('Waitng ' + waitTime + ' seconds for free mission slot...');
+            msg('Waitng ' + Math.floor(waitTime) + ' seconds for free mission slot...');
             setTimeout(func, waitTime * 1000);
           } else {
             // unknown situation. Retry in 30 secs
@@ -147,14 +136,6 @@ var fn = function () {
             delay += Math.max(0, 1500 - window.spyQueueCurrent.elapsed());
           spy.spy(delay);
           window.spyQueueCurrent = spy;
-        } else {
-          log('no new spy request ' + window.spyQueue.length);
-        }
-      } else {
-        if (window.spyQueue.length > 0) {
-          log('spy in progress: ' + JSON.stringify(window.spyQueueCurrent));
-        } else {
-          log('spyQueue empty: ');
         }
       }
     }
