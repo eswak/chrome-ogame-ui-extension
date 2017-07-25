@@ -82,6 +82,7 @@ var fn = function () {
               window.uipp_analytics('uipp-spy', 'failed');
               if (a.response.coordinates) {
                 // wait for free mission slot
+                msg(a.response.message);
                 enqueueOnFreeMissionSlot(_this.spy);
               } else {
                 // general error, try again in 2 sec
@@ -117,7 +118,8 @@ var fn = function () {
             msg('Waitng ' + waitTime + ' seconds for free mission slot...');
             setTimeout(func, waitTime * 1000);
           } else {
-            func();
+            // unknown situation. Retry in 30 secs
+            setTimeout(func, 30 * 1000);
           }
         }
       });
