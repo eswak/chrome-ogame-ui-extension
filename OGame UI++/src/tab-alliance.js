@@ -14,13 +14,18 @@ var fn = function () {
     $el.addClass('enhanced');
 
     var alliancePlayers = [];
-    var myAllianceId = $('[name=ogame-alliance-id]').attr('content');
+    var myPlayerId = $('[name=ogame-player-id]').attr('content');
+    var myAllianceId = window.config.players[myPlayerId].alliance;
     for (var key in window.config.players) {
       var player = window.config.players[key];
       player.id = key;
       if (player.alliance && player.alliance === myAllianceId) {
         alliancePlayers.push(player);
       }
+    }
+
+    if (!alliancePlayers.length) {
+      return;
     }
 
     var tabhtml = [
