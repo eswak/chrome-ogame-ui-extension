@@ -114,12 +114,12 @@ var fn = function () {
           if (timeTab.length > 0) {
             timeTab.sort(function (a, b) {return a - b;});
             log('timeTab: ' + Date.now() / 1000 + ' ' + JSON.stringify(timeTab));
-            var waitTime = Math.round(timeTab[0] - Date.now() / 1000) + 1;
+            var waitTime = Math.round(timeTab[0] - Date.now() / 1000) + 10 * Math.random();
             msg('Waitng ' + waitTime + ' seconds for free mission slot...');
             setTimeout(func, waitTime * 1000);
           } else {
             // unknown situation. Retry in 30 secs
-            setTimeout(func, 30 * 1000);
+            setTimeout(func, 30 * 1000 + 10 * 1000 * Math.random());
           }
         }
       });
@@ -142,9 +142,9 @@ var fn = function () {
       if (!window.spyQueueCurrent || window.spyQueueCurrent.status === 'end') {
         var spy = window.spyQueue.find(function (s) { return s.status === 'new'; });
         if (spy) {
-          var delay = 0;
+          var delay = 500 * Math.random();
           if (window.spyQueueCurrent)
-            delay = Math.max(0, 1500 - window.spyQueueCurrent.elapsed());
+            delay += Math.max(0, 1500 - window.spyQueueCurrent.elapsed());
           spy.spy(delay);
           window.spyQueueCurrent = spy;
         } else {
