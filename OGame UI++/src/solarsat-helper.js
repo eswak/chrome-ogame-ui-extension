@@ -9,7 +9,10 @@ var fn = function () {
         var energy = Number($('#resources_energy').text());
 
         if (energy < 0) {
-          var production = Number($('.production_info .time .undermark').text().replace(/[()+]/g, ''));
+          var $production = $('.production_info .time .undermark');
+          if ($production.text().length === 0)
+            $production = $('#ago_items_production > span');
+          var production = Number($production.text().replace(/[()+]/g, ''));
           var n = Math.ceil(Math.abs(energy) / production);
           $('#number')[0].value = n;
         }
