@@ -13,6 +13,16 @@ var fn = function () {
     localStorage.removeItem(configKey);
     localStorage.setItem(configKey + '-' + playerId, oldConfig);
   }
+
+  // remove backups and undefined configs for more free space
+  var patt = new RegExp(configKey + '-' + '\\d+$');
+  for (var key in localStorage) {
+    if (key.indexOf(configKey) === 0 && !patt.test(key)) {
+      window.console.log('OGame UI++ : removing \'' + key + '\' from localStorage');
+      localStorage.removeItem(key);
+    }
+  }
+
   configKey += '-' + playerId;
 
   function saveConfig () {
