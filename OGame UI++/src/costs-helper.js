@@ -10,7 +10,7 @@ var fn = function () {
 
     setInterval(function () {
       var costs = {
-        metal: window._gfNumberToJsNumber($('.metal.tooltip .cost').text().trim()),
+        metal: window._gfNumberToJsNumber($('.metal.tooltip .cost').first().text().trim()),
         crystal: window._gfNumberToJsNumber($('.crystal.tooltip .cost').text().trim()),
         deuterium: window._gfNumberToJsNumber($('.deuterium.tooltip .cost').text().trim())
       };
@@ -39,9 +39,11 @@ var fn = function () {
     function _addRessourceCountTimeHelper (costs) {
       var times = _getCostTimes(costs);
 
-      var $metalElement = $('.metal.tooltip:not(.enhanced)');
-      $metalElement.append('<div class="enhancement">' + window._time(times.metal) + '</div>');
-      $metalElement.addClass('enhanced');
+      var $metalElement = $('.metal.tooltip:not(.enhanced)').first();
+      if ($metalElement.find('.metal').length > 0) {
+        $metalElement.append('<div class="enhancement">' + window._time(times.metal) + '</div>');
+        $metalElement.addClass('enhanced');
+      }
 
       var $crystalElement = $('.crystal.tooltip:not(.enhanced)');
       $crystalElement.append('<div class="enhancement">' + window._time(times.crystal) + '</div>');
