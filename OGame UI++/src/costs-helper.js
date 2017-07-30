@@ -8,70 +8,56 @@ var fn = function () {
       return;
     }
 
+    var resNames = ['metal', 'crystal', 'deuterium'];
+    var availableIn = {};
+
     setInterval(function () {
-      var costs = {
-        metal: window._gfNumberToJsNumber($('.metal.tooltip .cost').first().text().trim()),
-        crystal: window._gfNumberToJsNumber($('.crystal.tooltip .cost').text().trim()),
-        deuterium: window._gfNumberToJsNumber($('.deuterium.tooltip .cost').text().trim())
-      };
+      var costs = {};
+      resNames.forEach(function (res) {
+        costs[res] = window._gfNumberToJsNumber($('.' + res + '.tooltip .cost').first().text().trim()),
+        availableIn[res] = (costs[res] - resources[res].now) / resources[res].prod;
+      });
+
+      if (isNaN(availableIn.deuterium)) { // we may not produce any deuterium...
+        availableIn.deuterium = costs.deuterium > resources.deuterium.now ? 8553600 : 0;
+      }
+
       if (costs.metal || costs.crystal || costs.deuterium) {
-        _addRessourceCountTimeHelper(costs);
-        _addLimitingReagentHelper(costs);
+        _addRessourceCountTimeHelper();
+        _addLimitingReagentHelper();
         _addProductionEconomyTimeTextHelper(costs);
         _addProductionRentabilityTimeTextHelper(costs);
 
         // for non-commanders only
         if ($('.commander.on').length === 0) {
-          _addProductionBuildableInTextHelper(costs);
+          _addProductionBuildableInTextHelper();
           _addProductionMaximumBuildableTextHelper(costs);
         }
       }
     }, 100);
 
-    function _getCostTimes (costs) {
-      return {
-        metal: Math.ceil(costs.metal / resources.metal.prod) || 0,
-        crystal: Math.ceil(costs.crystal / resources.crystal.prod) || 0,
-        deuterium: Math.ceil(costs.deuterium / resources.deuterium.prod) || 0
-      };
-    }
+    function _addRessourceCountTimeHelper () {
+      resNames.forEach(function (res) {
+        var $element = $('.' + res + '.tooltip:not(.enhanced)').first();
+        if ($element.find('.' + res).length > 0) {
+          if (availableIn[res] > 0) {
+            $element.append('<div class="enhancement">' + window._time(availableIn[res], -1) + '</div>');
+          }
 
-    function _addRessourceCountTimeHelper (costs) {
-      var times = _getCostTimes(costs);
-
-      var $metalElement = $('.metal.tooltip:not(.enhanced)').first();
-      if ($metalElement.find('.metal').length > 0) {
-        $metalElement.append('<div class="enhancement">' + window._time(times.metal) + '</div>');
-        $metalElement.addClass('enhanced');
-      }
-
-      var $crystalElement = $('.crystal.tooltip:not(.enhanced)');
-      $crystalElement.append('<div class="enhancement">' + window._time(times.crystal) + '</div>');
-      $crystalElement.addClass('enhanced');
-
-      var $deuteriumElement = $('.deuterium.tooltip:not(.enhanced)');
-      $deuteriumElement.append('<div class="enhancement">' + window._time(times.deuterium) + '</div>');
-      $deuteriumElement.addClass('enhanced');
-    }
-
-    function _getLimitingReagent (costs) {
-      var times = _getCostTimes(costs);
-      var limitingreagent = null;
-      if (times.metal > 0 || times.crystal > 0 || times.deuterium > 0) {
-        if (times.metal >= times.crystal && times.metal > times.deuterium) {
-          limitingreagent = 'metal';
-        } else if (times.crystal >= times.metal && times.crystal > times.deuterium) {
-          limitingreagent = 'crystal';
-        } else if (times.deuterium >= times.metal && times.deuterium > times.crystal) {
-          limitingreagent = 'deuterium';
+          $element.addClass('enhanced');
         }
-      }
-
-      return limitingreagent;
+      });
     }
 
-    function _addLimitingReagentHelper (costs) {
-      var limitingreagent = _getLimitingReagent(costs);
+    function _addLimitingReagentHelper () {
+      var limitingreagent = null;
+      ['metal', 'crystal', 'deuterium'].forEach(function (res) {
+        if (availableIn[res] && availableIn[res] > 0) {
+          if (limitingreagent === null || availableIn[res] > availableIn[limitingreagent]) {
+            limitingreagent = res;
+          }
+        }
+      });
 
       if (limitingreagent) {
         $('.' + limitingreagent + '.tooltip.enhanced:not(.limitingreagent)').addClass('limitingreagent');
@@ -94,26 +80,15 @@ var fn = function () {
       }) + '</li>');
     }
 
-    function _addProductionBuildableInTextHelper (costs) {
+    function _addProductionBuildableInTextHelper () {
       var $el = $('#content .production_info:not(.enhanced-buildable-in)');
       $el.addClass('enhanced-buildable-in');
 
-      var availableIn = {
-        metal: Math.max(costs.metal - resources.metal.now, 0) / resources.metal.prod,
-        crystal: Math.max(costs.crystal - resources.crystal.now, 0) / resources.crystal.prod,
-        deuterium: Math.max(costs.deuterium - resources.deuterium.now, 0) / resources.deuterium.prod
-      };
-      if (isNaN(availableIn.deuterium)) { // we may not produce any deuterium...
-        availableIn.deuterium = costs.deuterium > resources.deuterium.now ? 8553600 : 0;
-      }
+      var availableInMax = Math.max(availableIn.metal, availableIn.crystal, availableIn.deuterium);
 
-      availableIn = Math.max(availableIn.metal, availableIn.crystal, availableIn.deuterium);
-
-      if (availableIn === 0) {
-        $el.append('<li class="enhancement">' + window._translate('BUILDABLE_NOW') + '</li>');
-      } else {
+      if (availableInMax > 0) {
         $el.append('<li class="enhancement">' + window._translate('BUILDABLE_IN', {
-          time: window._time(availableIn, -1)
+          time: window._time(availableInMax, -1)
         }) + '</li>');
       }
     }
