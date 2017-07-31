@@ -291,7 +291,7 @@ var fn = function () {
         newPlanetProductionWorth += window.uipp_getProduction('crystal', lowestMineLevels.crystal) / 3600;
         newPlanetProductionWorth += window.uipp_getProduction('deuterium', lowestMineLevels.deuterium) / 3600;
 
-        var mineRentabilityTime = cummulativeLowestMineCostsWorth / newPlanetProductionWorth;
+        var mineRentabilityTime = (cummulativeLowestMineCostsWorth + astroCostWorth) / newPlanetProductionWorth;
         var mineEconomyTime = cummulativeLowestMineCostsWorth / globalProdWorth;
         rentabilityTimes.push({
           coords: [],
