@@ -8,12 +8,20 @@ var fn = function () {
       return;
     }
 
+    var resNames = ['metal', 'crystal', 'deuterium'];
+    var availableIn = {};
+
     setInterval(function () {
-      var costs = {
-        metal: window._gfNumberToJsNumber($('.metal.tooltip .cost').text().trim()),
-        crystal: window._gfNumberToJsNumber($('.crystal.tooltip .cost').text().trim()),
-        deuterium: window._gfNumberToJsNumber($('.deuterium.tooltip .cost').text().trim())
-      };
+      var costs = {};
+      resNames.forEach(function (res) {
+        costs[res] = window._gfNumberToJsNumber($('.' + res + '.tooltip .cost').first().text().trim()),
+        availableIn[res] = (costs[res] - resources[res].now) / resources[res].prod;
+      });
+
+      if (isNaN(availableIn.deuterium)) { // we may not produce any deuterium...
+        availableIn.deuterium = costs.deuterium > resources.deuterium.now ? 8553600 : 0;
+      }
+
       if (costs.metal || costs.crystal || costs.deuterium) {
         _addRessourceCountTimeHelper(costs);
         _addLimitingReagentHelper(costs);
@@ -22,7 +30,7 @@ var fn = function () {
 
         // for non-commanders only
         if ($('.commander.on').length === 0) {
-          _addProductionBuildableInTextHelper(costs);
+          _addProductionBuildableInTextHelper();
           _addProductionMaximumBuildableTextHelper(costs);
         }
       }
@@ -39,17 +47,18 @@ var fn = function () {
     function _addRessourceCountTimeHelper (costs) {
       var times = _getCostTimes(costs);
 
-      var $metalElement = $('.metal.tooltip:not(.enhanced)');
-      $metalElement.append('<div class="enhancement">' + window._time(times.metal) + '</div>');
-      $metalElement.addClass('enhanced');
-
-      var $crystalElement = $('.crystal.tooltip:not(.enhanced)');
-      $crystalElement.append('<div class="enhancement">' + window._time(times.crystal) + '</div>');
-      $crystalElement.addClass('enhanced');
-
-      var $deuteriumElement = $('.deuterium.tooltip:not(.enhanced)');
-      $deuteriumElement.append('<div class="enhancement">' + window._time(times.deuterium) + '</div>');
-      $deuteriumElement.addClass('enhanced');
+      resNames.forEach(function (res) {
+        var $element = $('.' + res + '.tooltip:not(.enhanced)').first();
+        if ($element.find('.' + res).length > 0) {
+          var time;
+          if (availableIn[res] > 0)
+            time = ('-' + window._time(availableIn[res], -1));
+          else
+            time = '<i>' + window._time(times[res]) + '</i>';
+          $element.append('<div class="enhancement">' + time + '</div>');
+          $element.addClass('enhanced');
+        }
+      });
     }
 
     function _getLimitingReagent (costs) {
@@ -92,26 +101,15 @@ var fn = function () {
       }) + '</li>');
     }
 
-    function _addProductionBuildableInTextHelper (costs) {
+    function _addProductionBuildableInTextHelper () {
       var $el = $('#content .production_info:not(.enhanced-buildable-in)');
       $el.addClass('enhanced-buildable-in');
 
-      var availableIn = {
-        metal: Math.max(costs.metal - resources.metal.now, 0) / resources.metal.prod,
-        crystal: Math.max(costs.crystal - resources.crystal.now, 0) / resources.crystal.prod,
-        deuterium: Math.max(costs.deuterium - resources.deuterium.now, 0) / resources.deuterium.prod
-      };
-      if (isNaN(availableIn.deuterium)) { // we may not produce any deuterium...
-        availableIn.deuterium = costs.deuterium > resources.deuterium.now ? 8553600 : 0;
-      }
+      var availableInMax = Math.max(availableIn.metal, availableIn.crystal, availableIn.deuterium);
 
-      availableIn = Math.max(availableIn.metal, availableIn.crystal, availableIn.deuterium);
-
-      if (availableIn === 0) {
-        $el.append('<li class="enhancement">' + window._translate('BUILDABLE_NOW') + '</li>');
-      } else {
+      if (availableInMax > 0) {
         $el.append('<li class="enhancement">' + window._translate('BUILDABLE_IN', {
-          time: window._time(availableIn, -1)
+          time: window._time(availableInMax, -1)
         }) + '</li>');
       }
     }
