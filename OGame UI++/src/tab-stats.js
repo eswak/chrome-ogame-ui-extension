@@ -92,11 +92,15 @@ var fn = function () {
           '</a>',
           '</td>',
           ['metal', 'crystal', 'deuterium'].map(function (resource) {
+            var storageFullIn = (planet.resources[resource].max - currentRealtimePlanetResources[resource]) / planet.resources[resource].prod;
+            var opacityUseFullIn = ((3600 * 24) / storageFullIn);
+            if (opacityUseFullIn > 0 && opacityUseFullIn < 0.1) opacityUseFullIn = 0;
             return [
               '<td id="stat-' + planet.coords.join('-') + '-' + resource + '">',
               '<div class="shadowed resourceIcon ' + resource + '" style="font-size: 20px; line-height: 32px;">' + planet.resources[resource].level + '</div>',
-              '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
-              '<div class="font-weight: bold; padding-bottom: 1px;">' + window._num(currentRealtimePlanetResources[resource], planet.resources[resource].prod, planet.resources[resource].max) + '</div>',
+              '<div style="float:left; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
+              '<div class="font-weight: bold; padding-bottom: 1px;">' + window._num(currentRealtimePlanetResources[resource], planet.resources[resource].prod, planet.resources[resource].max) +
+              (opacityUseFullIn >= 0 ? '<span style="opacity:' + opacityUseFullIn.toFixed(2) + '"> (' + window._time(storageFullIn) + ')</span>' : ' (Full)') + '</div>',
               '<div><span class="undermark">+' + window._num(Math.floor(planet.resources[resource].prod * 3600)) + '</span> /' + window._translate('TIME_HOUR') + '</div>',
               '<div><span class="undermark">+' + window._num(Math.floor(planet.resources[resource].prod * 3600 * 24)) + '</span> /' + window._translate('TIME_DAY') + '</div>',
               '</div>',
