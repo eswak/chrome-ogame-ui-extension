@@ -24,7 +24,7 @@ var fn = function () {
       var secondsSinceDisplay = Math.floor((Date.now() - start) / 1000);
       var updatedNumber = n + secondsSinceDisplay * increment;
       if (max && updatedNumber > max) { // if full
-        $el.text(window.gfNumberGetHumanReadable(max, true, 3));
+        $el.text(window.gfNumberGetHumanReadable(n, true, 3));
         $el.css('color', '#d32f2f');
       } else if (max && updatedNumber > (max - increment * 3600)) { // if less than 1h to full
         $el.text(window.gfNumberGetHumanReadable(updatedNumber, true, 3));
