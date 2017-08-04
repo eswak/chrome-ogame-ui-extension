@@ -1,6 +1,6 @@
 var fn = function () {
   'use strict';
-  window._num = function _num (n, increment) {
+  window._num = function _num (n, increment, max) {
     if (n && n.map) {
       return n.map(function (num) {
         return window._num(num);
@@ -22,7 +22,16 @@ var fn = function () {
       }
 
       var secondsSinceDisplay = Math.floor((Date.now() - start) / 1000);
-      $el.text(window.gfNumberGetHumanReadable(n + secondsSinceDisplay * increment, true, 3));
+      var updatedNumber = n + secondsSinceDisplay * increment;
+      if (max && updatedNumber > max) { // if full
+        $el.text(window.gfNumberGetHumanReadable(max, true, 3));
+        $el.css('color', '#d32f2f');
+      } else if (max && updatedNumber > (max - increment * 3600)) { // if less than 1h to full
+        $el.text(window.gfNumberGetHumanReadable(updatedNumber, true, 3));
+        $el.css('color', '#f78f20');
+      } else {
+        $el.text(window.gfNumberGetHumanReadable(updatedNumber, true, 3));
+      }
     }, 100);
 
     return '<span id="number-' + id + '"></span>';
