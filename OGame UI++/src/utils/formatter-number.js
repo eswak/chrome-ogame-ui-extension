@@ -25,10 +25,10 @@ var fn = function () {
       var updatedNumber = n + secondsSinceDisplay * increment;
       if (max && updatedNumber > max) { // if full
         $el.text(window.gfNumberGetHumanReadable(n, true, 3));
-        $el.css('color', '#d32f2f');
-      } else if (max && updatedNumber > (max - increment * 3600)) { // if less than 1h to full
+        $el.css('color', '#d43635');
+      } else if (max && updatedNumber > (max - increment * 3 * 3600)) { // if less than 3h to full
         $el.text(window.gfNumberGetHumanReadable(updatedNumber, true, 3));
-        $el.css('color', '#f78f20');
+        $el.css('color', '#d29d00');
       } else {
         $el.text(window.gfNumberGetHumanReadable(updatedNumber, true, 3));
       }
