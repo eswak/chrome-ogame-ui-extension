@@ -115,10 +115,11 @@ var fn = function () {
 
         var reverse = $tr.find('.icon_movement_reserve').length ? true : false;
 
+        var trCount = $tooltip.find('tr').length;
         var entry = {
-          metal: window._gfNumberToJsNumber($tooltip.find('tr:nth-child(5) td').last().text()),
-          crystal: window._gfNumberToJsNumber($tooltip.find('tr:nth-child(6) td').last().text()),
-          deuterium: window._gfNumberToJsNumber($tooltip.find('tr:nth-child(7) td').last().text()),
+          metal: window._gfNumberToJsNumber($tooltip.find('tr:nth-child(' + (trCount - 2) + ') td').last().text()),
+          crystal: window._gfNumberToJsNumber($tooltip.find('tr:nth-child(' + (trCount - 1) + ') td').last().text()),
+          deuterium: window._gfNumberToJsNumber($tooltip.find('tr:nth-child(' + trCount + ') td').last().text()),
           from: $tr.find('.coordsOrigin a').text().trim(),
           to: $tr.find('.destCoords a').text().trim(),
           nShips: $tr.find('.detailsFleet').text().trim(),

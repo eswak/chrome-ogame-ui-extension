@@ -5,6 +5,10 @@ var fn = function () {
     var millionChar = window.gfNumberGetHumanReadable(1e6, true).replace('1', '');
     var billionChar = window.gfNumberGetHumanReadable(1e9, true).replace('1', '');
 
+    if (num.match(/\./g) && num.match(/\./g).length === 2) { // replace first . by nothing if there's 2 of them
+      num = num.replace('.', '');
+    }
+
     var flags = {
       thousand: num.indexOf('.') !== -1 || num.indexOf(',') !== -1,
       million: num.indexOf(millionChar) !== -1,
