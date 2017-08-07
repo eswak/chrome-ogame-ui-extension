@@ -48,6 +48,7 @@ var fn = function () {
 
       var planetStatsHtml = '';
       var rentabilityTimes = [];
+      var fullIn = { metal: [], crystal: [], deuterium: [] };
       myPlanets.forEach(function (planet) {
         // add rentability times to array
         ['metal', 'crystal', 'deuterium'].forEach(function (resource) {
@@ -64,6 +65,20 @@ var fn = function () {
           crystal: Math.round(planet.resources.crystal.now + planet.resources.crystal.prod * ((Date.now() - planet.resources.lastUpdate) / 1000)),
           deuterium: Math.round(planet.resources.deuterium.now + planet.resources.deuterium.prod * ((Date.now() - planet.resources.lastUpdate) / 1000))
         };
+
+        // add storage time to array
+        ['metal', 'crystal', 'deuterium'].forEach(function (resource) {
+          var planetFullIn = 0;
+          var planetRemainingStorage = planet.resources[resource].max - currentRealtimePlanetResources[resource];
+          if (planetRemainingStorage > 0) {
+            planetFullIn = planetRemainingStorage / planet.resources[resource].prod;
+          }
+
+          fullIn[resource].push({
+            planet: planet,
+            time: planetFullIn
+          });
+        });
 
         // add production to global stats
         globalStats.prod.metal += planet.resources.metal.prod;
@@ -94,7 +109,7 @@ var fn = function () {
           ['metal', 'crystal', 'deuterium'].map(function (resource) {
             return [
               '<td id="stat-' + planet.coords.join('-') + '-' + resource + '">',
-              '<div class="shadowed resourceIcon ' + resource + '" style="font-size: 20px; line-height: 32px;">' + planet.resources[resource].level + '</div>',
+              '<div class="shadowed resourceIcon resourceIconDimmed ' + resource + '" style="font-size: 20px; line-height: 32px;">' + planet.resources[resource].level + '</div>',
               '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
               '<div>' + window._num(currentRealtimePlanetResources[resource], planet.resources[resource].prod, planet.resources[resource].max) + '</div>',
               '<div><span class="undermark">+' + window._num(Math.floor(planet.resources[resource].prod * 3600)) + '</span> /' + window._translate('TIME_HOUR') + '</div>',
@@ -174,7 +189,7 @@ var fn = function () {
           ['metal', 'crystal', 'deuterium'].map(function (resource) {
             return [
               '<td id="stat-flight">',
-              '<div class="shadowed resourceIcon ' + resource + '" style="font-size: 20px; line-height: 32px;"></div>',
+              '<div class="shadowed resourceIcon resourceIconDimmed ' + resource + '" style="font-size: 20px; line-height: 32px;"></div>',
               '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
               '<div style="padding-top: 11px;">' + window._num(inflight[resource]) + '</div>',
               '</div>',
@@ -184,6 +199,39 @@ var fn = function () {
           '</tr>'
         ].join('');
       }
+
+      // storage times
+      planetStatsHtml += [
+        '<tr><td style="height:5px"></td></tr>',
+        '<tr>',
+        '<td style="max-width: 80px; overflow: hidden; text-overflow: ellipsis;">',
+        '<div class="bar_container" style="width: 40px;display: inline-block;">',
+        '<div class="filllevel_bar filllevel_undermark" style="width: 50%;"></div>',
+        '</div>',
+        '</td>',
+        ['metal', 'crystal', 'deuterium'].map(function (resource) {
+          var fullInTop3 = fullIn[resource].sort(function (a, b) {
+            return a.time > b.time ? 1 : -1;
+          }).slice(0, 3);
+          return [
+            '<td id="stat-flight">',
+            '<div class="shadowed resourceIcon resourceIconDimmed ' + resource + '" style="font-size: 20px; line-height: 32px;">',
+            fullInTop3.map(function (fullInEntry) {
+              return '<div style="font-size:9px;line-height:11px">' + window._time(fullInEntry.time, -1) + '</div>';
+            }).join(''),
+            '</div>',
+            '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
+
+            fullInTop3.map(function (fullInEntry) {
+              return '<div style="font-size:9px;line-height:11px">' + fullInEntry.planet.name + '</div>';
+            }).join(''),
+
+            '</div>',
+            '</td>'
+          ].join('');
+        }).join(''),
+        '</tr>'
+      ].join('');
 
       // global stats
       globalStats.level.metal /= globalStats.planetCount;
@@ -202,7 +250,7 @@ var fn = function () {
         ['metal', 'crystal', 'deuterium'].map(function (resource) {
           return [
             '<td>',
-            '<div class="shadowed resourceIcon ' + resource + '" style="font-size: 20px; line-height: 32px;">' + Math.floor(10 * globalStats.level[resource]) / 10 + '</div>',
+            '<div class="shadowed resourceIcon resourceIconDimmed ' + resource + '" style="font-size: 20px; line-height: 32px;">' + Math.floor(10 * globalStats.level[resource]) / 10 + '</div>',
             '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em; padding-bottom: 3px">',
             '<div class="font-weight: bold; padding-bottom: 1px;">' + window._num(globalStats.current[resource], globalStats.prod[resource]) + '</div>',
             '<div><span class="undermark">+' + window._num(Math.floor(globalStats.prod[resource] * 3600)) + '</span> /' + window._translate('TIME_HOUR') + '</div>',
