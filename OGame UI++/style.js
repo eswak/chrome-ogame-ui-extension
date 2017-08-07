@@ -94,6 +94,12 @@ style.textContent = [
   '}',
   'div#planetList > .smallplanet:hover .transDeployLink {',
   '  opacity: 1;',
-  '}'
+  '}',
+  ['metal', 'crystal', 'deuterium'].map(function (resource) {
+    return '.resourceIconDimmed.' + resource + ' {' +
+    '  background: linear-gradient(rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.4) 100%), ' +
+    '  ' + getComputedStyle(document.querySelector('.resourceIcon.' + resource)).background +
+    '}';
+  }).join('\n')
 ].join('\n');
 (document.head || document.documentElement).appendChild(style);
