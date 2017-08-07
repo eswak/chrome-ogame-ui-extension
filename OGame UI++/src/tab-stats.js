@@ -96,7 +96,7 @@ var fn = function () {
               '<td id="stat-' + planet.coords.join('-') + '-' + resource + '">',
               '<div class="shadowed resourceIcon ' + resource + '" style="font-size: 20px; line-height: 32px;">' + planet.resources[resource].level + '</div>',
               '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
-              '<div class="font-weight: bold; padding-bottom: 1px;">' + window._num(currentRealtimePlanetResources[resource], planet.resources[resource].prod, planet.resources[resource].max) + '</div>',
+              '<div>' + window._num(currentRealtimePlanetResources[resource], planet.resources[resource].prod, planet.resources[resource].max) + '</div>',
               '<div><span class="undermark">+' + window._num(Math.floor(planet.resources[resource].prod * 3600)) + '</span> /' + window._translate('TIME_HOUR') + '</div>',
               '<div><span class="undermark">+' + window._num(Math.floor(planet.resources[resource].prod * 3600 * 24)) + '</span> /' + window._translate('TIME_DAY') + '</div>',
               '</div>',
@@ -107,7 +107,84 @@ var fn = function () {
         ].join('');
       });
 
-      // glogal stats
+      // in flight
+      var missions = [];
+      $('#eventContent .tooltip.tooltipClose').each(function () {
+        var $tooltip = $($(this).attr('title'));
+        var $tr = $(this).parent().parent();
+
+        var reverse = $tr.find('.icon_movement_reserve').length ? true : false;
+
+        var entry = {
+          metal: window._gfNumberToJsNumber($tooltip.find('tr:nth-child(5) td').last().text()),
+          crystal: window._gfNumberToJsNumber($tooltip.find('tr:nth-child(6) td').last().text()),
+          deuterium: window._gfNumberToJsNumber($tooltip.find('tr:nth-child(7) td').last().text()),
+          from: $tr.find('.coordsOrigin a').text().trim(),
+          to: $tr.find('.destCoords a').text().trim(),
+          nShips: $tr.find('.detailsFleet').text().trim(),
+          reverse: reverse
+        };
+
+        if (reverse) {
+          var to = entry.to;
+          entry.to = entry.from;
+          entry.from = to;
+        }
+
+        missions.push(entry);
+      });
+
+      missions = missions.filter(function (mission) {
+        var isReturnMissionDuplicate = false;
+        missions.forEach(function (otherMission) {
+          if (
+            mission.reverse &&
+            otherMission.from === mission.to &&
+            otherMission.to === mission.from &&
+            otherMission.nShips === mission.nShips &&
+            otherMission.metal === mission.metal &&
+            otherMission.crystal === mission.crystal &&
+            otherMission.deuterium === mission.deuterium
+          ) {
+            isReturnMissionDuplicate = true;
+          }
+        });
+        return !isReturnMissionDuplicate;
+      });
+
+      var inflight = { metal: 0, crystal: 0, deuterium: 0 };
+      missions.forEach(function (mission) {
+        inflight.metal += mission.metal;
+        inflight.crystal += mission.crystal;
+        inflight.deuterium += mission.deuterium;
+      });
+
+      if (inflight.metal || inflight.crystal || inflight.deuterium) {
+        globalStats.current.metal += inflight.metal;
+        globalStats.current.crystal += inflight.crystal;
+        globalStats.current.deuterium += inflight.deuterium;
+
+        planetStatsHtml += [
+          '<tr><td style="height:5px"></td></tr>',
+          '<tr>',
+          '<td style="max-width: 80px; overflow: hidden; text-overflow: ellipsis;">',
+          '<span class="icon_movement" style="display: inline-block;"></span>',
+          '</td>',
+          ['metal', 'crystal', 'deuterium'].map(function (resource) {
+            return [
+              '<td id="stat-flight">',
+              '<div class="shadowed resourceIcon ' + resource + '" style="font-size: 20px; line-height: 32px;"></div>',
+              '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
+              '<div style="padding-top: 11px;">' + window._num(inflight[resource]) + '</div>',
+              '</div>',
+              '</td>'
+            ].join('');
+          }).join(''),
+          '</tr>'
+        ].join('');
+      }
+
+      // global stats
       globalStats.level.metal /= globalStats.planetCount;
       globalStats.level.crystal /= globalStats.planetCount;
       globalStats.level.deuterium /= globalStats.planetCount;
