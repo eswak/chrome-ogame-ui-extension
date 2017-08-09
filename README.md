@@ -8,6 +8,8 @@ Available in-game languages :
  - :es: Spanish
  - :tr: Turkish
  - :de: German
+ - ![](pl.png) Polish
+ 
 
 This extension improves the user interface by adding several features :
  - New tab : nearby idles (+ notes)
