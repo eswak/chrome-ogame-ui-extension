@@ -8,7 +8,7 @@ Available in-game languages :
  - :es: Spanish
  - :tr: Turkish
  - :de: German
- - ![](pl.png) Polish
+ - :poland: Polish
  
 
 This extension improves the user interface by adding several features :
