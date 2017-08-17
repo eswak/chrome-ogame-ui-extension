@@ -56,7 +56,8 @@ var fn = function () {
             coords: planet.coords,
             resource: resource,
             time: window._getRentabilityTime(resource, planet.resources[resource].prod, planet.resources[resource].level),
-            level: planet.resources[resource].level + 1
+            level: planet.resources[resource].level + 1,
+            inprog: window.config.inprog['[' + planet.coords.join(':') + ']-' + resource] || null
           });
         });
 
@@ -109,7 +110,10 @@ var fn = function () {
           ['metal', 'crystal', 'deuterium'].map(function (resource) {
             return [
               '<td id="stat-' + planet.coords.join('-') + '-' + resource + '">',
-              '<div class="shadowed resourceIcon resourceIconDimmed ' + resource + '" style="font-size: 20px; line-height: 32px;">' + planet.resources[resource].level + '</div>',
+              '<div class="shadowed resourceIcon resourceIconDimmed ' + resource + '" style="position: relative; font-size: 20px; line-height: 32px;">',
+              planet.resources[resource].level,
+              window.config.inprog['[' + planet.coords.join(':') + ']-' + resource] ? '<span class="icon12px icon_wrench" style="position:absolute;bottom:-3px;right:0;"></span>' : '',
+              '</div>',
               '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
               '<div>' + window._num(currentRealtimePlanetResources[resource], planet.resources[resource].prod, planet.resources[resource].max) + '</div>',
               '<div><span class="undermark">+' + window._num(Math.floor(planet.resources[resource].prod * 3600)) + '</span> /' + window._translate('TIME_HOUR') + '</div>',
@@ -266,6 +270,7 @@ var fn = function () {
 
       $wrapper.append($('<table class="uipp-table">' + planetStatsHtml + '</table>'));
 
+      // score charts
       var hasEnoughHistory = window._getPlayerScoreTrend($('[name=ogame-player-id]').attr('content'), 'g', 2).abs;
       if (hasEnoughHistory) {
         var playerId = $('[name=ogame-player-id]').attr('content');
@@ -357,7 +362,6 @@ var fn = function () {
         });
       }
 
-      var currentPlanetResources = window._getCurrentPlanetResources();
       var globalProdWorth = 0;
       globalProdWorth += globalStats.prod.metal * worth.metal;
       globalProdWorth += globalStats.prod.crystal * worth.crystal;
@@ -435,7 +439,8 @@ var fn = function () {
           ],
           metalLevel: lowestMineLevels.metal,
           crystalLevel: lowestMineLevels.crystal,
-          deuteriumLevel: lowestMineLevels.deuterium
+          deuteriumLevel: lowestMineLevels.deuterium,
+          inprog: window.config.inprog.astro || null
         });
       }
 
@@ -447,7 +452,8 @@ var fn = function () {
           resource: 'plasma',
           level: (window.config.plasmaTech || 0) + 1,
           time: plasmaRentabilityTime,
-          totalCost: window.uipp_getCost('plasma', window.config.plasmaTech)
+          totalCost: window.uipp_getCost('plasma', window.config.plasmaTech),
+          inprog: window.config.inprog.plasma || null
         });
       }
 
@@ -456,9 +462,38 @@ var fn = function () {
         return a.time - b.time;
       });
 
+      var inprogPoints = 0;
+      rentabilityTimes.forEach(function (rentability) {
+        if (rentability.inprog) {
+          inprogPoints += (rentability.totalCost || rentability.astroCost)[0];
+          inprogPoints += (rentability.totalCost || rentability.astroCost)[1];
+          inprogPoints += (rentability.totalCost || rentability.astroCost)[2];
+        }
+      });
+      inprogPoints = Math.floor(inprogPoints / 1000);
+      var playerScores = [];
+      for (var key in window.config.players) {
+        var player = window.config.players[key];
+        if (player && Number(player.globalScore)) {
+          playerScores.push(Number(player.globalScore));
+        }
+      }
+      playerScores = playerScores.sort(function (a, b) {
+        return a < b ? 1 : -1;
+      });
+      var currentPlayer = window.config.players[$('[name=ogame-player-id]').attr('content')];
+      var playerPositionAfterCompletion = playerScores.filter(function (score) {
+        return score > (Number(currentPlayer.globalScore) + inprogPoints);
+      }).length;
+
       $wrapper.append($([
         '<div style="margin-top:50px;text-align: center;;font-size: 15px;padding-bottom: 10px;">',
         window._translate('NEXT_MOST_RENTABLE_BUILDS'),
+        '</div>',
+        '<div style="text-align: center">',
+        '<span class="icon12px icon_wrench"></span> ',
+        '<span class="undermark">+' + inprogPoints + '</span> ',
+        '<span>(' + currentPlayer.globalPosition + ' → ' + playerPositionAfterCompletion + ')</span>',
         '</div>'
       ].join('')));
       var $rentabilityWrapper = $('<div style="text-align:center"></div>');
@@ -479,6 +514,7 @@ var fn = function () {
             '<span class="tooltip" title="' + tooltip + '" style="display:inline-block;margin:5px;position:relative">',
             '<img src="' + window.uipp_images[rentability.resource] + '" height="50"/>',
             '<span class="shadowed" style="position:absolute;width:100%;display:inline-block;line-height:50px;text-align:center;left:0;top: 0;font-size:26px;">' + rentability.level + '</span>',
+            rentability.inprog ? '<span class="icon12px icon_wrench" style="position:absolute;bottom:0;right:0;"></span>' : '',
             '</span>',
           ].join('')));
         } else if (rentability.resource === 'astrophysics') {
@@ -501,6 +537,7 @@ var fn = function () {
             '<span class="tooltip" title="' + tooltip + '" style="display:inline-block;margin:5px;position:relative">',
             '<img src="' + window.uipp_images[rentability.resource] + '" height="50"/>',
             '<span class="shadowed" style="position:absolute;width:100%;display:inline-block;line-height:50px;text-align:center;left:0;top: 0;font-size:26px;">' + rentability.level + '</span>',
+            rentability.inprog ? '<span class="icon12px icon_wrench" style="position:absolute;bottom:0;right:0;"></span>' : '',
             '</span>',
           ].join('')));
         } else {
@@ -521,6 +558,7 @@ var fn = function () {
             '<img src="' + window.uipp_images[rentability.resource] + '" height="50"/>',
             '<span class="shadowed" style="position:absolute;width:100%;display:inline-block;line-height:35px;text-align:center;left:0;top: 0;font-size:19px;">' + rentability.level + '</span>',
             '<span class="shadowed" style="position:absolute;width:100%;display:inline-block;line-height:35px;text-align:center;left:0;top: 17px;font-size:9px;">[' + rentability.coords.join(':') + ']</span>',
+            rentability.inprog ? '<span class="icon12px icon_wrench" style="position:absolute;bottom:0;right:0;"></span>' : '',
             '</span>',
           ].join('')));
         }
