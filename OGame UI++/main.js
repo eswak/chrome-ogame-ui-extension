@@ -45,6 +45,7 @@ var userscript = function () {
   window._addTabSettings();
 
   // Add static helpers
+  window._addInprogParser();
   window._addCurrentPlanetStorageHelper();
   window._addPlanetFleetShortcuts();
 
