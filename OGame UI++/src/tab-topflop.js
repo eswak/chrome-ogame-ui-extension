@@ -2,7 +2,7 @@ var fn = function () {
   'use strict';
 
   window._addTabTopflop = function _addTabTopflop () {
-    var $menuEntry = $('<li class="topflop enhanced"><span class="menu_icon"><div class="customMenuEntrySettings menuImage overview"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">Top / Flop</span></a></li>');
+    var $menuEntry = $('<li class="topflop enhanced"><span class="menu_icon"><div class="menuImage overview"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">Top / Flop</span></a></li>');
 
     var hasEnoughHistory = window._getPlayerScoreTrend($('[name=ogame-player-id]').attr('content'), 'g', 2).abs;
     if (hasEnoughHistory) {
@@ -10,17 +10,13 @@ var fn = function () {
     }
 
     $menuEntry.click(function () {
+      var $wrapper = window._onMenuClick('topflop');
+      if (!$wrapper) return;
+
       window.uipp_analytics('uipp-tab-click', 'topflop');
-      // ui changes
-      $('.menubutton.selected').removeClass('selected');
-      $('.menuImage.highlighted').removeClass('highlighted');
-      $('.topflop .menubutton').addClass('selected');
-      $('.customMenuEntrySettings').addClass('highlighted');
 
       var N_ENTRIES = 15;
       var PLAYER_POOL = window.config.history;
-
-      var $wrapper = $('<div class="uiEnhancementWindow clearfix"></div>');
 
       ['globalScore', 'economyScore', 'militaryScore'].forEach(function (scoreType) {
         var entries = [];
@@ -89,10 +85,7 @@ var fn = function () {
 
       });
 
-      // insert html
-      var $eventboxContent = $('#eventboxContent');
-      $('#contentWrapper').html($eventboxContent);
-      $('#contentWrapper').append($wrapper);
+      window._insertHtml($wrapper);
     });
   };
 };

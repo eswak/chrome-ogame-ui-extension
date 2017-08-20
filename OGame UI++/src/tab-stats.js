@@ -1,20 +1,15 @@
 var fn = function () {
   'use strict';
   window._addTabStats = function _addTabStats () {
-    var $statsEntry = $('<li class="stats enhanced"><span class="menu_icon"><div class="customMenuEntry2 menuImage empire"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">' + window._translate('MENU_STATS') + '</span></a></li>');
+    var $statsEntry = $('<li class="stats enhanced"><span class="menu_icon"><div class="menuImage empire"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">' + window._translate('MENU_STATS') + '</span></a></li>');
     $('#menuTable').append($statsEntry);
     $statsEntry.click(function () {
+      var $wrapper = window._onMenuClick('stats');
+      if (!$wrapper) return;
+
       window.uipp_analytics('uipp-tab-click', 'statistics');
-      // ui changes
-      $('.menubutton.selected').removeClass('selected');
-      $('.menuImage.highlighted').removeClass('highlighted');
-      $('.stats .menubutton').addClass('selected');
-      $('.customMenuEntry2').addClass('highlighted');
 
       var worth = window.uipp_getResourcesWorth();
-
-      var $wrapper = $('<div class="uiEnhancementWindow"></div>');
-
       var globalStats = {
         prod: {
           metal: 0,
@@ -528,10 +523,7 @@ var fn = function () {
 
       $wrapper.append($rentabilityWrapper);
 
-      // insert html
-      var $eventboxContent = $('#eventboxContent');
-      $('#contentWrapper').html($eventboxContent);
-      $('#contentWrapper').append($wrapper);
+      window._insertHtml($wrapper);
     });
 
     function _getMyLowestMineLevels () {

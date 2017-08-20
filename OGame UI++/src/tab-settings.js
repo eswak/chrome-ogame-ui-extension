@@ -10,17 +10,13 @@ var fn = function () {
   };
 
   window._addTabSettings = function _addTabSettings () {
-    var $menuEntry = $('<li class="settings enhanced"><span class="menu_icon"><div class="customMenuEntrySettings menuImage alliance"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">OGame UI++</span></a></li>');
+    var $menuEntry = $('<li class="settings enhanced"><span class="menu_icon"><div class="menuImage alliance"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">OGame UI++</span></a></li>');
     $('#menuTable').append($menuEntry);
     $menuEntry.click(function () {
-      window.uipp_analytics('uipp-tab-click', 'settings');
-      // ui changes
-      $('.menubutton.selected').removeClass('selected');
-      $('.menuImage.highlighted').removeClass('highlighted');
-      $('.settings .menubutton').addClass('selected');
-      $('.customMenuEntrySettings').addClass('highlighted');
+      var $wrapper = window._onMenuClick('settings');
+      if (!$wrapper) return;
 
-      var $wrapper = $('<div class="uiEnhancementWindow"></div>');
+      window.uipp_analytics('uipp-tab-click', 'settings');
 
       // trade rate window.config
       $wrapper.append($([
@@ -104,10 +100,7 @@ var fn = function () {
         window.location.reload();
       });
 
-      // insert html
-      var $eventboxContent = $('#eventboxContent');
-      $('#contentWrapper').html($eventboxContent);
-      $('#contentWrapper').append($wrapper);
+      window._insertHtml($wrapper);
     });
   };
 };
