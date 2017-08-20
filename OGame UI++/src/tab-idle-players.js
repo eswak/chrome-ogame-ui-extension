@@ -2,15 +2,13 @@ var fn = function () {
   'use strict';
 
   window._addTabIdlePlayers = function _addTabIdlePlayers () {
-    var $entry = $('<li class="idles enhanced"><span class="menu_icon"><div class="customMenuEntry menuImage galaxy"></div></span><a class="menubutton" href="#" accesskey="" target="_self" ><span class="textlabel enhancement">' + window._translate('MENU_NEIGHBOURS_INACTIVE') + '</span></a></li>');
+    var $entry = $('<li class="idles enhanced"><span class="menu_icon"><div class="menuImage galaxy"></div></span><a class="menubutton" href="#" accesskey="" target="_self" ><span class="textlabel enhancement">' + window._translate('MENU_NEIGHBOURS_INACTIVE') + '</span></a></li>');
     $('#menuTable').append($entry);
     $entry.click(function () {
+      var $wrapper = window._onMenuClick('idles');
+      if (!$wrapper) return;
+
       window.uipp_analytics('uipp-tab-click', 'idle-players');
-      // ui changes
-      $('.menubutton.selected').removeClass('selected');
-      $('.menuImage.highlighted').removeClass('highlighted');
-      $('.idles .menubutton').addClass('selected');
-      $('.customMenuEntry').addClass('highlighted');
 
       var myCoords = window._getCurrentPlanetCoordinates();
 
@@ -50,7 +48,6 @@ var fn = function () {
         }
       }
 
-      var $wrapper = $('<div id="highscoreContent"></div>');
       var $table = $([
         '<table class="uipp-table">',
         '<thead>',
@@ -219,10 +216,7 @@ var fn = function () {
         });
       }
 
-      // insert html
-      var $eventboxContent = $('#eventboxContent');
-      $('#contentWrapper').html($eventboxContent);
-      $('#contentWrapper').append($wrapper);
+      window._insertHtml($wrapper);
     });
 
     window.filterTable = function filterTable (attribute, minValue, maxValue, $table, $filterBar) {

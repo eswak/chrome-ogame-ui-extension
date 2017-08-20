@@ -2,15 +2,13 @@ var fn = function () {
   'use strict';
 
   window._addTabNeighbors = function _addTabNeighbors () {
-    var $neighboursEntry = $('<li class="neighbours enhanced"><span class="menu_icon"><div class="customMenuEntry4 menuImage defense"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">' + window._translate('MENU_NEIGHBOURS_ACTIVE') + '</span></a></li>');
+    var $neighboursEntry = $('<li class="neighbours enhanced"><span class="menu_icon"><div class="menuImage defense"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">' + window._translate('MENU_NEIGHBOURS_ACTIVE') + '</span></a></li>');
     $('#menuTable').append($neighboursEntry);
     $neighboursEntry.click(function () {
+      var $wrapper = window._onMenuClick('neighbours');
+      if (!$wrapper) return;
+
       window.uipp_analytics('uipp-tab-click', 'nearby-neighbors');
-      // ui changes
-      $('.menubutton.selected').removeClass('selected');
-      $('.menuImage.highlighted').removeClass('highlighted');
-      $('.neighbours .menubutton').addClass('selected');
-      $('.customMenuEntry4').addClass('highlighted');
 
       // keeps player coordinates
       var myCoords = new Array(3);
@@ -48,7 +46,6 @@ var fn = function () {
         }
       }
 
-      var $wrapper = $('<div></div>');
       var $table = $('<table class="uipp-table"><thead id="highscoreContent"><tr><th>' + window._translate('COORDINATES') + '</th><th><span class="navButton uipp-score" id="points"></th><th><span class="navButton uipp-score" id="economy"></th><th><span class="navButton uipp-score" id="fleet"></th><th>' + window._translate('PLAYER') + '</th><th>' + window._translate('NOTE') + '</th><th>' + window._translate('ACTIONS') + '</th></tr></thead><tbody></tbody></table>');
       var playerName = $('[name=ogame-player-name]').attr('content');
 
@@ -130,10 +127,7 @@ var fn = function () {
         });
       }, 10);
 
-      // insert html
-      var $eventboxContent = $('#eventboxContent');
-      $('#contentWrapper').html($eventboxContent);
-      $('#contentWrapper').append($wrapper);
+      window._insertHtml($wrapper);
     });
   };
 };
