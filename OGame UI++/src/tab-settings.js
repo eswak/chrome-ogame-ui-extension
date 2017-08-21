@@ -50,6 +50,24 @@ var fn = function () {
         window.uipp_analytics('uipp-donate', 1);
       });
 
+      // links config
+      $wrapper.append('<div style="margin-top:50px"></div>');
+      for (var key in window.config.links) {
+        var $entry = $([
+          '<div>',
+          '<input type="text" value="' + key + '" style="width:100px;"/>',
+          '<input type="text" value="' + window.config.links[key] + '" style="margin-left: 5px;width:495px"/>',
+          '<span class="icon icon_close" onclick="_removeLink(\'' + key + '\', this)" style="margin-left:3px;margin-bottom:-3px;cursor:pointer;"></span>',
+          '</div>'
+        ].join(''));
+        $wrapper.append($entry);
+      }
+      $wrapper.append([
+        '<div style="text-align:center;margin-top:5px" onclick="_addLink()">',
+        '<a class="btn_blue" style="width:200px">Add link</a>',
+        '</div>'
+      ].join(''));
+
       // add reset ALL button
       var $resetAllButton = $('<div style="margin-top: 50px; text-align: center;"><i>' + window._translate('RESET_ALL_TEXT') + '</i><br><br><a href="#" class="btn_blue" style="width:625px">' + window._translate('RESET_ALL') + '</a></div>');
       $wrapper.append($resetAllButton);

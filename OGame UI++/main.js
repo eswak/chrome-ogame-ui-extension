@@ -40,9 +40,8 @@ var userscript = function () {
   window._addTabStats();
   window._addTabTopflop();
   window._addTabNeighbors();
-  window._addTabSimulator();
-  window._addTabWarRiders();
   window._addTabSettings();
+  window._addLinkTabs();
 
   // Add static helpers
   window._addInprogParser();
