@@ -9,34 +9,26 @@ Available in-game languages :
  - :tr: Turkish
  - :de: German
  - :poland: Polish
- 
 
 This extension improves the user interface by adding several features :
- - New tab : nearby idles (+ notes)
- - New tab : active neighbours (+ notes)
- - New tab : account's global stats
- - New tab : daily top / flop (who lost the most fleet between yesterday and today ?)
- - Add info about player's other planets in galaxy tooltip
- - Add info about your alliance teammates (who grows the fastest ? who has the most fleet ?)
- - Add a link to speedsim's websim in the menu
- - Add a link to your war-riders.de profile in the menu
- - Displays the Return On Investment (ROI) time when viewing a mine or plasma technology
- - Displays in how much time your storage will be full (total & remaining time)
- - Displays total time required to gather resources for any construction
- - Circles the limiting reagent in each construction
- - Displays time before you can make a construction (Commander-like)
- - Displays the max. buildable units with your current resources (Commander-like)
+  - Remaining storage time under current planet's resources
+  - Statistices tab : look at all your planet's resources ticking in real time
+  - Next recommended builds : know the ROI on your mines & build wisely
+  - Pre-fill the solar satelite text field if you have negative energy
+  - See the daily server top/flop (biggest point increase/drop)
+  - Fast deploy/transport icons when you hover your planets
+  - Add custom links in your left menu
 
-![Screenshot 1](1.png)
+![Screenshot 1](uipp.1.png)
 
-![Screenshot 2](2.png)
+![Screenshot 2](uipp.2.png)
 
-![Screenshot 3](3.png)
+![Screenshot 3](uipp.3.png)
 
-![Screenshot 4](4.png)
+![Screenshot 4](uipp.4.png)
 
-![Screenshot 5](5.png)
+![Screenshot 5](uipp.5.png)
 
-![Screenshot 6](6.png)
+![Screenshot 6](uipp.6.png)
 
-![Screenshot 7](7.png)
+![Screenshot 7](uipp.7.png)

@@ -80,15 +80,6 @@ var userscript = function () {
   window._addTabSettings();
   window._addLinkTabs();
 
-  setTimeout(function () {
-    if (!$('li.idles').length) {
-      window._addTabNeighbors();
-      window._addTabIdlePlayers();
-    } else {
-      window.uipp_noWarningNotice = true;
-    }
-  }, 1000);
-
   // Add static helpers
   window._addInprogParser();
 
