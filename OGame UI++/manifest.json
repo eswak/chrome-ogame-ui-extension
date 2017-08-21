@@ -53,10 +53,8 @@
       "src/tab-idle-players.js",
       "src/tab-neighbors.js",
       "src/tab-settings.js",
-      "src/tab-simulator.js",
       "src/tab-stats.js",
       "src/tab-topflop.js",
-      "src/tab-war-riders.js",
       "style.js",
       "main.js"
     ],
