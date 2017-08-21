@@ -68,6 +68,30 @@ var fn = function () {
         '</div>'
       ].join(''));
 
+      // features config
+      window._toggleFeature = function _toggleFeature (key, element) {
+        if (window.config.features[key]) {
+          $(element).css('opacity', '0.4');
+          window.config.features[key] = false;
+        } else {
+          $(element).css('opacity', '1');
+          window.config.features[key] = true;
+        }
+
+        window._saveConfig();
+      };
+
+      var $featurewrapper = $('<div style="margin-top:50px;text-align:center;"></div>');
+      for (var featureKey in window.config.features) {
+        $featurewrapper.append($([
+          '<img src="' + window.uipp_images.features[featureKey] + '"',
+          'style="width:100px;height:100px;margin:10px;cursor:pointer;',
+          'opacity:' + (window.config.features[featureKey] ? '1' : '0.4') + ';"',
+          'onclick="_toggleFeature(\'' + featureKey + '\', this)"/>'
+        ].join('')));
+      }
+      $wrapper.append($featurewrapper);
+
       // add reset ALL button
       var $resetAllButton = $('<div style="margin-top: 50px; text-align: center;"><i>' + window._translate('RESET_ALL_TEXT') + '</i><br><br><a href="#" class="btn_blue" style="width:625px">' + window._translate('RESET_ALL') + '</a></div>');
       $wrapper.append($resetAllButton);

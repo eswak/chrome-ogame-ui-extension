@@ -263,11 +263,13 @@ var fn = function () {
         '<tr><td style="height:10px"></td></tr>'
       ].join('') + planetStatsHtml;
 
-      $wrapper.append($('<table class="uipp-table">' + planetStatsHtml + '</table>'));
+      if (window.config.features.stats) {
+        $wrapper.append($('<table class="uipp-table">' + planetStatsHtml + '</table>'));
+      }
 
       // score charts
       var hasEnoughHistory = window._getPlayerScoreTrend($('[name=ogame-player-id]').attr('content'), 'g', 2).abs;
-      if (hasEnoughHistory) {
+      if (hasEnoughHistory && window.config.features.charts) {
         var playerId = $('[name=ogame-player-id]').attr('content');
         var current = window.config.players[playerId];
         var history = window.config.history[playerId];
@@ -481,85 +483,88 @@ var fn = function () {
         return score > (Number(currentPlayer.globalScore) + inprogPoints);
       }).length;
 
-      $wrapper.append($([
-        '<div style="margin-top:50px;text-align: center;;font-size: 15px;padding-bottom: 10px;">',
-        window._translate('NEXT_MOST_RENTABLE_BUILDS'),
-        '</div>',
-        '<div style="text-align: center">',
-        '<span class="icon12px icon_wrench"></span> ',
-        '<span class="undermark">+' + inprogPoints + '</span> ',
-        '<span>(' + currentPlayer.globalPosition + ' → ' + playerPositionAfterCompletion + ')</span>',
-        '</div>'
-      ].join('')));
-      var $rentabilityWrapper = $('<div style="text-align:center"></div>');
-      rentabilityTimes.forEach(function (rentability) {
-        var tooltip = '';
-        if (rentability.resource === 'plasma') {
-          tooltip = window._translate('ROI', {
-            time: window._time(rentability.time),
-            tradeRate: window.config.tradeRate.join(' / ')
-          });
-          tooltip += '<br>';
-          tooltip += '<br>' + window._translate('RENTABILITY_PLASMA', {
-            level: rentability.level,
-            totalCost: window._num(rentability.totalCost).join(' / ')
-          });
-          tooltip = tooltip.replace(/<\/?span[^>]*>/g, '');
-          $rentabilityWrapper.append($([
-            '<span class="tooltip" title="' + tooltip + '" style="display:inline-block;margin:5px;position:relative">',
-            '<img src="' + window.uipp_images[rentability.resource] + '" height="50"/>',
-            '<span class="shadowed" style="position:absolute;width:100%;display:inline-block;line-height:50px;text-align:center;left:0;top: 0;font-size:26px;">' + rentability.level + '</span>',
-            rentability.inprog ? '<span class="icon12px icon_wrench" style="position:absolute;bottom:0;right:0;"></span>' : '',
-            '</span>',
-          ].join('')));
-        } else if (rentability.resource === 'astrophysics') {
-          tooltip = window._translate('ROI', {
-            time: window._time(rentability.time),
-            tradeRate: window.config.tradeRate.join(' / ')
-          });
-          tooltip += '<br>';
-          tooltip += '<br>' + window._translate('RENTABILITY_ASTRO', {
-            level: rentability.level,
-            mineLevel: rentability.metalLevel + ' / ' + rentability.crystalLevel + ' / ' + rentability.deuteriumLevel,
-            astroTime: window._time(rentability.astroTime),
-            mineEconomyTime: window._time(rentability.mineEconomyTime),
-            mineTime: window._time(rentability.mineRentabilityTime),
-            mineCost: window._num(rentability.mineCost).join(' / '),
-            astroCost: window._num(rentability.astroCost).join(' / ')
-          });
-          tooltip = tooltip.replace(/<\/?span[^>]*>/g, '');
-          $rentabilityWrapper.append($([
-            '<span class="tooltip" title="' + tooltip + '" style="display:inline-block;margin:5px;position:relative">',
-            '<img src="' + window.uipp_images[rentability.resource] + '" height="50"/>',
-            '<span class="shadowed" style="position:absolute;width:100%;display:inline-block;line-height:50px;text-align:center;left:0;top: 0;font-size:26px;">' + rentability.level + '</span>',
-            rentability.inprog ? '<span class="icon12px icon_wrench" style="position:absolute;bottom:0;right:0;"></span>' : '',
-            '</span>',
-          ].join('')));
-        } else {
-          tooltip = window._translate('ROI', {
-            time: window._time(rentability.time),
-            tradeRate: window.config.tradeRate.join(' / ')
-          });
-          tooltip += '<br>';
-          tooltip += '<br>' + window._translate('RENTABILITY_MINE_' + rentability.resource.toUpperCase(), {
-            level: rentability.level,
-            economyTime: window._time(rentability.economyTime),
-            coords: '[' + rentability.coords.join(':') + ']',
-            totalCost: window._num(rentability.totalCost).join(' / ')
-          });
-          tooltip = tooltip.replace(/<\/?span[^>]*>/g, '');
-          $rentabilityWrapper.append($([
-            '<span class="tooltip" title="' + tooltip + '" style="display:inline-block;margin:5px;position:relative;">',
-            '<img src="' + window.uipp_images[rentability.resource] + '" height="50"/>',
-            '<span class="shadowed" style="position:absolute;width:100%;display:inline-block;line-height:35px;text-align:center;left:0;top: 0;font-size:19px;">' + rentability.level + '</span>',
-            '<span class="shadowed" style="position:absolute;width:100%;display:inline-block;line-height:35px;text-align:center;left:0;top: 17px;font-size:9px;">[' + rentability.coords.join(':') + ']</span>',
-            rentability.inprog ? '<span class="icon12px icon_wrench" style="position:absolute;bottom:0;right:0;"></span>' : '',
-            '</span>',
-          ].join('')));
-        }
-      });
+      if (window.config.features.nextbuilds) {
+        $wrapper.append($([
+          '<div style="margin-top:50px;text-align: center;;font-size: 15px;padding-bottom: 10px;">',
+          window._translate('NEXT_MOST_RENTABLE_BUILDS'),
+          '</div>',
+          '<div style="text-align: center">',
+          '<span class="icon12px icon_wrench"></span> ',
+          '<span class="undermark">+' + inprogPoints + '</span> ',
+          '<span>(' + currentPlayer.globalPosition + ' → ' + playerPositionAfterCompletion + ')</span>',
+          '</div>'
+        ].join('')));
 
-      $wrapper.append($rentabilityWrapper);
+        var $rentabilityWrapper = $('<div style="text-align:center"></div>');
+        rentabilityTimes.forEach(function (rentability) {
+          var tooltip = '';
+          if (rentability.resource === 'plasma') {
+            tooltip = window._translate('ROI', {
+              time: window._time(rentability.time),
+              tradeRate: window.config.tradeRate.join(' / ')
+            });
+            tooltip += '<br>';
+            tooltip += '<br>' + window._translate('RENTABILITY_PLASMA', {
+              level: rentability.level,
+              totalCost: window._num(rentability.totalCost).join(' / ')
+            });
+            tooltip = tooltip.replace(/<\/?span[^>]*>/g, '');
+            $rentabilityWrapper.append($([
+              '<span class="tooltip" title="' + tooltip + '" style="display:inline-block;margin:5px;position:relative">',
+              '<img src="' + window.uipp_images[rentability.resource] + '" height="50"/>',
+              '<span class="shadowed" style="position:absolute;width:100%;display:inline-block;line-height:50px;text-align:center;left:0;top: 0;font-size:26px;">' + rentability.level + '</span>',
+              rentability.inprog ? '<span class="icon12px icon_wrench" style="position:absolute;bottom:0;right:0;"></span>' : '',
+              '</span>',
+            ].join('')));
+          } else if (rentability.resource === 'astrophysics') {
+            tooltip = window._translate('ROI', {
+              time: window._time(rentability.time),
+              tradeRate: window.config.tradeRate.join(' / ')
+            });
+            tooltip += '<br>';
+            tooltip += '<br>' + window._translate('RENTABILITY_ASTRO', {
+              level: rentability.level,
+              mineLevel: rentability.metalLevel + ' / ' + rentability.crystalLevel + ' / ' + rentability.deuteriumLevel,
+              astroTime: window._time(rentability.astroTime),
+              mineEconomyTime: window._time(rentability.mineEconomyTime),
+              mineTime: window._time(rentability.mineRentabilityTime),
+              mineCost: window._num(rentability.mineCost).join(' / '),
+              astroCost: window._num(rentability.astroCost).join(' / ')
+            });
+            tooltip = tooltip.replace(/<\/?span[^>]*>/g, '');
+            $rentabilityWrapper.append($([
+              '<span class="tooltip" title="' + tooltip + '" style="display:inline-block;margin:5px;position:relative">',
+              '<img src="' + window.uipp_images[rentability.resource] + '" height="50"/>',
+              '<span class="shadowed" style="position:absolute;width:100%;display:inline-block;line-height:50px;text-align:center;left:0;top: 0;font-size:26px;">' + rentability.level + '</span>',
+              rentability.inprog ? '<span class="icon12px icon_wrench" style="position:absolute;bottom:0;right:0;"></span>' : '',
+              '</span>',
+            ].join('')));
+          } else {
+            tooltip = window._translate('ROI', {
+              time: window._time(rentability.time),
+              tradeRate: window.config.tradeRate.join(' / ')
+            });
+            tooltip += '<br>';
+            tooltip += '<br>' + window._translate('RENTABILITY_MINE_' + rentability.resource.toUpperCase(), {
+              level: rentability.level,
+              economyTime: window._time(rentability.economyTime),
+              coords: '[' + rentability.coords.join(':') + ']',
+              totalCost: window._num(rentability.totalCost).join(' / ')
+            });
+            tooltip = tooltip.replace(/<\/?span[^>]*>/g, '');
+            $rentabilityWrapper.append($([
+              '<span class="tooltip" title="' + tooltip + '" style="display:inline-block;margin:5px;position:relative;">',
+              '<img src="' + window.uipp_images[rentability.resource] + '" height="50"/>',
+              '<span class="shadowed" style="position:absolute;width:100%;display:inline-block;line-height:35px;text-align:center;left:0;top: 0;font-size:19px;">' + rentability.level + '</span>',
+              '<span class="shadowed" style="position:absolute;width:100%;display:inline-block;line-height:35px;text-align:center;left:0;top: 17px;font-size:9px;">[' + rentability.coords.join(':') + ']</span>',
+              rentability.inprog ? '<span class="icon12px icon_wrench" style="position:absolute;bottom:0;right:0;"></span>' : '',
+              '</span>',
+            ].join('')));
+          }
+        });
+
+        $wrapper.append($rentabilityWrapper);
+      }
 
       window._insertHtml($wrapper);
     });
