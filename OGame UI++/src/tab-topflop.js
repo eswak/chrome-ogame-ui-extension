@@ -18,7 +18,20 @@ var fn = function () {
       var N_ENTRIES = 15;
       var PLAYER_POOL = window.config.history;
 
-      ['globalScore', 'economyScore', 'militaryScore'].forEach(function (scoreType) {
+      var sections = [];
+      if (window.config.features.topgeneral) {
+        sections.push('globalScore');
+      }
+
+      if (window.config.features.topeco) {
+        sections.push('economyScore');
+      }
+
+      if (window.config.features.topfleet) {
+        sections.push('militaryScore');
+      }
+
+      sections.forEach(function (scoreType) {
         var entries = [];
         for (var playerId in PLAYER_POOL) {
           var current = Number((window.config.players[playerId] || {})[scoreType] || 0);

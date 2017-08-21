@@ -17,7 +17,21 @@ var uipp_images = {
   crystal: chrome.extension.getURL('img/mine-crystal.png'),
   deuterium: chrome.extension.getURL('img/mine-deuterium.png'),
   astrophysics: chrome.extension.getURL('img/tech-astro.png'),
-  plasma: chrome.extension.getURL('img/tech-plasma.png')
+  plasma: chrome.extension.getURL('img/tech-plasma.png'),
+  features: {
+    alliance: chrome.extension.getURL('img/features/alliance.png'),
+    charts: chrome.extension.getURL('img/features/charts.png'),
+    deploytransport: chrome.extension.getURL('img/features/deploytransport.png'),
+    galaxy: chrome.extension.getURL('img/features/galaxy.png'),
+    minetext: chrome.extension.getURL('img/features/minetext.png'),
+    nextbuilds: chrome.extension.getURL('img/features/nextbuilds.png'),
+    solarsat: chrome.extension.getURL('img/features/solarsat.png'),
+    stats: chrome.extension.getURL('img/features/stats.png'),
+    storagetime: chrome.extension.getURL('img/features/storagetime.png'),
+    topeco: chrome.extension.getURL('img/features/topeco.png'),
+    topfleet: chrome.extension.getURL('img/features/topfleet.png'),
+    topgeneral: chrome.extension.getURL('img/features/topgeneral.png')
+  }
 };
 var imgScript = document.createElement('script');
 imgScript.innerHTML = 'var uipp_images = ' + JSON.stringify(uipp_images) + ';';
@@ -34,25 +48,64 @@ var userscript = function () {
   window._setConfigMyPlanets();
   window._parseResearchTab();
 
+  window.config.features = window.config.features || {
+    alliance: true,
+    charts: true,
+    deploytransport: true,
+    galaxy: true,
+    minetext: true,
+    nextbuilds: true,
+    solarsat: true,
+    stats: true,
+    storagetime: true,
+    topeco: true,
+    topfleet: true,
+    topgeneral: true
+  };
+  var features = window.config.features;
+
   // Add tabs in the left menu
-  window._addTabAlliance();
+  if (features.alliance) {
+    window._addTabAlliance();
+  }
+
   window._addTabIdlePlayers();
-  window._addTabStats();
-  window._addTabTopflop();
+
+  if (features.stats || features.charts || features.nextbuilds) {
+    window._addTabStats();
+  }
+
+  if (features.topeco || features.topfleet || features.topgeneral) {
+    window._addTabTopflop();
+  }
+
   window._addTabNeighbors();
   window._addTabSettings();
   window._addLinkTabs();
 
   // Add static helpers
   window._addInprogParser();
-  window._addCurrentPlanetStorageHelper();
-  window._addPlanetFleetShortcuts();
+
+  if (features.storagetime) {
+    window._addCurrentPlanetStorageHelper();
+  }
+
+  if (features.deploytransport) {
+    window._addPlanetFleetShortcuts();
+  }
 
   // Add interval checkers
-  window._addSpyReportsScannerInterval();
-  window._addGalaxyPlayersPlanetsInterval();
-  window._addCostsHelperInterval();
-  window._addSolarSatHelperInterval();
+  if (features.galaxy) {
+    window._addGalaxyPlayersPlanetsInterval();
+  }
+
+  if (features.minetext) {
+    window._addCostsHelperInterval();
+  }
+
+  if (features.solarsat) {
+    window._addSolarSatHelperInterval();
+  }
 
   // Refresh universe data (config.players)
   window._refreshUniverseData();
