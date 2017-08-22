@@ -45,9 +45,11 @@ var fn = function () {
     var label = window.prompt('Link label ?');
     var url = window.prompt('URL ?');
 
-    window.config.links[label] = url;
-    window._saveConfig();
-    document.location.reload();
+    if (label && url) {
+      window.config.links[label] = url;
+      window._saveConfig();
+      document.location.reload();
+    }
   };
 };
 
