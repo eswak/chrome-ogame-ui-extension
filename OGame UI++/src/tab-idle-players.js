@@ -173,6 +173,7 @@ var fn = function () {
         'OGame UI++ contributors',
         '<br><br><br>',
         'PS: Feel free to suggest new features, contribute code, or fork an old version on our <a style="color:#AB7AFF" target="_blank" href="https://github.com/eswak/chrome-ogame-ui-extension">Github</a>.',
+        '<br><br><br><a style="color:#AB7AFF" target="_blank" href="https://chrome.google.com/webstore/detail/ogame-nearby-players/knaaglboaiokbmjlkgnngoaadfplkdgm">"OGame Nearby Players" on Google Store</a>',
         '</div>'
       ].join('')));
 
