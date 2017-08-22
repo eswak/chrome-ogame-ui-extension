@@ -153,6 +153,29 @@ var fn = function () {
         '</div>'
       ].join(''));
 
+      $wrapper.append($([
+        '<div style="border:1px dashed red;padding:5px;margin:5px;">',
+        '<div style="font-size:16px;font-weight:bold;margin-bottom:5px;">Important notice (2017-08-22)</div>',
+        'Hi ! I’m the creator of OGame UI++.<br>',
+        'Next week, this extension will evolve to comply with GameForge’s rules about extension features.<br>',
+        'After the next update, this extension’s content will be reviewed by the OGame staff, so you’ll be safe to use it as much as you want without risking to get your account banned :-)<br>',
+        '<br>Sadly, this also means that some features need to disappear. Here’s what will change :<br>',
+        '<ul>',
+        '<li> - No more "maximum buildable" on ships & defenses : that feature is available if you subscribe to commander.</li>',
+        '<li> - No more "time before being able to build" (the rectangle & time around resources cost of mines etc) : also a commander feature.</li>',
+        '<li> - No listing of players in the whole universe</li>',
+        '</ul>',
+        '<br>Yes : that means that the 2 tabs with idle players & active neighbours will need to be removed :-(<br>',
+        '<br>If you still want to use the 2 tabs of idle players & active neighbours, I will publish these in a separate extension on the chrome store named "OGame Nearby Players".',
+        '<br>In this extension’s description text, it will be clearly said that the feature is not approved by Gameforge staff, and that you risk to get banned for using it.<br>',
+        '<br>We still have ideas for new exciting features that will (we think) convince you to stay on the light side of the force, so stay in touch ^^<br>',
+        '<br>Have a nice day,<br>',
+        'OGame UI++ contributors',
+        '<br><br><br>',
+        'PS: Feel free to suggest new features, contribute code, or fork an old version on our <a style="color:#AB7AFF" target="_blank" href="https://github.com/eswak/chrome-ogame-ui-extension">Github</a>.',
+        '</div>'
+      ].join('')));
+
       $wrapper.append($filterBar);
 
       // persistent filters
