@@ -7,6 +7,15 @@ var fn = function () {
       var $wrapper = window._onMenuClick('stats');
       if (!$wrapper) return;
 
+      // clear decolonized planets from the list
+      var planetOrder = $('#planetList .planet-koords').text();
+      for (var key in window.config.my.planets) {
+        if (planetOrder.indexOf(window.config.my.planets[key].coords.join(':')) === -1) {
+          delete window.config.my.planets[key];
+          window._saveConfig();
+        }
+      }
+
       window.uipp_analytics('uipp-tab-click', 'statistics');
 
       var worth = window.uipp_getResourcesWorth();
@@ -36,7 +45,6 @@ var fn = function () {
         }
       }
 
-      var planetOrder = $('#planetList .planet-koords').text();
       myPlanets = myPlanets.sort(function (a, b) {
         return planetOrder.indexOf(a.coords.join(':')) > planetOrder.indexOf(b.coords.join(':')) ? 1 : -1;
       });

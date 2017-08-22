@@ -32,9 +32,8 @@ var fn = function () {
       });
     }
 
-    var planetOrder = $('#planetList .planet-koords').text();
     for (var key in window.config.my.planets) {
-      if (!window.config.my.planets[key].coords || planetOrder.indexOf(window.config.my.planets[key].coords.join(':')) === -1) {
+      if (!window.config.my.planets[key].coords) {
         delete window.config.my.planets[key];
       }
     }
