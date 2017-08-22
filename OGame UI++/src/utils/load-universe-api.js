@@ -77,12 +77,24 @@ var fn = function () {
                             });
 
                             $.ajax({
-                              url: '/api/serverData.xml',
+                              url: '/api/alliances.xml',
                               dataType: 'xml',
-                              success: function (data) {
-                                var universe = window.xml2json(data).serverData;
-                                console.log('OGame UI++ : loaded universe data.');
-                                cb && cb(players, universe);
+                              success: function (alliancesData) {
+                                $('player', alliancesData).each(function () {
+                                  var playerId = $(this).attr('id');
+                                  var allianceId = $(this).parent().attr('id');
+                                  players[playerId].alliance = allianceId;
+                                });
+
+                                $.ajax({
+                                  url: '/api/serverData.xml',
+                                  dataType: 'xml',
+                                  success: function (data) {
+                                    var universe = window.xml2json(data).serverData;
+                                    console.log('OGame UI++ : loaded universe data.');
+                                    cb && cb(players, universe);
+                                  }
+                                });
                               }
                             });
                           }
