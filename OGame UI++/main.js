@@ -113,6 +113,8 @@ var userscript = function () {
     window._addSolarSatHelperInterval();
   }
 
+  window._addImportExportHelper();
+
   // Refresh universe data (config.players)
   window._refreshUniverseData();
 

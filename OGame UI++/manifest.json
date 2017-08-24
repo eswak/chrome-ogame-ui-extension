@@ -58,6 +58,7 @@
       "src/current-planet-storage-helper.js",
       "src/galaxy-players-planets.js",
       "src/history-logger.js",
+      "src/import-export-helper.js",
       "src/planet-fleet-shortcuts.js",
       "src/solarsat-helper.js",
       "src/tab-alliance.js",
