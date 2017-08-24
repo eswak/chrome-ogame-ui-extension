@@ -77,7 +77,7 @@
     "run_at": "document_idle"
   } ],
   "converted_from_user_script": true,
-  "version": "2.2.2",
+  "version": "2.2.3",
   "name": "__MSG_appName__",
   "description": "__MSG_appDesc__",
   "default_locale": "en",
