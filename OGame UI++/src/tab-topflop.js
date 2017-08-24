@@ -4,8 +4,7 @@ var fn = function () {
   window._addTabTopflop = function _addTabTopflop () {
     var $menuEntry = $('<li class="topflop enhanced"><span class="menu_icon"><div class="menuImage overview"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">Top / Flop</span></a></li>');
 
-    var hasEnoughHistory = window._getPlayerScoreTrend($('[name=ogame-player-id]').attr('content'), 'g', 2).abs;
-    if (hasEnoughHistory) {
+    if (window._getPlayerScoreTrend($('[name=ogame-player-id]').attr('content'), 'g', 2).hasEnoughHistory) {
       $('#menuTable').append($menuEntry);
     }
 

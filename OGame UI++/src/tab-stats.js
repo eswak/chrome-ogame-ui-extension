@@ -295,7 +295,7 @@ var fn = function () {
       }
 
       // score charts
-      var hasEnoughHistory = window._getPlayerScoreTrend($('[name=ogame-player-id]').attr('content'), 'g', 2).abs;
+      var hasEnoughHistory = window._getPlayerScoreTrend($('[name=ogame-player-id]').attr('content'), 'g', 2).hasEnoughHistory;
       if (hasEnoughHistory && window.config.features.charts) {
         var playerId = $('[name=ogame-player-id]').attr('content');
         var current = window.config.players[playerId];

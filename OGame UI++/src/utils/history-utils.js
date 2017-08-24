@@ -18,7 +18,8 @@ var fn = function () {
     });
 
     if (playerScores.length < minEntries) {
-      return { n: 0, abs: 0, html: '<span class="tooltip" title="Come back tommorow for more stats">?</span>' };
+      return { hasEnoughHistory: false, n: 0, abs: 0,
+        html: '<span class="tooltip" title="Come back tommorow for more stats">?</span>' };
     }
 
     playerScores = playerScores.slice(Math.max(playerScores.length - maxEntries, 0), playerScores.length);
@@ -62,6 +63,7 @@ var fn = function () {
     ].join('');
 
     return {
+      hasEnoughHistory: true,
       n: diffPerDay,
       abs: trend.lastScore - trend.firstScore,
       html: str
