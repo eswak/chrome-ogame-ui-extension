@@ -114,6 +114,7 @@ var userscript = function () {
   }
 
   window._addImportExportHelper();
+  window._addAuctioneerHelper();
 
   // Refresh universe data (config.players)
   window._refreshUniverseData();
