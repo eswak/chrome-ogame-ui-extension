@@ -69,8 +69,6 @@ var userscript = function () {
     window._addTabAlliance();
   }
 
-  window._addTabIdlePlayers();
-
   if (features.stats || features.charts || features.nextbuilds) {
     window._addTabStats();
   }
@@ -79,9 +77,17 @@ var userscript = function () {
     window._addTabTopflop();
   }
 
-  window._addTabNeighbors();
   window._addTabSettings();
   window._addLinkTabs();
+
+  setTimeout(function () {
+    if (!$('li.idles').length) {
+      window._addTabNeighbors();
+      window._addTabIdlePlayers();
+    } else {
+      window.uipp_noWarningNotice = true;
+    }
+  }, 1000);
 
   // Add static helpers
   window._addInprogParser();
