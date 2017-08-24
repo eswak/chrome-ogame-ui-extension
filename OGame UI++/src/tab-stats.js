@@ -111,11 +111,30 @@ var fn = function () {
           '</a>',
           '</td>',
           ['metal', 'crystal', 'deuterium'].map(function (resource) {
+            var costs = window.uipp_getCost(resource, planet.resources[resource].level);
+            var tooltip = [
+              window._num(costs[0]),
+              ' ' + window._translate('UNIT_METAL'),
+              '<br>',
+              window._num(costs[1]),
+              ' ' + window._translate('UNIT_CRYSTAL')
+            ].join('');
+
+            var inprog = window.config.inprog['[' + planet.coords.join(':') + ']-' + resource];
+
+            if (inprog) {
+              tooltip += [
+                '<br><br>',
+                '⇧ ' + (Number(planet.resources[resource].level) + 1),
+                ' : ' + window._time(Math.floor(inprog - Date.now()) / 1000)
+              ].join('');
+            }
+
             return [
               '<td id="stat-' + planet.coords.join('-') + '-' + resource + '">',
-              '<div class="shadowed resourceIcon resourceIconDimmed ' + resource + '" style="position: relative; font-size: 20px; line-height: 32px;">',
+              '<div class="tooltip shadowed resourceIcon resourceIconDimmed ' + resource + '" style="position: relative; font-size: 20px; line-height: 32px;" title="' + tooltip + '">',
               planet.resources[resource].level,
-              window.config.inprog['[' + planet.coords.join(':') + ']-' + resource] ? '<span class="icon12px icon_wrench" style="position:absolute;bottom:-3px;right:0;"></span>' : '',
+              inprog ? '<span class="icon12px icon_wrench" style="position:absolute;bottom:-3px;right:0;"></span>' : '',
               '</div>',
               '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
               '<div>' + window._num(currentRealtimePlanetResources[resource], planet.resources[resource].prod, planet.resources[resource].max) + '</div>',
