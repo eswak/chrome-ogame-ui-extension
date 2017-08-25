@@ -50,7 +50,7 @@ var fn = function () {
 
       var $table = $([
         '<table class="uipp-table">',
-        '<thead>',
+        '<thead id="highscoreContent">',
         '<tr>',
         '<th onclick="uipp_analytics(\'uipp-sort\', \'coordinates\');">' + window._translate('COORDINATES') + '</th>',
         '<th onclick="uipp_analytics(\'uipp-sort\', \'flight-time\');" class="tooltip" title="' + window._translate('RETURN_TRIP_DURATION') + '"><img src="https://gf2.geo.gfsrv.net/cdna2/89624964d4b06356842188dba05b1b.gif" style="transform:scale(1.6);margin-bottom:-4px;"/></th>',
@@ -92,7 +92,7 @@ var fn = function () {
       $table.find('tbody').append(tbody);
 
       var $filterBar = $([
-        '<div class="uipp-filterbar">',
+        '<div class="uipp-filterbar" id="highscoreContent">',
 
         // flight duration filters
         '<span data-filter="flight-time">',
