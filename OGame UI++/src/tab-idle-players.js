@@ -87,7 +87,10 @@ var fn = function () {
         if (window.config && window.config.ignoredPlanets && window.config.ignoredPlanets[idle.coords[0] + ':' + idle.coords[1] + ':' + idle.coords[2]]) {
           tr = $(tr).addClass('ignore').wrapAll('<div>').parent().html();
         }
-        tbody += tr;
+
+        if (!isNaN(Number(idle.militaryScore))) {
+          tbody += tr;
+        }
       });
       $table.find('tbody').append(tbody);
 
