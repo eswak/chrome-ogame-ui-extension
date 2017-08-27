@@ -30,6 +30,10 @@ var fn = function () {
         sections.push('militaryScore');
       }
 
+      if (window.config.features.topresearch) {
+        sections.push('researchScore');
+      }
+
       sections.forEach(function (scoreType) {
         var entries = [];
         for (var playerId in PLAYER_POOL) {
@@ -63,6 +67,9 @@ var fn = function () {
           $wrapper.append($('<div id="highscoreContent" style="float: left;text-align:center;margin:10px 0 10px -12px"><span class="navButton uipp-score" id="economy"></span></div>'));
         } else if (scoreType === 'militaryScore') {
           $wrapper.append($('<div id="highscoreContent" style="float: left;text-align:center;margin:10px 0 10px -12px"><span class="navButton uipp-score" id="fleet"></span></div>'));
+        } else if (scoreType === 'researchScore') {
+          $wrapper.append($('<div id="highscoreContent" style="float: left;text-align:center;margin:10px 0 10px -12px"><span class="navButton uipp-score" id="research"></span></div>'));
+          delete topflop.flop;
         }
 
         for (var key in topflop) {

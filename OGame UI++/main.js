@@ -30,7 +30,8 @@ var uipp_images = {
     storagetime: chrome.extension.getURL('img/features/storagetime.png'),
     topeco: chrome.extension.getURL('img/features/topeco.png'),
     topfleet: chrome.extension.getURL('img/features/topfleet.png'),
-    topgeneral: chrome.extension.getURL('img/features/topgeneral.png')
+    topgeneral: chrome.extension.getURL('img/features/topgeneral.png'),
+    topresearch: chrome.extension.getURL('img/features/topresearch.png')
   }
 };
 var imgScript = document.createElement('script');
@@ -60,8 +61,13 @@ var userscript = function () {
     storagetime: true,
     topeco: true,
     topfleet: true,
-    topgeneral: true
+    topgeneral: true,
+    topresearch: true
   };
+  if (typeof window.config.features.topresearch !== 'boolean') {
+    window.config.features.topresearch = true;
+  }
+
   var features = window.config.features;
 
   // Add tabs in the left menu
@@ -73,7 +79,7 @@ var userscript = function () {
     window._addTabStats();
   }
 
-  if (features.topeco || features.topfleet || features.topgeneral) {
+  if (features.topeco || features.topfleet || features.topgeneral || features.topresearch) {
     window._addTabTopflop();
   }
 
