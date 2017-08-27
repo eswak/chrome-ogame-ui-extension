@@ -83,7 +83,9 @@ var fn = function () {
                                 $('player', alliancesData).each(function () {
                                   var playerId = $(this).attr('id');
                                   var allianceId = $(this).parent().attr('id');
-                                  players[playerId].alliance = allianceId;
+                                  if (players[playerId]) {
+                                    players[playerId].alliance = allianceId;
+                                  }
                                 });
 
                                 $.ajax({
