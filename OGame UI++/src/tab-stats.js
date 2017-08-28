@@ -131,7 +131,9 @@ var fn = function () {
             }
 
             return [
-              '<td id="stat-' + planet.coords.join('-') + '-' + resource + '">',
+              '<td id="stat-' + planet.coords.join('-') + '-' + resource + '"',
+              ' onclick="uipp_toggleSelect(this, \'' + resource + '\', ' + currentRealtimePlanetResources[resource] + ', ' + planet.resources[resource].prod + ')"',
+              ' style="cursor:pointer;user-select:none;">',
               '<div class="tooltip shadowed resourceIcon resourceIconDimmed ' + resource + '" style="position: relative; font-size: 20px; line-height: 32px;" title="' + tooltip + '">',
               planet.resources[resource].level,
               inprog ? '<span class="icon12px icon_wrench" style="position:absolute;bottom:-3px;right:0;"></span>' : '',
@@ -147,6 +149,68 @@ var fn = function () {
           '</tr>'
         ].join('');
       });
+
+      // selected
+      var selected = {
+        metal: { current: 0, production: 0 },
+        crystal: { current: 0, production: 0 },
+        deuterium: { current: 0, production: 0 }
+      };
+      window.uipp_toggleSelect = function (el, resource, current, production) {
+        var $el = $(el);
+        $el.toggleClass('uipp-selected');
+
+        if ($el.hasClass('uipp-selected')) {
+          selected[resource].current += current;
+          selected[resource].production += production;
+        } else {
+          selected[resource].current -= current;
+          selected[resource].production -= production;
+        }
+
+        window.uipp_refreshSelectedDisplay();
+      };
+
+      window.uipp_unselectAll = function () {
+        selected = {
+          metal: { current: 0, production: 0 },
+          crystal: { current: 0, production: 0 },
+          deuterium: { current: 0, production: 0 }
+        };
+        $('.uipp-selected').removeClass('uipp-selected');
+
+        window.uipp_refreshSelectedDisplay();
+      };
+
+      window.uipp_refreshSelectedDisplay = function () {
+        var $selectedWrapper = $('.uipp-selected-resources');
+        if ($selectedWrapper) {
+          $selectedWrapper.remove();
+        }
+
+        if (!selected.metal.current && !selected.crystal.current && !selected.deuterium.current) {
+          return;
+        }
+
+        $('.uipp-table').first().append([
+          '<tr class="uipp-selected-resources"><td style="height:5px"></td></tr>',
+          '<tr class="uipp-selected-resources uipp-selected"',
+          ' onclick="uipp_unselectAll()"',
+          ' style="cursor:pointer;user-select:none;">',
+          '<td style="max-width: 80px; overflow: hidden; text-overflow: ellipsis;">∑</td>',
+          ['metal', 'crystal', 'deuterium'].map(function (resource) {
+            return [
+              '<td id="stat-flight">',
+              '<div class="shadowed resourceIcon resourceIconDimmed ' + resource + '"></div>',
+              '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
+              '<div style="padding-top: 11px;">' + window._num(selected[resource].current, selected[resource].production) + '</div>',
+              '</div>',
+              '</td>'
+            ].join('');
+          }).join(''),
+          '</tr>'
+        ].join(''));
+      };
 
       // in flight
       var missions = [];
@@ -214,8 +278,8 @@ var fn = function () {
           '</td>',
           ['metal', 'crystal', 'deuterium'].map(function (resource) {
             return [
-              '<td id="stat-flight">',
-              '<div class="shadowed resourceIcon resourceIconDimmed ' + resource + '" style="font-size: 20px; line-height: 32px;"></div>',
+              '<td>',
+              '<div class="shadowed resourceIcon resourceIconDimmed ' + resource + '"></div>',
               '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
               '<div style="padding-top: 11px;">' + window._num(inflight[resource]) + '</div>',
               '</div>',
