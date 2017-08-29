@@ -278,7 +278,7 @@ var fn = function () {
           '</td>',
           ['metal', 'crystal', 'deuterium'].map(function (resource) {
             return [
-              '<td>',
+              '<td onclick="uipp_toggleSelect(this, \'' + resource + '\', ' + inflight[resource] + ', 0)" style="cursor:pointer;user-select:none;">',
               '<div class="shadowed resourceIcon resourceIconDimmed ' + resource + '"></div>',
               '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
               '<div style="padding-top: 11px;">' + window._num(inflight[resource]) + '</div>',
