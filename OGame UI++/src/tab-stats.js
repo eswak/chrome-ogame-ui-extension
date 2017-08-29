@@ -177,7 +177,7 @@ var fn = function () {
           crystal: { current: 0, production: 0 },
           deuterium: { current: 0, production: 0 }
         };
-        $('.uipp-selected').removeClass('uipp-selected');
+        $('.uipp-table .uipp-selected').removeClass('uipp-selected');
 
         window.uipp_refreshSelectedDisplay();
       };
@@ -586,8 +586,8 @@ var fn = function () {
           '</div>'
         ].join('')));
 
-        var $rentabilityWrapper = $('<div style="text-align:center"></div>');
-        rentabilityTimes.forEach(function (rentability) {
+        var $rentabilityWrapper = $('<div style="text-align:center" class="rentability"></div>');
+        rentabilityTimes.forEach(function (rentability, i) {
           var tooltip = '';
           if (rentability.resource === 'plasma') {
             tooltip = window._translate('ROI', {
@@ -601,7 +601,9 @@ var fn = function () {
             });
             tooltip = tooltip.replace(/<\/?span[^>]*>/g, '');
             $rentabilityWrapper.append($([
-              '<span class="tooltip" title="' + tooltip + '" style="display:inline-block;margin:5px;position:relative">',
+              '<span class="tooltip" title="' + tooltip + '"',
+              ' style="display:inline-block;margin:5px;position:relative;height:50px;width:50px;"',
+              ' onclick="uipp_toggleSimulateNextBuild(this, ' + i + ')">',
               '<img src="' + window.uipp_images[rentability.resource] + '" height="50"/>',
               '<span class="shadowed" style="position:absolute;width:100%;display:inline-block;line-height:50px;text-align:center;left:0;top: 0;font-size:26px;">' + rentability.level + '</span>',
               rentability.inprog ? '<span class="icon12px icon_wrench" style="position:absolute;bottom:0;right:0;"></span>' : '',
@@ -624,7 +626,9 @@ var fn = function () {
             });
             tooltip = tooltip.replace(/<\/?span[^>]*>/g, '');
             $rentabilityWrapper.append($([
-              '<span class="tooltip" title="' + tooltip + '" style="display:inline-block;margin:5px;position:relative">',
+              '<span class="tooltip" title="' + tooltip + '"',
+              ' style="display:inline-block;margin:5px;position:relative;height:50px;width:50px;"',
+              ' onclick="uipp_toggleSimulateNextBuild(this, ' + i + ')">',
               '<img src="' + window.uipp_images[rentability.resource] + '" height="50"/>',
               '<span class="shadowed" style="position:absolute;width:100%;display:inline-block;line-height:50px;text-align:center;left:0;top: 0;font-size:26px;">' + rentability.level + '</span>',
               rentability.inprog ? '<span class="icon12px icon_wrench" style="position:absolute;bottom:0;right:0;"></span>' : '',
@@ -644,7 +648,9 @@ var fn = function () {
             });
             tooltip = tooltip.replace(/<\/?span[^>]*>/g, '');
             $rentabilityWrapper.append($([
-              '<span class="tooltip" title="' + tooltip + '" style="display:inline-block;margin:5px;position:relative;">',
+              '<span class="tooltip" title="' + tooltip + '"',
+              ' style="display:inline-block;margin:5px;position:relative;height:50px;width:50px;cursor:pointer;user-select:none"',
+              ' onclick="uipp_toggleSimulateNextBuild(this, ' + i + ')">',
               '<img src="' + window.uipp_images[rentability.resource] + '" height="50"/>',
               '<span class="shadowed" style="position:absolute;width:100%;display:inline-block;line-height:35px;text-align:center;left:0;top: 0;font-size:19px;">' + rentability.level + '</span>',
               '<span class="shadowed" style="position:absolute;width:100%;display:inline-block;line-height:35px;text-align:center;left:0;top: 17px;font-size:9px;">[' + rentability.coords.join(':') + ']</span>',
@@ -655,6 +661,71 @@ var fn = function () {
         });
 
         $wrapper.append($rentabilityWrapper);
+
+        // allow to simulate next builds
+        var simulatedNextBuilds = {};
+        window.uipp_toggleSimulateNextBuild = function (el, i) {
+          var rentability = rentabilityTimes[i];
+          var $el = $(el);
+          $el.toggleClass('uipp-selected');
+          $el.css('outline-offset', '3px');
+
+          var id = (rentability.coords || []).join('-') + rentability.resource;
+
+          if ($el.hasClass('uipp-selected')) {
+            simulatedNextBuilds[id] = rentability;
+          } else {
+            delete simulatedNextBuilds[id];
+          }
+
+          window.uipp_refreshSimulationDisplay();
+        };
+
+        window.uipp_resetSimulation = function () {
+          simulatedNextBuilds = {};
+          $('.rentability .uipp-selected').removeClass('uipp-selected');
+
+          window.uipp_refreshSimulationDisplay();
+        };
+
+        window.uipp_refreshSimulationDisplay = function () {
+          var $selectedWrapper = $('.uipp-simulation');
+          if ($selectedWrapper) {
+            $selectedWrapper.remove();
+          }
+
+          if (Object.keys(simulatedNextBuilds).length === 0) {
+            return;
+          }
+
+          var totalCost = [0, 0, 0];
+          var timeToAchieve = 0;
+          for (var simKey in simulatedNextBuilds) {
+            var cost = simulatedNextBuilds[simKey].astroCost || simulatedNextBuilds[simKey].totalCost;
+            if (!simulatedNextBuilds[simKey].inprog) {
+              totalCost[0] += cost[0];
+              totalCost[1] += cost[1];
+              totalCost[2] += cost[2];
+
+              timeToAchieve += simulatedNextBuilds[simKey].time;
+            }
+          }
+
+          var totalCostWorth = totalCost[0] * worth.metal + totalCost[1] * worth.crystal + totalCost[2] * worth.deuterium;
+
+          var timeToAchieve = totalCostWorth / globalProdWorth;
+
+          $rentabilityWrapper.append([
+            '<div class="uipp-simulation"',
+            ' style="cursor:pointer;margin-top: 15px;font-size: 16px;"',
+            ' onclick="uipp_resetSimulation()">',
+            totalCost.map(function (n) {
+              return window._num(n);
+            }).join(' / '),
+            ' ≈ ' + window._time(timeToAchieve, -1),
+            '</div>'
+          ].join(''));
+        };
       }
 
       window._insertHtml($wrapper);
