@@ -95,7 +95,7 @@ var fn = function () {
       // add reset ALL button
       var $resetAllButton = $('<div style="margin-top: 50px; text-align: center;"><i>' + window._translate('RESET_ALL_TEXT') + '</i><br><br><a href="#" class="btn_blue" style="width:625px">' + window._translate('RESET_ALL') + '</a></div>');
       $wrapper.append($resetAllButton);
-      $resetAllButton.click(function () {
+      $resetAllButton.find('a').click(function () {
         window.uipp_analytics('uipp-data-reset', 'all');
         window._resetConfig();
         window.location.reload();
