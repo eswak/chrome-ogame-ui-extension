@@ -2,12 +2,51 @@ var fn = function () {
   'use strict';
   window._addCurrentPlanetStorageHelper = function _addCurrentPlanetStorageHelper () {
     var resources = window._getCurrentPlanetResources();
+    var resourcesArr = ['metal', 'crystal', 'deuterium'];
+    var tooltips;
+    try {
+      tooltips = JSON.parse(
+        window.initAjaxResourcebox.toString()
+          .replace('function initAjaxResourcebox(){reloadResources(', '')
+          .replace(new RegExp('\\);}$'), '')
+      );
+    }
+    catch (e) {
+      console.log('uipp : error while parsing resource tooltips');
+    }
 
     if (resources) {
-      // indicates storage left (in time) and total storage time
-      $('#metal_box .value').append('<br><span class="enhancement storageleft">' + window._time((resources.metal.max - resources.metal.now) / resources.metal.prod, -1) + (window._time(resources.metal.max / resources.metal.prod).length > 0 ? ' (' + window._time(resources.metal.max / resources.metal.prod) + ')' : '') + '</span>');
-      $('#crystal_box .value').append('<br><span class="enhancement storageleft">' + window._time((resources.crystal.max - resources.crystal.now) / resources.crystal.prod, -1) + (window._time(resources.crystal.max / resources.crystal.prod).length > 0 ? ' (' + window._time(resources.crystal.max / resources.crystal.prod) + ')' : '') + '</span>');
-      $('#deuterium_box .value').append('<br><span class="enhancement storageleft">' + window._time((resources.deuterium.max - resources.deuterium.now) / resources.deuterium.prod, -1) + (window._time(resources.deuterium.max / resources.deuterium.prod).length > 0 ? ' (' + window._time(resources.deuterium.max / resources.deuterium.prod) + ')' : '') + '</span>');
+      resourcesArr.forEach(function (resource) {
+        // indicates storage left (in time)
+        $('#' + resource + '_box .value').append([
+          '<br>',
+          '<span class="enhancement storageleft">',
+          window._time((resources[resource].max - resources[resource].now) / resources[resource].prod, -1),
+          '</span>'
+        ].join(''));
+
+        // add indicators to tooltip
+        if (!tooltips) {
+          return;
+        }
+
+        var tempTooltip = tooltips[resource].tooltip.replace(
+          '</table>',
+          [
+            '<tr class="enhancement">',
+            '<th>' + window._translate('CURRENT_STORAGE_TIME') + ' :</th>',
+            '<td>' + window._time((resources[resource].max - resources[resource].now) / resources[resource].prod, -1) + '</td>',
+            '</tr>',
+            '<tr class="enhancement">',
+            '<th>' + window._translate('TOTAL_STORAGE_TIME') + ' :</th>',
+            '<td>' + (window._time(resources[resource].max / resources[resource].prod).length > 0 ? window._time(resources[resource].max / resources[resource].prod) : '') + '</td>',
+            '</tr>',
+            '</table>'
+          ].join('')
+        );
+
+        window.changeTooltip($('#' + resource + '_box'), tempTooltip);
+      });
     }
   };
 };
