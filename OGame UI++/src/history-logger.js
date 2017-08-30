@@ -21,7 +21,7 @@ var fn = function () {
 
       // keep max. MAX_ENTRIES days of stats
       // keep all for current player
-      var MAX_ENTRIES = 3;
+      var MAX_ENTRIES = 2;
       if (playerId === $('[name=ogame-player-id]').attr('content')) {
         continue;
       }

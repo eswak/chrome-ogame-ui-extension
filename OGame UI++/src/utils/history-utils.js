@@ -2,7 +2,7 @@ var fn = function () {
   'use strict';
 
   window._getPlayerScoreTrend = function _getPlayerScoreTrend (playerId, type, minEntries, maxEntries) {
-    minEntries = minEntries || 3;
+    minEntries = minEntries || 2;
     maxEntries = maxEntries || minEntries;
     window.config.history = window.config.history || {};
     var playerScores = [];
