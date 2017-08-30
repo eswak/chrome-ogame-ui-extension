@@ -3,29 +3,50 @@ var fn = function () {
   window._addCurrentPlanetStorageHelper = function _addCurrentPlanetStorageHelper () {
     var resources = window._getCurrentPlanetResources();
     var resourcesArr = ['metal', 'crystal', 'deuterium'];
-    var tooltips = JSON.parse(
-      window.initAjaxResourcebox.toString()
-        .replace('function initAjaxResourcebox(){reloadResources(', '')
-        .replace(new RegExp('\\);}$'), '')
-    );
+    var tooltips;
+    try {
+      tooltips = JSON.parse(
+        window.initAjaxResourcebox.toString()
+          .replace('function initAjaxResourcebox(){reloadResources(', '')
+          .replace(new RegExp('\\);}$'), '')
+      );
+    }
+    catch (e) {
+      console.log('uipp : error while parsing resource tooltips');
+    }
 
     if (resources) {
-      for (var i = 0; i < resourcesArr.length; i++) {
+      resourcesArr.forEach(function (resource) {
         // indicates storage left (in time)
-        $('#' + resourcesArr[i] + '_box .value').append('<br><span class="enhancement storageleft">' + window._time((resources[resourcesArr[i]].max - resources[resourcesArr[i]].now) / resources[resourcesArr[i]].prod, -1) + '</span>');
+        $('#' + resource + '_box .value').append([
+          '<br>',
+          '<span class="enhancement storageleft">',
+          window._time((resources[resource].max - resources[resource].now) / resources[resource].prod, -1),
+          '</span>'
+        ].join(''));
 
         // add indicators to tooltip
-        var tempTooltip = tooltips[resourcesArr[i]].tooltip.replace(
+        if (!tooltips) {
+          return;
+        }
+
+        var tempTooltip = tooltips[resource].tooltip.replace(
           '</table>',
           [
-            '<tr class="enhancement"><th>Time untill full:</th><td>' + window._time((resources[resourcesArr[i]].max - resources[resourcesArr[i]].now) / resources[resourcesArr[i]].prod, -1) + '</td></tr>',
-            '<tr class="enhancement"><th>Total storage time:</th><td>' + (window._time(resources[resourcesArr[i]].max / resources[resourcesArr[i]].prod).length > 0 ? window._time(resources[resourcesArr[i]].max / resources[resourcesArr[i]].prod) : '') + '</td></tr>',
+            '<tr class="enhancement">',
+            '<th>' + window._translate('CURRENT_STORAGE_TIME') + ' :</th>',
+            '<td>' + window._time((resources[resource].max - resources[resource].now) / resources[resource].prod, -1) + '</td>',
+            '</tr>',
+            '<tr class="enhancement">',
+            '<th>' + window._translate('TOTAL_STORAGE_TIME') + ' :</th>',
+            '<td>' + (window._time(resources[resource].max / resources[resource].prod).length > 0 ? window._time(resources[resource].max / resources[resource].prod) : '') + '</td>',
+            '</tr>',
             '</table>'
           ].join('')
         );
 
-        changeTooltip($('#' + resourcesArr[i] + '_box'), tempTooltip);
-      }
+        window.changeTooltip($('#' + resource + '_box'), tempTooltip);
+      });
     }
   };
 };

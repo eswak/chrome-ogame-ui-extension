@@ -4,6 +4,8 @@ var fn = function () {
 
   var translations = {
     fr: {
+      CURRENT_STORAGE_TIME: 'Hangar plein dans',
+      TOTAL_STORAGE_TIME: 'Capacité de stockage',
       NEXT_MOST_RENTABLE_BUILDS: 'Prochaines actions les plus rentables',
       RENTABILITY_ASTRO: 'Montez astrophysique niveau {level}, et colonisez.<br>Montez les mines niveau : {mineLevel}<br><br>Temps d\'économies pour Astrophysique : {astroTime}<br>Coût pour Astrophysique : {astroCost}<br><br>Temps d\'économies pour les mines : {mineEconomyTime}<br>Coût total des mines : {mineCost}<br><br>Temps de rentabilité des mines de la nouvelle colonie : {mineTime}',
       RENTABILITY_MINE_METAL: 'Montez votre mine de métal niveau {level} sur {coords}.<br><br>Temps d\'économies pour lancer la construction : {economyTime}<br>Coût : {totalCost}',
@@ -50,6 +52,8 @@ var fn = function () {
       STATS_RATIO: 'Ratio de production (rapport au '
     },
     en: {
+      CURRENT_STORAGE_TIME: 'Time until full',
+      TOTAL_STORAGE_TIME: 'Total storage time',
       NEXT_MOST_RENTABLE_BUILDS: 'Next best ROI',
       RENTABILITY_ASTRO: 'Level up astrophysics to level {level}, and make a new colony.<br>Level up the new colony\'s mines to {mineLevel}<br><br>Time for resource-gathering of astrophysics : {astroTime}<br>Cost of astrophysics : {astroCost}<br><br>Time for resource-gathering of mines (total) : {mineEconomyTime}<br>Total mine cost : {mineCost}<br><br>New colony mines ROI : {mineTime}',
       RENTABILITY_MINE_METAL: 'Level up your metal mine to level {level} on {coords}<br><br>Time for resource-gathering : {economyTime}<br>Cost : {totalCost}',
@@ -265,7 +269,7 @@ var fn = function () {
   }
 
   window._translate = function _translate (key, args) {
-    var ret = translations[lang][key] || key;
+    var ret = translations[lang][key] || translations['en'][key] || key;
     for (var k in args) {
       if (args.noBold) {
         ret = ret.replace('{' + k + '}', args[k]);
