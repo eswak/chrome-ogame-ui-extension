@@ -29,7 +29,7 @@ var fn = function () {
     }
 
     var tabhtml = [
-      '<div style="float: left; margin-top: 2em;">',
+      '<div style="float: left; margin-top: 2em; width: 100%">',
       '<table class="uipp-table bordered">',
       '<thead id="highscoreContent">',
       '<tr>',
@@ -58,11 +58,15 @@ var fn = function () {
           '<td data-value="' + window._getPlayerScoreTrend(alliancePlayer.id, 's').n + '">' + window._getPlayerScoreTrend(alliancePlayer.id, 's').html + '</td>',
           '<td data-value="' + alliancePlayer.economyScore + '">', window.uipp_scoreHumanReadable(alliancePlayer.economyScore) + '</td>',
           '<td data-value="' + window._getPlayerScoreTrend(alliancePlayer.id, 'e').n + '">' + window._getPlayerScoreTrend(alliancePlayer.id, 'e').html + '</td>',
-          '<td>',
+          '<td data-value="' + alliancePlayer.planets.length + '">',
+          '<span class="tooltip tooltipRel tooltipClose tooltipRight" rel="planets-' + alliancePlayer.id + '">',
+          alliancePlayer.planets.length,
+          '</span>',
+          '<div id="planets-' + alliancePlayer.id + '" style="display:none">',
           alliancePlayer.planets.map(function (planet) {
-            return '<a href="/game/index.php?page=galaxy&galaxy=' + planet.coords[0] + '&system=' + planet.coords[1] + '&position=' + planet.coords[2] + '">[' + planet.coords.join(':') + ']</a>';
-          }).join(' '),
-
+            return '<a href=\'/game/index.php?page=galaxy&galaxy=' + planet.coords[0] + '&system=' + planet.coords[1] + '&position=' + planet.coords[2] + '\'>[' + planet.coords.join(':') + ']</a>';
+          }).join('<br>'),
+          '</div>',
           '</td>',
           '</tr>'
         ].join('');
