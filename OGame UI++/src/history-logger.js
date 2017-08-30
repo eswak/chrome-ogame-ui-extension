@@ -33,6 +33,13 @@ var fn = function () {
       }
     }
 
+    // purge deleted players from history
+    for (var historyPlayerId in window.config.history) {
+      if (!window.config.players[historyPlayerId]) {
+        delete window.config.history[historyPlayerId];
+      }
+    }
+
     window._saveConfig();
   };
 };
