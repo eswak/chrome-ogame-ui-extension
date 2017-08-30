@@ -19,10 +19,15 @@ var fn = function () {
       });
 
       if (costs.metal || costs.crystal || costs.deuterium) {
-        _addRessourceCountHelper();
-        // _addLimitingReagentHelper();
-        _addProductionEconomyTimeTextHelper(costs);
-        _addProductionRentabilityTimeTextHelper(costs);
+        if (window.config.features.missingresources) {
+          _addRessourceCountHelper();
+          // _addLimitingReagentHelper();
+        }
+
+        if (window.config.features.minetext) {
+          _addProductionEconomyTimeTextHelper(costs);
+          _addProductionRentabilityTimeTextHelper(costs);
+        }
 
         // for non-commanders only
         // if ($('.commander.on').length === 0) {

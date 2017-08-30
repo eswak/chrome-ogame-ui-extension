@@ -24,6 +24,7 @@ var uipp_images = {
     deploytransport: chrome.extension.getURL('img/features/deploytransport.png'),
     galaxy: chrome.extension.getURL('img/features/galaxy.png'),
     minetext: chrome.extension.getURL('img/features/minetext.png'),
+    missingresources: chrome.extension.getURL('img/features/missingresources.png'),
     nextbuilds: chrome.extension.getURL('img/features/nextbuilds.png'),
     solarsat: chrome.extension.getURL('img/features/solarsat.png'),
     stats: chrome.extension.getURL('img/features/stats.png'),
@@ -49,12 +50,14 @@ var userscript = function () {
   window._setConfigMyPlanets();
   window._parseResearchTab();
 
-  window.config.features = window.config.features || {
+  window.config.features = window.config.features || {};
+  var defaultFeatures = {
     alliance: true,
     charts: true,
     deploytransport: true,
     galaxy: true,
     minetext: true,
+    missingresources: true,
     nextbuilds: true,
     solarsat: true,
     stats: true,
@@ -64,8 +67,10 @@ var userscript = function () {
     topgeneral: true,
     topresearch: true
   };
-  if (typeof window.config.features.topresearch !== 'boolean') {
-    window.config.features.topresearch = true;
+  for (var featureKey in defaultFeatures) {
+    if (typeof window.config.features[featureKey] !== 'boolean') {
+      window.config.features[featureKey] = defaultFeatures[featureKey];
+    }
   }
 
   var features = window.config.features;
@@ -102,7 +107,7 @@ var userscript = function () {
     window._addGalaxyPlayersPlanetsInterval();
   }
 
-  if (features.minetext) {
+  if (features.minetext || features.missingresources) {
     window._addCostsHelperInterval();
   }
 
