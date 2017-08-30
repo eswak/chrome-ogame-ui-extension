@@ -45,7 +45,7 @@ var fn = function () {
         }
 
         // add note text field
-        $this.append('<style scoped>::-webkit-input-placeholder{color:#AB7AFF}</style>');
+        $this.append('<style scoped>::-webkit-input-placeholder{color:#AB7AFF; opacity:0.4;}</style>');
         $this.append($('<input class="enhancement uipp-spynote" value="' + note + '" onkeyup="_editNote(' + coordinates.split(':').join(',') + ', this.value); return false;" type="text" placeholder="Empty planet note"/>')
           .css({
             'width': '555px',
