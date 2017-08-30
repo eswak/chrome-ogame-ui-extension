@@ -6,13 +6,12 @@ var fn = function () {
       return;
     }
 
-    // use an interval and not the DOMSubtreeModified event, because it causes
-    // performance inssue
-    setInterval(function () {
+    function domModified () {
       $('span.msg_title:not(.enhanced)').each(function (idx, element) {
         var $this = $(this);
         $this.addClass('enhanced');
-
+        console.log('DOMSubtreeModified');
+        
         // don't enhance our-planets-activty
         if ($this.parent().parent().find('.espionageDefText').length !== 0) {
           return;
@@ -61,7 +60,11 @@ var fn = function () {
           })
         );
       });
-    }, 100);
+      $('#contentWrapper').one('DOMSubtreeModified', domModified);
+    }
+
+    // attach to DOMSubtreeModified event
+    domModified();
 
     function _getPlanetCoords (text) {
       var start = text.indexOf('[');
