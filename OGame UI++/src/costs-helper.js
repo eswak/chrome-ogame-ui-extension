@@ -9,21 +9,17 @@ var fn = function () {
     }
 
     var resNames = ['metal', 'crystal', 'deuterium'];
-    var availableIn = {};
+    var missingResources = {};
 
     setInterval(function () {
       var costs = {};
       resNames.forEach(function (res) {
         costs[res] = window._gfNumberToJsNumber($('.' + res + '.tooltip .cost').first().text().trim()),
-        availableIn[res] = (costs[res] - resources[res].now) / resources[res].prod;
+        missingResources[res] = costs[res] - resources[res].now;
       });
 
-      if (isNaN(availableIn.deuterium)) { // we may not produce any deuterium...
-        availableIn.deuterium = costs.deuterium > resources.deuterium.now ? 8553600 : 0;
-      }
-
       if (costs.metal || costs.crystal || costs.deuterium) {
-        // _addRessourceCountTimeHelper();
+        _addRessourceCountHelper();
         // _addLimitingReagentHelper();
         _addProductionEconomyTimeTextHelper(costs);
         _addProductionRentabilityTimeTextHelper(costs);
@@ -36,12 +32,12 @@ var fn = function () {
       }
     }, 100);
 
-    function _addRessourceCountTimeHelper () {
+    function _addRessourceCountHelper () {
       resNames.forEach(function (res) {
         var $element = $('.' + res + '.tooltip:not(.enhanced)').first();
         if ($element.find('.' + res).length > 0) {
-          if (availableIn[res] > 0) {
-            $element.append('<div class="enhancement">' + window._time(availableIn[res], -1) + '</div>');
+          if (missingResources[res] > 0) {
+            $element.append('<div class="enhancement">-' + window._num(missingResources[res], -1 * resources[res].prod) + '</div>');
           }
 
           $element.addClass('enhanced');
@@ -51,10 +47,17 @@ var fn = function () {
 
     function _addLimitingReagentHelper () {
       var limitingreagent = null;
+      var availableInLimitingReagent = null;
       ['metal', 'crystal', 'deuterium'].forEach(function (res) {
-        if (availableIn[res] && availableIn[res] > 0) {
-          if (limitingreagent === null || availableIn[res] > availableIn[limitingreagent]) {
+        var availableIn = missingResources[res] / resources[res].prod;
+        if (isNaN(availableIn)) {
+          availableIn = Infinity;
+        }
+
+        if (availableIn && availableIn > 0) {
+          if (limitingreagent === null || availableIn > availableInLimitingReagent) {
             limitingreagent = res;
+            availableInLimitingReagent = availableIn;
           }
         }
       });
