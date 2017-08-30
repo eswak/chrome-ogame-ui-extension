@@ -11,6 +11,8 @@ var fn = function () {
         ep: Number(window.config.players[playerId].economyPosition) || 0,
         m: Number(window.config.players[playerId].militaryScore) || 0,
         mp: Number(window.config.players[playerId].militaryPosition) || 0,
+        h: Number(window.config.players[playerId].honorScore) || 0,
+        hp: Number(window.config.players[playerId].honorPosition) || 0,
         r: Number(window.config.players[playerId].researchScore) || 0,
         rp: Number(window.config.players[playerId].researchPosition) || 0,
         g: Number(window.config.players[playerId].globalScore) || 0,

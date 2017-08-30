@@ -77,24 +77,37 @@ var fn = function () {
                             });
 
                             $.ajax({
-                              url: '/api/alliances.xml',
+                              url: '/api/highscore.xml?category=1&type=7',
                               dataType: 'xml',
-                              success: function (alliancesData) {
-                                $('player', alliancesData).each(function () {
-                                  var playerId = $(this).attr('id');
-                                  var allianceId = $(this).parent().attr('id');
-                                  if (players[playerId]) {
-                                    players[playerId].alliance = allianceId;
+                              success: function (honorScores) {
+                                $('player', honorScores).each(function () {
+                                  if (players[$(this).attr('id')]) {
+                                    players[$(this).attr('id')].honorPosition = $(this).attr('position');
+                                    players[$(this).attr('id')].honorScore = $(this).attr('score');
                                   }
                                 });
 
                                 $.ajax({
-                                  url: '/api/serverData.xml',
+                                  url: '/api/alliances.xml',
                                   dataType: 'xml',
-                                  success: function (data) {
-                                    var universe = window.xml2json(data).serverData;
-                                    console.log('OGame UI++ : loaded universe data.');
-                                    cb && cb(players, universe);
+                                  success: function (alliancesData) {
+                                    $('player', alliancesData).each(function () {
+                                      var playerId = $(this).attr('id');
+                                      var allianceId = $(this).parent().attr('id');
+                                      if (players[playerId]) {
+                                        players[playerId].alliance = allianceId;
+                                      }
+                                    });
+
+                                    $.ajax({
+                                      url: '/api/serverData.xml',
+                                      dataType: 'xml',
+                                      success: function (data) {
+                                        var universe = window.xml2json(data).serverData;
+                                        console.log('OGame UI++ : loaded universe data.');
+                                        cb && cb(players, universe);
+                                      }
+                                    });
                                   }
                                 });
                               }
