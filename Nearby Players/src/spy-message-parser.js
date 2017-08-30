@@ -10,8 +10,7 @@ var fn = function () {
       $('span.msg_title:not(.enhanced)').each(function (idx, element) {
         var $this = $(this);
         $this.addClass('enhanced');
-        console.log('DOMSubtreeModified');
-        
+
         // don't enhance our-planets-activty
         if ($this.parent().parent().find('.espionageDefText').length !== 0) {
           return;
