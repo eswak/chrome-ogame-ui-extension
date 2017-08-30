@@ -9,7 +9,7 @@
     "js": [
       "src/tab-idle-players.js",
       "src/tab-neighbors.js",
-      "src/messages-spionage.js",
+      "src/spy-message-parser.js",
       "main.js"
     ],
     "matches": [
