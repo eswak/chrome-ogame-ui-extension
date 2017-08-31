@@ -10,6 +10,7 @@
       "src/tab-idle-players.js",
       "src/tab-neighbors.js",
       "src/spy-message-parser.js",
+      "src/costs-helper.js",
       "main.js"
     ],
     "matches": [
