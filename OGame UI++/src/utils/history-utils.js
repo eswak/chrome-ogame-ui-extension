@@ -40,7 +40,7 @@ var fn = function () {
 
     var timespan = (new Date(trend.lastDay).getTime() - new Date(trend.firstDay).getTime()) / (24 * 36e5) + 1;
     var diff = (trend.lastScore / (trend.firstScore || 1)) - 1;
-    var diffPerDay = Math.round(100 * (diff / timespan));
+    var diffPerDay = Math.round(100 * (diff / ((timespan - 1) || 1)));
 
     var str;
     if (diffPerDay > 0) {
