@@ -15,6 +15,7 @@ var userscript = function () {
     window._addTabIdlePlayers();
     window._addTabNeighbors();
     window._addPlanetsNotes();
+    window._addCostsHelperInterval();
   }, 10);
 };
 
