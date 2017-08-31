@@ -25,9 +25,6 @@
   ],
   "content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'",
   "content_scripts": [ {
-    "exclude_globs": [  ],
-    "exclude_matches": [  ],
-    "include_globs": [  ],
     "css": [
       "lib/chartist.min.css"
     ],
@@ -76,7 +73,6 @@
     ],
     "run_at": "document_idle"
   } ],
-  "converted_from_user_script": true,
   "version": "3.5.0",
   "name": "__MSG_appName__",
   "description": "__MSG_appDesc__",
@@ -87,5 +83,10 @@
     "48": "metalmine.48.jpeg",
     "128": "metalmine.128.jpeg"
   },
-  "author": "Eswak"
+  "author": "Eswak",
+  "applications": {
+    "gecko": {
+      "id": "uipp@allmyt.eu"
+    }
+  }
 }
