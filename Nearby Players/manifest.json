@@ -7,6 +7,7 @@
     "include_globs": [  ],
     "css": [],
     "js": [
+      "src/utils/dom-events.js",
       "src/tab-idle-players.js",
       "src/tab-neighbors.js",
       "src/spy-message-parser.js",
