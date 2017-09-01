@@ -11,7 +11,7 @@ var fn = function () {
     var resNames = ['metal', 'crystal', 'deuterium'];
     var missingResources = {};
 
-    setInterval(function () {
+    window._enhanceOnceOnDomChange ('#contentWrapper #content', function () {
       var costs = {};
       resNames.forEach(function (res) {
         costs[res] = window._gfNumberToJsNumber($('.' + res + '.tooltip .cost').first().text().trim()),
@@ -35,7 +35,7 @@ var fn = function () {
         //   _addProductionMaximumBuildableTextHelper(costs);
         // }
       }
-    }, 100);
+    });
 
     function _addRessourceCountHelper () {
       resNames.forEach(function (res) {

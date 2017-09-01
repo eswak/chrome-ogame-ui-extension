@@ -52,6 +52,7 @@
       "src/utils/xml2json.js",
       "src/utils/formulas.js",
       "src/utils/on-menu-click.js",
+      "src/utils/dom-events.js",
       "src/analytics.js",
       "src/costs-helper.js",
       "src/current-planet-storage-helper.js",

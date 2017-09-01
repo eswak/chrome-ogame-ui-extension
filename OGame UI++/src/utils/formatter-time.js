@@ -20,7 +20,9 @@ var fn = function () {
         actuatedSeconds = 0;
       }
 
-      $el.text(_format(actuatedSeconds));
+      actuatedSeconds = _format(actuatedSeconds);
+      if ($el.text() !== actuatedSeconds)
+        $el.text(actuatedSeconds);
     }, 100);
 
     return '<span id="time-' + id + '"></span>';

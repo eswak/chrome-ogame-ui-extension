@@ -10,7 +10,7 @@ var fn = function () {
     var resNames = ['metal', 'crystal', 'deuterium'];
     var availableIn = {};
 
-    setInterval(function () {
+    window._enhanceOnceOnDomChange ('#contentWrapper #content', function (idx, element) {
       var costs = {};
       resNames.forEach(function (res) {
         costs[res] = window._gfNumberToJsNumber($('.' + res + '.tooltip .cost').first().text().trim()),
@@ -31,17 +31,17 @@ var fn = function () {
           _addProductionMaximumBuildableTextHelper(costs);
         }
       }
-    }, 100);
+    });
 
     function _addRessourceCountTimeHelper () {
       resNames.forEach(function (res) {
-        var $element = $('.' + res + '.tooltip:not(.enhanced)').first();
+        // remove first 'ressource count helper'
+        $('.' + res + '.tooltip .enhancement').remove();
+        var $element = $('.' + res + '.tooltip').first();
         if ($element.find('.' + res).length > 0) {
           if (availableIn[res] > 0) {
             $element.append('<div class="enhancement">' + window._time(availableIn[res], -1) + '</div>');
           }
-
-          $element.addClass('enhanced');
         }
       });
     }

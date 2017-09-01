@@ -24,18 +24,23 @@ var fn = function () {
       var secondsSinceDisplay = Math.floor((Date.now() - start) / 1000);
       var updatedNumber = n + secondsSinceDisplay * increment;
       if (max && updatedNumber > max) { // if full
-        $el.text(window.gfNumberGetHumanReadable(n, true, 3));
+        setTextIfChanged($el, window.gfNumberGetHumanReadable(n, true, 3));
         $el.css('color', '#d43635');
       } else if (max && updatedNumber > (max - increment * 3 * 3600)) { // if less than 3h to full
-        $el.text(window.gfNumberGetHumanReadable(updatedNumber, true, 3));
+        setTextIfChanged($el, window.gfNumberGetHumanReadable(updatedNumber, true, 3));
         $el.css('color', '#d29d00');
       } else {
-        $el.text(window.gfNumberGetHumanReadable(updatedNumber, true, 3));
+        setTextIfChanged($el, window.gfNumberGetHumanReadable(updatedNumber, true, 3));
       }
     }, 100);
 
     return '<span id="number-' + id + '"></span>';
   };
+
+  function setTextIfChanged ($el, text) {
+    if ($el.text() !== text)
+      $el.text(text);
+  }
 
   window.uipp_diff = function (diff, isPercent, colored) {
     if (colored !== false) {
