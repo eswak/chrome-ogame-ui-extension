@@ -134,7 +134,7 @@ var fn = function () {
               '<td id="stat-' + planet.coords.join('-') + '-' + resource + '"',
               ' onclick="uipp_toggleSelect(this, \'' + resource + '\', ' + currentRealtimePlanetResources[resource] + ', ' + planet.resources[resource].prod + ')"',
               ' style="cursor:pointer;user-select:none;">',
-              '<div class="tooltip shadowed resourceIcon resourceIconDimmed ' + resource + '" style="position: relative; font-size: 20px; line-height: 32px;" title="' + tooltip + '">',
+              '<div class="tooltip shadowed" style="position: relative; font-size: 20px; line-height: 32px; float: left; width: 48px; height: 32px; background-image:url(' + window.uipp_images.resources[resource] + ')" title="' + tooltip + '">',
               planet.resources[resource].level,
               inprog ? '<span class="icon12px icon_wrench" style="position:absolute;bottom:-3px;right:0;"></span>' : '',
               '</div>',
@@ -201,7 +201,7 @@ var fn = function () {
           ['metal', 'crystal', 'deuterium'].map(function (resource) {
             return [
               '<td id="stat-flight">',
-              '<div class="shadowed resourceIcon resourceIconDimmed ' + resource + '"></div>',
+              '<div class="shadowed" style="float: left; width: 48px; height: 32px; background-image:url(' + window.uipp_images.resources[resource] + ')"></div>',
               '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
               '<div style="padding-top: 11px;">' + window._num(selected[resource].current, selected[resource].production) + '</div>',
               '</div>',
@@ -279,7 +279,7 @@ var fn = function () {
           ['metal', 'crystal', 'deuterium'].map(function (resource) {
             return [
               '<td onclick="uipp_toggleSelect(this, \'' + resource + '\', ' + inflight[resource] + ', 0)" style="cursor:pointer;user-select:none;">',
-              '<div class="shadowed resourceIcon resourceIconDimmed ' + resource + '"></div>',
+              '<div class="shadowed" style="float: left; width: 48px; height: 32px; background-image:url(' + window.uipp_images.resources[resource] + ')"></div>',
               '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
               '<div style="padding-top: 11px;">' + window._num(inflight[resource]) + '</div>',
               '</div>',
@@ -305,7 +305,7 @@ var fn = function () {
           }).slice(0, 3);
           return [
             '<td id="stat-flight">',
-            '<div class="shadowed resourceIcon resourceIconDimmed ' + resource + '" style="font-size: 20px; line-height: 32px;">',
+            '<div class="shadowed" style="float: left; width: 48px; height: 32px; background-image:url(' + window.uipp_images.resources[resource] + ')">',
             fullInTop3.map(function (fullInEntry) {
               return '<div style="font-size:9px;line-height:11px">' + window._time(fullInEntry.time, -1) + '</div>';
             }).join(''),
@@ -340,7 +340,9 @@ var fn = function () {
         ['metal', 'crystal', 'deuterium'].map(function (resource) {
           return [
             '<td>',
-            '<div class="shadowed resourceIcon resourceIconDimmed ' + resource + '" style="font-size: 20px; line-height: 32px;">' + Math.floor(10 * globalStats.level[resource]) / 10 + '</div>',
+            '<div class="shadowed" style="font-size: 20px; line-height: 32px; float: left; width: 48px; height: 32px; background-image:url(' + window.uipp_images.resources[resource] + ')">',
+            Math.floor(10 * globalStats.level[resource]) / 10,
+            '</div>',
             '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em; padding-bottom: 3px">',
             '<div class="font-weight: bold; padding-bottom: 1px;">' + window._num(globalStats.current[resource], globalStats.prod[resource]) + '</div>',
             '<div><span class="undermark">+' + window._num(Math.floor(globalStats.prod[resource] * 3600)) + '</span> /' + window._translate('TIME_HOUR') + '</div>',

@@ -33,6 +33,11 @@ var uipp_images = {
     topfleet: chrome.extension.getURL('img/features/topfleet.png'),
     topgeneral: chrome.extension.getURL('img/features/topgeneral.png'),
     topresearch: chrome.extension.getURL('img/features/topresearch.png')
+  },
+  resources: {
+    metal: chrome.extension.getURL('img/resources/metal.png'),
+    crystal: chrome.extension.getURL('img/resources/crystal.png'),
+    deuterium: chrome.extension.getURL('img/resources/deuterium.png')
   }
 };
 var imgScript = document.createElement('script');
