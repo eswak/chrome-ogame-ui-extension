@@ -5,6 +5,8 @@ var fn = function () {
 
     if ($('.planetlink.active').length > 0) {
       coordinates = $('.planetlink.active').find('.planet-koords').text().replace('[', '').replace(']', '').split(':');
+    } else if ($('.moonlink.active').length > 0) {
+      coordinates = $('.moonlink.active').parent().find('.planet-koords').text().replace('[', '').replace(']', '').split(':');
     } else {
       coordinates = $('.planetlink').find('.planet-koords').text().replace('[', '').replace(']', '').split(':');
     }

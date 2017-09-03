@@ -29,6 +29,14 @@ var fn = function () {
           window.config.my.planets[planetCoords].coords = planetCoords.replace(/[[\]]/g, '').split(':').map(Number);
           window.config.my.planets[planetCoords].href = link.attr('href');
         }
+
+        if ($(this).find('.moonlink').length) {
+          window.config.my.planets[planetCoords + 'L'] = window.config.my.planets[planetCoords + 'L'] || {};
+          window.config.my.planets[planetCoords + 'L'].coords = planetCoords.replace(/[[\]]/g, '').split(':').map(Number);
+          window.config.my.planets[planetCoords + 'L'].href = $(this).find('.moonlink').attr('href');
+          window.config.my.planets[planetCoords + 'L'].isMoon = true;
+          window.config.my.planets[planetCoords].moon = planetCoords + 'L';
+        }
       });
     }
 

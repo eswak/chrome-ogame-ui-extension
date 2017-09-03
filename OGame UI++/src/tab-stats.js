@@ -40,7 +40,7 @@ var fn = function () {
 
       var myPlanets = [];
       for (var coords in window.config.my.planets) {
-        if (window.config.my.planets[coords].resources) {
+        if (window.config.my.planets[coords].resources && !window.config.my.planets[coords].isMoon) {
           myPlanets.push(window.config.my.planets[coords]);
         }
       }
@@ -136,16 +136,24 @@ var fn = function () {
               ].join('');
             }
 
+            var moonResource = 0;
+            if (planet.moon) {
+              var moonResources = window.config.my.planets[planet.moon].resources;
+              if (moonResources) {
+                moonResource = moonResources[resource].now;
+              }
+            }
+
             return [
               '<td id="stat-' + planet.coords.join('-') + '-' + resource + '"',
-              ' onclick="uipp_toggleSelect(this, \'' + resource + '\', ' + currentRealtimePlanetResources[resource] + ', ' + planet.resources[resource].prod + ')"',
+              ' onclick="uipp_toggleSelect(this, \'' + resource + '\', ' + (currentRealtimePlanetResources[resource] + moonResource) + ', ' + planet.resources[resource].prod + ')"',
               ' style="cursor:pointer;user-select:none;">',
               '<div class="tooltip shadowed" style="position: relative; font-size: 20px; line-height: 32px; float: left; width: 48px; height: 32px; background-image:url(' + window.uipp_images.resources[resource] + ')" title="' + tooltip + '">',
               planet.resources[resource].level,
               inprog ? '<span class="icon12px icon_wrench" style="position:absolute;bottom:-3px;right:0;"></span>' : '',
               '</div>',
               '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
-              '<div>' + window._num(currentRealtimePlanetResources[resource], planet.resources[resource].prod, planet.resources[resource].max) + '</div>',
+              '<div>' + window._num(currentRealtimePlanetResources[resource], planet.resources[resource].prod, planet.resources[resource].max) + (planet.moon ? (' + <span class="overmark">' + window._num(moonResource) + '</span>') : '') + '</div>',
               '<div><span class="undermark">+' + window._num(Math.floor(planet.resources[resource].prod * 3600)) + '</span> /' + window._translate('TIME_HOUR') + '</div>',
               '<div><span class="undermark">+' + window._num(Math.floor(planet.resources[resource].prod * 3600 * 24)) + '</span> /' + window._translate('TIME_DAY') + '</div>',
               '</div>',
