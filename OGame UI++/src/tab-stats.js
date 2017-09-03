@@ -741,11 +741,13 @@ var fn = function () {
       };
       for (var key in window.config.my.planets) {
         var myPlanet = window.config.my.planets[key];
-        ['metal', 'crystal', 'deuterium'].forEach(function (res) {
-          if (myPlanet.resources[res].level < lowestMineLevels[res]) {
-            lowestMineLevels[res] = myPlanet.resources[res].level;
-          }
-        });
+        if (myPlanet.resources) {
+          ['metal', 'crystal', 'deuterium'].forEach(function (res) {
+            if (myPlanet.resources[res].level < lowestMineLevels[res]) {
+              lowestMineLevels[res] = myPlanet.resources[res].level;
+            }
+          });
+        }
       }
       return lowestMineLevels;
     }

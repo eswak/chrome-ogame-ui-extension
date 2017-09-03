@@ -23,12 +23,14 @@ var fn = function () {
       var nextLevelGlobalProdWorth = 0;
       for (var coords in window.config.my.planets) {
         var planet = window.config.my.planets[coords];
-        currentGlobalProdWorth += planet.resources.metal.prod * worth.metal +
-          planet.resources.crystal.prod * worth.crystal +
-          planet.resources.deuterium.prod * worth.deuterium;
-        nextLevelGlobalProdWorth += planet.resources.metal.prod * worth.metal * 1.01 +
-          planet.resources.crystal.prod * worth.crystal * 1.0066 +
-          planet.resources.deuterium.prod * worth.deuterium * 1.0033;
+        if (planet.resources) {
+          currentGlobalProdWorth += planet.resources.metal.prod * worth.metal +
+            planet.resources.crystal.prod * worth.crystal +
+            planet.resources.deuterium.prod * worth.deuterium;
+          nextLevelGlobalProdWorth += planet.resources.metal.prod * worth.metal * 1.01 +
+            planet.resources.crystal.prod * worth.crystal * 1.0066 +
+            planet.resources.deuterium.prod * worth.deuterium * 1.0033;
+        }
       }
 
       var plasmaCosts = window.uipp_getCost('plasma', level);
