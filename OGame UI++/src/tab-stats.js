@@ -64,11 +64,17 @@ var fn = function () {
           });
         });
 
-        var currentRealtimePlanetResources = {
-          metal: Math.round(planet.resources.metal.now + planet.resources.metal.prod * ((Date.now() - planet.resources.lastUpdate) / 1000)),
-          crystal: Math.round(planet.resources.crystal.now + planet.resources.crystal.prod * ((Date.now() - planet.resources.lastUpdate) / 1000)),
-          deuterium: Math.round(planet.resources.deuterium.now + planet.resources.deuterium.prod * ((Date.now() - planet.resources.lastUpdate) / 1000))
-        };
+        var currentRealtimePlanetResources = {};
+        ['metal', 'crystal', 'deuterium'].forEach(function (resource) {
+          var actuatedAmount = Math.round(planet.resources[resource].now + planet.resources[resource].prod * ((Date.now() - planet.resources.lastUpdate) / 1000));
+          if (planet.resources[resource].now > planet.resources[resource].max) {
+            currentRealtimePlanetResources[resource] = planet.resources[resource].now;
+          } else if (actuatedAmount > planet.resources[resource].max) {
+            currentRealtimePlanetResources[resource] = planet.resources[resource].max;
+          } else {
+            currentRealtimePlanetResources[resource] = actuatedAmount;
+          }
+        });
 
         // add storage time to array
         ['metal', 'crystal', 'deuterium'].forEach(function (resource) {
