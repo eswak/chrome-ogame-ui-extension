@@ -6,7 +6,7 @@ var fn = function () {
 
       if ($el.length) {
         $el.addClass('enhanced');
-        var energy = Number($('#resources_energy').text());
+        var energy = Number($('#resources_energy').text().replace(/\./g, ''));
 
         if (energy < 0) {
           var $production = $('.production_info .time .undermark');
