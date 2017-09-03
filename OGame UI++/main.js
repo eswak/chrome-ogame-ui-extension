@@ -1,6 +1,7 @@
 // inject libs
 var libs = [
-  'lib/chartist.min.js'
+  'lib/chartist.min.js',
+  'lib/dom-to-image.min.js'
 ];
 libs.forEach(function (path) {
   var lib = document.createElement('script');

@@ -370,6 +370,38 @@ var fn = function () {
         '<tr><td style="height:10px"></td></tr>'
       ].join('') + planetStatsHtml;
 
+      planetStatsHtml += [
+        '<tr>',
+        '<td colspan="4" style="text-align:center;padding-top:15px" class="enhancement">',
+        '<span class="icon_nf icon_share" style="cursor:pointer;" onclick="_shareStats(this)"></span>',
+        '</td>',
+        '</tr>'
+      ].join('');
+
+      window._shareStats = function _shareStats (el) {
+        var $el = $(el);
+        var $parent = $el.parent();
+        var dateStr = new Date().toISOString().split('T')[0];
+        var text = [
+          window.config.universe.language + window.config.universe.number,
+          $('meta[name="ogame-player-name"]').attr('content'),
+          dateStr
+        ].join(' - ');
+        $parent.html([
+          '<div>' + text + '</div>',
+          '<div>Created with OGame UI++ (goo.gl/hXeoZn)</div>'
+        ].join(''));
+
+        window._getScreenshotLink($('.uiEnhancementWindow .uipp-table')[0], function (err, link) {
+          if (err) {
+            return window.fadeBox('Error while uploading screenshot', true);
+          }
+
+          window.fadeBox('Screenshot saved to imgur.com', false);
+          $parent.html(link);
+        });
+      };
+
       if (window.config.features.stats) {
         $wrapper.append($('<table class="uipp-table">' + planetStatsHtml + '</table>'));
       }

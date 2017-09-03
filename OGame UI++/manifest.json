@@ -1,6 +1,7 @@
 {
   "web_accessible_resources": [
     "lib/chartist.min.js",
+    "lib/dom-to-image.min.js",
     "img/features/alliance.png",
     "img/features/charts.png",
     "img/features/deploytransport.png",
@@ -52,6 +53,7 @@
       "src/utils/set-config-trade-rate.js",
       "src/utils/toggle-ignore-planet.js",
       "src/utils/parse-research-tab.js",
+      "src/utils/upload-image.js",
       "src/utils/xml2json.js",
       "src/utils/formulas.js",
       "src/utils/on-menu-click.js",
