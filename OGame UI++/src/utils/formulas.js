@@ -69,15 +69,29 @@ var fn = function () {
     return totalCost;
   }
 
-  window.uipp_getProduction = function uipp_getProduction (type, level) {
+  window.uipp_getProduction = function uipp_getProduction (type, level, averageTemp, additionalMultiplier) {
     var speed = Number(window.config.universe.speed);
+
+    var multiplier = 1 + (additionalMultiplier || 0);
+    if ($('.geologist.on').length) {
+      multiplier += 0.1;
+    }
+    if ($('#officers.all').length) {
+      multiplier += 0.02;
+    }
+
+    averageTemp = averageTemp || 30;
+
     switch (type) {
     case 'metal':
-      return 30 * level * Math.pow(1.1, level) * speed * (1 + (window.config.plasmaTech || 0) * 0.01) + 30 * speed;
+      multiplier += (window.config.plasmaTech || 0) * 0.01;
+      return Math.round(30 * level * Math.pow(1.1, level) * speed * multiplier + 30 * speed);
     case 'crystal':
-      return 20 * level * Math.pow(1.1, level) * speed * (1 + (window.config.plasmaTech || 0) * 0.0066) + 15 * speed;
+      multiplier += (window.config.plasmaTech || 0) * 0.0066;
+      return Math.round(20 * level * Math.pow(1.1, level) * speed * multiplier + 15 * speed);
     case 'deuterium':
-      return 10 * level * Math.pow(1.1, level) * speed * (1 + (window.config.plasmaTech || 0) * 0.0033);
+      multiplier += (window.config.plasmaTech || 0) * 0.0033;
+      return Math.round(10 * level * Math.pow(1.1, level) * speed * multiplier * (1.36 - 0.004 * averageTemp));
     default:
       return null;
     }
