@@ -39,7 +39,9 @@ var fn = function () {
           window.config.my.planets[planetCoords + 'L'].coords = planetCoords.replace(/[[\]]/g, '').split(':').map(Number);
           window.config.my.planets[planetCoords + 'L'].href = $(this).find('.moonlink').attr('href');
           window.config.my.planets[planetCoords + 'L'].isMoon = true;
-          window.config.my.planets[planetCoords].moon = planetCoords + 'L';
+          if (window.config.my.planets[planetCoords]) {
+            window.config.my.planets[planetCoords].moon = planetCoords + 'L';
+          }
         }
       });
     }

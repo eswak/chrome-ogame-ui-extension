@@ -143,6 +143,7 @@ var fn = function () {
                 moonResource = moonResources[resource].now;
               }
             }
+            globalStats.current[resource] += moonResource;
 
             return [
               '<td id="stat-' + planet.coords.join('-') + '-' + resource + '"',
