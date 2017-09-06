@@ -617,22 +617,25 @@ var fn = function () {
       playerScores = playerScores.sort(function (a, b) {
         return a < b ? 1 : -1;
       });
-      var currentPlayer = window.config.players[$('[name=ogame-player-id]').attr('content')];
-      var playerPositionAfterCompletion = playerScores.filter(function (score) {
-        return score > (Number(currentPlayer.globalScore) + inprogPoints);
-      }).length;
 
       if (window.config.features.nextbuilds) {
-        $wrapper.append($([
-          '<div style="margin-top:50px;text-align: center;;font-size: 15px;padding-bottom: 10px;">',
-          window._translate('NEXT_MOST_RENTABLE_BUILDS'),
-          '</div>',
-          '<div style="text-align: center">',
-          '<span class="icon12px icon_wrench"></span> ',
-          '<span class="undermark">+' + inprogPoints + '</span> ',
-          '<span>(' + currentPlayer.globalPosition + ' → ' + playerPositionAfterCompletion + ')</span>',
-          '</div>'
-        ].join('')));
+        var currentPlayer = window.config.players[$('[name=ogame-player-id]').attr('content')];
+        if (currentPlayer) {
+          var playerPositionAfterCompletion = playerScores.filter(function (score) {
+            return score > (Number(currentPlayer.globalScore) + inprogPoints);
+          }).length;
+
+          $wrapper.append($([
+            '<div style="margin-top:50px;text-align: center;;font-size: 15px;padding-bottom: 10px;">',
+            window._translate('NEXT_MOST_RENTABLE_BUILDS'),
+            '</div>',
+            '<div style="text-align: center">',
+            '<span class="icon12px icon_wrench"></span> ',
+            '<span class="undermark">+' + inprogPoints + '</span> ',
+            '<span>(' + currentPlayer.globalPosition + ' → ' + playerPositionAfterCompletion + ')</span>',
+            '</div>'
+          ].join('')));
+        }
 
         var $rentabilityWrapper = $('<div style="text-align:center" class="rentability"></div>');
         rentabilityTimes.forEach(function (rentability, i) {
