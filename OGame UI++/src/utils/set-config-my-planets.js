@@ -29,10 +29,14 @@ var fn = function () {
           window.config.my.planets[planetCoords].coords = planetCoords.replace(/[[\]]/g, '').split(':').map(Number);
           window.config.my.planets[planetCoords].href = link.attr('href');
         }
-        var temperatures = link.attr('title').match(/[-0-9 ]+°C/g).map(function (temp) {
-          return Number(temp.replace('°C', '').trim());
-        });
-        window.config.my.planets[planetCoords].averageTemp = (temperatures[0] + temperatures[1]) / 2;
+
+        var tooltiphtml = link.attr('title');
+        if (tooltiphtml) { // user may already have deployed the tooltip when this code is run
+          var temperatures = tooltiphtml.match(/[-0-9 ]+°C/g).map(function (temp) {
+            return Number(temp.replace('°C', '').trim());
+          });
+          window.config.my.planets[planetCoords].averageTemp = (temperatures[0] + temperatures[1]) / 2;
+        }
 
         if ($(this).find('.moonlink').length) {
           window.config.my.planets[planetCoords + 'L'] = window.config.my.planets[planetCoords + 'L'] || {};
