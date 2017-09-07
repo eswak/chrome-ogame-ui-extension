@@ -8,8 +8,29 @@ var fn = function () {
       var $wrapper = window._onMenuClick('idles');
       if (!$wrapper) return;
 
-      window.uipp_analytics('uipp-tab-click', 'idle-players');
+      // make sure we are in the galaxy view, if not switch to it
+      if (document.body.id !== 'galaxy') {
+        localStorage.setItem('uipp_showNearbyPlayers', '1');
+        $('#menuTable > li > a').each(function () {
+          if (this.href && this.href.indexOf('galaxy') > 0) {
+            var $this = $(this);
+            setTimeout(function () {
+              $this.find('span').click();
+            },0);
+          }
+        });
+      } else {
+        window.uipp_analytics('uipp-tab-click', 'idle-players');
+        showPlayers($wrapper);
+      }
+    });
 
+    if (localStorage.getItem('uipp_showNearbyPlayers')) {
+      localStorage.removeItem('uipp_showNearbyPlayers');
+      setTimeout(function () { $entry.click(); }, 0);
+    }
+
+    function showPlayers ($wrapper) {
       var myCoords = window._getCurrentPlanetCoordinates();
 
       // finds nearby players by checking whether player is newbie or not
@@ -220,7 +241,7 @@ var fn = function () {
       }
 
       window._insertHtml($wrapper);
-    });
+    }
 
     window.filterTable = function filterTable (attribute, minValue, maxValue, $table, $filterBar) {
       if (!$table || !$table.length) {
