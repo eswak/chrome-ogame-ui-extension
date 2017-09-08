@@ -13,6 +13,7 @@ var fn = function () {
       if (!$wrapper) return;
 
       window.uipp_analytics('uipp-tab-click', 'topflop');
+      $wrapper.append(window.uipp_gearIcon());
 
       var N_ENTRIES = 15;
       var PLAYER_POOL = window.config.history;
@@ -35,6 +36,7 @@ var fn = function () {
       }
 
       sections.forEach(function (scoreType) {
+        var $section = window.uipp_setupConfigMode('topflop-' + scoreType, 'Description of ' + scoreType);
         var entries = [];
         for (var playerId in PLAYER_POOL) {
           var current = Number((window.config.players[playerId] || {})[scoreType] || 0);
@@ -62,18 +64,18 @@ var fn = function () {
         };
 
         if (scoreType === 'globalScore') {
-          $wrapper.append($('<div id="highscoreContent" style="float: left;text-align:center;margin:0 0px 10px -12px"><span class="navButton uipp-score" id="points"></span></div>'));
+          $section.append($('<div id="highscoreContent" style="float: left;text-align:center;margin:0 0px 10px -12px"><span class="navButton uipp-score" id="points"></span></div>'));
         } else if (scoreType === 'economyScore') {
-          $wrapper.append($('<div id="highscoreContent" style="float: left;text-align:center;margin:10px 0 10px -12px"><span class="navButton uipp-score" id="economy"></span></div>'));
+          $section.append($('<div id="highscoreContent" style="float: left;text-align:center;margin:10px 0 10px -12px"><span class="navButton uipp-score" id="economy"></span></div>'));
         } else if (scoreType === 'militaryScore') {
-          $wrapper.append($('<div id="highscoreContent" style="float: left;text-align:center;margin:10px 0 10px -12px"><span class="navButton uipp-score" id="fleet"></span></div>'));
+          $section.append($('<div id="highscoreContent" style="float: left;text-align:center;margin:10px 0 10px -12px"><span class="navButton uipp-score" id="fleet"></span></div>'));
         } else if (scoreType === 'researchScore') {
-          $wrapper.append($('<div id="highscoreContent" style="float: left;text-align:center;margin:10px 0 10px -12px"><span class="navButton uipp-score" id="research"></span></div>'));
+          $section.append($('<div id="highscoreContent" style="float: left;text-align:center;margin:10px 0 10px -12px"><span class="navButton uipp-score" id="research"></span></div>'));
           delete topflop.flop;
         }
 
         for (var key in topflop) {
-          $wrapper.append($([
+          $section.append($([
             '<div class="halfsection">',
             '<table class="uipp-table">',
             topflop[key].map(function (entry) {
@@ -101,7 +103,7 @@ var fn = function () {
             '</div>'
           ].join('')));
         }
-
+        $wrapper.append($section);
       });
 
       window._insertHtml($wrapper);

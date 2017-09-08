@@ -17,6 +17,7 @@ var fn = function () {
       }
 
       window.uipp_analytics('uipp-tab-click', 'statistics');
+      $wrapper.append(window.uipp_gearIcon());
 
       var worth = window.uipp_getResourcesWorth();
       var globalStats = {
@@ -404,7 +405,8 @@ var fn = function () {
       };
 
       if (window.config.features.stats) {
-        $wrapper.append($('<table class="uipp-table">' + planetStatsHtml + '</table>'));
+        var $table = $('<table class="uipp-table">' + planetStatsHtml + '</table>');
+        $wrapper.append(window.uipp_setupConfigMode('stats', 'Description of stats', $table));
       }
 
       // score charts
@@ -414,7 +416,7 @@ var fn = function () {
         var current = window.config.players[playerId];
         var history = window.config.history[playerId];
 
-        $wrapper.append($([
+        $wrapper.append(window.uipp_setupConfigMode('charts', 'Description of charts', $([
           '<div class="clearfix" style="margin-top:50px;">',
           '<div id="chart-history" style="width:70%;height:200px;float:left;"></div>',
           '<div id="chart-pie" style="width:30%;height:170px;float:left;margin-top:5px;position:relative;">',
@@ -434,7 +436,7 @@ var fn = function () {
           '</span>',
           '</div>',
           '</div>'
-        ].join('')));
+        ].join(''))));
         setTimeout(function () {
           var labels = Object.keys(history);
           var series = [
@@ -620,13 +622,14 @@ var fn = function () {
       });
 
       if (window.config.features.nextbuilds) {
+        var $nextbuildsWrapper = window.uipp_setupConfigMode('nextbuilds', 'Description of nextbuilds');
         var currentPlayer = window.config.players[$('[name=ogame-player-id]').attr('content')];
         if (currentPlayer) {
           var playerPositionAfterCompletion = playerScores.filter(function (score) {
             return score > (Number(currentPlayer.globalScore) + inprogPoints);
           }).length;
 
-          $wrapper.append($([
+          $nextbuildsWrapper.append($([
             '<div style="margin-top:50px;text-align: center;;font-size: 15px;padding-bottom: 10px;">',
             window._translate('NEXT_MOST_RENTABLE_BUILDS'),
             '</div>',
@@ -712,7 +715,8 @@ var fn = function () {
           }
         });
 
-        $wrapper.append($rentabilityWrapper);
+        $nextbuildsWrapper.append($rentabilityWrapper);
+        $wrapper.append($nextbuildsWrapper);
 
         // allow to simulate next builds
         var simulatedNextBuilds = {};
