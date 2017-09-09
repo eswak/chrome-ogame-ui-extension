@@ -92,56 +92,47 @@ var fn = function () {
       }
       $wrapper.append($featurewrapper);
 
-      // add reset ALL button
-      var $resetAllButton = $('<div style="margin-top: 50px; text-align: center;"><i>' + window._translate('RESET_ALL_TEXT') + '</i><br><br><a href="#" class="btn_blue" style="width:625px">' + window._translate('RESET_ALL') + '</a></div>');
-      $wrapper.append($resetAllButton);
-      $resetAllButton.find('a').click(function () {
-        window.uipp_analytics('uipp-data-reset', 'all');
-        window._resetConfig();
-        window.location.reload();
+      // Troubleshooting
+      var $resetWrapper = $('<div><hr style="border-color:gray"><span>Troubleshooting</span></div>');
+      $resetWrapper.append('<div style="margin-top: 10px; color: gray; text-align: justify;">' + window._translate('RESET_ALL_TEXT') + '<br><br>');
+      window._translate('RESET_ALL_TEXT');
+      [
+        ['all', window._translate('RESET_ALL')],
+        ['history', window._translate('RESET_HISTORY')],
+        ['notes', window._translate('RESET_NOTES')],
+        ['planet-info', window._translate('RESET_PLANETINFO')]
+      ].forEach (function (choice) {
+        var $checkbox = $('<div style="margin-left: 18px;"> <input type="checkbox" class="resetChoice">' + choice[1] + '</div>').data('name', choice[0])
+          .find('input').css({
+            'padding': '0.5em',
+            'cursor': 'pointer',
+            'margin-left': '-17px' }).end()
+          .change(function () {
+            // enable 'Reset' button if any checkbox is selected
+            $resetButton.find('a').attr('disabled', $('.resetChoice:checked').length === 0);
+          });
+        $resetWrapper.append($checkbox);
       });
 
-      // add reset history button
-      var $resetHistory = $('<div style="text-align:center;margin-top:10px"><a href="#" class="btn_blue" style="width:625px">' + window._translate('RESET_HISTORY') + '</a></div>');
-      $wrapper.append($resetHistory);
-      $resetHistory.click(function () {
-        window.uipp_analytics('uipp-data-reset', 'history');
-        delete window.config.history;
-        window._saveConfig();
-        window.location.reload();
+      // add 'Reset' button
+      var $resetButton = $('<div style="text-align: center; margin-top: 15px"><a href="#" class="btn_blue" style="width:100px" disabled="true">Reset</a></div>');
+      $resetButton.click(function () {
+        $('.resetChoice:checked').each(function () {
+          var $this = $(this);
+          window.uipp_analytics('uipp-data-reset', $this.data('name'));
+          switch ($this.data('name')) {
+          case 'all': window._resetConfig(); break;
+          case 'history': delete window.config.history; break;
+          case 'notes': delete window.config.planetNotes; break;
+          case 'planet-info': delete window.config.players; window.config.lastPlayersUpdate = 0; break;
+          }
+          window._saveConfig();
+          window.location.reload();
+        });
       });
 
-      // add reset notes button
-      var $resetPlanetNotes = $('<div style="text-align:center;margin-top:10px"><a href="#" class="btn_blue" style="width:625px">' + window._translate('RESET_NOTES') + '</a></div>');
-      $wrapper.append($resetPlanetNotes);
-      $resetPlanetNotes.click(function () {
-        window.uipp_analytics('uipp-data-reset', 'notes');
-        delete window.config.planetNotes;
-        window._saveConfig();
-        window.location.reload();
-      });
-
-      // add reset planet info button
-      var $resetPlanetInfos = $('<div style="text-align:center;margin-top:10px"><a href="#" class="btn_blue" style="width:625px">' + window._translate('RESET_PLANETINFO') + '</a></div>');
-      $wrapper.append($resetPlanetInfos);
-      $resetPlanetInfos.click(function () {
-        window.uipp_analytics('uipp-data-reset', 'planet-info');
-        delete window.config.my.planets;
-        window._saveConfig();
-        window.location.reload();
-      });
-
-      // add reset universe button
-      var $resetUniverse = $('<div style="text-align:center;margin-top:10px"><a href="#" class="btn_blue" style="width:625px">' + window._translate('RESET_UNIVERSE') + '</a></div>');
-      $wrapper.append($resetUniverse);
-      $resetUniverse.click(function () {
-        window.uipp_analytics('uipp-data-reset', 'universe');
-        delete window.config.players;
-        window.config.lastPlayersUpdate = 0;
-        window._saveConfig();
-        window.location.reload();
-      });
-
+      $resetWrapper.append($resetButton);
+      $wrapper.append($resetWrapper);
       window._insertHtml($wrapper);
     });
   };
