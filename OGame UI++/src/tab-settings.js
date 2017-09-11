@@ -102,7 +102,9 @@ var fn = function () {
         ['notes', window._translate('RESET_NOTES')],
         ['planet-info', window._translate('RESET_PLANETINFO')]
       ].forEach (function (choice) {
-        var $checkbox = $('<div style="margin-left: 18px;"> <input type="checkbox" class="resetChoice">' + choice[1] + '</div>').data('name', choice[0])
+        var $checkbox = $('<div style="margin-left: 18px;"> </div>').data('name', choice[0])
+          .append('<input type="checkbox" class="resetChoice">')
+          .append('<span style="position: relative; top: -3px">' + choice[1] + '</span>')
           .find('input').css({
             'padding': '0.5em',
             'cursor': 'pointer',
