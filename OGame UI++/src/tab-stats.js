@@ -791,7 +791,7 @@ var fn = function () {
       };
       for (var key in window.config.my.planets) {
         var myPlanet = window.config.my.planets[key];
-        if (myPlanet.resources) {
+        if (myPlanet.resources && !myPlanet.isMoon) {
           ['metal', 'crystal', 'deuterium'].forEach(function (res) {
             if (myPlanet.resources[res].level < lowestMineLevels[res]) {
               lowestMineLevels[res] = myPlanet.resources[res].level;
