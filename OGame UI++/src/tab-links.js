@@ -8,7 +8,7 @@ var fn = function () {
     var playerName = $('[name="ogame-player-name"]').attr('content');
     window.config.links = window.config.links || {
       'WarRiders.de': 'http://www.war-riders.de/{serverLang}/{serverNum}/search/player/{playerName}',
-      'TrashSim': 'https://trashsim.universeview.be',
+      'TrashSim': 'https://trashsim.universeview.be?utm_source=uipp&utm_medium=browser-extension&utm_campaign=default-link',
       'TradeCalc': 'http://proxyforgame.com/us/ogame/calc/trade.php'
     };
 
