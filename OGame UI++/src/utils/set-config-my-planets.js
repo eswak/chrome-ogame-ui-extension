@@ -33,7 +33,7 @@ var fn = function () {
         var tooltiphtml = link.attr('title');
         if (tooltiphtml) { // user may already have deployed the tooltip when this code is run
           var temperatures = tooltiphtml.match(/[-0-9 ]+°C/g);
-          if (temperatures) {
+          if (temperatures && window.config.my.planets[planetCoords]) {
             temperatures = temperatures.map(function (temp) {
               return Number(temp.replace('°C', '').trim());
             });
