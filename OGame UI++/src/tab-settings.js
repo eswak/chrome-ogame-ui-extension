@@ -93,7 +93,7 @@ var fn = function () {
       $wrapper.append($featurewrapper);
 
       // Troubleshooting
-      var $resetWrapper = $('<div><hr style="border-color:gray"><span>Troubleshooting</span></div>');
+      var $resetWrapper = $('<div><hr style="border-color: #222;margin: 2em 0;"><span>' + window._translate('TROUBLESHOOTING') + '</span></div>');
       $resetWrapper.append('<div style="margin-top: 10px; color: gray; text-align: justify;">' + window._translate('RESET_ALL_TEXT') + '<br><br>');
       window._translate('RESET_ALL_TEXT');
       [
@@ -101,10 +101,10 @@ var fn = function () {
         ['history', window._translate('RESET_HISTORY')],
         ['notes', window._translate('RESET_NOTES')],
         ['planet-info', window._translate('RESET_PLANETINFO')]
-      ].forEach (function (choice) {
-        var $checkbox = $('<div style="margin-left: 18px;"> </div>').data('name', choice[0])
-          .append('<input type="checkbox" class="resetChoice">')
-          .append('<span style="position: relative; top: -3px">' + choice[1] + '</span>')
+      ].forEach(function (choice, i) {
+        var $checkbox = $('<div style="margin-left: 18px;' + (i === 0 ? 'margin-bottom:2em' : '') + '"> </div>').data('name', choice[0])
+          .append('<input type="checkbox" class="resetChoice" id="reset-' + choice[0] + '">')
+          .append('<label style="position: relative; top: -3px" for="reset-' + choice[0] + '">' + choice[1] + '</label>')
           .find('input').css({
             'padding': '0.5em',
             'cursor': 'pointer',
@@ -112,12 +112,21 @@ var fn = function () {
           .change(function () {
             // enable 'Reset' button if any checkbox is selected
             $resetButton.find('a').attr('disabled', $('.resetChoice:checked').length === 0);
+
+            if (i === 0) {
+              var checkAll = $(this).find('.resetChoice:checked').length;
+              if (checkAll) {
+                $resetWrapper.find('.resetChoice').prop('checked', true);
+              } else {
+                $resetWrapper.find('.resetChoice').prop('checked', false);
+              }
+            }
           });
         $resetWrapper.append($checkbox);
       });
 
       // add 'Reset' button
-      var $resetButton = $('<div style="text-align: center; margin-top: 15px"><a href="#" class="btn_blue" style="width:100px" disabled="true">Reset</a></div>');
+      var $resetButton = $('<div style="text-align: center; margin-top: 15px"><a href="#" class="btn_blue" style="width:100px" disabled="true">' + window._translate('RESET') + '</a></div>');
       $resetButton.click(function () {
         $('.resetChoice:checked').each(function () {
           var $this = $(this);
