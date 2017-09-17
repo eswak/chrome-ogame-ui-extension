@@ -25,7 +25,7 @@ var fn = function () {
         }
 
         if (window.config.features.minetext) {
-          _addProductionEconomyTimeTextHelper(costs);
+          // _addProductionEconomyTimeTextHelper(costs);
           _addProductionRentabilityTimeTextHelper(costs);
         }
 
