@@ -32,10 +32,13 @@ var fn = function () {
 
         var tooltiphtml = link.attr('title');
         if (tooltiphtml) { // user may already have deployed the tooltip when this code is run
-          var temperatures = tooltiphtml.match(/[-0-9 ]+°C/g).map(function (temp) {
-            return Number(temp.replace('°C', '').trim());
-          });
-          window.config.my.planets[planetCoords].averageTemp = (temperatures[0] + temperatures[1]) / 2;
+          var temperatures = tooltiphtml.match(/[-0-9 ]+°C/g);
+          if (temperatures) {
+            temperatures = temperatures.map(function (temp) {
+              return Number(temp.replace('°C', '').trim());
+            });
+            window.config.my.planets[planetCoords].averageTemp = (temperatures[0] + temperatures[1]) / 2;
+          }
         }
 
         if ($(this).find('.moonlink').length) {
