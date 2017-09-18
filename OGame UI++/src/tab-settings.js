@@ -110,9 +110,6 @@ var fn = function () {
             'cursor': 'pointer',
             'margin-left': '-17px' }).end()
           .change(function () {
-            // enable 'Reset' button if any checkbox is selected
-            $resetButton.find('a').attr('disabled', $('.resetChoice:checked').length === 0);
-
             if (i === 0) {
               var checkAll = $(this).find('.resetChoice:checked').length;
               if (checkAll) {
@@ -121,6 +118,8 @@ var fn = function () {
                 $resetWrapper.find('.resetChoice').prop('checked', false);
               }
             }
+            // enable 'Reset' button if any checkbox is selected
+            $resetButton.find('a').attr('disabled', $('.resetChoice:checked').length === 0);
           });
         $resetWrapper.append($checkbox);
       });

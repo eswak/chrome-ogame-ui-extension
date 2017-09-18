@@ -232,7 +232,7 @@ var fn = function () {
       RETURN_TRIP_DURATION: 'Czas podróży w obie strony Dużym Transporterem.',
       TRADE_RATE: 'Kurs wymiany',
       RESET_ALL_TEXT: 'Jeśli masz problemy z tym rozszerzeniem lub gdy chcesz przywrócić domyślne ustawienia, naciśnij przycisk poniżej aby wyczyścić ustawienia. Będziesz musiał ponownie odwiedzić zakładkę "Surowce" na każdej ze swoich planet aby ponownie odczytać statystyki. Utracisz również wszystkie notatki przypisane planetom!',
-      RESET: 'Resetuje',
+      RESET: 'Resetuj',
       RESET_ALL: 'Resetuje ustawienia oraz dane w OGame UI++',
       RESET_HISTORY: 'Resetuje historię wszystkich graczy (twoją również). Będziesz musiał poczekać kilka dni aby zebrać nowe dane',
       RESET_NOTES: 'Resetuje wszystkie notatki przypisane planetom',
