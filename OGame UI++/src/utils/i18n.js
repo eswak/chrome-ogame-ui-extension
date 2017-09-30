@@ -108,14 +108,6 @@ var fn = function () {
       STATS_RATIO: 'Production ratio (relative to '
     },
     es: {
-      RETURN_TRIP_DURATION: 'Duration of a return trip with Large Cargo Ship',
-      TRADE_RATE: 'Trade rate',
-      RESET_ALL_TEXT: 'If you encounter bugs using this extension, or if you want to restore default settings, click on the button below to clean up all this extension\'s data. You will need to revisit all your planet\'s resources page in order to get a properly-filled statistics page, and you will also lose all your neighbours annotations.',
-      RESET_ALL: 'Reset all OGame UI++ extension data',
-      RESET_HISTORY: 'Reset the score history of all players (including you). You\'ll have to wait several days to have historic data again',
-      RESET_NOTES: 'Reset all the notes you wrote on your neighbours\'s planets',
-      RESET_PLANETINFO: 'Reset your planet data (you\'ll need to visit the resource page of all the planets of your empire in order to have a filled statistics tab)',
-      RESET_UNIVERSE: 'Reset all universe data (player names, planet positions, current score). These data are fetched on the official OGame API, which is updated every 7 days',
       UNIT_METAL: 'Metal',
       UNIT_CRYSTAL: 'Cristal',
       UNIT_DEUTERIUM: 'Deuterio',
@@ -147,14 +139,6 @@ var fn = function () {
       STATS_RATIO: 'Relación de producción (en comparación con'
     },
     tr: {
-      RETURN_TRIP_DURATION: 'Duration of a return trip with Large Cargo Ship',
-      TRADE_RATE: 'Trade rate',
-      RESET_ALL_TEXT: 'If you encounter bugs using this extension, or if you want to restore default settings, click on the button below to clean up all this extension\'s data. You will need to revisit all your planet\'s resources page in order to get a properly-filled statistics page, and you will also lose all your neighbours annotations.',
-      RESET_ALL: 'Reset all OGame UI++ extension data',
-      RESET_HISTORY: 'Reset the score history of all players (including you). You\'ll have to wait several days to have historic data again',
-      RESET_NOTES: 'Reset all the notes you wrote on your neighbours\'s planets',
-      RESET_PLANETINFO: 'Reset your planet data (you\'ll need to visit the resource page of all the planets of your empire in order to have a filled statistics tab)',
-      RESET_UNIVERSE: 'Reset all universe data (player names, planet positions, current score). These data are fetched on the official OGame API, which is updated every 7 days',
       UNIT_METAL: 'Metal',
       UNIT_CRYSTAL: 'Kristal',
       UNIT_DEUTERIUM: 'Deuterium',
@@ -186,14 +170,6 @@ var fn = function () {
       STATS_RATIO: 'Üretim Oranı (İlişki: '
     },
     de: {
-      RETURN_TRIP_DURATION: 'Duration of a return trip with Large Cargo Ship',
-      TRADE_RATE: 'Trade rate',
-      RESET_ALL_TEXT: 'If you encounter bugs using this extension, or if you want to restore default settings, click on the button below to clean up all this extension\'s data. You will need to revisit all your planet\'s resources page in order to get a properly-filled statistics page, and you will also lose all your neighbours annotations.',
-      RESET_ALL: 'Reset all OGame UI++ extension data',
-      RESET_HISTORY: 'Reset the score history of all players (including you). You\'ll have to wait several days to have historic data again',
-      RESET_NOTES: 'Reset all the notes you wrote on your neighbours\'s planets',
-      RESET_PLANETINFO: 'Reset your planet data (you\'ll need to visit the resource page of all the planets of your empire in order to have a filled statistics tab)',
-      RESET_UNIVERSE: 'Reset all universe data (player names, planet positions, current score). These data are fetched on the official OGame API, which is updated every 7 days',
       UNIT_METAL: 'Metall',
       UNIT_CRYSTAL: 'Kristall',
       UNIT_DEUTERIUM: 'Deuterium',
