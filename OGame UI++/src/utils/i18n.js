@@ -1,9 +1,10 @@
 var fn = function () {
   'use strict';
-  var lang = window.constants.language || 'en';
-
   var translations = {
     fr: {
+      FEEDBACK: 'Envie de nous laisser un message ?',
+      FEEDBACK_PLACEHOLDER: 'Commentaire, suggestion, idée...',
+      SEND: 'Envoyer',
       CURRENT_STORAGE_TIME: 'Hangar plein dans',
       TOTAL_STORAGE_TIME: 'Capacité de stockage',
       NEXT_MOST_RENTABLE_BUILDS: 'Prochaines actions les plus rentables',
@@ -54,6 +55,9 @@ var fn = function () {
       STATS_RATIO: 'Ratio de production (rapport au '
     },
     en: {
+      FEEDBACK: 'Feedback',
+      FEEDBACK_PLACEHOLDER: 'comment, suggestion, idea or greeting',
+      SEND: 'Send',
       CURRENT_STORAGE_TIME: 'Time until full',
       TOTAL_STORAGE_TIME: 'Total storage time',
       NEXT_MOST_RENTABLE_BUILDS: 'Next best ROI',
@@ -269,11 +273,13 @@ var fn = function () {
       STATS_RATIO: 'Współczynnik produkcji (w stosunku do '
     }
   };
-  if (!translations[lang]) {
-    lang = 'en';
-  }
 
   window._translate = function _translate (key, args) {
+    var lang = window.config.language || window.constants.language || 'en';
+    if (!translations[lang]) {
+      lang = 'en';
+    }
+
     var ret = translations[lang][key] || translations['en'][key] || key;
     for (var k in args) {
       if (args.noBold) {
