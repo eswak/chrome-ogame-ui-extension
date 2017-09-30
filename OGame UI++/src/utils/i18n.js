@@ -55,6 +55,7 @@ var fn = function () {
       STATS_RATIO: 'Ratio de production (rapport au '
     },
     en: {
+      LANGUAGE: 'Language',
       FEEDBACK: 'Feedback',
       FEEDBACK_PLACEHOLDER: 'comment, suggestion, idea or greeting',
       SEND: 'Send',
