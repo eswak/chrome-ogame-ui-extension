@@ -167,6 +167,56 @@ var fn = function () {
       }
       $wrapper.append($featurewrapper);
 
+      // Feedback
+      var $feedback = $('<div><hr style="border-color: #222;margin: 2em 0 0.5em;">' +
+                        '<span style="font-size: 1.3em;">' + window._translate('Feedback') + '</span></div>');
+      $feedback.append([
+        '<form><p style="margin-top: 10px;">',
+        '<input id="name"    name="name"    type="text" placeholder="nickname" style="width: 6em;">',
+        '<input id="comment" name="comment" type="text" placeholder="comment, suggestion, idea or greetings"',
+        'style="width:80%; margin-left: 5px;"></p>',
+        '<div style="text-align: center; margin-top: 15px">',
+        '<input id="send" type="submit" value="Send" class="btn_blue" style="width:100px" disabled="true">',
+        '<p id="result"></p>',
+        '</div>',
+        '</form>'].join(''));
+
+      // enable 'Send' button if any text input is not empty
+      $feedback.find('input').keyup(function () {
+        var characters = $feedback.find('#name').val() + $feedback.find('#comment').val();
+        $feedback.find('#send').attr('disabled', characters.length === 0);
+      });
+      var request;
+      // bind to the submit event of our form
+      $feedback.find('form').submit(function (event) {
+        // abort any pending request
+        if (request) request.abort();
+        var $this = $(this);
+        // serialize the data in the form
+        var $inputs = $this.find('input, select, button, textarea');
+        var serializedData = $this.serialize();
+        // let's disable the inputs for the duration of the ajax request
+        $inputs.prop('disabled', true);
+        $this.find('#result').text('Sending...');
+        request = $.ajax({
+          url: 'https://script.google.com/macros/s/AKfycbx7QRXajP7lEtsh9LDUPcuY2psYP9igjQSRBghW0nQGP-2U-dPX/exec',
+          type: 'post',
+          data: serializedData,
+          success: function () {
+            $this.find('#result').html('Success - thank you 👍');
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            window.console.error(textStatus, errorThrown);
+          },
+          complete: function () {
+            $inputs.prop('disabled', false); // reenable the inputs
+          }
+        });
+        // prevent default posting of form
+        event.preventDefault();
+      });
+      $wrapper.append($feedback);
+
       // Troubleshooting
       var $resetWrapper = $('<div><hr style="border-color: #222;margin: 2em 0 0.5em">' +
                             '<span style="font-size: 1.3em;">' + window._translate('TROUBLESHOOTING') + '</span></div>');
