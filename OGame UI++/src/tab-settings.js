@@ -33,6 +33,31 @@ var fn = function () {
         '</div>'
       ].join('')));
 
+      // language config
+      $wrapper.append($([
+        '<div style="padding: 10px 0" class="clearfix">',
+        '<div style="float: left; line-height: 32px;padding-right: 10px;">' + window._translate('LANGUAGE') + ' : ' + '</div>',
+        '<div>',
+        '<select id="uipp-language" onchange="uipp_setLanguage()" style="visibility:visible;font-size:13px;vertical-align:-8px;">',
+        '<option value="">---</option>',
+        '<option value="en" ' + (window.config.language === 'en' ? 'selected' : '') + '>English</option>',
+        '<option value="fr" ' + (window.config.language === 'fr' ? 'selected' : '') + '>Français</option>',
+        '<option value="de" ' + (window.config.language === 'de' ? 'selected' : '') + '>Deutsch</option>',
+        '<option value="es" ' + (window.config.language === 'es' ? 'selected' : '') + '>Español</option>',
+        '<option value="tr" ' + (window.config.language === 'tr' ? 'selected' : '') + '>Türk</option>',
+        '<option value="pl" ' + (window.config.language === 'pl' ? 'selected' : '') + '>Polski</option>',
+        '</select>',
+        '</div>',
+        '</div>'
+      ].join('')));
+
+      window.uipp_setLanguage = function () {
+        var lang = $('#uipp-language')[0].value || null;
+        window.config.language = lang;
+        window._saveConfig();
+        document.location.reload();
+      };
+
       // Feedback
       var $feedback = $('<div><hr style="border-color: #222;margin: 2em 0 0.5em;">' +
                         '<span style="font-size: 1.3em;">' + window._translate('FEEDBACK') + '</span></div>');
