@@ -202,6 +202,10 @@ var fn = function () {
       STATS_RATIO: 'Produktionsverhältnis (relativ zu '
     },
     pl: {
+      LANGUAGE: 'Język',
+      FEEDBACK: 'Komentarz',
+      FEEDBACK_PLACEHOLDER: 'komentarz, sugestia, pomysł lub pozdrowienia',
+      SEND: 'Wyślij',
       NEXT_MOST_RENTABLE_BUILDS: 'Następna najlepsza inwestycja',
       NEXT_MOST_RENTABLE_BUILDS_DESCRIPTION: 'Czas zwrotu inwestycji oparty jest na czasie ukończenia konstrukcji. Nie brany jest tu pod uwagę czas zbierania surowców na tę konstrukcję.',
       RENTABILITY_ASTRO: 'Ulepsz Astrofizykę to poziomu {level} i załóż nową kolonię.<br>Ulepsz kopalnie nowej kolonii do poziomów	 {mineLevel}<br><br>Czas zbierania surowców dla Astrofizyki : {astroTime}<br>Koszt Astrofizyki : {astroCost}<br><br>Czas zbierania surowców przez kopalnie(całkowity) : {mineEconomyTime}<br>Całkowity koszt kopalnii: {mineCost}<br><br>Czas zwrotu inwestycji z nowej kolonii : {mineTime}',
@@ -213,6 +217,7 @@ var fn = function () {
       RETURN_TRIP_DURATION: 'Czas podróży w obie strony Dużym Transporterem.',
       TRADE_RATE: 'Kurs wymiany',
       RESET_ALL_TEXT: 'Jeśli masz problemy z tym rozszerzeniem lub gdy chcesz przywrócić domyślne ustawienia, naciśnij przycisk poniżej aby wyczyścić ustawienia. Będziesz musiał ponownie odwiedzić zakładkę "Surowce" na każdej ze swoich planet aby ponownie odczytać statystyki. Utracisz również wszystkie notatki przypisane planetom!',
+      TROUBLESHOOTING: 'Rozwiązywanie problemów',
       RESET: 'Resetuj',
       RESET_ALL: 'Resetuje ustawienia oraz dane w OGame UI++',
       RESET_HISTORY: 'Resetuje historię wszystkich graczy (twoją również). Będziesz musiał poczekać kilka dni aby zebrać nowe dane',
