@@ -197,7 +197,7 @@ var fn = function () {
       TIME_SECOND: 's',
       TIME_MINUTE: 'm',
       TIME_HOUR: 'h',
-      TIME_DAY: 'j',
+      TIME_DAY: 't',
       ECONOMY_TIME: 'Benötigt {time} Ressourcen-Sammeln (mit Handel)',
       BUILDABLE_IN: 'Baubar in : {time}',
       ROI: 'Return on investment : {time} mit Handelskurs {tradeRate}',
