@@ -10,7 +10,7 @@ var fn = function () {
     $('#menuTable').append($timerEntry);
 
     var $input = $(
-      '<input class="textlabel enhancement tooltip"' +
+      '<input id="timer" class="textlabel enhancement tooltipHTML"' +
       'placeholder = "timer / note"' +
       'style="' +
       'width: 84%;' +
@@ -25,7 +25,7 @@ var fn = function () {
       'font-size: inherit;' +
       '">');
     $input.attr('title', '5 = 5m<br>.5h = 30m<br>1h2m3s = 67m 3s<br>0.5 note = 30s note<br>ENTER = start');
-    $input.append('<style> ::-webkit-input-placeholder { color: #624790; } </style>');
+    $input.append('<style>#timer::-webkit-input-placeholder { color: #624790; } </style>');
 
     var timer;
     function stopTimer (finished) {
