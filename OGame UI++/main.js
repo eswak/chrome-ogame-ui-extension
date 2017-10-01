@@ -30,6 +30,7 @@ var uipp_images = {
     solarsat: chrome.extension.getURL('img/features/solarsat.png'),
     stats: chrome.extension.getURL('img/features/stats.png'),
     storagetime: chrome.extension.getURL('img/features/storagetime.png'),
+    timers: chrome.extension.getURL('img/features/timers.png'),
     topeco: chrome.extension.getURL('img/features/topeco.png'),
     topfleet: chrome.extension.getURL('img/features/topfleet.png'),
     topgeneral: chrome.extension.getURL('img/features/topgeneral.png'),
@@ -68,6 +69,7 @@ var userscript = function () {
     solarsat: true,
     stats: true,
     storagetime: true,
+    timers: true,
     topeco: true,
     topfleet: true,
     topgeneral: true,
@@ -95,6 +97,9 @@ var userscript = function () {
   }
 
   window._addTabSettings();
+
+  features.timers && window._addTimerTab();
+
   window._addLinkTabs();
 
   // Add static helpers

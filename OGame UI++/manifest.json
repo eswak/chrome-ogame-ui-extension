@@ -12,6 +12,7 @@
     "img/features/solarsat.png",
     "img/features/stats.png",
     "img/features/storagetime.png",
+    "img/features/timers.png",
     "img/features/topeco.png",
     "img/features/topfleet.png",
     "img/features/topgeneral.png",
@@ -69,6 +70,7 @@
       "src/tab-links.js",
       "src/tab-settings.js",
       "src/tab-stats.js",
+      "src/tab-timers.js",
       "src/tab-topflop.js",
       "style.js",
       "main.js"
