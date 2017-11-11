@@ -147,9 +147,11 @@ var fn = function () {
       window._toggleFeature = function _toggleFeature (key, element) {
         if (window.config.features[key]) {
           $(element).css('opacity', '0.4');
+          $(element).css('filter', 'grayscale(1)');
           window.config.features[key] = false;
         } else {
           $(element).css('opacity', '1');
+          $(element).css('filter', '');
           window.config.features[key] = true;
         }
 
@@ -161,7 +163,8 @@ var fn = function () {
         $featurewrapper.append($([
           '<img src="' + window.uipp_images.features[featureKey] + '"',
           'style="width:100px;height:100px;margin:10px;cursor:pointer;',
-          'opacity:' + (window.config.features[featureKey] ? '1' : '0.4') + ';"',
+          'opacity:' + (window.config.features[featureKey] ? '1' : '0.4') + ';',
+          'filter:' + (window.config.features[featureKey] ? '' : 'grayscale(1)') + ';"',
           'onclick="_toggleFeature(\'' + featureKey + '\', this)"/>'
         ].join('')));
       }

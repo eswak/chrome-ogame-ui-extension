@@ -57,27 +57,28 @@ var userscript = function () {
   window._parseResearchTab();
 
   window.config.features = window.config.features || {};
+  window.config.gearFeatures = window.config.gearFeatures || {};
   var defaultFeatures = {
     alliance: true,
-    charts: true,
     deploytransport: true,
     galaxy: true,
     minetext: true,
     missingresources: true,
-    nextbuilds: true,
     solarsat: true,
     stats: true,
     storagetime: true,
-    topeco: true,
-    topfleet: true,
-    topgeneral: true,
-    topresearch: true
+    topfleet: true
   };
   for (var featureKey in defaultFeatures) {
     if (typeof window.config.features[featureKey] !== 'boolean') {
       window.config.features[featureKey] = defaultFeatures[featureKey];
     }
   }
+
+  // remove obsolete features
+  ['topeco', 'topgeneral', 'topresearch', 'nextbuilds', 'charts'].forEach(function (feature) {
+    delete window.config.features[feature];
+  });
 
   var features = window.config.features;
 
@@ -86,11 +87,11 @@ var userscript = function () {
     window._addTabAlliance();
   }
 
-  if (features.stats || features.charts || features.nextbuilds) {
+  if (features.stats) {
     window._addTabStats();
   }
 
-  if (features.topeco || features.topfleet || features.topgeneral || features.topresearch) {
+  if (features.topfleet) {
     window._addTabTopflop();
   }
 

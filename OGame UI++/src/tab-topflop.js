@@ -18,25 +18,9 @@ var fn = function () {
       var N_ENTRIES = 15;
       var PLAYER_POOL = window.config.history;
 
-      var sections = [];
-      if (window.config.features.topgeneral) {
-        sections.push('globalScore');
-      }
-
-      if (window.config.features.topeco) {
-        sections.push('economyScore');
-      }
-
-      if (window.config.features.topfleet) {
-        sections.push('militaryScore');
-      }
-
-      if (window.config.features.topresearch) {
-        sections.push('researchScore');
-      }
-
+      var sections = ['globalScore', 'economyScore', 'militaryScore', 'researchScore'];
       sections.forEach(function (scoreType) {
-        var $section = window.uipp_setupConfigMode('topflop-' + scoreType, 'Description of ' + scoreType);
+        var $section = window.uipp_gearWrapper('topflop-' + scoreType/* , 'Description of topflop' */);
         var entries = [];
         for (var playerId in PLAYER_POOL) {
           var current = Number((window.config.players[playerId] || {})[scoreType] || 0);

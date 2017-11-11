@@ -404,19 +404,18 @@ var fn = function () {
         });
       };
 
-      if (window.config.features.stats) {
-        var $table = $('<table class="uipp-table">' + planetStatsHtml + '</table>');
-        $wrapper.append(window.uipp_setupConfigMode('stats', 'Description of stats', $table));
-      }
+      var $table = $('<table class="uipp-table">' + planetStatsHtml + '</table>');
+      $wrapper.append(window.uipp_gearWrapper('stats-stats' /* , 'Description of stats' */).append($table));
 
       // score charts
       var hasEnoughHistory = window._getPlayerScoreTrend($('[name=ogame-player-id]').attr('content'), 'g', 2).hasEnoughHistory;
-      if (hasEnoughHistory && window.config.features.charts) {
+      if (hasEnoughHistory) {
         var playerId = $('[name=ogame-player-id]').attr('content');
         var current = window.config.players[playerId];
         var history = window.config.history[playerId];
 
-        $wrapper.append(window.uipp_setupConfigMode('charts', 'Description of charts', $([
+        var $wrapper2 = window.uipp_gearWrapper('stats-charts'/* , 'Description of charts' */);
+        $wrapper2.append([
           '<div class="clearfix" style="margin-top:50px;">',
           '<div id="chart-history" style="width:70%;height:200px;float:left;"></div>',
           '<div id="chart-pie" style="width:30%;height:170px;float:left;margin-top:5px;position:relative;">',
@@ -436,7 +435,8 @@ var fn = function () {
           '</span>',
           '</div>',
           '</div>'
-        ].join(''))));
+        ].join(''));
+        $wrapper.append($wrapper2);
         setTimeout(function () {
           var labels = Object.keys(history);
           var series = [
@@ -621,168 +621,166 @@ var fn = function () {
         return a < b ? 1 : -1;
       });
 
-      if (window.config.features.nextbuilds) {
-        var $nextbuildsWrapper = window.uipp_setupConfigMode('nextbuilds', 'Description of nextbuilds');
-        var currentPlayer = window.config.players[$('[name=ogame-player-id]').attr('content')];
-        if (currentPlayer) {
-          var playerPositionAfterCompletion = playerScores.filter(function (score) {
-            return score > (Number(currentPlayer.globalScore) + inprogPoints);
-          }).length;
+      var $nextbuildsWrapper = window.uipp_gearWrapper('stats-nextbuilds' /* , 'Description of next builds' */);
+      var currentPlayer = window.config.players[$('[name=ogame-player-id]').attr('content')];
+      if (currentPlayer) {
+        var playerPositionAfterCompletion = playerScores.filter(function (score) {
+          return score > (Number(currentPlayer.globalScore) + inprogPoints);
+        }).length;
 
-          $nextbuildsWrapper.append($([
-            '<div style="margin-top:50px;text-align: center;;font-size: 15px;padding-bottom: 10px;">',
-            window._translate('NEXT_MOST_RENTABLE_BUILDS'),
-            '</div>',
-            '<div style="text-align: center">',
-            '<span class="icon12px icon_wrench"></span> ',
-            '<span class="undermark">+' + inprogPoints + '</span> ',
-            '<span>(' + currentPlayer.globalPosition + ' → ' + playerPositionAfterCompletion + ')</span>',
-            '</div>'
+        $nextbuildsWrapper.append($([
+          '<div style="margin-top:50px;text-align: center;;font-size: 15px;padding-bottom: 10px;">',
+          window._translate('NEXT_MOST_RENTABLE_BUILDS'),
+          '</div>',
+          '<div style="text-align: center">',
+          '<span class="icon12px icon_wrench"></span> ',
+          '<span class="undermark">+' + inprogPoints + '</span> ',
+          '<span>(' + currentPlayer.globalPosition + ' → ' + playerPositionAfterCompletion + ')</span>',
+          '</div>'
+        ].join('')));
+      }
+
+      var $rentabilityWrapper = $('<div style="text-align:center" class="rentability"></div>');
+      rentabilityTimes.forEach(function (rentability, i) {
+        var tooltip = '';
+        if (rentability.resource === 'plasma') {
+          tooltip = window._translate('ROI', {
+            time: window._time(rentability.time),
+            tradeRate: window.config.tradeRate.join(' / ')
+          });
+          tooltip += '<br>';
+          tooltip += '<br>' + window._translate('RENTABILITY_PLASMA', {
+            level: rentability.level,
+            totalCost: window._num(rentability.totalCost).join(' / ')
+          });
+          tooltip = tooltip.replace(/<\/?span[^>]*>/g, '');
+          $rentabilityWrapper.append($([
+            '<span class="tooltip" title="' + tooltip + '"',
+            ' style="display:inline-block;margin:5px;position:relative;height:50px;width:50px;"',
+            ' onclick="uipp_toggleSimulateNextBuild(this, ' + i + ')">',
+            '<img src="' + window.uipp_images[rentability.resource] + '" height="50"/>',
+            '<span class="shadowed" style="position:absolute;width:100%;display:inline-block;line-height:50px;text-align:center;left:0;top: 0;font-size:26px;">' + rentability.level + '</span>',
+            rentability.inprog ? '<span class="icon12px icon_wrench" style="position:absolute;bottom:0;right:0;"></span>' : '',
+            '</span>',
+          ].join('')));
+        } else if (rentability.resource === 'astrophysics') {
+          tooltip = window._translate('ROI', {
+            time: window._time(rentability.time),
+            tradeRate: window.config.tradeRate.join(' / ')
+          });
+          tooltip += '<br>';
+          tooltip += '<br>' + window._translate('RENTABILITY_ASTRO', {
+            level: rentability.level,
+            mineLevel: rentability.metalLevel + ' / ' + rentability.crystalLevel + ' / ' + rentability.deuteriumLevel,
+            astroTime: window._time(rentability.astroTime),
+            mineEconomyTime: window._time(rentability.mineEconomyTime),
+            mineTime: window._time(rentability.mineRentabilityTime),
+            mineCost: window._num(rentability.mineCost).join(' / '),
+            astroCost: window._num(rentability.astroCost).join(' / ')
+          });
+          tooltip = tooltip.replace(/<\/?span[^>]*>/g, '');
+          $rentabilityWrapper.append($([
+            '<span class="tooltip" title="' + tooltip + '"',
+            ' style="display:inline-block;margin:5px;position:relative;height:50px;width:50px;"',
+            ' onclick="uipp_toggleSimulateNextBuild(this, ' + i + ')">',
+            '<img src="' + window.uipp_images[rentability.resource] + '" height="50"/>',
+            '<span class="shadowed" style="position:absolute;width:100%;display:inline-block;line-height:50px;text-align:center;left:0;top: 0;font-size:26px;">' + rentability.level + '</span>',
+            rentability.inprog ? '<span class="icon12px icon_wrench" style="position:absolute;bottom:0;right:0;"></span>' : '',
+            '</span>',
+          ].join('')));
+        } else {
+          tooltip = window._translate('ROI', {
+            time: window._time(rentability.time),
+            tradeRate: window.config.tradeRate.join(' / ')
+          });
+          tooltip += '<br>';
+          tooltip += '<br>' + window._translate('RENTABILITY_MINE_' + rentability.resource.toUpperCase(), {
+            level: rentability.level,
+            economyTime: window._time(rentability.economyTime),
+            coords: '[' + rentability.coords.join(':') + ']',
+            totalCost: window._num(rentability.totalCost).join(' / ')
+          });
+          tooltip = tooltip.replace(/<\/?span[^>]*>/g, '');
+          $rentabilityWrapper.append($([
+            '<span class="tooltip" title="' + tooltip + '"',
+            ' style="display:inline-block;margin:5px;position:relative;height:50px;width:50px;cursor:pointer;user-select:none"',
+            ' onclick="uipp_toggleSimulateNextBuild(this, ' + i + ')">',
+            '<img src="' + window.uipp_images[rentability.resource] + '" height="50"/>',
+            '<span class="shadowed" style="position:absolute;width:100%;display:inline-block;line-height:35px;text-align:center;left:0;top: 0;font-size:19px;">' + rentability.level + '</span>',
+            '<span class="shadowed" style="position:absolute;width:100%;display:inline-block;line-height:35px;text-align:center;left:0;top: 17px;font-size:9px;">[' + rentability.coords.join(':') + ']</span>',
+            rentability.inprog ? '<span class="icon12px icon_wrench" style="position:absolute;bottom:0;right:0;"></span>' : '',
+            '</span>',
           ].join('')));
         }
+      });
 
-        var $rentabilityWrapper = $('<div style="text-align:center" class="rentability"></div>');
-        rentabilityTimes.forEach(function (rentability, i) {
-          var tooltip = '';
-          if (rentability.resource === 'plasma') {
-            tooltip = window._translate('ROI', {
-              time: window._time(rentability.time),
-              tradeRate: window.config.tradeRate.join(' / ')
-            });
-            tooltip += '<br>';
-            tooltip += '<br>' + window._translate('RENTABILITY_PLASMA', {
-              level: rentability.level,
-              totalCost: window._num(rentability.totalCost).join(' / ')
-            });
-            tooltip = tooltip.replace(/<\/?span[^>]*>/g, '');
-            $rentabilityWrapper.append($([
-              '<span class="tooltip" title="' + tooltip + '"',
-              ' style="display:inline-block;margin:5px;position:relative;height:50px;width:50px;"',
-              ' onclick="uipp_toggleSimulateNextBuild(this, ' + i + ')">',
-              '<img src="' + window.uipp_images[rentability.resource] + '" height="50"/>',
-              '<span class="shadowed" style="position:absolute;width:100%;display:inline-block;line-height:50px;text-align:center;left:0;top: 0;font-size:26px;">' + rentability.level + '</span>',
-              rentability.inprog ? '<span class="icon12px icon_wrench" style="position:absolute;bottom:0;right:0;"></span>' : '',
-              '</span>',
-            ].join('')));
-          } else if (rentability.resource === 'astrophysics') {
-            tooltip = window._translate('ROI', {
-              time: window._time(rentability.time),
-              tradeRate: window.config.tradeRate.join(' / ')
-            });
-            tooltip += '<br>';
-            tooltip += '<br>' + window._translate('RENTABILITY_ASTRO', {
-              level: rentability.level,
-              mineLevel: rentability.metalLevel + ' / ' + rentability.crystalLevel + ' / ' + rentability.deuteriumLevel,
-              astroTime: window._time(rentability.astroTime),
-              mineEconomyTime: window._time(rentability.mineEconomyTime),
-              mineTime: window._time(rentability.mineRentabilityTime),
-              mineCost: window._num(rentability.mineCost).join(' / '),
-              astroCost: window._num(rentability.astroCost).join(' / ')
-            });
-            tooltip = tooltip.replace(/<\/?span[^>]*>/g, '');
-            $rentabilityWrapper.append($([
-              '<span class="tooltip" title="' + tooltip + '"',
-              ' style="display:inline-block;margin:5px;position:relative;height:50px;width:50px;"',
-              ' onclick="uipp_toggleSimulateNextBuild(this, ' + i + ')">',
-              '<img src="' + window.uipp_images[rentability.resource] + '" height="50"/>',
-              '<span class="shadowed" style="position:absolute;width:100%;display:inline-block;line-height:50px;text-align:center;left:0;top: 0;font-size:26px;">' + rentability.level + '</span>',
-              rentability.inprog ? '<span class="icon12px icon_wrench" style="position:absolute;bottom:0;right:0;"></span>' : '',
-              '</span>',
-            ].join('')));
-          } else {
-            tooltip = window._translate('ROI', {
-              time: window._time(rentability.time),
-              tradeRate: window.config.tradeRate.join(' / ')
-            });
-            tooltip += '<br>';
-            tooltip += '<br>' + window._translate('RENTABILITY_MINE_' + rentability.resource.toUpperCase(), {
-              level: rentability.level,
-              economyTime: window._time(rentability.economyTime),
-              coords: '[' + rentability.coords.join(':') + ']',
-              totalCost: window._num(rentability.totalCost).join(' / ')
-            });
-            tooltip = tooltip.replace(/<\/?span[^>]*>/g, '');
-            $rentabilityWrapper.append($([
-              '<span class="tooltip" title="' + tooltip + '"',
-              ' style="display:inline-block;margin:5px;position:relative;height:50px;width:50px;cursor:pointer;user-select:none"',
-              ' onclick="uipp_toggleSimulateNextBuild(this, ' + i + ')">',
-              '<img src="' + window.uipp_images[rentability.resource] + '" height="50"/>',
-              '<span class="shadowed" style="position:absolute;width:100%;display:inline-block;line-height:35px;text-align:center;left:0;top: 0;font-size:19px;">' + rentability.level + '</span>',
-              '<span class="shadowed" style="position:absolute;width:100%;display:inline-block;line-height:35px;text-align:center;left:0;top: 17px;font-size:9px;">[' + rentability.coords.join(':') + ']</span>',
-              rentability.inprog ? '<span class="icon12px icon_wrench" style="position:absolute;bottom:0;right:0;"></span>' : '',
-              '</span>',
-            ].join('')));
+      $nextbuildsWrapper.append($rentabilityWrapper);
+      $wrapper.append($nextbuildsWrapper);
+
+      // allow to simulate next builds
+      var simulatedNextBuilds = {};
+      window.uipp_toggleSimulateNextBuild = function (el, i) {
+        var rentability = rentabilityTimes[i];
+        var $el = $(el);
+        $el.toggleClass('uipp-selected');
+        $el.css('outline-offset', '3px');
+
+        var id = (rentability.coords || []).join('-') + rentability.resource;
+
+        if ($el.hasClass('uipp-selected')) {
+          simulatedNextBuilds[id] = rentability;
+        } else {
+          delete simulatedNextBuilds[id];
+        }
+
+        window.uipp_refreshSimulationDisplay();
+      };
+
+      window.uipp_resetSimulation = function () {
+        simulatedNextBuilds = {};
+        $('.rentability .uipp-selected').removeClass('uipp-selected');
+
+        window.uipp_refreshSimulationDisplay();
+      };
+
+      window.uipp_refreshSimulationDisplay = function () {
+        var $selectedWrapper = $('.uipp-simulation');
+        if ($selectedWrapper) {
+          $selectedWrapper.remove();
+        }
+
+        if (Object.keys(simulatedNextBuilds).length === 0) {
+          return;
+        }
+
+        var totalCost = [0, 0, 0];
+        var timeToAchieve = 0;
+        for (var simKey in simulatedNextBuilds) {
+          var cost = simulatedNextBuilds[simKey].astroCost || simulatedNextBuilds[simKey].totalCost;
+          if (!simulatedNextBuilds[simKey].inprog) {
+            totalCost[0] += cost[0];
+            totalCost[1] += cost[1];
+            totalCost[2] += cost[2];
+
+            timeToAchieve += simulatedNextBuilds[simKey].time;
           }
-        });
+        }
 
-        $nextbuildsWrapper.append($rentabilityWrapper);
-        $wrapper.append($nextbuildsWrapper);
+        var totalCostWorth = totalCost[0] * worth.metal + totalCost[1] * worth.crystal + totalCost[2] * worth.deuterium;
 
-        // allow to simulate next builds
-        var simulatedNextBuilds = {};
-        window.uipp_toggleSimulateNextBuild = function (el, i) {
-          var rentability = rentabilityTimes[i];
-          var $el = $(el);
-          $el.toggleClass('uipp-selected');
-          $el.css('outline-offset', '3px');
+        var timeToAchieve = totalCostWorth / globalProdWorth;
 
-          var id = (rentability.coords || []).join('-') + rentability.resource;
-
-          if ($el.hasClass('uipp-selected')) {
-            simulatedNextBuilds[id] = rentability;
-          } else {
-            delete simulatedNextBuilds[id];
-          }
-
-          window.uipp_refreshSimulationDisplay();
-        };
-
-        window.uipp_resetSimulation = function () {
-          simulatedNextBuilds = {};
-          $('.rentability .uipp-selected').removeClass('uipp-selected');
-
-          window.uipp_refreshSimulationDisplay();
-        };
-
-        window.uipp_refreshSimulationDisplay = function () {
-          var $selectedWrapper = $('.uipp-simulation');
-          if ($selectedWrapper) {
-            $selectedWrapper.remove();
-          }
-
-          if (Object.keys(simulatedNextBuilds).length === 0) {
-            return;
-          }
-
-          var totalCost = [0, 0, 0];
-          var timeToAchieve = 0;
-          for (var simKey in simulatedNextBuilds) {
-            var cost = simulatedNextBuilds[simKey].astroCost || simulatedNextBuilds[simKey].totalCost;
-            if (!simulatedNextBuilds[simKey].inprog) {
-              totalCost[0] += cost[0];
-              totalCost[1] += cost[1];
-              totalCost[2] += cost[2];
-
-              timeToAchieve += simulatedNextBuilds[simKey].time;
-            }
-          }
-
-          var totalCostWorth = totalCost[0] * worth.metal + totalCost[1] * worth.crystal + totalCost[2] * worth.deuterium;
-
-          var timeToAchieve = totalCostWorth / globalProdWorth;
-
-          $rentabilityWrapper.append([
-            '<div class="uipp-simulation"',
-            ' style="cursor:pointer;margin-top: 15px;font-size: 16px;"',
-            ' onclick="uipp_resetSimulation()">',
-            totalCost.map(function (n) {
-              return window._num(n);
-            }).join(' / '),
-            ' ≈ ' + window._time(timeToAchieve, -1),
-            '</div>'
-          ].join(''));
-        };
-      }
+        $rentabilityWrapper.append([
+          '<div class="uipp-simulation"',
+          ' style="cursor:pointer;margin-top: 15px;font-size: 16px;"',
+          ' onclick="uipp_resetSimulation()">',
+          totalCost.map(function (n) {
+            return window._num(n);
+          }).join(' / '),
+          ' ≈ ' + window._time(timeToAchieve, -1),
+          '</div>'
+        ].join(''));
+      };
 
       window._insertHtml($wrapper);
     });

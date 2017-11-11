@@ -1,17 +1,12 @@
 var fn = function () {
   'use strict';
 
-  window.uipp_setupConfigMode = function (name, description, $content) {
-    var feature = 'feature-' + name;
-    var enabled = window.config.features[feature];
+  window.uipp_gearWrapper = function (name, description) {
+    var enabled = window.config.gearFeatures[name];
     if (enabled === undefined) enabled = true;
-    var $wrapper = $(['<div id="' + feature + '" class="uipp-gearbox clearfix">',
-      // '<div class="uipp-gearbox-msg" style="z-index: 2;">', description, '</div>',
-      '</div>'].join(''));
-    $wrapper.append($('<div class="uipp-gearbox-fill tooltip shadowed" style="position: absolute; z-index: 1; cursor: pointer;"></div>')
-      .attr('title', description)
-    );
-    $wrapper.append($content);
+    var $wrapper = $('<div id="' + name + '" class="uipp-gearbox clearfix"/>');
+    $wrapper.append('<div class="uipp-gearbox-fill tooltip shadowed" style="position: absolute; z-index: 1; cursor: pointer;"/>');
+    description && $wrapper.find('.tooltip').attr('title', description);
     !enabled && $wrapper.hide();
     return $wrapper;
   };
@@ -21,9 +16,6 @@ var fn = function () {
       .css({
         'position': 'absolute',
         'z-index': '2',
-        // 'height': '2vh',
-        // 'width': '2vh',
-        // 'background-size': 'cover',
         'margin': '0.5vh'
       })
       .click(function () {
@@ -33,7 +25,7 @@ var fn = function () {
         $('.uipp-gearbox').each(function () {
           var $this = $(this);
           var feature = $this.attr('id');
-          var enabled = window.config.features[feature];
+          var enabled = window.config.gearFeatures[feature];
           if (enabled === undefined) enabled = true;
           show || enabled ? $this.show() : $this.hide();
           show && !enabled && window.dispatchEvent(new Event('resize')); // force redraw chartis
@@ -42,7 +34,7 @@ var fn = function () {
             .height($this.outerHeight())
             .click(function () {
               enabled = !enabled;
-              window.config.features[feature] = enabled;
+              window.config.gearFeatures[feature] = enabled;
               window._saveConfig();
               $(this).css('background-color', 'rgba(0,0,0,' + (enabled ? '0.3' : '0.8') + ')');
             })
@@ -53,15 +45,6 @@ var fn = function () {
               'margin': '-2px',
               'display': show ? 'block' : 'none' });
         });
-      // move chackbox to the right
-      // $('.uipp-gearbox input').each(function () {
-      //   $(this).css({
-      //     'opacity': '1',
-      //     'left': $(this).parent().outerWidth() - $(this).outerWidth() });
-      // });
-
-      // show/hide message
-      // $('.uipp-gearbox-msg').each(function () { show ? $(this).show() : $(this).hide(); });
       });
   };
 };
