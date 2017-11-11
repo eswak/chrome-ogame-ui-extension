@@ -36,6 +36,7 @@
       "src/utils/edit-note.js",
       "src/utils/formatter-number.js",
       "src/utils/formatter-time.js",
+      "src/utils/gearboxes.js",
       "src/utils/get-current-planet-coordinates.js",
       "src/utils/get-current-planet-resources.js",
       "src/utils/get-resources-worth.js",
