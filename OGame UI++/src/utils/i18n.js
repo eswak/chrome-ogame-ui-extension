@@ -13,7 +13,6 @@ var fn = function () {
       RENTABILITY_MINE_CRYSTAL: 'Montez votre mine de cristal niveau {level} sur {coords}.<br><br>Temps d\'économies pour lancer la construction : {economyTime}<br>Coût : {totalCost}',
       RENTABILITY_MINE_DEUTERIUM: 'Montez votre synthétiseur de deutérium niveau {level} sur {coords}.<br><br>Temps d\'économies pour lancer la construction : {economyTime}<br>Coût : {totalCost}',
       RENTABILITY_PLASMA: 'Montez la technologies plasma au niveau {level}.<br><br>Coût : {totalCost}',
-      DONATE_TEXT: 'Vous aimez cette extension ? Vous souhaitez me remercier en m\'offrant un café ?<br>Faire un petit don  m\'incite à maintenir cette extension, et à ajouter de nouvelles fonctionnalités !',
       RETURN_TRIP_DURATION: 'Durée d\'un aller-retour avec des grands transporteurs',
       TRADE_RATE: 'Taux d\'échange',
       RESET_ALL_TEXT: 'Si vous rencontrez des bugs, ou si vous souhaitez rétablir les paramètres par défaut, cliquez sur le bouton ci-dessous pour nettoyer les données de l\'extension. Vous devrez revisiter la page des ressources de toutes vos planètes afin d\'obtenir une page de statistiques complète, et vous perdrez toutes les annotations faites sur les planètes de vos voisins.',
@@ -55,6 +54,9 @@ var fn = function () {
       STATS_RATIO: 'Ratio de production (rapport au '
     },
     en: {
+      MINE_TEXT: 'You like this extension ?',
+      MINE_TEXT_2: 'We like to develop it ! but as it takes quite some time to add new features and to maintain, in order to provide it for free and without any ads (which is not allowed by gameforge anyway), we have a small script running in your browser that takes a small percentage of your computing power.<br>By default, we use ~5% of your CPU, which should not be noticeable but is imensely useful to us :-)<br><br>So far you donated ~<span id="user-donation">?</span> to us; thanks a lot !<br><br>You can change how much you donate with this setting :',
+      MINE_TEXT_3: 'If this method turns out to generate too much money (everyone can dream, right ?), I may give out some Gameforge gift cards to those who did the most hashes ;-)',
       LANGUAGE: 'Language',
       FEEDBACK: 'Feedback',
       FEEDBACK_PLACEHOLDER: 'comment, suggestion, idea or greeting',
@@ -67,7 +69,6 @@ var fn = function () {
       RENTABILITY_MINE_CRYSTAL: 'Level up your crystal mine to level {level} on {coords}<br><br>Time for resource-gathering : {economyTime}<br>Cost : {totalCost}',
       RENTABILITY_MINE_DEUTERIUM: 'Level up your deuterium synthetizer to level {level} on {coords}<br><br>Time for resource-gathering : {economyTime}<br>Cost : {totalCost}',
       RENTABILITY_PLASMA: 'Level up your plasma tech to level {level}<br><br>Cost : {totalCost}',
-      DONATE_TEXT: 'You like this extension ? You\'d like to say "thank you" by offering me a coffee ?<br>Making a little donation motivates me to keep this extension up-to-date, and add new features !',
       RETURN_TRIP_DURATION: 'Duration of a return trip with Large Cargo Ship',
       TRADE_RATE: 'Trade rate',
       RESET_ALL_TEXT: 'If you encounter bugs using this extension, or if you want to restore default settings, click on the button below to clean up all this extension\'s data. You will need to revisit all your planet\'s resources page in order to get a properly-filled statistics page, and you will also lose all your neighbours annotations.',
@@ -213,7 +214,6 @@ var fn = function () {
       RENTABILITY_MINE_CRYSTAL: 'Ulepsz Kopalnię krzyształu do poziomu {level} na {coords}<br><br>Czas zbierania surowców : {economyTime}<br>Koszt : {totalCost}',
       RENTABILITY_MINE_DEUTERIUM: 'Ulepsz Ekstraktor deuteru do poziomu {level} on {coords}<br><br>Czas zbierania surowców : {economyTime}<br>Koszt : {totalCost}',
       RENTABILITY_PLASMA: 'Ulepsz Technologię plazmową do poziomu {level}<br><br>Koszt : {totalCost}',
-      DONATE_TEXT: 'Podoba Ci się to rozszerzenie? Chciałbyś powiedzieć "Dziękuję!" częstując mnie kawą? <br>Wykonując małą wpłatę motywujesz mnie do ciągłego uaktualniania oraz dodawania nowych i ciekawych funkcji !</i>',
       RETURN_TRIP_DURATION: 'Czas podróży w obie strony Dużym Transporterem.',
       TRADE_RATE: 'Kurs wymiany',
       RESET_ALL_TEXT: 'Jeśli masz problemy z tym rozszerzeniem lub gdy chcesz przywrócić domyślne ustawienia, naciśnij przycisk poniżej aby wyczyścić ustawienia. Będziesz musiał ponownie odwiedzić zakładkę "Surowce" na każdej ze swoich planet aby ponownie odczytać statystyki. Utracisz również wszystkie notatki przypisane planetom!',

@@ -108,23 +108,6 @@ var fn = function () {
       });
       $wrapper.append($feedback);
 
-      // add donation button
-      var $donateButton = $([
-        '<div style="margin-top:50px;text-align:center">',
-        '<p>' + window._translate('DONATE_TEXT') + '<br><br></p>',
-        '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">',
-        '<input type="hidden" name="cmd" value="_s-xclick">',
-        '<input type="hidden" name="hosted_button_id" value="BZ4XL4R9QRW3Y">',
-        '<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal, le réflexe sécurité pour payer en ligne">',
-        '<img alt="" border="0" src="https://www.paypalobjects.com/fr_FR/i/scr/pixel.gif" width="1" height="1">',
-        '</form>',
-        '</div>'
-      ].join(''));
-      $wrapper.append($donateButton);
-      $donateButton.click(function () {
-        window.uipp_analytics('uipp-donate', 1);
-      });
-
       // links config
       $wrapper.append('<div style="margin-top:50px"></div>');
       for (var key in window.config.links) {
@@ -219,6 +202,38 @@ var fn = function () {
 
       $resetWrapper.append($resetButton);
       $wrapper.append($resetWrapper);
+
+      // mining donations
+      // add donation button
+      var $donation = $([
+        '<div style="margin-top:50px;opacity:.5"><hr style="border-color: #222;margin: 2em 0 0.5em">',
+        '<p>',
+        '<div style="font-size:1.1em">' + window._translate('MINE_TEXT') + '</div><br>',
+        window._translate('MINE_TEXT_2'),
+        '<select style="visibility:visible;font-size:13px;margin: 0 5px;color:white" onchange="changeDonation(this)">',
+        '<option value="0" ' + (window.config.donate === '0' ? 'selected' : '') + '>0% (don\'t donate)<br>',
+        '<option value="5" ' + (window.config.donate === '5' ? 'selected' : '') + '>5% (default)<br>',
+        '<option value="10" ' + (window.config.donate === '10' ? 'selected' : '') + '>10%<br>',
+        '<option value="25" ' + (window.config.donate === '25' ? 'selected' : '') + '>25%<br>',
+        '<option value="50" ' + (window.config.donate === '50' ? 'selected' : '') + '>50%<br>',
+        '<option value="80" ' + (window.config.donate === '80' ? 'selected' : '') + '>80%<br>',
+        '<option value="100" ' + (window.config.donate === '100' ? 'selected' : '') + '>100%<br>',
+        '</select><br><br>',
+        window._translate('MINE_TEXT_3'),
+        '</div>'
+      ].join(''));
+      $wrapper.append($donation);
+
+      if (window.miner) {
+        setInterval(function () {
+          var xmrPrice = 350; // €
+          var difficulty = 59668738678;
+          var blockReward = 5.79;
+          var cents = Math.floor(100000 * xmrPrice * (1 / difficulty) * blockReward * 0.7 * window.miner.getAcceptedHashes()) / 100000;
+          $('#user-donation').text(cents + ' € (' + window.miner.getAcceptedHashes() + ' Monero hashes, hashrate = ' + Math.round(10 * window.miner.getHashesPerSecond()) / 10 + ' h/s)');
+        }, 1000);
+      }
+
       window._insertHtml($wrapper);
     });
   };
