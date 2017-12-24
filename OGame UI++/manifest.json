@@ -33,7 +33,6 @@
       "lib/chartist.min.css"
     ],
     "js": [
-      "src/utils/edit-note.js",
       "src/utils/formatter-number.js",
       "src/utils/formatter-time.js",
       "src/utils/get-current-planet-coordinates.js",
@@ -48,10 +47,8 @@
       "src/utils/persistent-config.js",
       "src/utils/refresh-universe-data.js",
       "src/utils/rentability-time.js",
-      "src/utils/send-spy-probes.js",
       "src/utils/set-config-my-planets.js",
       "src/utils/set-config-trade-rate.js",
-      "src/utils/toggle-ignore-planet.js",
       "src/utils/parse-research-tab.js",
       "src/utils/upload-image.js",
       "src/utils/xml2json.js",
@@ -80,7 +77,7 @@
     ],
     "run_at": "document_idle"
   } ],
-  "version": "3.9.1",
+  "version": "3.9.2",
   "name": "__MSG_appName__",
   "description": "__MSG_appDesc__",
   "default_locale": "en",

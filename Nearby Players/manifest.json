@@ -8,6 +8,9 @@
     "css": [],
     "js": [
       "src/utils/dom-events.js",
+      "src/utils/edit-note.js",
+      "src/utils/send-spy-probes.js",
+      "src/utils/toggle-ignore-planet.js",
       "src/tab-idle-players.js",
       "src/tab-neighbors.js",
       "src/spy-message-parser.js",
@@ -21,7 +24,7 @@
     "run_at": "document_idle"
   } ],
   "converted_from_user_script": true,
-  "version": "2.3.0",
+  "version": "2.3.1",
   "name": "__MSG_appName__",
   "description": "__MSG_appDesc__",
   "default_locale": "en",
