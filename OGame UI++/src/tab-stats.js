@@ -112,8 +112,8 @@ var fn = function () {
           '<tr>',
           '<td style="max-width: 80px; overflow: hidden; text-overflow: ellipsis;">',
           '<a href="' + planet.href + '">',
-          planet.name + '<br>',
-          '<span style="vertical-align: -1px; opacity: .7;">[' + planet.coords.join(':') + ']</span>',
+          '<span class="uipp-stats-planet-name">' + planet.name + '</span><br>',
+          '<span style="vertical-align: -1px; opacity: .7;" class="uipp-stats-planet-coords" temp="' + planet.averageTemp + '">[' + planet.coords.join(':') + ']</span>',
           '</a>',
           '</td>',
           ['metal', 'crystal', 'deuterium'].map(function (resource) {
@@ -145,6 +145,14 @@ var fn = function () {
             }
             globalStats.current[resource] += moonResource;
 
+            var minePoints = 0;
+            for (var i = 0; i < planet.resources[resource].level; i++) {
+              var levelCost = window.uipp_getCost(resource, i);
+              minePoints += levelCost[0];
+              minePoints += levelCost[1];
+            }
+            minePoints = Math.floor(minePoints / 1000);
+
             return [
               '<td id="stat-' + planet.coords.join('-') + '-' + resource + '"',
               ' onclick="uipp_toggleSelect(this, \'' + resource + '\', ' + (currentRealtimePlanetResources[resource] + moonResource) + ', ' + planet.resources[resource].prod + ')"',
@@ -154,7 +162,7 @@ var fn = function () {
               inprog ? '<span class="icon12px icon_wrench" style="position:absolute;bottom:-3px;right:0;"></span>' : '',
               '</div>',
               '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
-              '<div>' + window._num(currentRealtimePlanetResources[resource], planet.resources[resource].prod, planet.resources[resource].max) + (planet.moon ? (' + <span class="overmark">' + window._num(moonResource) + '</span>') : '') + '</div>',
+              '<div class="uipp-current-resources" points="' + window._num(minePoints) + '">' + window._num(currentRealtimePlanetResources[resource], planet.resources[resource].prod, planet.resources[resource].max) + (planet.moon ? (' + <span class="overmark">' + window._num(moonResource) + '</span>') : '') + '</div>',
               '<div><span class="undermark">+' + window._num(Math.floor(planet.resources[resource].prod * 3600)) + '</span> /' + window._translate('TIME_HOUR') + '</div>',
               '<div><span class="undermark">+' + window._num(Math.floor(planet.resources[resource].prod * 3600 * 24)) + '</span> /' + window._translate('TIME_DAY') + '</div>',
               '</div>',
@@ -215,7 +223,7 @@ var fn = function () {
           '<td style="max-width: 80px; overflow: hidden; text-overflow: ellipsis;">∑</td>',
           ['metal', 'crystal', 'deuterium'].map(function (resource) {
             return [
-              '<td id="stat-flight">',
+              '<td>',
               '<div class="shadowed" style="float: left; width: 48px; height: 32px; background-image:url(' + window.uipp_images.resources[resource] + ')"></div>',
               '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
               '<div style="padding-top: 11px;">' + window._num(selected[resource].current, selected[resource].production) + '</div>',
@@ -286,8 +294,8 @@ var fn = function () {
         globalStats.current.deuterium += inflight.deuterium;
 
         planetStatsHtml += [
-          '<tr><td style="height:5px"></td></tr>',
-          '<tr>',
+          '<tr class="resources-in-flight"><td style="height:5px"></td></tr>',
+          '<tr class="resources-in-flight">',
           '<td style="max-width: 80px; overflow: hidden; text-overflow: ellipsis;">',
           '<span class="icon_movement" style="display: inline-block;"></span>',
           '</td>',
@@ -307,8 +315,8 @@ var fn = function () {
 
       // storage times
       planetStatsHtml += [
-        '<tr><td style="height:5px"></td></tr>',
-        '<tr>',
+        '<tr class="storage-time"><td style="height:5px"></td></tr>',
+        '<tr class="storage-time">',
         '<td style="max-width: 80px; overflow: hidden; text-overflow: ellipsis;">',
         '<div class="bar_container" style="width: 40px;display: inline-block;">',
         '<div class="filllevel_bar filllevel_undermark" style="width: 50%;"></div>',
@@ -319,7 +327,7 @@ var fn = function () {
             return a.time > b.time ? 1 : -1;
           }).slice(0, 3);
           return [
-            '<td id="stat-flight">',
+            '<td>',
             '<div class="shadowed" style="float: left; width: 48px; height: 32px; background-image:url(' + window.uipp_images.resources[resource] + ')">',
             fullInTop3.map(function (fullInEntry) {
               return '<div style="font-size:9px;line-height:11px">' + window._time(fullInEntry.time, -1) + '</div>';
@@ -359,7 +367,7 @@ var fn = function () {
             Math.floor(10 * globalStats.level[resource]) / 10,
             '</div>',
             '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em; padding-bottom: 3px">',
-            '<div class="font-weight: bold; padding-bottom: 1px;">' + window._num(globalStats.current[resource], globalStats.prod[resource]) + '</div>',
+            '<div class="uipp-current-global-resources">' + window._num(globalStats.current[resource], globalStats.prod[resource]) + '</div>',
             '<div><span class="undermark">+' + window._num(Math.floor(globalStats.prod[resource] * 3600)) + '</span> /' + window._translate('TIME_HOUR') + '</div>',
             '<div><span class="undermark">+' + window._num(Math.floor(globalStats.prod[resource] * 3600 * 24)) + '</span> /' + window._translate('TIME_DAY') + '</div>',
             '<div style="font-size: 8px; padding-top: 5px;">' + productionRatio[resource] + '</div>',
@@ -392,6 +400,22 @@ var fn = function () {
           '<div>' + text + '</div>',
           '<div>Created with OGame UI++ (goo.gl/hXeoZn)</div>'
         ].join(''));
+
+        $('.uipp-stats-planet-name').each(function (i) {
+          $(this).html('P' + (i + 1));
+        });
+        $('.uipp-stats-planet-coords').each(function () {
+          $(this).html($(this).attr('temp') + ' °C');
+        });
+
+        $('.uipp-selected-resources').css('display', 'none');
+        $('.storage-time').css('display', 'none');
+        $('.resources-in-flight').css('display', 'none');
+        $('.uipp-current-global-resources').css('display', 'none');
+        $('.uipp-current-resources').each(function () {
+          $(this).html($(this).attr('points') + ' points');
+        });
+        $('.uipp-selected').removeClass('uipp-selected');
 
         window._getScreenshotLink($('.uiEnhancementWindow .uipp-table')[0], function (err, link) {
           if (err) {
