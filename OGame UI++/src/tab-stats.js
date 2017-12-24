@@ -804,6 +804,12 @@ var fn = function () {
         };
       }
 
+      $wrapper.append([
+        '<div style="padding: 2em; opacity: 0.5;">',
+        window._translate('RENTABILITY_EXPLAINATION'),
+        '</div>'
+      ].join(''));
+
       window._insertHtml($wrapper);
     });
 
