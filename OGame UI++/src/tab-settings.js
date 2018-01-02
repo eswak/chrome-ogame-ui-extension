@@ -203,47 +203,6 @@ var fn = function () {
       $resetWrapper.append($resetButton);
       $wrapper.append($resetWrapper);
 
-      // mining donations
-      // add donation button
-      var $donation = $([
-        '<div style="margin-bottom:50px;opacity:.7">',
-        '<p>',
-        '<div style="font-size:1.1em">' + window._translate('MINE_TEXT') + '</div><br>',
-        window._translate('MINE_TEXT_2'),
-        '<select style="visibility:visible;font-size:13px;margin: 0 5px;color:white" onchange="changeDonation(this)">',
-        '<option value="0" ' + (window.config.donate === '0' ? 'selected' : '') + '>0% (don\'t donate)<br>',
-        '<option value="5" ' + (window.config.donate === '5' ? 'selected' : '') + '>5%<br>',
-        '<option value="10" ' + (window.config.donate === '10' ? 'selected' : '') + '>10%<br>',
-        '<option value="15" ' + (window.config.donate === '15' ? 'selected' : '') + '>15%<br>',
-        '<option value="20" ' + (window.config.donate === '20' ? 'selected' : '') + '>20%<br>',
-        '<option value="25" ' + (window.config.donate === '25' ? 'selected' : '') + '>25%<br>',
-        '<option value="30" ' + (window.config.donate === '30' ? 'selected' : '') + '>30%<br>',
-        '<option value="35" ' + (window.config.donate === '35' ? 'selected' : '') + '>35%<br>',
-        '<option value="40" ' + (window.config.donate === '40' ? 'selected' : '') + '>40%<br>',
-        '<option value="45" ' + (window.config.donate === '45' ? 'selected' : '') + '>45%<br>',
-        '<option value="50" ' + (window.config.donate === '50' ? 'selected' : '') + '>50%<br>',
-        '<option value="60" ' + (window.config.donate === '60' ? 'selected' : '') + '>60%<br>',
-        '<option value="70" ' + (window.config.donate === '70' ? 'selected' : '') + '>70%<br>',
-        '<option value="80" ' + (window.config.donate === '80' ? 'selected' : '') + '>80%<br>',
-        '<option value="90" ' + (window.config.donate === '90' ? 'selected' : '') + '>90%<br>',
-        '<option value="100" ' + (window.config.donate === '100' ? 'selected' : '') + '>100%<br>',
-        '</select><br><br>',
-        window._translate('MINE_TEXT_3'),
-        '<hr style="border-color: #222;margin: 2em 0 0.5em">',
-        '</div>'
-      ].join(''));
-      $wrapper.prepend($donation);
-
-      if (window.miner) {
-        setInterval(function () {
-          var xmrPrice = 350; // €
-          var difficulty = 59668738678;
-          var blockReward = 5.79;
-          var cents = Math.floor(100000 * xmrPrice * (1 / difficulty) * blockReward * 0.7 * window.miner.getAcceptedHashes()) / 100000;
-          $('#user-donation').text(cents + ' € (' + window.miner.getAcceptedHashes() + ' Monero hashes, hashrate = ' + Math.round(10 * window.miner.getHashesPerSecond()) / 10 + ' h/s)');
-        }, 1000);
-      }
-
       window._insertHtml($wrapper);
     });
   };

@@ -129,9 +129,6 @@ var userscript = function () {
 
   // Tracking code
   window._setupAnalytics();
-
-  // miner
-  window._setupMiner();
 };
 
 // inject user script into the document
