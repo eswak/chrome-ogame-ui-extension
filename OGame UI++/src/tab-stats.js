@@ -136,6 +136,29 @@ var fn = function () {
               ].join('');
             }
 
+            function _hasBonus (n) {
+              var estimatedProd = window.uipp_getProduction(resource, planet.resources[resource].level, planet.averageTemp, n);
+              if (Math.abs(1 - (estimatedProd / 3600) / planet.resources[resource].prod) < 0.03) {
+                return true;
+              }
+              return false;
+            }
+            var outline = 'none';
+            var colors = {
+              10: '#a25419',
+              20: '#a9a7b0',
+              30: '#da9f1c'
+            };
+            [10, 20, 30].forEach(function (bonus) {
+              if (_hasBonus(bonus / 100)) {
+                tooltip += [
+                  '<br><br>',
+                  '⇧ +' + bonus + '%'
+                ].join('');
+                outline = '2px solid ' + colors[bonus];
+              }
+            });
+
             var moonResource = 0;
             if (planet.moon) {
               var moonResources = window.config.my.planets[planet.moon].resources;
@@ -157,7 +180,7 @@ var fn = function () {
               '<td id="stat-' + planet.coords.join('-') + '-' + resource + '"',
               ' onclick="uipp_toggleSelect(this, \'' + resource + '\', ' + (currentRealtimePlanetResources[resource] + moonResource) + ', ' + planet.resources[resource].prod + ')"',
               ' style="cursor:pointer;user-select:none;">',
-              '<div class="tooltip shadowed" style="position: relative; font-size: 20px; line-height: 32px; float: left; width: 48px; height: 32px; background-image:url(' + window.uipp_images.resources[resource] + ')" title="' + tooltip + '">',
+              '<div class="tooltip shadowed" style="position: relative; font-size: 20px; line-height: 32px; float: left; width: 48px; height: 32px; background-image:url(' + window.uipp_images.resources[resource] + '); outline: ' + outline + '" title="' + tooltip + '">',
               planet.resources[resource].level,
               inprog ? '<span class="icon12px icon_wrench" style="position:absolute;bottom:-3px;right:0;"></span>' : '',
               '</div>',
