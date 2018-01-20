@@ -15,7 +15,7 @@ var fn = function () {
 
       _this.setStatus = function (status) {
         function setColor (color) {
-          $('#planet_' + _this.coordsStr + ' .icon_eye').css('box-shadow', 'inset 0 0 0 20px rgba(' + color + ',0.3)');
+          $('#planet_' + _this.coordsStr + ' .icon_eye').css('box-shadow', 'inset 0 0 0 20px rgba(' + color + ',0.5)');
         }
 
         if (status === 'new') {
@@ -74,10 +74,11 @@ var fn = function () {
               if (a.response.coordinates) {
                 // wait for free mission slot
                 msg(a.response.message);
-                enqueueOnFreeMissionSlot(_this.spy);
+                _this.waitForFreeMissionSlot();
               } else {
-                // general error, try again in 2 sec
-                setTimeout(_this.spy, 2000);
+                // unknown situation. Process next operation
+                _this.setStatus('error');
+                processSpyQueue();
               }
             }
             window.miniFleetToken = a.newToken;
@@ -85,34 +86,42 @@ var fn = function () {
         });
       };
 
+      _this.waitForFreeMissionSlot = function () {
+        // get end time of latest mission
+        $.ajax('?page=eventList&ajax=1', {
+          dataType: 'html',
+          type: 'POST',
+          success: function (res) {
+            var timeTab = [];
+            $(res).find('tr.eventFleet').each(function () {
+              var t = $(this).attr('data-arrival-time');
+              if (t && $(this).attr('data-return-flight') === 'true') {
+                timeTab.push(t);
+              }
+            });
+            var currentFleetCout = timeTab.length;
+            var maxFleetCount = window.config.computerTech + 1;
+            if (currentFleetCout >= (maxFleetCount - 2)) { // if queue full or just released one or two slots(-2)
+              timeTab.sort(function (a, b) {return a - b;});
+              var waitTime = Math.round(timeTab[0] - Date.now() / 1000) + 10;
+              if (currentFleetCout >= maxFleetCount)
+                msg('Waiting ' + Math.floor(waitTime) + ' seconds for free mission slot...');
+              else
+                waitTime = 2; // just released one slot
+              setTimeout(_this.spy, waitTime * 1000);
+            } else {
+              // unknown situation. Process next operation
+              _this.setStatus('error');
+              processSpyQueue();
+            }
+          }
+        });
+      };
+
       _this.setStatus('new');
     }
 
-    function enqueueOnFreeMissionSlot (func) {
-      // get end time of next mission
-      $.ajax('?page=eventList&ajax=1', {
-        dataType: 'html',
-        type: 'POST',
-        success: function (res) {
-          var timeTab = [];
-          $(res).find('tr.eventFleet').each(function () {
-            var t = $(this).attr('data-arrival-time');
-            if (t && $(this).attr('data-return-flight') === 'true') {
-              timeTab.push(t);
-            }
-          });
-          if (timeTab.length > 0) {
-            timeTab.sort(function (a, b) {return a - b;});
-            var waitTime = Math.round(timeTab[0] - Date.now() / 1000) + 10 * Math.random();
-            msg('Waitng ' + Math.floor(waitTime) + ' seconds for free mission slot...');
-            setTimeout(func, waitTime * 1000);
-          } else {
-            // unknown situation. Retry in 30 secs
-            setTimeout(func, 30 * 1000 + 10 * 1000 * Math.random());
-          }
-        }
-      });
-    }
+
 
     function enqueueSpy (coords) {
       window.spyQueue = window.spyQueue || [];
@@ -122,16 +131,19 @@ var fn = function () {
       }
     }
 
+    function removeFromQueue (spy) {
+      window.spyQueue = window.spyQueue.filter(function (s) { return s.spyTime !== spy.spyTime; });
+    }
+
     function processSpyQueue () {
-      if (window.spyQueueCurrent && window.spyQueueCurrent.status === 'end') {
-        // remove from queue
-        window.spyQueue = window.spyQueue.filter(function (s) { return s.spyTime !== window.spyQueueCurrent.spyTime; });
+      if (window.spyQueueCurrent && (window.spyQueueCurrent.status === 'end' || window.spyQueueCurrent.status === 'error')) {
+        removeFromQueue(window.spyQueueCurrent);
       }
 
-      if (!window.spyQueueCurrent || window.spyQueueCurrent.status === 'end') {
+      if (!window.spyQueueCurrent || (window.spyQueueCurrent.status === 'end' || window.spyQueueCurrent.status === 'error')) {
         var spy = window.spyQueue.find(function (s) { return s.status === 'new'; });
         if (spy) {
-          var delay = 500 * Math.random();
+          var delay = 500;
           if (window.spyQueueCurrent)
             delay += Math.max(0, 1500 - window.spyQueueCurrent.elapsed());
           spy.spy(delay);
