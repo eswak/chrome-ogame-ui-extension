@@ -9,6 +9,7 @@ var fn = function () {
     window.config.combustionDrive = Number($('[ref=115] .level').text().match(/\d+/g)[0]);
     window.config.plasmaTech = Number($('[ref=122] .level').text().match(/\d+/g)[0]);
     window.config.astroTech = Number($('[ref=124] .level').text().match(/\d+/g)[0]);
+    window.config.computerTech = Number($('[ref=108] .level').text().match(/\d+/g)[0]);
 
     window._saveConfig();
   };
