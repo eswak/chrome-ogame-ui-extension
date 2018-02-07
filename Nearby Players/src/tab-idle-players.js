@@ -122,6 +122,7 @@ var fn = function () {
         '<span data-filter="flight-time">',
         '<img src="https://gf2.geo.gfsrv.net/cdna2/89624964d4b06356842188dba05b1b.gif"/>',
         [
+          [null, 1800, '<30m'],
           [null, 3600, '<1h'],
           [null, 2 * 3600, '<2h'],
           [null, 5 * 3600, '<5h'],
@@ -139,7 +140,7 @@ var fn = function () {
 
         // economy score filters
         '<span data-filter="economy-score">',
-        '<span class="navButton uipp-score" id="economy" style="margin: -25px -18px -19px 40px; transform: scale(0.33);"></span>',
+        '<span class="navButton uipp-score" id="economy" style="margin: -25px -18px -19px 20px; transform: scale(0.33);"></span>',
         [
           [0, 0, '0'],
           [1, null, '>0'],
@@ -160,7 +161,7 @@ var fn = function () {
 
         // military score filters
         '<span data-filter="military-score">',
-        '<span class="navButton uipp-score" id="fleet" style="margin: -25px -18px -19px 40px; transform: scale(0.33);"></span>',
+        '<span class="navButton uipp-score" id="fleet" style="margin: -25px -18px -19px 20px; transform: scale(0.33);"></span>',
         [
           [0, 0, '0'],
           [1, null, '>0']
