@@ -3,6 +3,7 @@ var userscript = function () {
   setTimeout(function () {
     'use strict';
 
+    localStorage.setItem('uipp_miniFleetToken', window.miniFleetToken);
     if (!window.config) {
       $('#links').append([
         '<div style="background: black;padding: 10px;margin: 10px 8px 0 0;border: 1px solid #ff6000;border-radius: 3px;color:#ff6000;text-align: center">',
