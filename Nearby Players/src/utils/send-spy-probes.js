@@ -12,6 +12,7 @@ var fn = function () {
       var _this = this;
       _this.coords = coords;
       _this.coordsStr = coords.galaxy + '_' + coords.system + '_' + coords.position;
+      _this.try = 0;
 
       _this.setStatus = function (status) {
         function setColor (color) {
@@ -59,32 +60,67 @@ var fn = function () {
             position: position,
             type: 1,
             shipCount: window.constants.espionage,
-            token: window.miniFleetToken
+            token: getNewToken()
           },
           dataType: 'json',
           type: 'POST',
           success: function (a) {
-            if (a.response.success) {
-              _this.setStatus('end');
-              processSpyQueue();
-              window.uipp_analytics('uipp-spy', 'success');
-            } else {
-              _this.setStatus('delay');
-              window.uipp_analytics('uipp-spy', 'failed');
-              if (a.response.coordinates) {
-                // wait for free mission slot
-                msg(a.response.message);
-                _this.waitForFreeMissionSlot();
-              } else {
-                // unknown situation. Process next operation
-                _this.setStatus('error');
+            if (a && a.response) {
+              if (a.response.success) {
+                _this.setStatus('end');
                 processSpyQueue();
+                window.uipp_analytics('uipp-spy', 'success');
+              } else {
+                _this.setStatus('delay');
+                window.uipp_analytics('uipp-spy', 'failed');
+                if (a.response.coordinates) {
+                  // wait for free mission slot
+                  msg(a.response.message);
+                  _this.waitForFreeMissionSlot();
+                } else {
+                  if (_this.try < 3) {
+                    _this.try += 1;
+                    getGalaxyAndTryAgain();
+                  } else {
+                    // unknown situation. Process next operation
+                    _this.setStatus('error');
+                    processSpyQueue();
+                  }
+                }
               }
+              localStorage.removeItem('uipp_miniFleetToken');
+              window.miniFleetToken = a.newToken;
+            } else {
+              getGalaxyAndTryAgain ();
             }
-            window.miniFleetToken = a.newToken;
           }
         });
       };
+
+      function getNewToken () {
+        var newToken = localStorage.getItem('uipp_miniFleetToken');
+        if (newToken) {
+          localStorage.removeItem('uipp_miniFleetToken');
+          if (newToken !== window.miniFleetToken)
+            _this.try = 0;
+          return newToken;
+        } else
+          return window.miniFleetToken;
+      }
+
+      function getGalaxyAndTryAgain () {
+        $.ajax('?page=galaxy', {
+          success: function (text) {
+            var newToken = text.match(/var miniFleetToken="(.*?)";/);
+            if (newToken && newToken.length >= 2) {
+              window.miniFleetToken = newToken[1];
+              localStorage.removeItem('uipp_miniFleetToken');
+            }
+            _this.spy(2000);
+          }
+        });
+      }
+
 
       _this.waitForFreeMissionSlot = function () {
         // get end time of latest mission
@@ -108,7 +144,10 @@ var fn = function () {
                 msg('Waiting ' + Math.floor(waitTime) + ' seconds for free mission slot...');
               else
                 waitTime = 2; // just released one slot
-              setTimeout(_this.spy, waitTime * 1000);
+              _this.spy(waitTime * 1000);
+            } else if (_this.try < 3) {
+              _this.try += 1;
+              getGalaxyAndTryAgain();
             } else {
               // unknown situation. Process next operation
               _this.setStatus('error');
