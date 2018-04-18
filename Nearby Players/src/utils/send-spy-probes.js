@@ -4,11 +4,6 @@ var fn = function () {
   window._startTime = Date.now();
   window._spy = function (galaxy, system, position) {
     
-    function msg (str) {
-      window.fadeBox(str, false);
-      debug(str);
-    }
-
     function debug() {
       console.log('ui++:', ...arguments);
     }
@@ -18,6 +13,8 @@ var fn = function () {
       _this.coords = coords;
       _this.coordsStr = coords.galaxy + '_' + coords.system + '_' + coords.position;
       _this.try = 0;
+      _this.waitingStatus = '';
+      _this.errorBackoffSec = 1;
 
       _this.setStatus = function (status, code) {
         function setColor (color) {
@@ -75,7 +72,7 @@ var fn = function () {
           setTimeout(_this.spy, delay);
           _this.statusInterval = setInterval(() => { 
               _this.spyInMs-= 1000;
-              _this.showStatus(Math.round(Math.max(0, _this.spyInMs/1000)) + 'sec');
+              _this.showStatus(Math.round(Math.max(0, _this.spyInMs/1000)) + 'sec ' + _this.waitingStatus);
             }, 1000 )
           return;
         }
@@ -131,7 +128,9 @@ var fn = function () {
             } else {
               getGalaxyAndTryAgain ();
             }
-          }
+            _this.errorBackoffSec = 1;
+          },
+          error: _this.errorBackoffCb
         });
       };
 
@@ -156,7 +155,8 @@ var fn = function () {
               localStorage.removeItem('uipp_miniFleetToken');
             }
             _this.spy(2000);
-          }
+          },
+          error: _this.errorBackoffCb
         });
       }
 
@@ -195,9 +195,22 @@ var fn = function () {
               _this.setStatus('error', 2);
               processSpyQueue();
             }
-          }
+          },
+          error: _this.errorBackoffCb
         });
       };
+
+      function msg (str) {
+        window.fadeBox(str, false);
+        _this.waitingStatus = str;
+        debug(str);
+      }
+
+      _this.errorBackoffCb = function (jqXHR, textStatus) {
+          msg('ERROR: ' + textStatus);
+          _this.errorBackoffSec += Math.min(60, _this.errorBackoffSec * 2);
+          _this.spy((_this.errorBackoffSec + 1) * 1000);
+      }
 
       _this.setStatus('new');
     }
