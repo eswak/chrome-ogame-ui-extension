@@ -5,7 +5,8 @@ var fn = function () {
   window._spy = function (galaxy, system, position) {
     
     function debug() {
-      console.log('ui++:', ...arguments);
+      if (window.uipp_debug)
+        console.log('ui++:', ...arguments);
     }
 
     function Spy (coords) {
