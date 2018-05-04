@@ -127,6 +127,9 @@ var userscript = function () {
     window._addSolarSatHelperInterval();
   }
 
+  window._addImportExportHelper();
+  window._addAuctioneerHelper();
+
   // Refresh universe data (config.players)
   window._refreshUniverseData();
 
