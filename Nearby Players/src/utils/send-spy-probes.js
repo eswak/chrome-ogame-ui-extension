@@ -3,9 +3,10 @@ var fn = function () {
 
   window._startTime = Date.now();
   window._spy = function (galaxy, system, position) {
-
-    function msg (str) {
-      window.fadeBox(str, false);
+    
+    function debug() {
+      if (window.uipp_debug)
+        console.log('ui++:', ...arguments);
     }
 
     function Spy (coords) {
@@ -13,8 +14,10 @@ var fn = function () {
       _this.coords = coords;
       _this.coordsStr = coords.galaxy + '_' + coords.system + '_' + coords.position;
       _this.try = 0;
+      _this.waitingStatus = '';
+      _this.errorBackoffSec = 1;
 
-      _this.setStatus = function (status) {
+      _this.setStatus = function (status, code) {
         function setColor (color) {
           $('#planet_' + _this.coordsStr + ' .icon_eye').css('box-shadow', 'inset 0 0 0 20px rgba(' + color + ',0.5)');
         }
@@ -29,7 +32,14 @@ var fn = function () {
           setColor('0,200,0');
         } else if (status === 'error') {
           setColor('250,0,0');
+          if (code)
+            _this.showStatus('Error ' + code)
         }
+        debug('set status', status, code != undefined ? code : '')
+
+        if (status !== 'error')
+          _this.showStatus(null);
+
         _this.status = status;
       };
 
@@ -43,11 +53,35 @@ var fn = function () {
         return Date.now() - _this.spyTime;
       };
 
+      _this.showStatus = function (status) {
+        var $p = $('#planet_' + _this.coordsStr + ' .icon_eye').parent();
+        var $el = $p.find('.status');
+        if (status) {
+          if ($el.length == 0)
+            $el = $p.append('<div class="status" style="position: absolute; white-space: nowrap;">'
+              ).find('.status');
+          $el.text(status);  
+          // $('#spyQueueStatus').text(status);
+        } else
+          $el.remove();
+      }
+
       _this.spy = function (delay) {
         if (delay && delay > 0) {
+          _this.spyInMs = delay;
           _this.setStatus('delay');
           setTimeout(_this.spy, delay);
+          _this.statusInterval = setInterval(() => { 
+              _this.spyInMs-= 1000;
+              _this.showStatus(Math.round(Math.max(0, _this.spyInMs/1000)) + 'sec ' + _this.waitingStatus);
+            }, 1000 )
           return;
+        }
+
+        if (_this.statusInterval) {
+          clearInterval(_this.statusInterval)
+          _this.statusInterval = null;
+          // _this.showStatus(null);
         }
 
         _this.spyTime = Date.now();
@@ -65,6 +99,7 @@ var fn = function () {
           dataType: 'json',
           type: 'POST',
           success: function (a) {
+            debug('?page=minifleet', a);
             if (a && a.response) {
               if (a.response.success) {
                 _this.setStatus('end');
@@ -77,13 +112,14 @@ var fn = function () {
                   // wait for free mission slot
                   msg(a.response.message);
                   _this.waitForFreeMissionSlot();
+                  _this.showStatus(a.response.message);
                 } else {
                   if (_this.try < 3) {
                     _this.try += 1;
                     getGalaxyAndTryAgain();
                   } else {
                     // unknown situation. Process next operation
-                    _this.setStatus('error');
+                    _this.setStatus('error', 1);
                     processSpyQueue();
                   }
                 }
@@ -93,7 +129,9 @@ var fn = function () {
             } else {
               getGalaxyAndTryAgain ();
             }
-          }
+            _this.errorBackoffSec = 1;
+          },
+          error: _this.errorBackoffCb
         });
       };
 
@@ -112,12 +150,14 @@ var fn = function () {
         $.ajax('?page=galaxy', {
           success: function (text) {
             var newToken = text.match(/var miniFleetToken="(.*?)";/);
+            debug('galaxy new token', newToken);
             if (newToken && newToken.length >= 2) {
               window.miniFleetToken = newToken[1];
               localStorage.removeItem('uipp_miniFleetToken');
             }
             _this.spy(2000);
-          }
+          },
+          error: _this.errorBackoffCb
         });
       }
 
@@ -128,6 +168,7 @@ var fn = function () {
           dataType: 'html',
           type: 'POST',
           success: function (res) {
+            debug('?page=eventList', $(res)[0]);
             var timeTab = [];
             $(res).find('tr.eventFleet').each(function () {
               var t = $(this).attr('data-arrival-time');
@@ -137,9 +178,11 @@ var fn = function () {
             });
             var currentFleetCout = timeTab.length;
             var maxFleetCount = window.config.computerTech + 1;
-            if (currentFleetCout >= (maxFleetCount - 2)) { // if queue full or just released one or two slots(-2)
+            debug('currentFleetCout, maxFleetCount, tech', currentFleetCout, maxFleetCount, window.config.computerTech);
+            if (currentFleetCout >= Math.max(1, maxFleetCount - 2)) { // if queue full or just released one or two slots(-2)
               timeTab.sort(function (a, b) {return a - b;});
               var waitTime = Math.round(timeTab[0] - Date.now() / 1000) + 10;
+              debug('waitTime', waitTime);
               if (currentFleetCout >= maxFleetCount)
                 msg('Waiting ' + Math.floor(waitTime) + ' seconds for free mission slot...');
               else
@@ -150,12 +193,25 @@ var fn = function () {
               getGalaxyAndTryAgain();
             } else {
               // unknown situation. Process next operation
-              _this.setStatus('error');
+              _this.setStatus('error', 2);
               processSpyQueue();
             }
-          }
+          },
+          error: _this.errorBackoffCb
         });
       };
+
+      function msg (str) {
+        window.fadeBox(str, false);
+        _this.waitingStatus = str;
+        debug(str);
+      }
+
+      _this.errorBackoffCb = function (jqXHR, textStatus) {
+          msg('ERROR: ' + textStatus);
+          _this.errorBackoffSec += Math.min(60, _this.errorBackoffSec * 2);
+          _this.spy((_this.errorBackoffSec + 1) * 1000);
+      }
 
       _this.setStatus('new');
     }
