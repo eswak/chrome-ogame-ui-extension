@@ -24,6 +24,7 @@ var uipp_images = {
     charts: chrome.extension.getURL('img/features/charts.png'),
     deploytransport: chrome.extension.getURL('img/features/deploytransport.png'),
     galaxy: chrome.extension.getURL('img/features/galaxy.png'),
+    galaxydebris: chrome.extension.getURL('img/features/galaxydebris.png'),
     minetext: chrome.extension.getURL('img/features/minetext.png'),
     missingresources: chrome.extension.getURL('img/features/missingresources.png'),
     nextbuilds: chrome.extension.getURL('img/features/nextbuilds.png'),
@@ -70,6 +71,7 @@ var userscript = function () {
     charts: true,
     deploytransport: true,
     galaxy: true,
+	galaxydebris: true,
     minetext: true,
     missingresources: true,
     nextbuilds: true,
@@ -120,6 +122,10 @@ var userscript = function () {
   // Add interval checkers
   if (features.galaxy) {
     window._addGalaxyPlayersPlanetsInterval();
+  }
+  
+  if (features.galaxydebris) {
+    window._addGalaxyDebrisInterval();
   }
 
   if (features.minetext || features.missingresources) {
