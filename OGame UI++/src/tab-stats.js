@@ -259,57 +259,7 @@ var fn = function () {
       };
 
       // in flight
-      var missions = [];
-      $('#eventContent .tooltip.tooltipClose').each(function () {
-        var $tooltip = $($(this).attr('title'));
-        var $tr = $(this).parent().parent();
-
-        var reverse = $tr.find('.icon_movement_reserve').length ? true : false;
-
-        var trCount = $tooltip.find('tr').length;
-        var entry = {
-          metal: window._gfNumberToJsNumber($tooltip.find('tr:nth-child(' + (trCount - 2) + ') td').last().text()),
-          crystal: window._gfNumberToJsNumber($tooltip.find('tr:nth-child(' + (trCount - 1) + ') td').last().text()),
-          deuterium: window._gfNumberToJsNumber($tooltip.find('tr:nth-child(' + trCount + ') td').last().text()),
-          from: $tr.find('.coordsOrigin a').text().trim(),
-          to: $tr.find('.destCoords a').text().trim(),
-          nShips: $tr.find('.detailsFleet').text().trim(),
-          reverse: reverse
-        };
-
-        if (reverse) {
-          var to = entry.to;
-          entry.to = entry.from;
-          entry.from = to;
-        }
-
-        missions.push(entry);
-      });
-
-      missions = missions.filter(function (mission) {
-        var isReturnMissionDuplicate = false;
-        missions.forEach(function (otherMission) {
-          if (
-            mission.reverse &&
-            otherMission.from === mission.to &&
-            otherMission.to === mission.from &&
-            otherMission.nShips === mission.nShips &&
-            otherMission.metal === mission.metal &&
-            otherMission.crystal === mission.crystal &&
-            otherMission.deuterium === mission.deuterium
-          ) {
-            isReturnMissionDuplicate = true;
-          }
-        });
-        return !isReturnMissionDuplicate;
-      });
-
-      var inflight = { metal: 0, crystal: 0, deuterium: 0 };
-      missions.forEach(function (mission) {
-        inflight.metal += mission.metal;
-        inflight.crystal += mission.crystal;
-        inflight.deuterium += mission.deuterium;
-      });
+      var inflight = window.uipp_getResourcesInFlight();
 
       if (inflight.metal || inflight.crystal || inflight.deuterium) {
         globalStats.current.metal += inflight.metal;

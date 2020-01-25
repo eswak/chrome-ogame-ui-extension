@@ -43,6 +43,7 @@
       "src/utils/formatter-time.js",
       "src/utils/get-current-planet-coordinates.js",
       "src/utils/get-current-planet-resources.js",
+      "src/utils/get-resources-in-flight.js",
       "src/utils/get-resources-worth.js",
       "src/utils/gf-number-to-js-number.js",
       "src/utils/gf-time-to-timestamp.js",
