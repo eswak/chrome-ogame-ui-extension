@@ -253,7 +253,13 @@ var fn = function () {
         $filterBar = $('.uipp-filterbar');
       }
 
-      window.config.idleFilters[attribute] = [minValue, maxValue];
+	  // detect if this filter is already active
+	  if (fromClick && window.config.idleFilters[attribute] && window.config.idleFilters[attribute][0] === minValue && window.config.idleFilters[attribute][1] === maxValue) {
+		minValue = null;
+		maxValue = null;
+	  }
+		
+	  window.config.idleFilters[attribute] = [minValue, maxValue];
       window._saveConfig();
 
       $filterBar.find('[data-filter="' + attribute + '"] .uipp-filter').removeClass('active');
