@@ -38,8 +38,11 @@ var fn = function () {
           pt: { metal: false, crystal: false, deuterium: false },
           gt: { metal: false, crystal: false, deuterium: false }
         };
-        var cargo = { pt: 5000, gt: 25000 };
-        var elements = { pt: $el.find('#ship_202'), gt: $el.find('#ship_203') };
+        var cargo = {
+			pt: 5000 * (1 + 0.05 * (window.config.hyperspaceTech || 0)),
+			gt: 25000 * (1 + 0.05 * (window.config.hyperspaceTech || 0))
+		};
+        var elements = { pt: $el.find('input[name=transporterSmall]'), gt: $el.find('input[name=transporterLarge]') };
         var resources = window._getCurrentPlanetResources();
 
         window.uipp_toggleShipResources = function (type, resource) {

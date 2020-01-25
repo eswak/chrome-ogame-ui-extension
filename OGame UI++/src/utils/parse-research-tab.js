@@ -7,9 +7,12 @@ var fn = function () {
     }
 
     window.config.combustionDrive = Number($('.combustionDriveTechnology.small .level').text().match(/\d+/g)[0]);
+    window.config.impulseDrive = Number($('.impulseDriveTechnology.small .level').text().match(/\d+/g)[0]);
+    window.config.hyperspaceDrive = Number($('.hyperspaceDriveTechnology.small .level').text().match(/\d+/g)[0]);
     window.config.plasmaTech = Number($('.plasmaTechnology.small .level').text().match(/\d+/g)[0]);
     window.config.astroTech = Number($('.astrophysicsTechnology.small .level').text().match(/\d+/g)[0]);
     window.config.computerTech = Number($('.computerTechnology.small .level').text().match(/\d+/g)[0]);
+    window.config.hyperspaceTech = Number($('.hyperspaceTechnology.small .level').text().match(/\d+/g)[0]);
 
     window._saveConfig();
   };
