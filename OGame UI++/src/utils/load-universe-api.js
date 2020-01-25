@@ -100,14 +100,29 @@ var fn = function () {
                                     });
 
                                     $.ajax({
-                                      url: '/api/serverData.xml',
-                                      dataType: 'xml',
-                                      success: function (data) {
-                                        var universe = window.xml2json(data).serverData;
-                                        console.log('OGame UI++ : loaded universe data.');
-                                        cb && cb(players, universe);
-                                      }
-                                    });
+									  url: '/api/localization.xml',
+									  dataType: 'xml',
+									  success: function (localizationData) {
+										var labels = {
+											metal: resourcesBar.resources.metal.tooltip.split('|')[0],
+											crystal: resourcesBar.resources.crystal.tooltip.split('|')[0],
+											deuterium: resourcesBar.resources.deuterium.tooltip.split('|')[0]
+										};
+										$('name', localizationData).each(function() {
+											labels[$(this).attr('id')] = $(this).text();
+										});
+
+										$.ajax({
+										  url: '/api/serverData.xml',
+										  dataType: 'xml',
+										  success: function (data) {
+											var universe = window.xml2json(data).serverData;
+											console.log('OGame UI++ : loaded universe data.');
+											cb && cb(players, universe, labels);
+										  }
+										});
+									  }
+									});
                                   }
                                 });
                               }
