@@ -69,6 +69,7 @@
       "src/costs-helper.js",
       "src/current-planet-storage-helper.js",
       "src/expedition-helper.js",
+      "src/expedition-message-parser.js",
       "src/galaxy-players-planets.js",
       "src/galaxy-debris.js",
       "src/history-logger.js",

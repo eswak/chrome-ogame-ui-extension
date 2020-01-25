@@ -146,6 +146,8 @@ var userscript = function () {
   if (features.solarsat) {
     window._addSolarSatHelperInterval();
   }
+  
+  window._addExpeditionMessageParserInterval();
 
   // Refresh universe data (config.players)
   window._refreshUniverseData();
