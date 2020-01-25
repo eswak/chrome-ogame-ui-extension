@@ -14,6 +14,7 @@ libs.forEach(function (path) {
 var uipp_images = {
   stay: chrome.extension.getURL('img/mission-stay.jpg'),
   ship: chrome.extension.getURL('img/mission-ship.jpg'),
+  expedition: chrome.extension.getURL('img/expedition.png'),
   metal: chrome.extension.getURL('img/mine-metal.png'),
   crystal: chrome.extension.getURL('img/mine-crystal.png'),
   deuterium: chrome.extension.getURL('img/mine-deuterium.png'),
@@ -23,6 +24,7 @@ var uipp_images = {
     alliance: chrome.extension.getURL('img/features/alliance.png'),
     charts: chrome.extension.getURL('img/features/charts.png'),
     deploytransport: chrome.extension.getURL('img/features/deploytransport.png'),
+    expeditionpoints: chrome.extension.getURL('img/features/expeditionpoints.png'),
     galaxy: chrome.extension.getURL('img/features/galaxy.png'),
     galaxydebris: chrome.extension.getURL('img/features/galaxydebris.png'),
     minetext: chrome.extension.getURL('img/features/minetext.png'),
@@ -70,6 +72,7 @@ var userscript = function () {
     alliance: true,
     charts: true,
     deploytransport: true,
+	expeditionpoints: true,
     galaxy: true,
 	galaxydebris: true,
     minetext: true,
@@ -134,6 +137,10 @@ var userscript = function () {
 
   if (features.ship) {
     window._addShipHelperInterval();
+  }
+
+  if (features.expeditionpoints) {
+    window._addExpeditionHelperInterval();
   }
 
   if (features.solarsat) {
