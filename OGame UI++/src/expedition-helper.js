@@ -109,6 +109,8 @@ var fn = function () {
 			var nBigTransport = Math.min(maxBigTransport, ownedBigTransport);
 			$('input[name=transporterLarge]').val(nBigTransport);
 			$('input[name=transporterLarge]').keyup();
+			
+			window.uipp_analytics('uipp-tab-click', 'expeditions-fleet');
 		};
       }
     }, 100);
