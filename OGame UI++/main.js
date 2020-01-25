@@ -12,9 +12,13 @@ libs.forEach(function (path) {
 
 // add image url object
 var uipp_images = {
+  inflight: chrome.extension.getURL('img/fleet-inflight.gif'),
   stay: chrome.extension.getURL('img/mission-stay.jpg'),
   ship: chrome.extension.getURL('img/mission-ship.jpg'),
+  datetime: chrome.extension.getURL('img/datetime.png'),
   expedition: chrome.extension.getURL('img/expedition.png'),
+  yield: chrome.extension.getURL('img/yield.png'),
+  item: chrome.extension.getURL('img/item.png'),
   metal: chrome.extension.getURL('img/mine-metal.png'),
   crystal: chrome.extension.getURL('img/mine-crystal.png'),
   deuterium: chrome.extension.getURL('img/mine-deuterium.png'),
@@ -25,6 +29,7 @@ var uipp_images = {
     charts: chrome.extension.getURL('img/features/charts.png'),
     deploytransport: chrome.extension.getURL('img/features/deploytransport.png'),
     expeditionpoints: chrome.extension.getURL('img/features/expeditionpoints.png'),
+    expeditiontab: chrome.extension.getURL('img/features/expeditiontab.png'),
     galaxy: chrome.extension.getURL('img/features/galaxy.png'),
     galaxydebris: chrome.extension.getURL('img/features/galaxydebris.png'),
     minetext: chrome.extension.getURL('img/features/minetext.png'),
@@ -40,16 +45,36 @@ var uipp_images = {
     topresearch: chrome.extension.getURL('img/features/topresearch.png')
   },
   resources: {
+    am: chrome.extension.getURL('img/resources/am.png'),
     metal: chrome.extension.getURL('img/resources/metal.png'),
     crystal: chrome.extension.getURL('img/resources/crystal.png'),
     deuterium: chrome.extension.getURL('img/resources/deuterium.png')
   },
+  ships: {
+    202: chrome.extension.getURL('img/ships/202.jpg'),
+    203: chrome.extension.getURL('img/ships/203.jpg'),
+    204: chrome.extension.getURL('img/ships/204.jpg'),
+    205: chrome.extension.getURL('img/ships/205.jpg'),
+    206: chrome.extension.getURL('img/ships/206.jpg'),
+    207: chrome.extension.getURL('img/ships/207.jpg'),
+    208: chrome.extension.getURL('img/ships/208.jpg'),
+    209: chrome.extension.getURL('img/ships/209.jpg'),
+    210: chrome.extension.getURL('img/ships/210.jpg'),
+    211: chrome.extension.getURL('img/ships/211.jpg'),
+    212: chrome.extension.getURL('img/ships/212.jpg'),
+    213: chrome.extension.getURL('img/ships/213.jpg'),
+    214: chrome.extension.getURL('img/ships/214.jpg'),
+    215: chrome.extension.getURL('img/ships/215.jpg'),
+    217: chrome.extension.getURL('img/ships/217.jpg'),
+    218: chrome.extension.getURL('img/ships/218.jpg'),
+    219: chrome.extension.getURL('img/ships/219.jpg')
+  },
   score: {
-	global: chrome.extension.getURL('img/score-global.png'),
-	economy: chrome.extension.getURL('img/score-economy.png'),
-	research: chrome.extension.getURL('img/score-research.png'),
-	military: chrome.extension.getURL('img/score-military.png'),
-	fleet: chrome.extension.getURL('img/score-fleet.png')
+  	global: chrome.extension.getURL('img/score-global.png'),
+  	economy: chrome.extension.getURL('img/score-economy.png'),
+  	research: chrome.extension.getURL('img/score-research.png'),
+  	military: chrome.extension.getURL('img/score-military.png'),
+  	fleet: chrome.extension.getURL('img/score-fleet.png')
   }
 };
 var imgScript = document.createElement('script');
@@ -72,9 +97,10 @@ var userscript = function () {
     alliance: true,
     charts: true,
     deploytransport: true,
-	expeditionpoints: true,
+    expeditionpoints: true,
+    expeditiontab: true,
     galaxy: true,
-	galaxydebris: true,
+    galaxydebris: true,
     minetext: true,
     missingresources: true,
     nextbuilds: true,
@@ -108,6 +134,11 @@ var userscript = function () {
     window._addTabTopflop();
   }
 
+  if (features.expeditiontab) {
+    window._addExpeditionMessageParserInterval();
+    window._addTabExpeditions();
+  }
+
   window._addTabSettings();
   window._addLinkTabs();
 
@@ -126,7 +157,7 @@ var userscript = function () {
   if (features.galaxy) {
     window._addGalaxyPlayersPlanetsInterval();
   }
-  
+
   if (features.galaxydebris) {
     window._addGalaxyDebrisInterval();
   }
@@ -146,8 +177,6 @@ var userscript = function () {
   if (features.solarsat) {
     window._addSolarSatHelperInterval();
   }
-  
-  window._addExpeditionMessageParserInterval();
 
   // Refresh universe data (config.players)
   window._refreshUniverseData();
