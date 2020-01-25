@@ -6,10 +6,10 @@ var fn = function () {
       return;
     }
 
-    window.config.combustionDrive = Number($('[ref=115] .level').text().match(/\d+/g)[0]);
-    window.config.plasmaTech = Number($('[ref=122] .level').text().match(/\d+/g)[0]);
-    window.config.astroTech = Number($('[ref=124] .level').text().match(/\d+/g)[0]);
-    window.config.computerTech = Number($('[ref=108] .level').text().match(/\d+/g)[0]);
+    window.config.combustionDrive = Number($('.combustionDriveTechnology.small .level').text().match(/\d+/g)[0]);
+    window.config.plasmaTech = Number($('.plasmaTechnology.small .level').text().match(/\d+/g)[0]);
+    window.config.astroTech = Number($('.astrophysicsTechnology.small .level').text().match(/\d+/g)[0]);
+    window.config.computerTech = Number($('.computerTechnology.small .level').text().match(/\d+/g)[0]);
 
     window._saveConfig();
   };

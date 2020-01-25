@@ -2,11 +2,11 @@ var fn = function () {
   'use strict';
   window._addInprogParser = function _addInprogParser () {
     var inprog = {
-      metal: $('.supply1 .time').text(),
-      crystal: $('.supply2 .time').text(),
-      deuterium: $('.supply3 .time').text(),
-      plasma: $('.research122 .time').text(),
-      astro: $('.research124 .time').text()
+      metal: $('.metalMine .countdown').text(),
+      crystal: $('.crystalMine .countdown').text(),
+      deuterium: $('.deuteriumSynthesizer .countdown').text(),
+      plasma: $('.plasmaTechnology .countdown').text(),
+      astro: $('.astrophysicsTechnology .countdown').text()
     };
 
     var currentPlanetCoordinatesStr = '[' + window._getCurrentPlanetCoordinates().join(':') + ']';
@@ -17,7 +17,7 @@ var fn = function () {
 
     window.config.inprog = window.config.inprog || {};
 
-    if (document.location.href.indexOf('resources') !== -1) {
+    if (document.location.href.indexOf('supplies') !== -1) {
       ['metal', 'crystal', 'deuterium'].forEach(function (resource) {
         delete window.config.inprog[currentPlanetCoordinatesStr + '-' + resource];
         if (inprog[resource]) {

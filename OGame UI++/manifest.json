@@ -26,7 +26,12 @@
     "img/mine-crystal.png",
     "img/mine-deuterium.png",
     "img/tech-astro.png",
-    "img/tech-plasma.png"
+    "img/tech-plasma.png",
+    "img/score-global.png",
+    "img/score-economy.png",
+    "img/score-research.png",
+    "img/score-military.png",
+    "img/score-fleet.png"
   ],
   "content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'",
   "content_scripts": [ {

@@ -18,6 +18,17 @@ var fn = function () {
       window.config.my.planets[onlyPlanetCoords].name = onlyPlanetName;
       window.config.my.planets[onlyPlanetCoords].coords = onlyPlanetCoords.replace(/[[\]]/g, '').split(':').map(Number);
       window.config.my.planets[onlyPlanetCoords].href = onlyPlanetLink.attr('href');
+	  
+	  var tooltiphtml = onlyPlanetLink.attr('title');
+        if (tooltiphtml) { // user may already have deployed the tooltip when this code is run
+          var temperatures = tooltiphtml.match(/[-0-9 ]+°C/g);
+          if (temperatures && window.config.my.planets[onlyPlanetCoords]) {
+            temperatures = temperatures.map(function (temp) {
+              return Number(temp.replace('°C', '').trim());
+            });
+            window.config.my.planets[onlyPlanetCoords].averageTemp = (temperatures[0] + temperatures[1]) / 2;
+          }
+        }
     } else {
       $('#planetList').children().each(function () {
         var link = $(this).find('.planetlink');

@@ -9,7 +9,7 @@ var fn = function () {
       if (!$wrapper) return;
 
       // make sure we are in the galaxy view, if not switch to it
-      if (document.body.id !== 'galaxy') {
+      if (document.location.href.indexOf('component=galaxy') === -1) {
         localStorage.setItem('uipp_showNearbyPlayers', '1');
         $('#menuTable > li > a').each(function () {
           if (this.href && this.href.indexOf('galaxy') > 0) {
@@ -75,8 +75,8 @@ var fn = function () {
         '<tr>',
         '<th onclick="uipp_analytics(\'uipp-sort\', \'coordinates\');">' + window._translate('COORDINATES') + '</th>',
         '<th onclick="uipp_analytics(\'uipp-sort\', \'flight-time\');" class="tooltip" title="' + window._translate('RETURN_TRIP_DURATION') + '"><img src="https://gf2.geo.gfsrv.net/cdna2/89624964d4b06356842188dba05b1b.gif" style="transform:scale(1.6);margin-bottom:-4px;"/></th>',
-        '<th onclick="uipp_analytics(\'uipp-sort\', \'economy-score\');"><span class="navButton uipp-score" id="economy"></span></th>',
-        '<th onclick="uipp_analytics(\'uipp-sort\', \'military-score\');"><span class="navButton uipp-score" id="fleet"></span></th>',
+        '<th onclick="uipp_analytics(\'uipp-sort\', \'economy-score\');"><img src="' + uipp_images.score.economy + '" style="height:26px;vertical-align:-15px;"/></th>',
+        '<th onclick="uipp_analytics(\'uipp-sort\', \'military-score\');"><img src="' + uipp_images.score.military + '" style="height:26px;vertical-align:-15px;"/></th>',
         '<th onclick="uipp_analytics(\'uipp-sort\', \'player-name\');">' + window._translate('PLAYER') + '</th>',
         '<th onclick="uipp_analytics(\'uipp-sort\', \'note\');">' + window._translate('NOTE') + '</th>',
         '<th>' + window._translate('ACTIONS') + '</th>',
@@ -90,7 +90,7 @@ var fn = function () {
         var tr = '<tr id="planet_' + idle.coords[0] + '_' + idle.coords[1] + '_' + idle.coords[2] + '"  data-filter-flight-time="' + idle.flightTime + '" data-filter-economy-score="' + idle.economyScore + '" data-filter-military-score="' + idle.militaryScore + '">';
 
         var td = '';
-        td += '<td><a href="/game/index.php?page=galaxy&galaxy=' + idle.coords[0] + '&system=' + idle.coords[1] + '&position=' + idle.coords[2] + '">[' + idle.coords[0] + ':' + idle.coords[1] + ':' + idle.coords[2] + ']</a></td>';
+        td += '<td><a href="/game/index.php?page=ingame&component=galaxy&galaxy=' + idle.coords[0] + '&system=' + idle.coords[1] + '&position=' + idle.coords[2] + '">[' + idle.coords[0] + ':' + idle.coords[1] + ':' + idle.coords[2] + ']</a></td>';
         td += '<td style="white-space:nowrap" data-value="' + idle.flightTime + '">' + window._time(idle.flightTime) + '</td>';
         td += '<td data-value="' + idle.economyScore + '"><a class="tooltip js_hideTipOnMobile" href="?page=highscore&searchRelId=' + idle.id + '&category=1&type=1" title="' + window._translate('ECONOMY_SCORE_LONG', {
           noBold: true,
@@ -103,7 +103,7 @@ var fn = function () {
         }) + '" style="white-space: nowrap"><a href="?page=highscore&searchRelId=' + idle.id + '&category=1&type=3">' + window.uipp_scoreHumanReadable(idle.militaryScore) + ' (' + window.uipp_scoreHumanReadable(idle.ships ? idle.ships : '0') + ')</a></td>';
         td += '<td class="tooltip js_hideTipOnMobile" title="' + idle.name + '">' + idle.name + '</td>';
         td += '<td style="width: 260px"><input value="' + (window.config && window.config.planetNotes && window.config.planetNotes[idle.coords[0] + ':' + idle.coords[1] + ':' + idle.coords[2]] ? window.config.planetNotes[idle.coords[0] + ':' + idle.coords[1] + ':' + idle.coords[2]] : '') + '" onkeyup="_editNote(' + idle.coords[0] + ',' + idle.coords[1] + ',' + idle.coords[2] + ',this.value);return false;" style="width:96.5%;" type="text"/></td>';
-        td += '<td><a class="tooltip js_hideTipOnMobile espionage" title="" href="javascript:void(0);" onclick="_spy(' + idle.coords[0] + ',' + idle.coords[1] + ',' + idle.coords[2] + ');return false;"><span class="icon icon_eye"></span></a>&nbsp;<a href="javascript:void(0);" onclick="_toggleIgnorePlanet(' + idle.coords[0] + ',' + idle.coords[1] + ',' + idle.coords[2] + ')"><span class="icon icon_against"></span></a>&nbsp;<a href="?page=fleet1&galaxy=' + idle.coords[0] + '&system=' + idle.coords[1] + '&position=' + idle.coords[2] + '&type=1&mission=1" onclick="$(this).find(\'.icon\').removeClass(\'icon_fastforward\').addClass(\'icon_checkmark\');uipp_analytics(\'uipp-attack-idle\', 1);" target="_blank"><span class="icon icon_fastforward"></span></a></td>';
+        td += '<td><a class="tooltip js_hideTipOnMobile espionage" title="" href="javascript:void(0);" onclick="_spy(' + idle.coords[0] + ',' + idle.coords[1] + ',' + idle.coords[2] + ');return false;"><span class="icon icon_eye"></span></a>&nbsp;<a href="javascript:void(0);" onclick="_toggleIgnorePlanet(' + idle.coords[0] + ',' + idle.coords[1] + ',' + idle.coords[2] + ')"><span class="icon icon_against"></span></a>&nbsp;<a href="?page=ingame&component=fleetdispatch&galaxy=' + idle.coords[0] + '&system=' + idle.coords[1] + '&position=' + idle.coords[2] + '&type=1&mission=1" onclick="$(this).find(\'.icon\').removeClass(\'icon_fastforward\').addClass(\'icon_checkmark\');uipp_analytics(\'uipp-attack-idle\', 1);" target="_blank"><span class="icon icon_fastforward"></span></a></td>';
         tr += td + '</tr>';
         if (window.config && window.config.ignoredPlanets && window.config.ignoredPlanets[idle.coords[0] + ':' + idle.coords[1] + ':' + idle.coords[2]]) {
           tr = $(tr).addClass('ignore').wrapAll('<div>').parent().html();
@@ -140,7 +140,7 @@ var fn = function () {
 
         // economy score filters
         '<span data-filter="economy-score">',
-        '<span class="navButton uipp-score" id="economy" style="margin: -25px -18px -19px 20px; transform: scale(0.33);"></span>',
+        '<img src="' + uipp_images.score.economy + '" style="height: 20px;vertical-align: -3px;margin-left: 20px;"/>',
         [
           [0, 0, '0'],
           [1, null, '>0'],
@@ -161,7 +161,7 @@ var fn = function () {
 
         // military score filters
         '<span data-filter="military-score">',
-        '<span class="navButton uipp-score" id="fleet" style="margin: -25px -18px -19px 20px; transform: scale(0.33);"></span>',
+        '<img src="' + uipp_images.score.military + '" style="height: 20px;vertical-align: -3px;margin-left: 20px;"/>',
         [
           [0, 0, '0'],
           [1, null, '>0']
@@ -245,6 +245,7 @@ var fn = function () {
     }
 
     window.filterTable = function filterTable (attribute, minValue, maxValue, $table, $filterBar) {
+	  var fromClick = !$table && !$filterBar;
       if (!$table || !$table.length) {
         $table = $('.uipp-table');
       }

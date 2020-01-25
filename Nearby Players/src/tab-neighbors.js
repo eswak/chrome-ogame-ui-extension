@@ -46,7 +46,7 @@ var fn = function () {
         }
       }
 
-      var $table = $('<table class="uipp-table"><thead id="highscoreContent"><tr><th>' + window._translate('COORDINATES') + '</th><th><span class="navButton uipp-score" id="points"></th><th><span class="navButton uipp-score" id="economy"></th><th><span class="navButton uipp-score" id="fleet"></th><th>' + window._translate('PLAYER') + '</th><th>' + window._translate('NOTE') + '</th><th>' + window._translate('ACTIONS') + '</th></tr></thead><tbody></tbody></table>');
+      var $table = $('<table class="uipp-table"><thead id="highscoreContent"><tr><th>' + window._translate('COORDINATES') + '</th><th><img src="' + uipp_images.score.global + '" style="height:26px;vertical-align:-15px;"/></th><th><img src="' + uipp_images.score.economy + '" style="height:26px;vertical-align:-15px;"/></th><th><img src="' + uipp_images.score.military + '" style="height:26px;vertical-align:-15px;"/></th><th>' + window._translate('PLAYER') + '</th><th>' + window._translate('NOTE') + '</th><th>' + window._translate('ACTIONS') + '</th></tr></thead><tbody></tbody></table>');
       var playerName = $('[name=ogame-player-name]').attr('content');
 
       var tbody = '';
@@ -54,7 +54,7 @@ var fn = function () {
         var tr = '<tr id="planet_' + neighbour.coords[0] + '_' + neighbour.coords[1] + '_' + neighbour.coords[2] + '">';
 
         var td = '';
-        td += '<td><a href="/game/index.php?page=galaxy&galaxy=' + neighbour.coords[0] + '&system=' + neighbour.coords[1] + '&position=' + neighbour.coords[2] + '">[' + neighbour.coords[0] + ':' + neighbour.coords[1] + ':' + neighbour.coords[2] + ']</a></td>';
+        td += '<td><a href="/game/index.php?page=ingame&component=galaxy&galaxy=' + neighbour.coords[0] + '&system=' + neighbour.coords[1] + '&position=' + neighbour.coords[2] + '">[' + neighbour.coords[0] + ':' + neighbour.coords[1] + ':' + neighbour.coords[2] + ']</a></td>';
         td += '<td data-value="' + window._getPlayerScoreTrend(neighbour.id, 'g').n + '">' + window._getPlayerScoreTrend(neighbour.id, 'g').html + '</td>';
         td += '<td class="tooltip js_hideTipOnMobile" title="' + window._translate('ECONOMY_SCORE_LONG', {
           noBold: true,
@@ -67,7 +67,7 @@ var fn = function () {
         }) + '" style="white-space:nowrap" data-value="' + neighbour.militaryScore + '"><a href="?page=highscore&searchRelId=' + neighbour.id + '&category=1&type=3">' + window.uipp_scoreHumanReadable(neighbour.militaryScore) + ' (' + window.uipp_scoreHumanReadable(neighbour.ships ? neighbour.ships : '0') + ')</a></td>';
         td += '<td class="tooltip js_hideTipOnMobile" title="' + neighbour.name + '"><span class="' + (playerName === neighbour.name ? 'enhancement' : '') + '">' + neighbour.name + '</span></td>';
         td += '<td width="100%"><input value="' + (window.config && window.config.planetNotes && window.config.planetNotes[neighbour.coords[0] + ':' + neighbour.coords[1] + ':' + neighbour.coords[2]] ? window.config.planetNotes[neighbour.coords[0] + ':' + neighbour.coords[1] + ':' + neighbour.coords[2]] : '') + '" onkeyup="_editNote(' + neighbour.coords[0] + ',' + neighbour.coords[1] + ',' + neighbour.coords[2] + ',this.value);return false;" style="width:96.5%;" type="text"/></td>';
-        td += '<td> <a espionage" href="javascript:void(0);" onclick="_spy(' + neighbour.coords[0] + ',' + neighbour.coords[1] + ',' + neighbour.coords[2] + ');return false;"><span class="icon icon_eye"></span></a>&nbsp;<a href="javascript:void(0);" onclick="_toggleIgnorePlanet(' + neighbour.coords[0] + ',' + neighbour.coords[1] + ',' + neighbour.coords[2] + ')"><span class="icon icon_against"></span></a>&nbsp; <a href="?page=fleet1&galaxy=' + neighbour.coords[0] + '&system=' + neighbour.coords[1] + '&position=' + neighbour.coords[2] + '&type=1&mission=1" onclick="$(this).find(\'.icon\').removeClass(\'icon_fastforward\').addClass(\'icon_checkmark\');" target="_blank"><span class="icon icon_fastforward"></span></a> </td>';
+        td += '<td> <a espionage" href="javascript:void(0);" onclick="_spy(' + neighbour.coords[0] + ',' + neighbour.coords[1] + ',' + neighbour.coords[2] + ');return false;"><span class="icon icon_eye"></span></a>&nbsp;<a href="javascript:void(0);" onclick="_toggleIgnorePlanet(' + neighbour.coords[0] + ',' + neighbour.coords[1] + ',' + neighbour.coords[2] + ')"><span class="icon icon_against"></span></a>&nbsp; <a href="?page=ingame&component=fleetdispatch&galaxy=' + neighbour.coords[0] + '&system=' + neighbour.coords[1] + '&position=' + neighbour.coords[2] + '&type=1&mission=1" onclick="$(this).find(\'.icon\').removeClass(\'icon_fastforward\').addClass(\'icon_checkmark\');" target="_blank"><span class="icon icon_fastforward"></span></a> </td>';
 
         tr += td + '</tr>';
         if (window.config && window.config.ignoredPlanets && window.config.ignoredPlanets[neighbour.coords[0] + ':' + neighbour.coords[1] + ':' + neighbour.coords[2]]) {

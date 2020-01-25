@@ -29,55 +29,43 @@ var fn = function () {
           '<div style="float:right;padding-left:10px;">',
 
           // global score
-          '<div>',
-          '<div id="highscoreContent" style="display:inline-block;height:20px;width:20px;">',
-          '<span id="points" class="navButton" style="display:inline-block;height:55px;width:55px;transform:scale(0.3);margin:-18px 0 0 -17px"></span>',
-          '</div>',
+          '<img src="' + uipp_images.score.global + '" style="height:20px"/>',
           '<span style="vertical-align:7px">',
           ' ' + window._getPlayerScoreTrend(playerId, 'g').html,
           ' ' + window.uipp_scoreHumanReadable(player.globalScore),
           '</span>',
-          '</div>',
+          '<br>',
 
           // military score
-          '<div>',
-          '<div id="highscoreContent" style="display:inline-block;height:20px;width:20px;">',
-          '<span id="fleet" class="navButton" style="display:inline-block;height:55px;width:55px;transform:scale(0.3);margin:-18px 0 0 -17px"></span>',
-          '</div>',
+          '<img src="' + uipp_images.score.military + '" style="height:20px"/>',
           '<span style="vertical-align:7px">',
           ' ' + window._getPlayerScoreTrend(playerId, 'm').html,
           ' ' + window.uipp_scoreHumanReadable(player.militaryScore),
           '</span>',
-          '</div>',
+          '<br>',
 
           // economy score
-          '<div>',
-          '<div id="highscoreContent" style="display:inline-block;height:20px;width:20px;">',
-          '<span id="economy" class="navButton" style="display:inline-block;height:55px;width:55px;transform:scale(0.3);margin:-18px 0 0 -17px"></span>',
-          '</div>',
+          '<img src="' + uipp_images.score.economy + '" style="height:20px"/>',
           '<span style="vertical-align:7px">',
           ' ' + window._getPlayerScoreTrend(playerId, 'e').html,
           ' ' + window.uipp_scoreHumanReadable(player.economyScore),
           '</span>',
-          '</div>',
+          '<br>',
 
           // research score
-          '<div>',
-          '<div id="highscoreContent" style="display:inline-block;height:20px;width:20px;">',
-          '<span id="research" class="navButton" style="display:inline-block;height:55px;width:55px;transform:scale(0.3);margin:-18px 0 0 -17px"></span>',
-          '</div>',
+          '<img src="' + uipp_images.score.research + '" style="height:20px"/>',
           '<span style="vertical-align:7px">',
           ' ' + window._getPlayerScoreTrend(playerId, 'r').html,
           ' ' + window.uipp_scoreHumanReadable(player.researchScore),
           '</span>',
-          '</div>',
+          '<br>',
 
           // planets
           '<ul>',
           playerPlanets.map(function (planet) {
             return [
               '<li class="enhancement">',
-              '[<a href="/game/index.php?page=galaxy&galaxy=',
+              '[<a href="/game/index.php?page=ingame&component=galaxy&galaxy=',
               planet.coords[0] + '&system=' + planet.coords[1] + '&position=' + planet.coords[2] + '">',
               planet.coords[0] + ':' + planet.coords[1] + ':' + planet.coords[2],
               '</a>] ',

@@ -5,11 +5,7 @@ var fn = function () {
     var resourcesArr = ['metal', 'crystal', 'deuterium'];
     var tooltips;
     try {
-      tooltips = JSON.parse(
-        window.initAjaxResourcebox.toString()
-          .replace('function initAjaxResourcebox(){reloadResources(', '')
-          .replace(new RegExp('\\);}$'), '')
-      );
+      tooltips = window.resourcesBar.resources;
     }
     catch (e) {
       console.log('uipp : error while parsing resource tooltips');

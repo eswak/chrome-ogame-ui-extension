@@ -62,19 +62,19 @@ var fn = function () {
         };
 
         if (scoreType === 'globalScore') {
-          $wrapper.append($('<div id="highscoreContent" style="float: left;text-align:center;margin:0 0px 10px -12px"><span class="navButton uipp-score" id="points"></span></div>'));
+          $wrapper.append($('<div style="text-align:center"><img src="' + uipp_images.score.global + '"/></div>'));
         } else if (scoreType === 'economyScore') {
-          $wrapper.append($('<div id="highscoreContent" style="float: left;text-align:center;margin:10px 0 10px -12px"><span class="navButton uipp-score" id="economy"></span></div>'));
+          $wrapper.append($('<div style="text-align:center"><img src="' + uipp_images.score.economy + '"/></div>'));
         } else if (scoreType === 'militaryScore') {
-          $wrapper.append($('<div id="highscoreContent" style="float: left;text-align:center;margin:10px 0 10px -12px"><span class="navButton uipp-score" id="fleet"></span></div>'));
+          $wrapper.append($('<div style="text-align:center"><img src="' + uipp_images.score.military + '"/></div>'));
         } else if (scoreType === 'researchScore') {
-          $wrapper.append($('<div id="highscoreContent" style="float: left;text-align:center;margin:10px 0 10px -12px"><span class="navButton uipp-score" id="research"></span></div>'));
+          $wrapper.append($('<div style="text-align:center"><img src="' + uipp_images.score.research + '"/></div>'));
           delete topflop.flop;
         }
 
         for (var key in topflop) {
           $wrapper.append($([
-            '<div class="halfsection">',
+            '<div class="halfsection"' + (!topflop.flop ? 'style="width:calc(100% - 18px)"' : '') + '>',
             '<table class="uipp-table">',
             topflop[key].map(function (entry) {
               return [

@@ -2,9 +2,11 @@ var fn = function () {
   'use strict';
 
   var uippClassName = 'uiEnhancementWindow';
+  var contentWrapper = '#contentWrapper';
+  contentWrapper = '#pageContent #middle';
 
   window._onMenuClick = function (menuClass) {
-    var $existingWrapper = $('#contentWrapper').find('.' + uippClassName);
+    var $existingWrapper = $(contentWrapper).find('.' + uippClassName);
     if ($existingWrapper.length === 0) {
       // uipp not visible
       $('.menubutton.selected').removeClass('selected').addClass('tempUnselected');
@@ -21,7 +23,7 @@ var fn = function () {
         // exit uipp
         $('.tempUnselected').addClass('selected');
         $('.tempUnhighlighted').addClass('highlighted');
-        $('#contentWrapper > :not(#eventboxContent)').show();
+        $(contentWrapper + ' > :not(#eventboxContent)').show();
         window.uippTab = null;
         return null;
       } else {
@@ -35,8 +37,8 @@ var fn = function () {
   };
 
   window._insertHtml = function ($wrapper) {
-    $('#contentWrapper > :not(#eventboxContent)').hide();
-    $('#contentWrapper').append($wrapper);
+    $(contentWrapper + ' > :not(#eventboxContent)').hide();
+    $(contentWrapper).append($wrapper);
   };
 };
 

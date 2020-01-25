@@ -40,6 +40,13 @@ var uipp_images = {
     metal: chrome.extension.getURL('img/resources/metal.png'),
     crystal: chrome.extension.getURL('img/resources/crystal.png'),
     deuterium: chrome.extension.getURL('img/resources/deuterium.png')
+  },
+  score: {
+	global: chrome.extension.getURL('img/score-global.png'),
+	economy: chrome.extension.getURL('img/score-economy.png'),
+	research: chrome.extension.getURL('img/score-research.png'),
+	military: chrome.extension.getURL('img/score-military.png'),
+	fleet: chrome.extension.getURL('img/score-fleet.png')
   }
 };
 var imgScript = document.createElement('script');

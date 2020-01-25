@@ -34,13 +34,13 @@ var fn = function () {
       '<thead id="highscoreContent">',
       '<tr>',
       '<th>' + window._translate('PLAYER') + '</th>',
-      '<th><span class="navButton uipp-score" id="points"></span></th>',
+      '<th><img src="' + uipp_images.score.global + '" style="height:26px"/></th>',
       '<th>⇵</th>',
-      '<th><span class="navButton uipp-score" id="fleet"></span></th>',
+      '<th><img src="' + uipp_images.score.military + '" style="height:26px"/></th>',
       '<th>⇵</th>',
-      '<th class="menu_icon"><span class="menuImage active fleet1" style="height: 27px; width: 27px; display: inline-block; margin-bottom: -5px;"></span></th>',
+      '<th><img src="' + uipp_images.score.fleet + '" style="height:26px"/></th>',
       '<th>⇵</th>',
-      '<th><span class="navButton uipp-score" id="economy"></span></th>',
+      '<th><img src="' + uipp_images.score.economy + '" style="height:26px"/></th>',
       '<th>⇵</th>',
       '<th>' + window._translate('PLANETS') + '</th>',
       '</tr>',
@@ -64,7 +64,7 @@ var fn = function () {
           '</span>',
           '<div id="planets-' + alliancePlayer.id + '" style="display:none">',
           alliancePlayer.planets.map(function (planet) {
-            return '<a href=\'/game/index.php?page=galaxy&galaxy=' + planet.coords[0] + '&system=' + planet.coords[1] + '&position=' + planet.coords[2] + '\'>[' + planet.coords.join(':') + ']</a>';
+            return '<a href=\'/game/index.php?page=ingame&component=galaxy&galaxy=' + planet.coords[0] + '&system=' + planet.coords[1] + '&position=' + planet.coords[2] + '\'>[' + planet.coords.join(':') + ']</a>';
           }).join('<br>'),
           '</div>',
           '</td>',

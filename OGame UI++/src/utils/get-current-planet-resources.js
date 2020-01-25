@@ -50,29 +50,39 @@ var fn = function () {
     };
 
     // parse resources data from the DOM and sets the resources object
-    var f = window.initAjaxResourcebox.toString();
-    f = f.replace('function initAjaxResourcebox(){reloadResources(', '');
-    f = f.substring(0, f.length - 3);
-    var data = JSON.parse(f);
-    resources.metal.now = data.metal.resources.actual;
-    resources.metal.max = data.metal.resources.max;
-    resources.metal.prod = data.metal.resources.production;
-    resources.crystal.now = data.crystal.resources.actual;
-    resources.crystal.max = data.crystal.resources.max;
-    resources.crystal.prod = data.crystal.resources.production;
-    resources.deuterium.now = data.deuterium.resources.actual;
-    resources.deuterium.max = data.deuterium.resources.max;
-    resources.deuterium.prod = data.deuterium.resources.production;
+    resources.metal.now = window.resourcesBar.resources.metal.amount;
+    resources.metal.max = window.resourcesBar.resources.metal.storage;
+	var metalProd = window._gfNumberToJsNumber(window.resourcesBar.resources.metal.tooltip.split('<td>')[3].split('>')[1].split('<')[0]) / 3600;
+	if (metalProd === 0 && config.my.planets[currentPlanetCoordinatesStr].resources.metal.prod) {
+		// production may be 0 because of full storage, if so, keep old value
+		metalProd = config.my.planets[currentPlanetCoordinatesStr].resources.metal.prod;
+	}
+    resources.metal.prod = metalProd;
+	
+    resources.crystal.now = window.resourcesBar.resources.crystal.amount;
+    resources.crystal.max = window.resourcesBar.resources.crystal.storage;
+	var crystalProd = window._gfNumberToJsNumber(window.resourcesBar.resources.crystal.tooltip.split('<td>')[3].split('>')[1].split('<')[0]) / 3600;
+	if (crystalProd === 0 && config.my.planets[currentPlanetCoordinatesStr].resources.crystal.prod) {
+		// production may be 0 because of full storage, if so, keep old value
+		crystalProd = config.my.planets[currentPlanetCoordinatesStr].resources.crystal.prod;
+	}
+    resources.crystal.prod = crystalProd;
+	
+    resources.deuterium.now = window.resourcesBar.resources.deuterium.amount;
+    resources.deuterium.max = window.resourcesBar.resources.deuterium.storage;
+	var deutProd = window._gfNumberToJsNumber(window.resourcesBar.resources.deuterium.tooltip.split('<td>')[3].split('>')[1].split('<')[0]) / 3600;
+	if (deutProd === 0 && config.my.planets[currentPlanetCoordinatesStr].resources.deuterium.prod) {
+		// production may be 0 because of full storage, if so, keep old value
+		deutProd = config.my.planets[currentPlanetCoordinatesStr].resources.deuterium.prod;
+	}
+    resources.deuterium.prod = deutProd;
 
     // if on the resources page, update the planet's resource levels
-    if (document.location.search.indexOf('resources') !== -1) {
+    if (document.location.search.indexOf('supplies') !== -1) {
       // get mines level
-      resources.metal.level = parseInt($('.supply1 .level')
-        .text().replace($('.supply1 .level').children().text(), '').trim());
-      resources.crystal.level = parseInt($('.supply2 .level')
-        .text().replace($('.supply2 .level').children().text(), '').trim());
-      resources.deuterium.level = parseInt($('.supply3 .level')
-        .text().replace($('.supply3 .level').children().text(), '').trim());
+      resources.metal.level = parseInt($('.metalMine .level').text());
+      resources.crystal.level = parseInt($('.crystalMine .level').text());
+      resources.deuterium.level = parseInt($('.deuteriumSynthesizer .level').text());
     }
 
     window.config.my.planets[currentPlanetCoordinatesStr].resources = resources;
