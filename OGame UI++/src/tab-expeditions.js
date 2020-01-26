@@ -30,7 +30,7 @@ var fn = function () {
       });
 
       var $table = $([
-        '<table class="uipp-table expetable">',
+        '<table class="uipp-table expetable" style="user-select:none">',
         '<thead>',
         '<tr>',
         '<th style="width:70px">' + '<img src="' + uipp_images.datetime + '" style="height:32px" />' + '</th>',
@@ -51,6 +51,24 @@ var fn = function () {
           '</tr>'
         ].join('');
       });
+
+      var sum = [
+        '<tr id="expe-sum" style="cursor:pointer" onclick="uipp_emptyExpeSelection()">',
+        '<td data-value="' + Date.now() + '">-</td>',
+        '<td>∑</td>',
+        '<td style="text-align:left" data-value="0">',
+        ['metal', 'crystal', 'deuterium'].map(function(res) {
+          return [
+            '<div style="display:inline-block; width: 120px; overflow: visible; white-space: nowrap;">',
+            '<img src="' + uipp_images.resources[res] + '" style="height:28px; margin-right: 8px; vertical-align: -9px" /> ',
+            '<span id="res-sum-' + res + '">0</span>',
+            '</div>'
+          ].join('');
+        }).join(''),
+        '</td>',
+        '</tr>'
+      ].join('');
+      tbody += sum;
 
       pastExpe.forEach(function(expe, i) {
         var value = 0;
@@ -97,7 +115,7 @@ var fn = function () {
         var expeWorth = worth.metal * expe.resources.metal + worth.crystal * expe.resources.crystal + worth.deuterium * expe.resources.deuterium;
 
         tbody += [
-          '<tr id="expe-' + i + '" style="cursor:pointer" onclick="uipp_toggleExpeSelection(' + i + ')">',
+          '<tr class="expe-row" id="expe-' + i + '" style="cursor:pointer" onclick="uipp_toggleExpeSelection(' + i + ')">',
           '<td data-value="' + expe.timestamp + '">', _date(expe.timestamp), '</td>',
           '<td>', expe.coords, '</td>',
           '<td style="text-align:left" data-value="' + expeWorth + '">', content, '</td>',
@@ -118,8 +136,26 @@ var fn = function () {
         }
       };
 
+      window.uipp_emptyExpeSelection = function() {
+        $('.expe-row.selected').removeClass('selected');
+        selection = {};
+        updateSelection();
+      }
+
       function updateSelection() {
-        console.log('selection', selection);
+        var expeditions = Object.values(selection);
+        if (Object.keys(selection).length === 0) {
+          expeditions = pastExpe;
+        }
+        var sum = { metal: 0, crystal: 0, deuterium: 0 };
+        expeditions.forEach(function (expe) {
+          ['metal', 'crystal', 'deuterium'].forEach(function (res) {
+            sum[res] += expe.resources[res];
+          });
+        });
+        $('#res-sum-metal').text(_num(sum.metal));
+        $('#res-sum-crystal').text(_num(sum.crystal));
+        $('#res-sum-deuterium').text(_num(sum.deuterium));
       }
 
       var style = document.createElement('style');
@@ -134,6 +170,8 @@ var fn = function () {
       $wrapper.append('<br><br><br>');
 
       setTimeout(function () {
+        updateSelection();
+
         $.tablesorter.addParser({
           id: 'attr-data-value',
           is: function () { return false; },
@@ -155,7 +193,7 @@ var fn = function () {
 
         $('table.uipp-table').tablesorter({
           cancelSelection: true,
-          sortList: [[1, 1]],
+          sortList: [[0]],
           headers: {
             0: { sorter: 'attr-data-value' },
             1: { sorter: 'coordinate' },
