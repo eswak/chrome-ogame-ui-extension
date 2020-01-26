@@ -17,6 +17,7 @@ var uipp_images = {
   ship: chrome.extension.getURL('img/mission-ship.jpg'),
   datetime: chrome.extension.getURL('img/datetime.png'),
   expedition: chrome.extension.getURL('img/expedition.png'),
+  marketcollect: chrome.extension.getURL('img/marketcollect.png'),
   yield: chrome.extension.getURL('img/yield.png'),
   item: chrome.extension.getURL('img/item.png'),
   metal: chrome.extension.getURL('img/mine-metal.png'),
@@ -32,6 +33,7 @@ var uipp_images = {
     expeditiontab: chrome.extension.getURL('img/features/expeditiontab.png'),
     galaxy: chrome.extension.getURL('img/features/galaxy.png'),
     galaxydebris: chrome.extension.getURL('img/features/galaxydebris.png'),
+    markethelper: chrome.extension.getURL('img/features/markethelper.png'),
     minetext: chrome.extension.getURL('img/features/minetext.png'),
     missingresources: chrome.extension.getURL('img/features/missingresources.png'),
     nextbuilds: chrome.extension.getURL('img/features/nextbuilds.png'),
@@ -108,6 +110,7 @@ var userscript = function () {
     solarsat: true,
     stats: true,
     storagetime: true,
+    markethelper: true,
     topeco: true,
     topfleet: true,
     topgeneral: true,
@@ -176,6 +179,10 @@ var userscript = function () {
 
   if (features.solarsat) {
     window._addSolarSatHelperInterval();
+  }
+
+  if (features.markethelper) {
+    window._addMarketHelper();
   }
 
   // Refresh universe data (config.players)
