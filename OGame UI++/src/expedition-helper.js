@@ -35,14 +35,14 @@ var fn = function () {
 			deathstar: 45000,
 			reaper: 700,
 			explorer: 115,
-			
+
 			transporterSmall: 20,
 			transporterLarge: 60,
 			colonyShip: 150,
 			recycler: 80,
 			espionageProbe: 5,
 		};
-		
+
 		$el.find('#technologies').append([
 			'<div style="position: absolute;bottom: 3px;right: 17px; cursor:pointer" onclick="uipp_autoFillExpedition()">',
 			'<span class="enhancement"><span id="uipp-current-expedition-points"></span> / ' + maxExpeditionPoints + '</span>',
@@ -50,7 +50,7 @@ var fn = function () {
 			'<img src="' + uipp_images.expedition + '" style="height:26px; vertical-align: -8px; margin-left: 5px;"/>',
 			'</div>'
 		].join(''));
-		
+
 		setInterval(function() {
 			var currentPoints = 0;
 			var shipsSelected = {
@@ -64,7 +64,7 @@ var fn = function () {
 				deathstar: Number($('.deathstar input[type=text]').val()),
 				reaper: Number($('.reaper input[type=text]').val()),
 				explorer: Number($('.explorer input[type=text]').val()),
-				
+
 				transporterSmall: Number($('.transporterSmall input[type=text]').val()),
 				transporterLarge: Number($('.transporterLarge input[type=text]').val()),
 				colonyShip: Number($('.colonyShip input[type=text]').val()),
@@ -75,7 +75,7 @@ var fn = function () {
 				currentPoints += shipsSelected[key] * shipPoints[key];
 			}
 			$('#uipp-current-expedition-points').text(currentPoints);
-			
+
 			var percent = Math.round(100 * currentPoints / maxExpeditionPoints);
 			var $percent = $('#uipp-current-expedition-points-percent');
 			$percent.text('(' + percent + '%)');
@@ -87,14 +87,19 @@ var fn = function () {
 				$percent.css('color', '#d43635')
 			}
 		}, 100);
-		
+
 		window.uipp_autoFillExpedition = function() {
-			var nExplorers = Number($('.explorer .amount').text().trim());
+			var nExplorers = Number($('.explorer .amount').attr('data-value'));
 			if (nExplorers > 0) {
 				$('input[name=explorer]').val(1);
 				$('input[name=explorer]').keyup();
 			}
-			var nProbe = Number($('.espionageProbe .amount').text().trim());
+			var nReapers = Number($('.reaper .amount').attr('data-value'));
+			if (nReapers > 0) {
+				$('input[name=reaper]').val(1);
+				$('input[name=reaper]').keyup();
+			}
+			var nProbe = Number($('.espionageProbe .amount').attr('data-value'));
 			if (nProbe > 0) {
 				$('input[name=espionageProbe]').val(1);
 				$('input[name=espionageProbe]').keyup();
@@ -103,13 +108,16 @@ var fn = function () {
 			if (nExplorers > 0) {
 				maxBigTransport -= 2; // remove 2 cargo because expedition points are given by explorer
 			}
-			
-			var ownedBigTransport = Number($('.transporterLarge .amount').text().trim());
-			
+			if (nReapers > 0) {
+				maxBigTransport -= 11; // remove 11 cargo because expedition points are given by reaper
+			}
+
+			var ownedBigTransport = Number($('.transporterLarge .amount').attr('data-value'));
+
 			var nBigTransport = Math.min(maxBigTransport, ownedBigTransport);
 			$('input[name=transporterLarge]').val(nBigTransport);
 			$('input[name=transporterLarge]').keyup();
-			
+
 			window.uipp_analytics('uipp-tab-click', 'expeditions-fleet');
 		};
       }

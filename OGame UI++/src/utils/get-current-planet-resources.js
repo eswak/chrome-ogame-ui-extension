@@ -53,25 +53,25 @@ var fn = function () {
     resources.metal.now = window.resourcesBar.resources.metal.amount;
     resources.metal.max = window.resourcesBar.resources.metal.storage;
 	var metalProd = window._gfNumberToJsNumber(window.resourcesBar.resources.metal.tooltip.split('<td>')[3].split('>')[1].split('<')[0]) / 3600;
-	if (metalProd === 0 && config.my.planets[currentPlanetCoordinatesStr].resources.metal.prod) {
+	if (metalProd === 0 && config.my.planets[currentPlanetCoordinatesStr].resources && config.my.planets[currentPlanetCoordinatesStr].resources.metal.prod) {
 		// production may be 0 because of full storage, if so, keep old value
 		metalProd = config.my.planets[currentPlanetCoordinatesStr].resources.metal.prod;
 	}
     resources.metal.prod = metalProd;
-	
+
     resources.crystal.now = window.resourcesBar.resources.crystal.amount;
     resources.crystal.max = window.resourcesBar.resources.crystal.storage;
 	var crystalProd = window._gfNumberToJsNumber(window.resourcesBar.resources.crystal.tooltip.split('<td>')[3].split('>')[1].split('<')[0]) / 3600;
-	if (crystalProd === 0 && config.my.planets[currentPlanetCoordinatesStr].resources.crystal.prod) {
+	if (crystalProd === 0 && config.my.planets[currentPlanetCoordinatesStr].resources && config.my.planets[currentPlanetCoordinatesStr].resources.crystal.prod) {
 		// production may be 0 because of full storage, if so, keep old value
 		crystalProd = config.my.planets[currentPlanetCoordinatesStr].resources.crystal.prod;
 	}
     resources.crystal.prod = crystalProd;
-	
+
     resources.deuterium.now = window.resourcesBar.resources.deuterium.amount;
     resources.deuterium.max = window.resourcesBar.resources.deuterium.storage;
 	var deutProd = window._gfNumberToJsNumber(window.resourcesBar.resources.deuterium.tooltip.split('<td>')[3].split('>')[1].split('<')[0]) / 3600;
-	if (deutProd === 0 && config.my.planets[currentPlanetCoordinatesStr].resources.deuterium.prod) {
+	if (deutProd === 0 && config.my.planets[currentPlanetCoordinatesStr].resources && config.my.planets[currentPlanetCoordinatesStr].resources.deuterium.prod) {
 		// production may be 0 because of full storage, if so, keep old value
 		deutProd = config.my.planets[currentPlanetCoordinatesStr].resources.deuterium.prod;
 	}

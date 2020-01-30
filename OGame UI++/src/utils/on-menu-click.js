@@ -2,8 +2,10 @@ var fn = function () {
   'use strict';
 
   var uippClassName = 'uiEnhancementWindow';
-  var contentWrapper = '#contentWrapper';
-  contentWrapper = '#pageContent #middle';
+  var contentWrapper = '#content';
+  if ($(contentWrapper).length === 0) {
+    contentWrapper = '#middle';
+  }
 
   window._onMenuClick = function (menuClass) {
     var $existingWrapper = $(contentWrapper).find('.' + uippClassName);

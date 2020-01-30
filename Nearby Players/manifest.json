@@ -25,7 +25,7 @@
   } ],
   "converted_from_user_script": true,
   "background": { "scripts": ["src/utils/hot-reload.js"] },
-  "version": "2.5.0",
+  "version": "2.5.1",
   "name": "__MSG_appName__",
   "description": "__MSG_appDesc__",
   "default_locale": "en",

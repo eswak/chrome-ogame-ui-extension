@@ -8,7 +8,6 @@ var fn = function () {
 
     window._enhanceOnceOnDomChange ('span.msg_title', function (idx, element) {
       var $this = $(this);
-      console.log('enhance span.msg_title');
       // don't enhance our-planets-activty
       if ($this.parent().parent().find('.espionageDefText').length !== 0) {
         return;

@@ -3,13 +3,7 @@ var fn = function () {
   window._addCurrentPlanetStorageHelper = function _addCurrentPlanetStorageHelper () {
     var resources = window._getCurrentPlanetResources();
     var resourcesArr = ['metal', 'crystal', 'deuterium'];
-    var tooltips;
-    try {
-      tooltips = window.resourcesBar.resources;
-    }
-    catch (e) {
-      console.log('uipp : error while parsing resource tooltips');
-    }
+    var tooltips = window.resourcesBar.resources;
 
     if (resources) {
       resourcesArr.forEach(function (resource) {
@@ -35,7 +29,7 @@ var fn = function () {
             '</tr>',
             '<tr class="enhancement">',
             '<th>' + window._translate('TOTAL_STORAGE_TIME') + ' :</th>',
-            '<td>' + (window._time(resources[resource].max / resources[resource].prod).length > 0 ? window._time(resources[resource].max / resources[resource].prod) : '') + '</td>',
+            '<td>' + (window._time(resources[resource].max / resources[resource].prod).length > 0 ? window._time(resources[resource].max / resources[resource].prod) : '∞') + '</td>',
             '</tr>',
             '</table>'
           ].join('')
