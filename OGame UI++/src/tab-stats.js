@@ -267,7 +267,7 @@ var fn = function () {
         globalStats.current.deuterium += inflight.deuterium;
 
         planetStatsHtml += [
-          '<tr class="resources-in-flight"><td style="height:5px"></td></tr>',
+          '<tr><td style="height:5px"></td></tr>',
           '<tr class="resources-in-flight">',
           '<td style="max-width: 80px; overflow: hidden; text-overflow: ellipsis;">',
           '<span class="icon_movement" style="display: inline-block;"></span>',
@@ -286,9 +286,46 @@ var fn = function () {
         ].join('');
       }
 
+      // collectable market offers
+      window.uipp_getCollectableOffers(function (offers, synchronous) {
+        var collectableResources = { metal: 0, crystal: 0, deuterium: 0 };
+        offers.forEach(function(offer) {
+          collectableResources[offer.resource] += offer.amount;
+        });
+
+        var html = [
+          '<tr class="collectable-offers">',
+          '<td style="max-width: 80px; overflow: hidden; text-overflow: ellipsis;">',
+          '<img src="' + uipp_images.marketcollect + '" style="height:24px"/>',
+          '</td>',
+          ['metal', 'crystal', 'deuterium'].map(function (resource) {
+            globalStats.current[resource] += collectableResources[resource];
+
+            return [
+              '<td onclick="uipp_toggleSelect(this, \'' + resource + '\', ' + collectableResources[resource] + ', 0)" style="cursor:pointer;user-select:none;">',
+              '<div class="shadowed" style="float: left; width: 48px; height: 32px; background-image:url(' + window.uipp_images.resources[resource] + ')"></div>',
+              '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
+              '<div style="padding-top: 11px;">' + window._num(collectableResources[resource]) + '</div>',
+              '</div>',
+              '</td>'
+            ].join('');
+          }).join(''),
+          '</tr>'
+        ].join('');
+        var htmlSpacer = '<tr class="collectable-offers-spacer"><td style="height:5px"></td></tr>';
+
+        if (!synchronous) {
+          $(htmlSpacer).insertAfter('tr.resources-in-flight');
+          $(html).insertAfter('tr.collectable-offers-spacer');
+        } else {
+          planetStatsHtml += htmlSpacer;
+          planetStatsHtml += html;
+        }
+      });
+
       // storage times
       planetStatsHtml += [
-        '<tr class="storage-time"><td style="height:5px"></td></tr>',
+        '<tr><td style="height:5px"></td></tr>',
         '<tr class="storage-time">',
         '<td style="max-width: 80px; overflow: hidden; text-overflow: ellipsis;">',
         '<div class="bar_container" style="width: 40px;display: inline-block;">',
