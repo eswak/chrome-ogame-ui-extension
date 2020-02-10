@@ -60,7 +60,7 @@ var fn = function () {
           '<td data-value="' + window._getPlayerScoreTrend(alliancePlayer.id, 'e').n + '">' + window._getPlayerScoreTrend(alliancePlayer.id, 'e').html + '</td>',
           '<td data-value="' + alliancePlayer.planets.length + '">',
           '<span class="tooltip tooltipRel tooltipClose tooltipRight" rel="planets-' + alliancePlayer.id + '">',
-          alliancePlayer.planets.length,
+          (alliancePlayer.planets.length || '?'),
           '</span>',
           '<div id="planets-' + alliancePlayer.id + '" style="display:none">',
           alliancePlayer.planets.map(function (planet) {
