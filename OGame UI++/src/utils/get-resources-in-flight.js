@@ -6,9 +6,9 @@ var fn = function () {
     if (_cachedResources) {
       return _cachedResources;
     }
-	
+
 	_cachedResources = { metal: 0, crystal: 0, deuterium: 0 };
-	
+
 	var missions = [];
 	$('#eventContent .tooltip.tooltipClose').each(function () {
 		var $tooltip = $($(this).attr('title'));
@@ -55,7 +55,7 @@ var fn = function () {
 		});
 		return !isReturnMissionDuplicate;
 	});
-	
+
 	// remove expedition's first entry missions (date of reaching expedition place)
 	// they make the resources count twice if for some reason someone sends resources
 	// aboard on expedition (another entry is present for the end of expedition)
@@ -65,17 +65,17 @@ var fn = function () {
 		if (mission.type !== 15 || mission.returnMission) {
 			return true;
 		}
-		
+
 		var hasNextMission = missionIds.indexOf(mission.id + 1) !== -1;
 		return !hasNextMission;
 	});
-	
+
 	missions.forEach(function (mission) {
 		_cachedResources.metal += mission.metal;
 		_cachedResources.crystal += mission.crystal;
 		_cachedResources.deuterium += mission.deuterium;
 	});
-	
+
 	return _cachedResources;
   };
 };
