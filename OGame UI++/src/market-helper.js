@@ -13,7 +13,7 @@ var fn = function () {
           nOffers++;
           $wrapper.append([
             '<div id="market-tid-' + offer.tid + '">',
-            '<img src="' + uipp_images.marketcollect + '" style="vertical-align:-7px; height: 26px; cursor:pointer;" onclick="uipp_collectMarketOffer(' + offer.tid + ', \'' + offer.resource + '\', ' + offer.amount + ')" class="tooltip" title="' + offer.text + '"/>',
+            '<img src="' + uipp_images.marketcollect + '" style="vertical-align:-7px; height: 26px; cursor:pointer;" onclick="uipp_collectMarketOffer(\'' + offer.type + '\', ' + offer.tid + ', \'' + offer.resource + '\', ' + offer.amount + ')" class="tooltip" title="' + offer.text + '"/>',
             '<img src="' + uipp_images.resources[offer.resource] + '" style="vertical-align: -7px; height: 26px; margin: 0 5px; filter: brightness(1.5);"/>',
             _num(offer.amount),
             '</div>'
@@ -24,8 +24,8 @@ var fn = function () {
       if (nOffers) $('#supplies header').append($wrapper);
     });
 
-    window.uipp_collectMarketOffer = function(tid, res, amount) {
-      $.get('/game/index.php?page=componentOnly&component=marketplace&action=collectPrice&marketTransactionId=' + tid + '&asJson=1', function(data) {
+    window.uipp_collectMarketOffer = function(type, tid, res, amount) {
+      $.get('/game/index.php?page=componentOnly&component=marketplace&action=' + (type === 'buy' ? 'collectItem' : 'collectPrice') + '&marketTransactionId=' + tid + '&asJson=1', function(data) {
         data = JSON.parse(data);
         window.fadeBox(data.message || data.errors[0].message, data.status === 'failure');
         if (data.status === 'success') {

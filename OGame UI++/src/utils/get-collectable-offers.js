@@ -31,6 +31,7 @@ var fn = function () {
 
           offers.push({
             tid: tid,
+            type: 'sell',
             date: date,
             coords: coords,
             resource: resource,
@@ -60,6 +61,7 @@ var fn = function () {
 
           offers.push({
             tid: tid,
+            type: 'buy',
             date: date,
             coords: coords,
             resource: resource,
