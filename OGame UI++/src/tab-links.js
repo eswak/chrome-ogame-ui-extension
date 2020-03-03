@@ -23,7 +23,7 @@ var fn = function () {
     for (var key in window.config.links) {
       var $entry = $([
         '<li style="margin-top:' + (i === 0 ? '10' : '0') + 'px;" class="customlink' + (++i) + '">',
-        '<a class="menubutton" href="' + _getLink(window.config.links[key]) + '" target="_blank">',
+        '<a class="menubutton" href="' + _getLink(window.config.links[key]) + '" ' + (window.config.links[key].indexOf('://') !== -1 ? 'target="_blank"' : '') + '>',
         '<span class="textlabel" style="color:white">' + key + '</span>',
         '</a>',
         '</li>'
