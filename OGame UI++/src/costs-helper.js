@@ -26,12 +26,6 @@ var fn = function () {
         if (window.config.features.minetext) {
           _addProductionRentabilityTimeTextHelper(costs);
         }
-
-		// only for me >_> features not allowed by Gameforge staff
-        if ($('meta[name="ogame-player-name"]').attr('content') === 'Eswak') {
-		  _addProductionBuildableInTextHelper(_getAvailableIn(resources, missingResources));
-		  _addProductionMaximumBuildableTextHelper(costs);
-        }
       }
     });
 
@@ -46,7 +40,7 @@ var fn = function () {
 			var $missingCount = $('<div class="enhancement"></div>');
 			$missingCount.html('-' + window._num(missingResources[res], -1 * resources[res].prod));
             $element.append($missingCount);
-			
+
 			setTimeout(function() {
 			  $missingCount.html('&nbsp;');
 			  $missingCount.parent().removeClass('insufficient');
@@ -81,7 +75,7 @@ var fn = function () {
       var $el = $('#technologydetails .content .build-it_wrap:not(.enhanced-buildable-in)');
       $el.addClass('enhanced-buildable-in');
 	  $el.css('text-align', 'right');
-	  
+
       var availableInMax = Math.max(availableIn.metal, availableIn.crystal, availableIn.deuterium);
 
       if (availableInMax > 0) {
@@ -166,7 +160,7 @@ var fn = function () {
         }) + '</li>');
         $('.building.plasmaTechnology').addClass('enhanced');
       }
-	  
+
 	  // vanilla CSS fixes to allow display of additional info
 	  $('.content .information > ul').css('width', 'auto');
 	  $('.content .information .narrow li').css('margin-bottom', '6px');
