@@ -39,6 +39,7 @@ var uipp_images = {
     nextbuilds: chrome.extension.getURL('img/features/nextbuilds.png'),
     solarsat: chrome.extension.getURL('img/features/solarsat.png'),
     ship: chrome.extension.getURL('img/features/ship.png'),
+    shipresources: chrome.extension.getURL('img/features/shipresources.png'),
     stats: chrome.extension.getURL('img/features/stats.png'),
     storagetime: chrome.extension.getURL('img/features/storagetime.png'),
     topeco: chrome.extension.getURL('img/features/topeco.png'),
@@ -107,6 +108,7 @@ var userscript = function () {
     missingresources: true,
     nextbuilds: true,
     ship: true,
+    shipresources: true,
     solarsat: true,
     stats: true,
     storagetime: true,
@@ -171,6 +173,10 @@ var userscript = function () {
 
   if (features.ship) {
     window._addShipHelperInterval();
+  }
+
+  if (features.shipresources) {
+    window._addShipResourcesHelperInterval();
   }
 
   if (features.expeditionpoints) {
