@@ -25,6 +25,11 @@ var fn = function () {
           crystal: 0,
           deuterium: 0
         },
+        points: {
+          metal: 0,
+          crystal: 0,
+          deuterium: 0
+        },
         level: {
           metal: 0,
           crystal: 0,
@@ -174,18 +179,19 @@ var fn = function () {
               minePoints += levelCost[0];
               minePoints += levelCost[1];
             }
+            globalStats.points[resource] += minePoints;
             minePoints = Math.floor(minePoints / 1000);
 
             return [
               '<td id="stat-' + planet.coords.join('-') + '-' + resource + '"',
               ' onclick="uipp_toggleSelect(this, \'' + resource + '\', ' + (currentRealtimePlanetResources[resource] + moonResource) + ', ' + planet.resources[resource].prod + ')"',
               ' style="cursor:pointer;user-select:none;">',
-              '<div class="tooltip shadowed" style="position: relative; font-size: 20px; line-height: 32px; float: left; width: 48px; height: 32px; background-image:url(' + window.uipp_images.resources[resource] + '); outline: ' + outline + '" title="' + tooltip + '">',
+              '<div class="uipp-stat-resource tooltip shadowed" style="position: relative; font-size: 20px; line-height: 32px; float: left; width: 48px; height: 32px; background-image:url(' + window.uipp_images.resources[resource] + '); outline: ' + outline + '" title="' + tooltip + '">',
               planet.resources[resource].level,
               inprog ? '<span class="icon12px icon_wrench" style="position:absolute;bottom:-3px;right:0;"></span>' : '',
               '</div>',
               '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em">',
-              '<div class="uipp-current-resources" points="' + window._num(minePoints) + '">' + window._num(currentRealtimePlanetResources[resource], planet.resources[resource].prod, planet.resources[resource].max) + (planet.moon ? (' + <span class="overmark">' + window._num(moonResource) + '</span>') : '') + '</div>',
+              '<div style="white-space:nowrap" class="uipp-current-resources" points="' + window._num(minePoints) + '">' + window._num(currentRealtimePlanetResources[resource], planet.resources[resource].prod, planet.resources[resource].max) + (planet.moon ? (' + <span class="overmark">' + window._num(moonResource) + '</span>') : '') + '</div>',
               '<div><span class="undermark">+' + window._num(Math.floor(planet.resources[resource].prod * 3600)) + '</span> /' + window._translate('TIME_HOUR') + '</div>',
               '<div><span class="undermark">+' + window._num(Math.floor(planet.resources[resource].prod * 3600 * 24)) + '</span> /' + window._translate('TIME_DAY') + '</div>',
               '</div>',
@@ -195,6 +201,22 @@ var fn = function () {
           '</tr>'
         ].join('');
       });
+
+      // add rentability times for mines until median level, not just next
+      /*var medianMineLevels = _getMedianMineLevels();
+      myPlanets.forEach(function (planet) {
+        ['metal', 'crystal', 'deuterium'].forEach(function (resource) {
+          for (var level = planet.resources[resource].level + 2; level <= medianMineLevels[resource]; level++) {
+            rentabilityTimes.push({
+              coords: planet.coords,
+              resource: resource,
+              time: window._getRentabilityTime(resource, planet.resources[resource].prod, planet.resources[resource].level, level),
+              level: level,
+              inprog: null
+            });
+          }
+        });
+      });*/
 
       // selected
       var selected = {
@@ -239,7 +261,6 @@ var fn = function () {
         }
 
         $('.uipp-table').first().append([
-          '<tr class="uipp-selected-resources"><td style="height:5px"></td></tr>',
           '<tr class="uipp-selected-resources uipp-selected"',
           ' onclick="uipp_unselectAll()"',
           ' style="cursor:pointer;user-select:none;">',
@@ -267,7 +288,7 @@ var fn = function () {
         globalStats.current.deuterium += inflight.deuterium;
 
         planetStatsHtml += [
-          '<tr><td style="height:5px"></td></tr>',
+          '<tr class="resources-in-flight-spacer"><td style="height:5px"></td></tr>',
           '<tr class="resources-in-flight">',
           '<td style="max-width: 80px; overflow: hidden; text-overflow: ellipsis;">',
           '<span class="icon_movement" style="display: inline-block;"></span>',
@@ -325,7 +346,7 @@ var fn = function () {
 
       // storage times
       planetStatsHtml += [
-        '<tr><td style="height:5px"></td></tr>',
+        '<tr class="storage-time-spacer"><td style="height:5px"></td></tr>',
         '<tr class="storage-time">',
         '<td style="max-width: 80px; overflow: hidden; text-overflow: ellipsis;">',
         '<div class="bar_container" style="width: 40px;display: inline-block;">',
@@ -377,7 +398,7 @@ var fn = function () {
             Math.floor(10 * globalStats.level[resource]) / 10,
             '</div>',
             '<div style="float:left; width: 95px; text-align: left; padding-left: 1em; font-size: 10px; line-height: 1em; padding-bottom: 3px">',
-            '<div class="uipp-current-global-resources">' + window._num(globalStats.current[resource], globalStats.prod[resource]) + '</div>',
+            '<div class="uipp-current-global-resources" points="' + window._num(globalStats.points[resource] / 1000) + '">' + window._num(globalStats.current[resource], globalStats.prod[resource]) + '</div>',
             '<div><span class="undermark">+' + window._num(Math.floor(globalStats.prod[resource] * 3600)) + '</span> /' + window._translate('TIME_HOUR') + '</div>',
             '<div><span class="undermark">+' + window._num(Math.floor(globalStats.prod[resource] * 3600 * 24)) + '</span> /' + window._translate('TIME_DAY') + '</div>',
             '<div style="font-size: 8px; padding-top: 5px;">' + productionRatio[resource] + '</div>',
@@ -418,14 +439,22 @@ var fn = function () {
           $(this).html($(this).attr('temp') + ' °C');
         });
 
+        $('.uipp-selected-resources-spacer').css('display', 'none');
         $('.uipp-selected-resources').css('display', 'none');
+        $('.collectable-offers-spacer').css('display', 'none');
+        $('.collectable-offers').css('display', 'none');
+        $('.storage-time-spacer').css('display', 'none');
         $('.storage-time').css('display', 'none');
+        $('.resources-in-flight-spacer').css('display', 'none');
         $('.resources-in-flight').css('display', 'none');
-        $('.uipp-current-global-resources').css('display', 'none');
         $('.uipp-current-resources').each(function () {
           $(this).html($(this).attr('points') + ' points');
         });
+        $('.uipp-current-global-resources').each(function () {
+          $(this).html($(this).attr('points') + ' points');
+        });
         $('.uipp-selected').removeClass('uipp-selected');
+        $('.uipp-stat-resource').css('outline', 'none');
 
         window._getScreenshotLink($('.uiEnhancementWindow .uipp-table')[0], function (err, link) {
           if (err) {
@@ -572,11 +601,11 @@ var fn = function () {
 
         var astroTime = astroCostWorth / globalProdWorth;
 
-        var lowestMineLevels = _getMyLowestMineLevels();
+        var medianMineLevels = _getMedianMineLevels();
         var cummulativeLowestMineCosts = {
-          metal: window.uipp_getCummulativeCost('metal', 0, lowestMineLevels.metal),
-          crystal: window.uipp_getCummulativeCost('crystal', 0, lowestMineLevels.crystal),
-          deuterium: window.uipp_getCummulativeCost('deuterium', 0, lowestMineLevels.deuterium)
+          metal: window.uipp_getCummulativeCost('metal', 0, medianMineLevels.metal),
+          crystal: window.uipp_getCummulativeCost('crystal', 0, medianMineLevels.crystal),
+          deuterium: window.uipp_getCummulativeCost('deuterium', 0, medianMineLevels.deuterium)
         };
 
         var cummulativeLowestMineCostsWorth = 0;
@@ -588,9 +617,9 @@ var fn = function () {
         cummulativeLowestMineCostsWorth += cummulativeLowestMineCosts.deuterium[1] * worth.crystal;
 
         var newPlanetProductionWorth = 0;
-        newPlanetProductionWorth += window.uipp_getProduction('metal', lowestMineLevels.metal) / 3600;
-        newPlanetProductionWorth += window.uipp_getProduction('crystal', lowestMineLevels.crystal) / 3600;
-        newPlanetProductionWorth += window.uipp_getProduction('deuterium', lowestMineLevels.deuterium) / 3600;
+        newPlanetProductionWorth += window.uipp_getProduction('metal', medianMineLevels.metal) / 3600;
+        newPlanetProductionWorth += window.uipp_getProduction('crystal', medianMineLevels.crystal) / 3600;
+        newPlanetProductionWorth += window.uipp_getProduction('deuterium', medianMineLevels.deuterium) / 3600;
 
         var mineRentabilityTime = (cummulativeLowestMineCostsWorth + astroCostWorth) / newPlanetProductionWorth;
         var mineEconomyTime = cummulativeLowestMineCostsWorth / globalProdWorth;
@@ -608,15 +637,39 @@ var fn = function () {
             cummulativeLowestMineCosts.metal[1] + cummulativeLowestMineCosts.crystal[1] + cummulativeLowestMineCosts.deuterium[1],
             0
           ],
-          metalLevel: lowestMineLevels.metal,
-          crystalLevel: lowestMineLevels.crystal,
-          deuteriumLevel: lowestMineLevels.deuterium,
+          metalLevel: medianMineLevels.metal,
+          crystalLevel: medianMineLevels.crystal,
+          deuteriumLevel: medianMineLevels.deuterium,
           inprog: window.config.inprog.astro || null
         });
       }
 
       // add plasma to rentability array
-      if (window.config.plasmaTech) {
+      var maxRentability = 0;
+      rentabilityTimes.forEach(function(e) {
+        if (e.time > maxRentability) {
+          maxRentability = e.time;
+        }
+      });
+      var pushNextPlasma = true;
+      var plasmaLevel = window.config.plasmaTech || 0;
+      while (pushNextPlasma) {
+        var nextPlasmaRentabilityTime = window._getRentabilityTime('plasma', null, plasmaLevel);
+        if (nextPlasmaRentabilityTime >= maxRentability) {
+          pushNextPlasma = false;
+        } else {
+          rentabilityTimes.push({
+            coords: [],
+            resource: 'plasma',
+            level: plasmaLevel + 1,
+            time: nextPlasmaRentabilityTime,
+            totalCost: window.uipp_getCost('plasma', plasmaLevel),
+            inprog: (window.config.inprog.plasma && plasmaLevel === window.config.plasmaTech) || null
+          });
+          plasmaLevel++;
+        }
+      }
+      /*if (window.config.plasmaTech) {
         var plasmaRentabilityTime = window._getRentabilityTime('plasma', null, window.config.plasmaTech);
         rentabilityTimes.push({
           coords: [],
@@ -626,7 +679,7 @@ var fn = function () {
           totalCost: window.uipp_getCost('plasma', window.config.plasmaTech),
           inprog: window.config.inprog.plasma || null
         });
-      }
+      }*/
 
       // rentability display
       rentabilityTimes = rentabilityTimes.sort(function (a, b) {
@@ -823,23 +876,25 @@ var fn = function () {
       window._insertHtml($wrapper);
     });
 
-    function _getMyLowestMineLevels () {
-      var lowestMineLevels = {
+    function _getMedianMineLevels () {
+      var medianMineLevels = {
         metal: Infinity,
         crystal: Infinity,
         deuterium: Infinity
       };
-      for (var key in window.config.my.planets) {
-        var myPlanet = window.config.my.planets[key];
-        if (myPlanet.resources && !myPlanet.isMoon) {
-          ['metal', 'crystal', 'deuterium'].forEach(function (res) {
-            if (myPlanet.resources[res].level < lowestMineLevels[res]) {
-              lowestMineLevels[res] = myPlanet.resources[res].level;
-            }
-          });
+
+      ['metal', 'crystal', 'deuterium'].forEach(function (res) {
+        var levels = [];
+        for (var key in window.config.my.planets) {
+          var myPlanet = window.config.my.planets[key];
+          if (myPlanet.resources && !myPlanet.isMoon) {
+            levels.push(myPlanet.resources[res].level);
+          }
         }
-      }
-      return lowestMineLevels;
+        levels = levels.sort();
+        medianMineLevels[res] = levels[Math.floor(levels.length / 2)];
+      });
+      return medianMineLevels;
     }
   };
 };

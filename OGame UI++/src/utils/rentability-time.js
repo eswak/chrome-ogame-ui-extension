@@ -1,9 +1,10 @@
 var fn = function () {
   'use strict';
-  window._getRentabilityTime = function _getRentabilityTime (type, currentProd, level) {
+  window._getRentabilityTime = function _getRentabilityTime (type, currentProd, level, targetLevel) {
     var currentHourlyProd = currentProd * 3600;
     var rentabilityTime = 0;
     var worth = window.uipp_getResourcesWorth();
+    targetLevel = targetLevel || (level + 1);
 
     switch(type) {
     case 'metal':
@@ -11,10 +12,11 @@ var fn = function () {
     case 'deuterium':
       var calculatedProduction = window.uipp_getProduction(type, level);
       var ratio = currentHourlyProd / calculatedProduction; // used for boosts, deuterium temperature, etc
-      var calculatedNextLevelproduction = window.uipp_getProduction(type, level + 1) * ratio;
-      var productionDiff = calculatedNextLevelproduction - currentHourlyProd;
+      var calculatedNextLevelproduction = window.uipp_getProduction(type, targetLevel) * ratio;
+      var calculatedCurrentLevelproduction = window.uipp_getProduction(type, targetLevel - 1) * ratio;
+      var productionDiff = calculatedNextLevelproduction - calculatedCurrentLevelproduction;
       var productionDiffWorth = productionDiff * worth[type];
-      var costs = window.uipp_getCost(type, level);
+      var costs = window.uipp_getCost(type, targetLevel - 1);
       var productionCostWorth = costs[0] * worth.metal + costs[1] * worth.crystal;
       rentabilityTime = (productionCostWorth / productionDiffWorth) * 3600; // in seconds
       break;
@@ -33,7 +35,7 @@ var fn = function () {
         }
       }
 
-      var plasmaCosts = window.uipp_getCost('plasma', level);
+      var plasmaCosts = window.uipp_getCost('plasma', targetLevel - 1);
       var plasmaCostsWorth = plasmaCosts[0] * worth.metal +
         plasmaCosts[1] * worth.crystal +
         plasmaCosts[2] * worth.deuterium;
