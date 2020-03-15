@@ -70,7 +70,15 @@ var fn = function () {
 
           // planets
           '<ul>',
-          playerPlanets.map(function (planet) {
+          playerPlanets.sort(function(a, b) {
+            if (a.coords[0] > b.coords[0]) { return 1 }
+            else if (a.coords[0] < b.coords[0]) { return -1 }
+            else if (a.coords[1] > b.coords[1]) { return 1 }
+            else if (a.coords[1] < b.coords[1]) { return -1 }
+            else if (a.coords[2] > b.coords[2]) { return 1 }
+            else if (a.coords[2] < b.coords[2]) { return -1 }
+            else return 0;
+          }).map(function (planet) {
             return [
               '<li class="enhancement">',
               '[<a href="/game/index.php?page=ingame&component=galaxy&galaxy=',
