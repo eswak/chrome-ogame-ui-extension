@@ -582,48 +582,48 @@ var fn = function () {
         return rentability;
       });
 
+      // get max rentability time
+      var maxRentability = 0;
+      rentabilityTimes.forEach(function(e) {
+        if (e.time > maxRentability) {
+          maxRentability = e.time;
+        }
+      });
+
       // add astrophysics to rentability times
       var astroLevel = window.config.astroTech;
-      if (astroLevel) {
-        var nextAstroLevelForPlanetUnlock = astroLevel;
-        var astroCost;
-        if (astroLevel % 2 === 1) {
-          astroCost = window.uipp_getCummulativeCost('astrophysics', astroLevel, astroLevel + 1);
-          nextAstroLevelForPlanetUnlock += 2;
-        } else {
-          astroCost = window.uipp_getCost('astrophysics', astroLevel);
-          nextAstroLevelForPlanetUnlock++;
-        }
-
+      var nextAstroLevelForPlanetUnlock = astroLevel + (astroLevel % 2 == 1 ? 2 : 1);
+      var pushNextAstro = true;
+      while (pushNextAstro) {
+        var astroCost = window.uipp_getCummulativeCost('astrophysics', astroLevel, nextAstroLevelForPlanetUnlock - 1);
         var astroCostWorth = 0;
         astroCostWorth += astroCost[0] * worth.metal;
         astroCostWorth += astroCost[1] * worth.crystal;
         astroCostWorth += astroCost[2] * worth.deuterium;
-
         var astroTime = astroCostWorth / globalProdWorth;
 
         var medianMineLevels = _getMedianMineLevels();
-        var cummulativeLowestMineCosts = {
+        var cummulativeMineCosts = {
           metal: window.uipp_getCummulativeCost('metal', 0, medianMineLevels.metal - 1),
           crystal: window.uipp_getCummulativeCost('crystal', 0, medianMineLevels.crystal - 1),
           deuterium: window.uipp_getCummulativeCost('deuterium', 0, medianMineLevels.deuterium - 1)
         };
 
-        var cummulativeLowestMineCostsWorth = 0;
-        cummulativeLowestMineCostsWorth += cummulativeLowestMineCosts.metal[0] * worth.metal;
-        cummulativeLowestMineCostsWorth += cummulativeLowestMineCosts.metal[1] * worth.crystal;
-        cummulativeLowestMineCostsWorth += cummulativeLowestMineCosts.crystal[0] * worth.metal;
-        cummulativeLowestMineCostsWorth += cummulativeLowestMineCosts.crystal[1] * worth.crystal;
-        cummulativeLowestMineCostsWorth += cummulativeLowestMineCosts.deuterium[0] * worth.metal;
-        cummulativeLowestMineCostsWorth += cummulativeLowestMineCosts.deuterium[1] * worth.crystal;
+        var cummulativeMineCostsWorth = 0;
+        cummulativeMineCostsWorth += cummulativeMineCosts.metal[0] * worth.metal;
+        cummulativeMineCostsWorth += cummulativeMineCosts.metal[1] * worth.crystal;
+        cummulativeMineCostsWorth += cummulativeMineCosts.crystal[0] * worth.metal;
+        cummulativeMineCostsWorth += cummulativeMineCosts.crystal[1] * worth.crystal;
+        cummulativeMineCostsWorth += cummulativeMineCosts.deuterium[0] * worth.metal;
+        cummulativeMineCostsWorth += cummulativeMineCosts.deuterium[1] * worth.crystal;
+        var mineEconomyTime = cummulativeMineCostsWorth / globalProdWorth;
 
         var newPlanetProductionWorth = 0;
         newPlanetProductionWorth += (window.uipp_getProduction('metal', medianMineLevels.metal) * worth.metal) / 3600;
         newPlanetProductionWorth += (window.uipp_getProduction('crystal', medianMineLevels.crystal) * worth.crystal) / 3600;
         newPlanetProductionWorth += (window.uipp_getProduction('deuterium', medianMineLevels.deuterium) * worth.deuterium) / 3600;
+        var mineRentabilityTime = (cummulativeMineCostsWorth + astroCostWorth) / newPlanetProductionWorth;
 
-        var mineRentabilityTime = (cummulativeLowestMineCostsWorth + astroCostWorth) / newPlanetProductionWorth;
-        var mineEconomyTime = cummulativeLowestMineCostsWorth / globalProdWorth;
         rentabilityTimes.push({
           coords: [],
           resource: 'astrophysics',
@@ -634,8 +634,8 @@ var fn = function () {
           mineRentabilityTime: mineRentabilityTime,
           astroCost: astroCost,
           mineCost: [
-            cummulativeLowestMineCosts.metal[0] + cummulativeLowestMineCosts.crystal[0] + cummulativeLowestMineCosts.deuterium[0],
-            cummulativeLowestMineCosts.metal[1] + cummulativeLowestMineCosts.crystal[1] + cummulativeLowestMineCosts.deuterium[1],
+            cummulativeMineCosts.metal[0] + cummulativeMineCosts.crystal[0] + cummulativeMineCosts.deuterium[0],
+            cummulativeMineCosts.metal[1] + cummulativeMineCosts.crystal[1] + cummulativeMineCosts.deuterium[1],
             0
           ],
           metalLevel: medianMineLevels.metal,
@@ -643,32 +643,30 @@ var fn = function () {
           deuteriumLevel: medianMineLevels.deuterium,
           inprog: window.config.inprog.astro || null
         });
+
+        nextAstroLevelForPlanetUnlock += 2;
+        astroLevel += 2;
+        pushNextAstro = mineRentabilityTime < maxRentability;
       }
 
       // add plasma to rentability array
-      var maxRentability = 0;
-      rentabilityTimes.forEach(function(e) {
-        if (e.time > maxRentability) {
-          maxRentability = e.time;
-        }
-      });
       var pushNextPlasma = true;
       var plasmaLevel = window.config.plasmaTech || 0;
       while (pushNextPlasma) {
         var nextPlasmaRentabilityTime = window._getRentabilityTime('plasma', null, plasmaLevel);
         if (nextPlasmaRentabilityTime >= maxRentability) {
           pushNextPlasma = false;
-        } else {
-          rentabilityTimes.push({
-            coords: [],
-            resource: 'plasma',
-            level: plasmaLevel + 1,
-            time: nextPlasmaRentabilityTime,
-            totalCost: window.uipp_getCost('plasma', plasmaLevel),
-            inprog: (window.config.inprog.plasma && plasmaLevel === window.config.plasmaTech) || null
-          });
-          plasmaLevel++;
         }
+
+        rentabilityTimes.push({
+          coords: [],
+          resource: 'plasma',
+          level: plasmaLevel + 1,
+          time: nextPlasmaRentabilityTime,
+          totalCost: window.uipp_getCost('plasma', plasmaLevel),
+          inprog: (window.config.inprog.plasma && plasmaLevel === window.config.plasmaTech) || null
+        });
+        plasmaLevel++;
       }
       /*if (window.config.plasmaTech) {
         var plasmaRentabilityTime = window._getRentabilityTime('plasma', null, window.config.plasmaTech);
