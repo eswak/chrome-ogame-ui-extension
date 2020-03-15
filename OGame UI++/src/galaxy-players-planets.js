@@ -60,6 +60,14 @@ var fn = function () {
           '</span>',
           '<br>',
 
+          // ships score
+          '<img src="' + uipp_images.score.fleet + '" style="height:20px"/>',
+          '<span style="vertical-align:7px">',
+          ' ' + window._getPlayerScoreTrend(playerId, 's').html,
+          ' ' + window.uipp_scoreHumanReadable(player.ships),
+          '</span>',
+          '<br>',
+
           // planets
           '<ul>',
           playerPlanets.map(function (planet) {
