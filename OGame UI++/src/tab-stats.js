@@ -604,9 +604,9 @@ var fn = function () {
 
         var medianMineLevels = _getMedianMineLevels();
         var cummulativeLowestMineCosts = {
-          metal: window.uipp_getCummulativeCost('metal', 0, medianMineLevels.metal),
-          crystal: window.uipp_getCummulativeCost('crystal', 0, medianMineLevels.crystal),
-          deuterium: window.uipp_getCummulativeCost('deuterium', 0, medianMineLevels.deuterium)
+          metal: window.uipp_getCummulativeCost('metal', 0, medianMineLevels.metal - 1),
+          crystal: window.uipp_getCummulativeCost('crystal', 0, medianMineLevels.crystal - 1),
+          deuterium: window.uipp_getCummulativeCost('deuterium', 0, medianMineLevels.deuterium - 1)
         };
 
         var cummulativeLowestMineCostsWorth = 0;
@@ -618,9 +618,9 @@ var fn = function () {
         cummulativeLowestMineCostsWorth += cummulativeLowestMineCosts.deuterium[1] * worth.crystal;
 
         var newPlanetProductionWorth = 0;
-        newPlanetProductionWorth += window.uipp_getProduction('metal', medianMineLevels.metal) / 3600;
-        newPlanetProductionWorth += window.uipp_getProduction('crystal', medianMineLevels.crystal) / 3600;
-        newPlanetProductionWorth += window.uipp_getProduction('deuterium', medianMineLevels.deuterium) / 3600;
+        newPlanetProductionWorth += (window.uipp_getProduction('metal', medianMineLevels.metal) * worth.metal) / 3600;
+        newPlanetProductionWorth += (window.uipp_getProduction('crystal', medianMineLevels.crystal) * worth.crystal) / 3600;
+        newPlanetProductionWorth += (window.uipp_getProduction('deuterium', medianMineLevels.deuterium) * worth.deuterium) / 3600;
 
         var mineRentabilityTime = (cummulativeLowestMineCostsWorth + astroCostWorth) / newPlanetProductionWorth;
         var mineEconomyTime = cummulativeLowestMineCostsWorth / globalProdWorth;
