@@ -18,7 +18,7 @@ var fn = function () {
       window.config.my.planets[onlyPlanetCoords].name = onlyPlanetName;
       window.config.my.planets[onlyPlanetCoords].coords = onlyPlanetCoords.replace(/[[\]]/g, '').split(':').map(Number);
       window.config.my.planets[onlyPlanetCoords].href = onlyPlanetLink.attr('href');
-	  
+
 	  var tooltiphtml = onlyPlanetLink.attr('title');
         if (tooltiphtml) { // user may already have deployed the tooltip when this code is run
           var temperatures = tooltiphtml.match(/[-0-9 ]+°C/g);
@@ -67,6 +67,31 @@ var fn = function () {
     for (var key in window.config.my.planets) {
       if (!window.config.my.planets[key].coords) {
         delete window.config.my.planets[key];
+      }
+    }
+
+    // clear abandoned planets & destroyed moons
+    var myPlanets = $('#myPlanets').html();
+    for (var key in config.my.planets) {
+      if (key.indexOf('L') === -1) {
+        if (myPlanets.indexOf(key) === -1) {
+          //console.log('delete planet', key);
+          delete config.my.planets[key];
+          _saveConfig();
+        }
+      } else {
+        $('#planetList > div').each(function() {
+          if ($(this).html().indexOf(key.replace('L', '')) !== -1) {
+            //console.log('moon', key, 'is in', $(this));
+            if (!$(this).find('.icon-moon').length) {
+              //console.log('moon is gone', key);
+              delete config.my.planets[key];
+              _saveConfig();
+            } else {
+              //console.log('moon still here', key);
+            }
+          }
+        });
       }
     }
 
