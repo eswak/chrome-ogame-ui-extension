@@ -152,9 +152,10 @@ var fn = function () {
             var colors = {
               10: '#a25419',
               20: '#a9a7b0',
-              30: '#da9f1c'
+              30: '#da9f1c',
+              40: '#7e3d8e'
             };
-            [10, 20, 30].forEach(function (bonus) {
+            [10, 20, 30, 40].forEach(function (bonus) {
               if (_hasBonus(bonus / 100)) {
                 tooltip += [
                   '<br><br>',
