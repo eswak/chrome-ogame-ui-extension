@@ -26,7 +26,8 @@ var fn = function () {
               if (players[$(this).attr('player')]) {
                 players[$(this).attr('player')].planets.push({
                   name: $(this).attr('name'),
-                  coords: $(this).attr('coords').split(':').map(Number)
+                  coords: $(this).attr('coords').split(':').map(Number),
+                  moon: $(this).find('moon').length
                 });
               }
             });

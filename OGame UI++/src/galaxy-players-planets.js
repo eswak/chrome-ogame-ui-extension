@@ -81,6 +81,7 @@ var fn = function () {
           }).map(function (planet) {
             return [
               '<li class="enhancement">',
+              planet.moon ? '<img src="https://gf3.geo.gfsrv.net/cdn87/c9643df71b262232a4d66e591f7543.gif" style="margin-left: -14px; margin-right: 2px; height: 12px; vertical-align: -3px;" />' : '',
               '[<a href="/game/index.php?page=ingame&component=galaxy&galaxy=',
               planet.coords[0] + '&system=' + planet.coords[1] + '&position=' + planet.coords[2] + '">',
               planet.coords[0] + ':' + planet.coords[1] + ':' + planet.coords[2],
