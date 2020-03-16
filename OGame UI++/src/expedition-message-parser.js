@@ -49,6 +49,19 @@ var fn = function () {
 			expeditionContent['item'] = $el.find('a.itemLink').text();
 		}
 
+    // debris fields
+    if ($el.find('figure.planetIcon').length) {
+      var debris = text.split(']')[1].match(/[0-9]+/g).map(Number);
+      if (debris[0] > 0) {
+        expeditionContent.metal = debris[0];
+        expeditionContent.debris = true;
+      }
+      if (debris[1] > 0) {
+        expeditionContent.crystal = debris[1];
+        expeditionContent.debris = true;
+      }
+    }
+
 		window.config.expeditionResults = window.config.expeditionResults || {};
 		window.config.expeditionResults[date + '|' + coords] = expeditionContent;
 		window._saveConfig();

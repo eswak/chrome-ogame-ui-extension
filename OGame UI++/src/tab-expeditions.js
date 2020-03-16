@@ -109,6 +109,10 @@ var fn = function () {
             content += '</div>';
             content += tooltip;
           }
+
+          if (expe.data.debris) {
+            content += '<figure class="planetIcon tf tooltip js_hideTipOnMobile tpd-hideOnClickOutside" style="float: right; margin-top: 6px; margin-right: 5px;"></figure>';
+          }
         }
 
         var worth = uipp_getResourcesWorth();
