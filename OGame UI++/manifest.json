@@ -120,7 +120,7 @@
     ],
     "run_at": "document_idle"
   } ],
-  "version": "3.22.0",
+  "version": "3.23.0",
   "name": "__MSG_appName__",
   "description": "__MSG_appDesc__",
   "default_locale": "en",
