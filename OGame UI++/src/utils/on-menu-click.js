@@ -2,46 +2,79 @@ var fn = function () {
   'use strict';
 
   var uippClassName = 'uiEnhancementWindow';
-  var contentWrapper = '#content';
-  if ($(contentWrapper).length === 0) {
-    contentWrapper = '#middle';
+  var uippActiveTab = null;
+  var $contentWrapper = _getContentWrapper();
+  if ($contentWrapper.length === 0) {
+    $contentWrapper = $('#middle').first();
   }
 
   window._onMenuClick = function (menuClass) {
-    var $existingWrapper = $(contentWrapper).find('.' + uippClassName);
-    if ($existingWrapper.length === 0) {
-      // uipp not visible
-      $('.menubutton.selected').removeClass('selected').addClass('tempUnselected');
-      $('.menuImage.highlighted').removeClass('highlighted').addClass('tempUnhighlighted');
-      $('.' + menuClass)
-        .find('.menubutton').addClass('selected').end()
-        .find('.menuImage').addClass('highlighted');
+    $contentWrapper = _getContentWrapper();
+    var $uippTab = $('.' + uippClassName);
+    if ($uippTab.length && menuClass === uippActiveTab) {
+      $uippTab.remove();
+      $contentWrapper.show();
+      $('#sideBar').show();
+      $('#planet').show();
+
+      // turn off custom tab
+      $('.selected').removeClass('selected');
+      $('.highlighted').removeClass('highlighted');
+      // turn on regular tab
+      $('.tempUnselected').addClass('selected');
+      $('.tempUnhighlighted').addClass('highlighted');
+      // reset tmp classes
+      $('.tempUnselected').removeClass('tempUnselected');
+      $('.tempUnhighlighted').removeClass('tempUnhighlighted');
+      $('.customSelected').removeClass('selected');
+      $('.customHighlighted').removeClass('highlighted');
+
+      $('.injectedComponent').show();
     } else {
-      // uipp visible
-      $existingWrapper.remove();
-      $('.enhanced .menubutton.selected').removeClass('selected');
-      $('.enhanced .menuImage.highlighted').removeClass('highlighted');
-      if (window.uippTab === menuClass) {
-        // exit uipp
-        $('.tempUnselected').addClass('selected');
-        $('.tempUnhighlighted').addClass('highlighted');
-        $(contentWrapper + ' > :not(#eventboxContent)').show();
-        window.uippTab = null;
-        return null;
-      } else {
-        $('.' + menuClass)
-          .find('.menubutton').addClass('selected').end()
-          .find('.menuImage').addClass('highlighted');
-      }
+      $('.' + uippClassName).remove();
+      uippActiveTab = menuClass;
+      return $('<div class="' + uippClassName + ' clearfix"></div>');
     }
-    window.uippTab = menuClass;
-    return $('<div class="' + uippClassName + ' clearfix"></div>');
+    return;
   };
 
   window._insertHtml = function ($wrapper) {
-    $(contentWrapper + ' > :not(#eventboxContent)').hide();
-    $(contentWrapper).append($wrapper);
+    $contentWrapper.parent().append($wrapper);
+    $contentWrapper.hide();
+    $('.injectedComponent').hide();
+    $('#sideBar').hide();
+    $('#planet').hide();
+
+    // menu
+    // disable current
+    $('.menubutton.selected').removeClass('selected').addClass('tempUnselected');
+    $('.menuImage.highlighted').removeClass('highlighted').addClass('tempUnhighlighted');
+    // highlight uipp
+    $('.' + uippActiveTab)
+      .find('.menubutton').addClass('selected').addClass('customSelected').end()
+      .find('.menuImage').addClass('highlighted').addClass('customHighlighted');
   };
+
+  window._getContentWrapper = _getContentWrapper;
+
+  function _getContentWrapper() {
+    return $([
+      '#overviewcomponent',
+      '#suppliescomponent',
+      '#facilitiescomponent',
+      '#marketplacecomponent',
+      '#inhalt', // merchant, officers, shop
+      '#researchcomponent',
+      '#shipyardcomponent',
+      '#defensescomponent',
+      '#fleetdispatchcomponent',
+      '#galaxycomponent',
+      '#netz',
+      '#buttonz', // messages
+      '#chatList', // instant chat
+      '#chatContent' // instant chat
+    ].join(', ')).first();
+  }
 };
 
 var script = document.createElement('script');
