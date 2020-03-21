@@ -12,6 +12,7 @@ libs.forEach(function (path) {
 
 // add image url object
 var uipp_images = {
+  wings: chrome.extension.getURL('img/wings.png'),
   inflight: chrome.extension.getURL('img/fleet-inflight.gif'),
   stay: chrome.extension.getURL('img/mission-stay.jpg'),
   ship: chrome.extension.getURL('img/mission-ship.jpg'),
@@ -48,10 +49,16 @@ var uipp_images = {
     topresearch: chrome.extension.getURL('img/features/topresearch.png')
   },
   resources: {
+    mix: chrome.extension.getURL('img/resources/mix.png'),
     am: chrome.extension.getURL('img/resources/am.png'),
     metal: chrome.extension.getURL('img/resources/metal.png'),
     crystal: chrome.extension.getURL('img/resources/crystal.png'),
-    deuterium: chrome.extension.getURL('img/resources/deuterium.png')
+    deuterium: chrome.extension.getURL('img/resources/deuterium.png'),
+    ambig: chrome.extension.getURL('img/resources/am-big.png'),
+    metalbig: chrome.extension.getURL('img/resources/metal-big.png'),
+    crystalbig: chrome.extension.getURL('img/resources/crystal-big.png'),
+    deuteriumbig: chrome.extension.getURL('img/resources/deuterium-big.png'),
+    itembig: chrome.extension.getURL('img/resources/item-big.png')
   },
   ships: {
     202: chrome.extension.getURL('img/ships/202.jpg'),
