@@ -51,9 +51,52 @@ var fn = function () {
         '</div>'
       ].join('')));
 
-      window.uipp_setLanguage = function () {
-        var lang = $('#uipp-language')[0].value || null;
-        window.config.language = lang;
+      // Fleet at dock threshold
+      var militaryPoints = Number(window.config.players[$('[name=ogame-player-id]').attr('content')].militaryScore);
+      $wrapper.append($([
+        '<div style="padding: 10px 0" class="clearfix">',
+        '<div style="float: left; line-height: 32px;padding-right: 10px;">' + window._translate('SHIP_AT_DOCK_THRESHOLD') + ' : ' + '</div>',
+        '<div>',
+        '<select id="uipp-shipatdock" onchange="uipp_setDockThreshold()" style="visibility:visible;font-size:13px;vertical-align:-8px;">',
+        [
+          { v: '0', t: window._translate('SHIP_AT_DOCK_THRESHOLD_ZERO') },
+          { v: '0.001', t: window._translate('SHIP_AT_DOCK_THRESHOLD_PERCENT', { percent: '0.1', value: _num(0.1 / 100 * militaryPoints * 1000) }) },
+          { v: '0.002', t: window._translate('SHIP_AT_DOCK_THRESHOLD_PERCENT', { percent: '0.2', value: _num(0.2 / 100 * militaryPoints * 1000) }) },
+          { v: '0.003', t: window._translate('SHIP_AT_DOCK_THRESHOLD_PERCENT', { percent: '0.3', value: _num(0.3 / 100 * militaryPoints * 1000) }) },
+          { v: '0.005', t: window._translate('SHIP_AT_DOCK_THRESHOLD_PERCENT', { percent: '0.5', value: _num(0.5 / 100 * militaryPoints * 1000) }) },
+          { v: '0.01', t: window._translate('SHIP_AT_DOCK_THRESHOLD_PERCENT', { percent: '1.0', value: _num(1.0 / 100 * militaryPoints * 1000) }) },
+          { v: '0.015', t: window._translate('SHIP_AT_DOCK_THRESHOLD_PERCENT', { percent: '1.5', value: _num(1.5 / 100 * militaryPoints * 1000) }) },
+          { v: '0.02', t: window._translate('SHIP_AT_DOCK_THRESHOLD_PERCENT', { percent: '2.0', value: _num(2.0 / 100 * militaryPoints * 1000) }) },
+          { v: '0.03', t: window._translate('SHIP_AT_DOCK_THRESHOLD_PERCENT', { percent: '3.0', value: _num(3.0 / 100 * militaryPoints * 1000) }) },
+          { v: '0.04', t: window._translate('SHIP_AT_DOCK_THRESHOLD_PERCENT', { percent: '4.0', value: _num(4.0 / 100 * militaryPoints * 1000) }) },
+          { v: '0.05', t: window._translate('SHIP_AT_DOCK_THRESHOLD_PERCENT', { percent: '5.0', value: _num(5.0 / 100 * militaryPoints * 1000) }) },
+          { v: '0.1', t: window._translate('SHIP_AT_DOCK_THRESHOLD_PERCENT', { percent: '10', value: _num(10 / 100 * militaryPoints * 1000) }) },
+          { v: '0.15', t: window._translate('SHIP_AT_DOCK_THRESHOLD_PERCENT', { percent: '15', value: _num(15 / 100 * militaryPoints * 1000) }) },
+          { v: '0.25', t: window._translate('SHIP_AT_DOCK_THRESHOLD_PERCENT', { percent: '25', value: _num(25 / 100 * militaryPoints * 1000) }) },
+          { v: '0.4', t: window._translate('SHIP_AT_DOCK_THRESHOLD_PERCENT', { percent: '40', value: _num(40 / 100 * militaryPoints * 1000) }) },
+          { v: '0.7', t: window._translate('SHIP_AT_DOCK_THRESHOLD_PERCENT', { percent: '70', value: _num(70 / 100 * militaryPoints * 1000) }) },
+          { v: '1', t: window._translate('SHIP_AT_DOCK_THRESHOLD_PERCENT', { percent: '100', value: _num(100 / 100 * militaryPoints * 1000) }) },
+          { v: '25', t: window._translate('SHIP_AT_DOCK_THRESHOLD_ABSOLUTE', { value: _num(25000) }) },
+          { v: '100', t: window._translate('SHIP_AT_DOCK_THRESHOLD_ABSOLUTE', { value: _num(100000) }) },
+          { v: '1000', t: window._translate('SHIP_AT_DOCK_THRESHOLD_ABSOLUTE', { value: _num(1000000) }) },
+          { v: '5000', t: window._translate('SHIP_AT_DOCK_THRESHOLD_ABSOLUTE', { value: _num(5000000) }) },
+          { v: '25000', t: window._translate('SHIP_AT_DOCK_THRESHOLD_ABSOLUTE', { value: _num(25000000) }) },
+          { v: '50000', t: window._translate('SHIP_AT_DOCK_THRESHOLD_ABSOLUTE', { value: _num(50000000) }) },
+          { v: '75000', t: window._translate('SHIP_AT_DOCK_THRESHOLD_ABSOLUTE', { value: _num(75000000) }) },
+          { v: '100000', t: window._translate('SHIP_AT_DOCK_THRESHOLD_ABSOLUTE', { value: _num(100000000) }) },
+          { v: '500000', t: window._translate('SHIP_AT_DOCK_THRESHOLD_ABSOLUTE', { value: _num(500000000) }) },
+          { v: '1000000', t: window._translate('SHIP_AT_DOCK_THRESHOLD_ABSOLUTE', { value: _num(1000000000) }) }
+        ].map(function (o) {
+          return '<option value="' + o.v + '" ' + (String(window.config.shipsAtDockThreshold) === o.v ? 'selected' : '') + '>' + o.t + '</option>';
+        }).join(''),
+        '</select>',
+        '</div>',
+        '</div>'
+      ].join('')));
+
+      window.uipp_setDockThreshold = function () {
+        var threshold = Number($('#uipp-shipatdock')[0].value || null);
+        window.config.shipsAtDockThreshold = threshold;
         window._saveConfig();
         document.location.reload();
       };

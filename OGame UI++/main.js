@@ -12,6 +12,8 @@ libs.forEach(function (path) {
 
 // add image url object
 var uipp_images = {
+  atk: chrome.extension.getURL('img/atk.png'),
+  atkunk: chrome.extension.getURL('img/atk-unk.png'),
   wings: chrome.extension.getURL('img/wings.png'),
   inflight: chrome.extension.getURL('img/fleet-inflight.gif'),
   stay: chrome.extension.getURL('img/mission-stay.jpg'),
@@ -40,6 +42,7 @@ var uipp_images = {
     nextbuilds: chrome.extension.getURL('img/features/nextbuilds.png'),
     solarsat: chrome.extension.getURL('img/features/solarsat.png'),
     ship: chrome.extension.getURL('img/features/ship.png'),
+    shipatdock: chrome.extension.getURL('img/features/shipatdock.png'),
     shipresources: chrome.extension.getURL('img/features/shipresources.png'),
     stats: chrome.extension.getURL('img/features/stats.png'),
     storagetime: chrome.extension.getURL('img/features/storagetime.png'),
@@ -115,6 +118,7 @@ var userscript = function () {
     missingresources: true,
     nextbuilds: true,
     ship: true,
+    shipatdock: true,
     shipresources: true,
     solarsat: true,
     stats: true,
@@ -180,6 +184,13 @@ var userscript = function () {
 
   if (features.ship) {
     window._addShipHelperInterval();
+  }
+
+  if (features.shipatdock) {
+    if (window.config.shipsAtDockThreshold == null) {
+      window.config.shipsAtDockThreshold = 0.1 / 100;
+    }
+    window._addShipAtDockHelper();
   }
 
   if (features.shipresources) {

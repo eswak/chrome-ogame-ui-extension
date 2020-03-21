@@ -2,6 +2,12 @@ var fn = function () {
   'use strict';
   var translations = {
     fr: {
+      SHIP_AT_DOCK: 'Flotte à quai',
+      SHIP_AT_DOCK_THRESHOLD: 'Avertissement de flotte à quai',
+      SHIP_AT_DOCK_THRESHOLD_ZERO: 'S\'il y a au moins un vaisseau, afficher l\'icône',
+      SHIP_AT_DOCK_THRESHOLD_PERCENT: '{percent}% des points militaires ({value} - mis à jour automatiquement)',
+      SHIP_AT_DOCK_THRESHOLD_ABSOLUTE: 'Seuil fixe - {value}',
+      SHIP_AT_DOCK_THRESHOLD_NEED_UPDATE: 'Visitez la page de flotte de cette planète<br>ou lune pour mettre à jour la flotte quai.',
       FEEDBACK: 'Envie de nous laisser un message ?',
       FEEDBACK_PLACEHOLDER: 'Commentaire, suggestion, idée...',
       SEND: 'Envoyer',
@@ -54,6 +60,12 @@ var fn = function () {
       STATS_RATIO: 'Ratio de production (rapport au '
     },
     en: {
+      SHIP_AT_DOCK: 'Ships parked',
+      SHIP_AT_DOCK_THRESHOLD: 'Ships parked warning',
+      SHIP_AT_DOCK_THRESHOLD_ZERO: 'If there is at least one ship, display icon',
+      SHIP_AT_DOCK_THRESHOLD_PERCENT: '{percent}% of military points ({value} - automatically updated)',
+      SHIP_AT_DOCK_THRESHOLD_ABSOLUTE: 'Fixed threshold - {value}',
+      SHIP_AT_DOCK_THRESHOLD_NEED_UPDATE: 'Visit the fleet page of this planet<br>or moon to update parked ships.',
       RENTABILITY_EXPLAINATION: '<span style="font-weight:700">How is rentability computed ?</span><br><br>Assuming the following things :<br> - 1) You configured a trade rate of 3 / 2 / 1<br> - 2) Your overall production is 1000 metal/h, 1000 cristal/h, 1000 deuterium/h.<br> - 3) Your next metal mine level costs 4000 metal, 1000 cristal, and produce 100 more metal/h.<br><br>The cost is worth 5500 "units" (metal is worth 3/3=1 units, crystal is worth 3/2=1.5 units, deuterium is worth 3/1=3 units).<br>The production gain is worth 100 * 3/3 = 100 units.<br>So, the rentability time of your metal mine\'s next level is 5500/100 = 55 hours.<br><br>This is all assuming you can trade your resources at the configured trade rate.<br><br><br>For astrophysics, the total cost is the cost of researching 2 more levels of astrophysics + the cost of building mines up to the median mine levels you have on your existing planets. The production is the final production after the new planet\'s mines will be maxed out. It does not take into account the research time and the building time required to achieve everything.',
       LANGUAGE: 'Language',
       FEEDBACK: 'Feedback',
