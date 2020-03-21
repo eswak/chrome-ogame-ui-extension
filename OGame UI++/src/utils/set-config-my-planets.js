@@ -72,26 +72,29 @@ var fn = function () {
 
     // clear abandoned planets & destroyed moons
     var myPlanets = $('#myPlanets').html();
-    for (var key in config.my.planets) {
-      if (key.indexOf('L') === -1) {
-        if (myPlanets.indexOf(key) === -1) {
-          //console.log('delete planet', key);
-          delete config.my.planets[key];
-          _saveConfig();
-        }
-      } else {
-        $('#planetList > div').each(function() {
-          if ($(this).html().indexOf(key.replace('L', '')) !== -1) {
-            //console.log('moon', key, 'is in', $(this));
-            if (!$(this).find('.icon-moon').length) {
-              //console.log('moon is gone', key);
-              delete config.my.planets[key];
-              _saveConfig();
-            } else {
-              //console.log('moon still here', key);
-            }
+    if (myPlanets) {
+      for (var key in config.my.planets) {
+        if (!key) { continue }
+        if (key.indexOf('L') === -1) {
+          if (myPlanets.indexOf(key) === -1) {
+            //console.log('delete planet', key);
+            delete config.my.planets[key];
+            _saveConfig();
           }
-        });
+        } else {
+          $('#planetList > div').each(function() {
+            if ($(this).html().indexOf(key.replace('L', '')) !== -1) {
+              //console.log('moon', key, 'is in', $(this));
+              if (!$(this).find('.icon-moon').length) {
+                //console.log('moon is gone', key);
+                delete config.my.planets[key];
+                _saveConfig();
+              } else {
+                //console.log('moon still here', key);
+              }
+            }
+          });
+        }
       }
     }
 
