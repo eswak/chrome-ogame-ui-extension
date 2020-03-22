@@ -92,6 +92,7 @@ var fn = function () {
       if (shipPoints > threshold || shipsNeedUpdate) {
         var img = uipp_images.atk;
         var tooltip = window._translate('SHIP_AT_DOCK') + ' : ' + _num(shipPoints * 1000) + '|';
+        tooltip += window._translate('LAST_UPDATE') + ' : ' + _time((Date.now() - window.config.my.planets[$(this).find('.planet-koords').text()].shipsLastUpdate) / 1000) + '<br><br>';
         tooltip += '<table class=&quot;marketitem_price_tooltip&quot;>';
         for (var key in window.config.my.planets[$(this).find('.planet-koords').text()].ships) {
           tooltip += [
@@ -104,7 +105,9 @@ var fn = function () {
         tooltip += '</table>';
 
         if (shipsNeedUpdate) {
-          tooltip = window._translate('SHIP_AT_DOCK') + ' : ???|' + window._translate('SHIP_AT_DOCK_THRESHOLD_NEED_UPDATE');
+          tooltip = window._translate('SHIP_AT_DOCK') + ' : ???|';
+          tooltip += window._translate('LAST_UPDATE') + ' : ' + _time((Date.now() - window.config.my.planets[$(this).find('.planet-koords').text()].shipsLastUpdate) / 1000) + '<br><br>';
+          tooltip += window._translate('SHIP_AT_DOCK_THRESHOLD_NEED_UPDATE');
           img = uipp_images.atkunk;
         }
 
@@ -123,6 +126,7 @@ var fn = function () {
         if (shipPointsMoon > threshold || shipsNeedUpdateMoon) {
           var tooltip = window._translate('SHIP_AT_DOCK') + ' : ' + _num(shipPointsMoon * 1000) + '|';
           var img = uipp_images.atk;
+          tooltip += window._translate('LAST_UPDATE') + ' : ' + _time((Date.now() - window.config.my.planets[$(this).find('.planet-koords').text() + 'L'].shipsLastUpdate) / 1000) + '<br><br>';
           tooltip += '<table class=&quot;marketitem_price_tooltip&quot;>';
           for (var key in window.config.my.planets[$(this).find('.planet-koords').text() + 'L'].ships) {
             tooltip += [
@@ -135,7 +139,9 @@ var fn = function () {
           tooltip += '</table>';
 
           if (shipsNeedUpdateMoon) {
-            tooltip = window._translate('SHIP_AT_DOCK') + ' : ???|' + window._translate('SHIP_AT_DOCK_THRESHOLD_NEED_UPDATE');
+            tooltip = window._translate('SHIP_AT_DOCK') + ' : ???|';
+            tooltip += window._translate('LAST_UPDATE') + ' : ' + _time((Date.now() - window.config.my.planets[$(this).find('.planet-koords').text() + 'L'].shipsLastUpdate) / 1000) + '<br><br>';
+            tooltip += window._translate('SHIP_AT_DOCK_THRESHOLD_NEED_UPDATE');
             img = uipp_images.atkunk;
           }
 

@@ -2,6 +2,7 @@ var fn = function () {
   'use strict';
   var translations = {
     fr: {
+      LAST_UPDATE: 'Dernière mise à jour',
       SHIP_AT_DOCK: 'Flotte à quai',
       SHIP_AT_DOCK_THRESHOLD: 'Avertissement de flotte à quai',
       SHIP_AT_DOCK_THRESHOLD_ZERO: 'S\'il y a au moins un vaisseau, afficher l\'icône',
@@ -60,6 +61,7 @@ var fn = function () {
       STATS_RATIO: 'Ratio de production (rapport au '
     },
     en: {
+      LAST_UPDATE: 'Last update',
       SHIP_AT_DOCK: 'Ships parked',
       SHIP_AT_DOCK_THRESHOLD: 'Ships parked warning',
       SHIP_AT_DOCK_THRESHOLD_ZERO: 'If there is at least one ship, display icon',
