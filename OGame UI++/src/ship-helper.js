@@ -39,9 +39,9 @@ var fn = function () {
           gt: { metal: false, crystal: false, deuterium: false }
         };
         var cargo = {
-			pt: 5000 * (1 + 0.05 * (window.config.hyperspaceTech || 0)),
-			gt: 25000 * (1 + 0.05 * (window.config.hyperspaceTech || 0))
-		};
+    			pt: 5000 * (1 + 0.05 * (window.config.hyperspaceTech || 0)),
+    			gt: 25000 * (1 + 0.05 * (window.config.hyperspaceTech || 0))
+    		};
         var elements = { pt: $el.find('input[name=transporterSmall]'), gt: $el.find('input[name=transporterLarge]') };
         var resources = window._getCurrentPlanetResources();
 
@@ -63,6 +63,10 @@ var fn = function () {
           }
           elements[type].val(Math.ceil(totalResources / cargo[type]));
           elements[type].keyup();
+
+          var field = { metal: 'cargoMetal', crystal: 'cargoCrystal', deuterium: 'cargoDeuterium' };
+          field = field[resource];
+          fleetDispatcher[field] = Math.min(resources[res].now, elements[type].val() * cargo[type]);
         };
       }
     }, 100);
