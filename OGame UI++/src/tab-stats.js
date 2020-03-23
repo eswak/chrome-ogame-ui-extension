@@ -641,7 +641,7 @@ var fn = function () {
           metalLevel: medianMineLevels.metal,
           crystalLevel: medianMineLevels.crystal,
           deuteriumLevel: medianMineLevels.deuterium,
-          inprog: window.config.inprog.astro || null
+          inprog: (window.config.inprog.astro && nextAstroLevelForPlanetUnlock === (window.config.astroTech + 1)) || null
         });
 
         nextAstroLevelForPlanetUnlock += 2;
