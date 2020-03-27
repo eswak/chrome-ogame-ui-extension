@@ -64,6 +64,13 @@ var fn = function () {
 
 		window.config.expeditionResults = window.config.expeditionResults || {};
 		window.config.expeditionResults[date + '|' + coords] = expeditionContent;
+
+    for (var key in window.config.expeditionResults) {
+      if (Object.keys(window.config.expeditionResults[key]).length === 0) {
+        delete window.config.expeditionResults[key];
+      }
+    }
+
 		window._saveConfig();
 	}
 
