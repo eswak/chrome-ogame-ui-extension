@@ -52,7 +52,7 @@ var fn = function () {
       ].join('')));
 
       // Fleet at dock threshold
-      var militaryPoints = Number(window.config.players[$('[name=ogame-player-id]').attr('content')].militaryScore);
+      var militaryPoints = Number(((window.config.players || {})[$('[name=ogame-player-id]').attr('content')] || {}).militaryScore || '0');
       $wrapper.append($([
         '<div style="padding: 10px 0" class="clearfix">',
         '<div style="float: left; line-height: 32px;padding-right: 10px;">' + window._translate('SHIP_AT_DOCK_THRESHOLD') + ' : ' + '</div>',

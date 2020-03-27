@@ -80,7 +80,7 @@ var fn = function () {
   function _addPlanetListHelpers() {
     var threshold = window.config.shipsAtDockThreshold;
     if (threshold <= 1) {
-      threshold *= Number(window.config.players[$('[name=ogame-player-id]').attr('content')].militaryScore);
+      threshold *= Number(((window.config.players || {})[$('[name=ogame-player-id]').attr('content')] || {}).militaryScore || '0');
     }
 
     $('.shipsatdockhelper').remove();
