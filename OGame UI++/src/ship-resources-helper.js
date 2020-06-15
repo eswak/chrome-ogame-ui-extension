@@ -48,8 +48,8 @@ var fn = function () {
   window.uipp_updateShipResourcesHelper = function() {
     var sum = getSum();
     var cargo = {
-      pt: 5000 * (1 + 0.05 * (window.config.hyperspaceTech || 0)),
-      gt: 25000 * (1 + 0.05 * (window.config.hyperspaceTech || 0))
+      pt: 5000 * (1 + 0.05 * (window.config.hyperspaceTech || 0)) + (window.config.isMiner ? 1250 : 0),
+      gt: 25000 * (1 + 0.05 * (window.config.hyperspaceTech || 0)) + (window.config.isMiner ? 6250 : 0)
     };
     $('#helper-shipresource-gt').text(Math.ceil(sum / cargo.gt));
     $('#helper-shipresource-pt').text(Math.ceil(sum / cargo.pt));
@@ -57,8 +57,8 @@ var fn = function () {
 
   window.uipp_setShipResourceHelper = function(type) {
     var cargo = {
-      pt: 5000 * (1 + 0.05 * (window.config.hyperspaceTech || 0)),
-      gt: 25000 * (1 + 0.05 * (window.config.hyperspaceTech || 0))
+      pt: 5000 * (1 + 0.05 * (window.config.hyperspaceTech || 0)) + (window.config.isMiner ? 1250 : 0),
+      gt: 25000 * (1 + 0.05 * (window.config.hyperspaceTech || 0)) + (window.config.isMiner ? 6250 : 0)
     };
 
     if (type === 'gt') {

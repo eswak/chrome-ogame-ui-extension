@@ -2,6 +2,8 @@ var fn = function () {
   'use strict';
 
   window._parseResearchTab = function _parseResearchTab () {
+    window.config.isMiner = $('#characterclass .miner').length ? true : false;
+
     if (document.location.href.indexOf('research') === -1) {
       return;
     }
