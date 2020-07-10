@@ -51,7 +51,7 @@ var fn = function () {
       }
 
       myPlanets = myPlanets.sort(function (a, b) {
-        return planetOrder.indexOf(a.coords.join(':')) > planetOrder.indexOf(b.coords.join(':')) ? 1 : -1;
+        return planetOrder.indexOf("["+a.coords.join(':')+"]") > planetOrder.indexOf("["+b.coords.join(':')+"]") ? 1 : -1;
       });
 
       var planetStatsHtml = '';
