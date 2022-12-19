@@ -67,7 +67,6 @@ function _getContentWrapper() {
       '#overviewcomponent',
       '#suppliescomponent',
       '#facilitiescomponent',
-      '#marketplacecomponent',
       '#inhalt', // merchant, officers, shop
       '#researchcomponent',
       '#shipyardcomponent',

@@ -322,6 +322,10 @@ window._addTabSettings = function _addTabSettings() {
       ].join('')
     );
 
+    // gone features
+    delete window.config.features['markethelper'];
+    window._saveConfig();
+
     // features config
     window._toggleFeature = function _toggleFeature(key, element) {
       if (window.config.features[key]) {
@@ -331,7 +335,6 @@ window._addTabSettings = function _addTabSettings() {
         $(element).css('opacity', '1');
         window.config.features[key] = true;
       }
-
       window._saveConfig();
     };
 

@@ -34,7 +34,6 @@ var userscript = function () {
     solarsat: true,
     stats: true,
     storagetime: true,
-    markethelper: true,
     topeco: true,
     topfleet: true,
     topgeneral: true,
@@ -114,10 +113,6 @@ var userscript = function () {
 
   if (features.solarsat) {
     window._addSolarSatHelperInterval();
-  }
-
-  if (features.markethelper) {
-    window._addMarketHelper();
   }
 
   // Refresh universe data (config.players)
