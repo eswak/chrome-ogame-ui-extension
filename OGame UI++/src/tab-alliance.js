@@ -1,6 +1,6 @@
 'use strict';
 window._addTabAlliance = function _addTabAlliance() {
-  if (document.location.href.indexOf('page=alliance') === -1) {
+  if (document.location.href.indexOf('component=alliance') === -1) {
     return;
   }
 
@@ -14,13 +14,20 @@ window._addTabAlliance = function _addTabAlliance() {
 
   var alliancePlayers = [];
   var myPlayerId = $('[name=ogame-player-id]').attr('content');
-  var myAllianceId = window.config.players[myPlayerId].alliance;
+  var myAllianceId = $('[name=ogame-alliance-id]').attr('content');
+  var addedSelf = false;
   for (var key in window.config.players) {
     var player = window.config.players[key];
     player.id = key;
     if (player.alliance && player.alliance === myAllianceId) {
+      if (key == myPlayerId) {
+        addedSelf = true;
+      }
       alliancePlayers.push(player);
     }
+  }
+  if (!addedSelf) {
+    alliancePlayers.push(window.config.players[myPlayerId]);
   }
 
   if (!alliancePlayers.length) {
@@ -28,7 +35,7 @@ window._addTabAlliance = function _addTabAlliance() {
   }
 
   var tabhtml = [
-    '<div style="float: left; margin-top: 2em; width: 100%">',
+    '<div style="float: left; margin: 2em 0 4em; width: 100%">',
     '<table class="uipp-table bordered">',
     '<thead id="highscoreContent">',
     '<tr>',
