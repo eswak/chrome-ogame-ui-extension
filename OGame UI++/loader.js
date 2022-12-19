@@ -1,0 +1,138 @@
+// add image url object
+var uipp_images = {
+  atk: chrome.runtime.getURL('img/atk.png'),
+  atkunk: chrome.runtime.getURL('img/atk-unk.png'),
+  wings: chrome.runtime.getURL('img/wings.png'),
+  inflight: chrome.runtime.getURL('img/fleet-inflight.gif'),
+  stay: chrome.runtime.getURL('img/mission-stay.jpg'),
+  ship: chrome.runtime.getURL('img/mission-ship.jpg'),
+  datetime: chrome.runtime.getURL('img/datetime.png'),
+  expedition: chrome.runtime.getURL('img/expedition.png'),
+  marketcollect: chrome.runtime.getURL('img/marketcollect.png'),
+  yield: chrome.runtime.getURL('img/yield.png'),
+  item: chrome.runtime.getURL('img/item.png'),
+  metal: chrome.runtime.getURL('img/mine-metal.png'),
+  crystal: chrome.runtime.getURL('img/mine-crystal.png'),
+  deuterium: chrome.runtime.getURL('img/mine-deuterium.png'),
+  astrophysics: chrome.runtime.getURL('img/tech-astro.png'),
+  plasma: chrome.runtime.getURL('img/tech-plasma.png'),
+  features: {
+    alliance: chrome.runtime.getURL('img/features/alliance.png'),
+    charts: chrome.runtime.getURL('img/features/charts.png'),
+    deploytransport: chrome.runtime.getURL('img/features/deploytransport.png'),
+    expeditionpoints: chrome.runtime.getURL('img/features/expeditionpoints.png'),
+    expeditiontab: chrome.runtime.getURL('img/features/expeditiontab.png'),
+    galaxy: chrome.runtime.getURL('img/features/galaxy.png'),
+    galaxydebris: chrome.runtime.getURL('img/features/galaxydebris.png'),
+    markethelper: chrome.runtime.getURL('img/features/markethelper.png'),
+    minetext: chrome.runtime.getURL('img/features/minetext.png'),
+    missingresources: chrome.runtime.getURL('img/features/missingresources.png'),
+    nextbuilds: chrome.runtime.getURL('img/features/nextbuilds.png'),
+    solarsat: chrome.runtime.getURL('img/features/solarsat.png'),
+    ship: chrome.runtime.getURL('img/features/ship.png'),
+    shipatdock: chrome.runtime.getURL('img/features/shipatdock.png'),
+    shipresources: chrome.runtime.getURL('img/features/shipresources.png'),
+    stats: chrome.runtime.getURL('img/features/stats.png'),
+    storagetime: chrome.runtime.getURL('img/features/storagetime.png'),
+    topeco: chrome.runtime.getURL('img/features/topeco.png'),
+    topfleet: chrome.runtime.getURL('img/features/topfleet.png'),
+    topgeneral: chrome.runtime.getURL('img/features/topgeneral.png'),
+    topresearch: chrome.runtime.getURL('img/features/topresearch.png')
+  },
+  resources: {
+    mix: chrome.runtime.getURL('img/resources/mix.png'),
+    am: chrome.runtime.getURL('img/resources/am.png'),
+    metal: chrome.runtime.getURL('img/resources/metal.png'),
+    crystal: chrome.runtime.getURL('img/resources/crystal.png'),
+    deuterium: chrome.runtime.getURL('img/resources/deuterium.png'),
+    ambig: chrome.runtime.getURL('img/resources/am-big.png'),
+    metalbig: chrome.runtime.getURL('img/resources/metal-big.png'),
+    crystalbig: chrome.runtime.getURL('img/resources/crystal-big.png'),
+    deuteriumbig: chrome.runtime.getURL('img/resources/deuterium-big.png'),
+    itembig: chrome.runtime.getURL('img/resources/item-big.png')
+  },
+  ships: {
+    202: chrome.runtime.getURL('img/ships/202.jpg'),
+    203: chrome.runtime.getURL('img/ships/203.jpg'),
+    204: chrome.runtime.getURL('img/ships/204.jpg'),
+    205: chrome.runtime.getURL('img/ships/205.jpg'),
+    206: chrome.runtime.getURL('img/ships/206.jpg'),
+    207: chrome.runtime.getURL('img/ships/207.jpg'),
+    208: chrome.runtime.getURL('img/ships/208.jpg'),
+    209: chrome.runtime.getURL('img/ships/209.jpg'),
+    210: chrome.runtime.getURL('img/ships/210.jpg'),
+    211: chrome.runtime.getURL('img/ships/211.jpg'),
+    212: chrome.runtime.getURL('img/ships/212.jpg'),
+    213: chrome.runtime.getURL('img/ships/213.jpg'),
+    214: chrome.runtime.getURL('img/ships/214.jpg'),
+    215: chrome.runtime.getURL('img/ships/215.jpg'),
+    217: chrome.runtime.getURL('img/ships/217.jpg'),
+    218: chrome.runtime.getURL('img/ships/218.jpg'),
+    219: chrome.runtime.getURL('img/ships/219.jpg')
+  },
+  score: {
+    global: chrome.runtime.getURL('img/score-global.png'),
+    economy: chrome.runtime.getURL('img/score-economy.png'),
+    research: chrome.runtime.getURL('img/score-research.png'),
+    military: chrome.runtime.getURL('img/score-military.png'),
+    fleet: chrome.runtime.getURL('img/score-fleet.png')
+  }
+};
+
+var scripts = chrome.runtime.getManifest().web_accessible_resources[1].resources;
+Promise.all(
+  scripts.map(function (scriptPath) {
+    return new Promise(function (resolve) {
+      var s = document.createElement('script');
+      s.src = chrome.runtime.getURL(scriptPath);
+      s.onload = function () {
+        //console.log('Loaded', scriptPath);
+        this.remove();
+        resolve();
+      };
+      (document.head || document.documentElement).appendChild(s);
+    });
+  })
+).then(function () {
+  console.log('Loaded all OGame UI++ files.');
+
+  var imagesEvent = document.createEvent('CustomEvent');
+  imagesEvent.initCustomEvent('UIPPImages', true, true, uipp_images);
+  document.dispatchEvent(imagesEvent);
+
+  var startEvent = document.createEvent('Event');
+  startEvent.initEvent('UIPPStart', true, true);
+  document.dispatchEvent(startEvent);
+
+  console.log('Starting OGame UI++.');
+});
+
+/*
+// Send an event:
+var evt = document.createEvent('CustomEvent');
+evt.initCustomEvent("UIPPNotification", true, true, {
+    title: 'Plasma is great',
+    message: 'How great it is!',
+    img: uipp_images.plasma
+});
+document.dispatchEvent(evt);
+*/
+document.addEventListener('UIPPNotification', function (evt) {
+  var when = evt.when || Date.now();
+  var title = evt.detail.title || 'OGame UI++ Notification';
+  var message = evt.detail.title || 'OGame UI++ Message';
+  var img = evt.detail.img || 'metalmine.48.jpeg';
+
+  chrome.runtime.sendMessage(chrome.runtime.id, {
+    type: 'notification',
+    when: when,
+    options: {
+      type: 'basic',
+      silent: false,
+      priority: 2,
+      title: title,
+      message: message,
+      iconUrl: img
+    }
+  });
+});

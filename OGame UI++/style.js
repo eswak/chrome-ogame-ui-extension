@@ -19,7 +19,7 @@ style.textContent = [
   '  margin: 5px 0 0 0;',
   '}',
   '.storageleft {',
-  '  position: absolute; bottom: -11px; left: -35%; width: 170%;',
+  '  position: absolute; bottom: -14px; left: -51%; width: 170%;',
   '}',
   '.boldy {',
   '  font-weight: bold;',

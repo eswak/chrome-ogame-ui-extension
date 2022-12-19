@@ -1,64 +1,69 @@
-var fn = function () {
-  'use strict';
+'use strict';
 
-  var uippClassName = 'uiEnhancementWindow';
-  var uippActiveTab = null;
-  var $contentWrapper = _getContentWrapper();
-  if ($contentWrapper.length === 0) {
-    $contentWrapper = $('#middle').first();
+var uippClassName = 'uiEnhancementWindow';
+var uippActiveTab = null;
+var $contentWrapper = _getContentWrapper();
+if ($contentWrapper.length === 0) {
+  $contentWrapper = $('#middle').first();
+}
+
+window._onMenuClick = function (menuClass) {
+  $contentWrapper = _getContentWrapper();
+  var $uippTab = $('.' + uippClassName);
+  if ($uippTab.length && menuClass === uippActiveTab) {
+    $uippTab.remove();
+    $contentWrapper.show();
+    $('#sideBar').show();
+    $('#planet').show();
+
+    // turn off custom tab
+    $('.selected').removeClass('selected');
+    $('.highlighted').removeClass('highlighted');
+    // turn on regular tab
+    $('.tempUnselected').addClass('selected');
+    $('.tempUnhighlighted').addClass('highlighted');
+    // reset tmp classes
+    $('.tempUnselected').removeClass('tempUnselected');
+    $('.tempUnhighlighted').removeClass('tempUnhighlighted');
+    $('.customSelected').removeClass('selected');
+    $('.customHighlighted').removeClass('highlighted');
+
+    $('.injectedComponent').show();
+  } else {
+    $('.' + uippClassName).remove();
+    uippActiveTab = menuClass;
+    return $('<div class="' + uippClassName + ' clearfix"></div>');
   }
+  return;
+};
 
-  window._onMenuClick = function (menuClass) {
-    $contentWrapper = _getContentWrapper();
-    var $uippTab = $('.' + uippClassName);
-    if ($uippTab.length && menuClass === uippActiveTab) {
-      $uippTab.remove();
-      $contentWrapper.show();
-      $('#sideBar').show();
-      $('#planet').show();
+window._insertHtml = function ($wrapper) {
+  $contentWrapper.parent().append($wrapper);
+  $contentWrapper.hide();
+  $('.injectedComponent').hide();
+  $('#sideBar').hide();
+  $('#planet').hide();
 
-      // turn off custom tab
-      $('.selected').removeClass('selected');
-      $('.highlighted').removeClass('highlighted');
-      // turn on regular tab
-      $('.tempUnselected').addClass('selected');
-      $('.tempUnhighlighted').addClass('highlighted');
-      // reset tmp classes
-      $('.tempUnselected').removeClass('tempUnselected');
-      $('.tempUnhighlighted').removeClass('tempUnhighlighted');
-      $('.customSelected').removeClass('selected');
-      $('.customHighlighted').removeClass('highlighted');
+  // menu
+  // disable current
+  $('.menubutton.selected').removeClass('selected').addClass('tempUnselected');
+  $('.menuImage.highlighted').removeClass('highlighted').addClass('tempUnhighlighted');
+  // highlight uipp
+  $('.' + uippActiveTab)
+    .find('.menubutton')
+    .addClass('selected')
+    .addClass('customSelected')
+    .end()
+    .find('.menuImage')
+    .addClass('highlighted')
+    .addClass('customHighlighted');
+};
 
-      $('.injectedComponent').show();
-    } else {
-      $('.' + uippClassName).remove();
-      uippActiveTab = menuClass;
-      return $('<div class="' + uippClassName + ' clearfix"></div>');
-    }
-    return;
-  };
+window._getContentWrapper = _getContentWrapper;
 
-  window._insertHtml = function ($wrapper) {
-    $contentWrapper.parent().append($wrapper);
-    $contentWrapper.hide();
-    $('.injectedComponent').hide();
-    $('#sideBar').hide();
-    $('#planet').hide();
-
-    // menu
-    // disable current
-    $('.menubutton.selected').removeClass('selected').addClass('tempUnselected');
-    $('.menuImage.highlighted').removeClass('highlighted').addClass('tempUnhighlighted');
-    // highlight uipp
-    $('.' + uippActiveTab)
-      .find('.menubutton').addClass('selected').addClass('customSelected').end()
-      .find('.menuImage').addClass('highlighted').addClass('customHighlighted');
-  };
-
-  window._getContentWrapper = _getContentWrapper;
-
-  function _getContentWrapper() {
-    return $([
+function _getContentWrapper() {
+  return $(
+    [
       '#overviewcomponent',
       '#suppliescomponent',
       '#facilitiescomponent',
@@ -73,11 +78,6 @@ var fn = function () {
       '#buttonz', // messages
       '#chatList', // instant chat
       '#chatContent' // instant chat
-    ].join(', ')).first();
-  }
-};
-
-var script = document.createElement('script');
-script.textContent = '(' + fn + ')()';
-(document.head || document.documentElement).appendChild(script);
-script.parentNode.removeChild(script);
+    ].join(', ')
+  ).first();
+}

@@ -1,99 +1,10 @@
-// inject libs
-var libs = [
-  'lib/chartist.min.js',
-  'lib/dom-to-image.min.js'
-];
-libs.forEach(function (path) {
-  var lib = document.createElement('script');
-  lib.src = chrome.extension.getURL(path);
-  (document.head || document.documentElement).appendChild(lib);
-  lib.parentNode.removeChild(lib);
+document.addEventListener('UIPPImages', function (evt, a, b, c) {
+  window.uipp_images = evt.detail;
 });
 
-// add image url object
-var uipp_images = {
-  atk: chrome.extension.getURL('img/atk.png'),
-  atkunk: chrome.extension.getURL('img/atk-unk.png'),
-  wings: chrome.extension.getURL('img/wings.png'),
-  inflight: chrome.extension.getURL('img/fleet-inflight.gif'),
-  stay: chrome.extension.getURL('img/mission-stay.jpg'),
-  ship: chrome.extension.getURL('img/mission-ship.jpg'),
-  datetime: chrome.extension.getURL('img/datetime.png'),
-  expedition: chrome.extension.getURL('img/expedition.png'),
-  marketcollect: chrome.extension.getURL('img/marketcollect.png'),
-  yield: chrome.extension.getURL('img/yield.png'),
-  item: chrome.extension.getURL('img/item.png'),
-  metal: chrome.extension.getURL('img/mine-metal.png'),
-  crystal: chrome.extension.getURL('img/mine-crystal.png'),
-  deuterium: chrome.extension.getURL('img/mine-deuterium.png'),
-  astrophysics: chrome.extension.getURL('img/tech-astro.png'),
-  plasma: chrome.extension.getURL('img/tech-plasma.png'),
-  features: {
-    alliance: chrome.extension.getURL('img/features/alliance.png'),
-    charts: chrome.extension.getURL('img/features/charts.png'),
-    deploytransport: chrome.extension.getURL('img/features/deploytransport.png'),
-    expeditionpoints: chrome.extension.getURL('img/features/expeditionpoints.png'),
-    expeditiontab: chrome.extension.getURL('img/features/expeditiontab.png'),
-    galaxy: chrome.extension.getURL('img/features/galaxy.png'),
-    galaxydebris: chrome.extension.getURL('img/features/galaxydebris.png'),
-    markethelper: chrome.extension.getURL('img/features/markethelper.png'),
-    minetext: chrome.extension.getURL('img/features/minetext.png'),
-    missingresources: chrome.extension.getURL('img/features/missingresources.png'),
-    nextbuilds: chrome.extension.getURL('img/features/nextbuilds.png'),
-    solarsat: chrome.extension.getURL('img/features/solarsat.png'),
-    ship: chrome.extension.getURL('img/features/ship.png'),
-    shipatdock: chrome.extension.getURL('img/features/shipatdock.png'),
-    shipresources: chrome.extension.getURL('img/features/shipresources.png'),
-    stats: chrome.extension.getURL('img/features/stats.png'),
-    storagetime: chrome.extension.getURL('img/features/storagetime.png'),
-    topeco: chrome.extension.getURL('img/features/topeco.png'),
-    topfleet: chrome.extension.getURL('img/features/topfleet.png'),
-    topgeneral: chrome.extension.getURL('img/features/topgeneral.png'),
-    topresearch: chrome.extension.getURL('img/features/topresearch.png')
-  },
-  resources: {
-    mix: chrome.extension.getURL('img/resources/mix.png'),
-    am: chrome.extension.getURL('img/resources/am.png'),
-    metal: chrome.extension.getURL('img/resources/metal.png'),
-    crystal: chrome.extension.getURL('img/resources/crystal.png'),
-    deuterium: chrome.extension.getURL('img/resources/deuterium.png'),
-    ambig: chrome.extension.getURL('img/resources/am-big.png'),
-    metalbig: chrome.extension.getURL('img/resources/metal-big.png'),
-    crystalbig: chrome.extension.getURL('img/resources/crystal-big.png'),
-    deuteriumbig: chrome.extension.getURL('img/resources/deuterium-big.png'),
-    itembig: chrome.extension.getURL('img/resources/item-big.png')
-  },
-  ships: {
-    202: chrome.extension.getURL('img/ships/202.jpg'),
-    203: chrome.extension.getURL('img/ships/203.jpg'),
-    204: chrome.extension.getURL('img/ships/204.jpg'),
-    205: chrome.extension.getURL('img/ships/205.jpg'),
-    206: chrome.extension.getURL('img/ships/206.jpg'),
-    207: chrome.extension.getURL('img/ships/207.jpg'),
-    208: chrome.extension.getURL('img/ships/208.jpg'),
-    209: chrome.extension.getURL('img/ships/209.jpg'),
-    210: chrome.extension.getURL('img/ships/210.jpg'),
-    211: chrome.extension.getURL('img/ships/211.jpg'),
-    212: chrome.extension.getURL('img/ships/212.jpg'),
-    213: chrome.extension.getURL('img/ships/213.jpg'),
-    214: chrome.extension.getURL('img/ships/214.jpg'),
-    215: chrome.extension.getURL('img/ships/215.jpg'),
-    217: chrome.extension.getURL('img/ships/217.jpg'),
-    218: chrome.extension.getURL('img/ships/218.jpg'),
-    219: chrome.extension.getURL('img/ships/219.jpg')
-  },
-  score: {
-  	global: chrome.extension.getURL('img/score-global.png'),
-  	economy: chrome.extension.getURL('img/score-economy.png'),
-  	research: chrome.extension.getURL('img/score-research.png'),
-  	military: chrome.extension.getURL('img/score-military.png'),
-  	fleet: chrome.extension.getURL('img/score-fleet.png')
-  }
-};
-var imgScript = document.createElement('script');
-imgScript.innerHTML = 'var uipp_images = ' + JSON.stringify(uipp_images) + ';';
-(document.head || document.documentElement).appendChild(imgScript);
-imgScript.parentNode.removeChild(imgScript);
+document.addEventListener('UIPPStart', function (evt) {
+  userscript();
+});
 
 // inject main script
 var userscript = function () {
@@ -215,12 +126,79 @@ var userscript = function () {
   // Add historical point logger
   window._logHistoryData();
 
-  // Tracking code
-  window._setupAnalytics();
-};
+  if (document.location.href.indexOf('fleetdispatch') !== -1 && window.config.autoProbes) {
+    // check if fleets have returned
+    setInterval(function () {
+      var current = Number(
+        $('.event_list .undermark')
+          .text()
+          .replace(/[^0-9]*/g, '')
+      );
+      var atPageLoad = Number($('#slots .advice').first().text().split(':')[1].split('/')[0]);
+      if (current !== atPageLoad) {
+        console.log('reload');
+        document.location.href = document.location.href;
+      } else {
+        console.log('same');
+      }
+    }, 5000);
 
-// inject user script into the document
-var script = document.createElement('script');
-script.textContent = '(' + userscript + ')()';
-(document.head || document.documentElement).appendChild(script);
-script.parentNode.removeChild(script);
+    // if not enough probes, return
+    var fleets = config.fleetProbes || 5;
+    var probes = config.nProbes || 20000;
+    var nProbesPerFleet = Math.floor(probes / fleets);
+    var nProbes = Number($('.espionageProbe .amount').text().replace(/\./g, '').trim());
+    if (nProbes < nProbesPerFleet) {
+      return;
+    }
+
+    // if at max fleet, return
+    if (maxFleetCount === fleetCount) {
+      return;
+    }
+
+    var targets = [];
+    for (var key in config.players) {
+      var player = config.players[key];
+      if (
+        player.status &&
+        player.status.toLowerCase().indexOf('i') !== -1 &&
+        player.status.indexOf('v') === -1 &&
+        player.militaryScore === '0' &&
+        Number(player.economyScore) > 10000
+      ) {
+        player.planets.forEach(function (p) {
+          targets.push({ score: Number(player.economyScore), coords: p.coords });
+        });
+      }
+    }
+    targets = targets.sort(function (a, b) {
+      return a.score > b.score ? -1 : 1;
+    });
+    var index = Math.floor(Math.random() * Math.random() * targets.length);
+    var target = targets[index].coords;
+
+    $('input[name=espionageProbe]').val(nProbesPerFleet).keyup();
+    fleetDispatcher.mission = 1;
+    fleetDispatcher.targetPlanet.galaxy = target[0];
+    fleetDispatcher.targetPlanet.system = target[1];
+    fleetDispatcher.targetPlanet.position = target[2];
+    setTimeout(function () {
+      $('#continueToFleet2').click();
+    }, 10);
+    setTimeout(function () {
+      $('a#pbutton.planet').click();
+    }, 20);
+    setTimeout(function () {
+      $('#continueToFleet3').click();
+    }, 30);
+    setTimeout(function () {
+      if (fleetDispatcher.targetPlayerColorClass === 'inactive') {
+        $('#sendFleet').click();
+      }
+    }, 1000);
+    setTimeout(function () {
+      document.location.href = document.location.href;
+    }, 2000);
+  }
+};

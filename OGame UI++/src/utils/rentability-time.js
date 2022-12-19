@@ -1,12 +1,11 @@
-var fn = function () {
-  'use strict';
-  window._getRentabilityTime = function _getRentabilityTime (type, currentProd, level, targetLevel) {
-    var currentHourlyProd = currentProd * 3600;
-    var rentabilityTime = 0;
-    var worth = window.uipp_getResourcesWorth();
-    targetLevel = targetLevel || (level + 1);
+'use strict';
+window._getRentabilityTime = function _getRentabilityTime(type, currentProd, level, targetLevel) {
+  var currentHourlyProd = currentProd * 3600;
+  var rentabilityTime = 0;
+  var worth = window.uipp_getResourcesWorth();
+  targetLevel = targetLevel || level + 1;
 
-    switch(type) {
+  switch (type) {
     case 'metal':
     case 'crystal':
     case 'deuterium':
@@ -26,28 +25,23 @@ var fn = function () {
       for (var coords in window.config.my.planets) {
         var planet = window.config.my.planets[coords];
         if (planet.resources) {
-          currentGlobalProdWorth += planet.resources.metal.prod * worth.metal +
+          currentGlobalProdWorth +=
+            planet.resources.metal.prod * worth.metal +
             planet.resources.crystal.prod * worth.crystal +
             planet.resources.deuterium.prod * worth.deuterium;
-          nextLevelGlobalProdWorth += planet.resources.metal.prod * worth.metal * 1.01 +
+          nextLevelGlobalProdWorth +=
+            planet.resources.metal.prod * worth.metal * 1.01 +
             planet.resources.crystal.prod * worth.crystal * 1.0066 +
             planet.resources.deuterium.prod * worth.deuterium * 1.0033;
         }
       }
 
       var plasmaCosts = window.uipp_getCost('plasma', targetLevel - 1);
-      var plasmaCostsWorth = plasmaCosts[0] * worth.metal +
-        plasmaCosts[1] * worth.crystal +
-        plasmaCosts[2] * worth.deuterium;
+      var plasmaCostsWorth =
+        plasmaCosts[0] * worth.metal + plasmaCosts[1] * worth.crystal + plasmaCosts[2] * worth.deuterium;
       rentabilityTime = plasmaCostsWorth / (nextLevelGlobalProdWorth - currentGlobalProdWorth);
       break;
-    }
+  }
 
-    return Math.floor(rentabilityTime);
-  };
+  return Math.floor(rentabilityTime);
 };
-
-var script = document.createElement('script');
-script.textContent = '(' + fn + ')()';
-(document.head || document.documentElement).appendChild(script);
-script.parentNode.removeChild(script);
