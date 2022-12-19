@@ -245,7 +245,7 @@ window._addTabStats = function _addTabStats() {
     });
 
     // add rentability times for mines until median level, not just next
-    var medianMineLevels = _getMedianMineLevels();
+    /*var medianMineLevels = _getMedianMineLevels();
     myPlanets.forEach(function (planet) {
       ['metal', 'crystal', 'deuterium'].forEach(function (resource) {
         for (var level = planet.resources[resource].level + 2; level <= medianMineLevels[resource]; level++) {
@@ -263,7 +263,7 @@ window._addTabStats = function _addTabStats() {
           });
         }
       });
-    });
+    });*/
 
     // selected
     var selected = {
@@ -338,6 +338,7 @@ window._addTabStats = function _addTabStats() {
 
     // in flight
     var inflight = window.uipp_getResourcesInFlight();
+    console.log('inflight', inflight);
 
     if (inflight.metal || inflight.crystal || inflight.deuterium) {
       globalStats.current.metal += inflight.metal;

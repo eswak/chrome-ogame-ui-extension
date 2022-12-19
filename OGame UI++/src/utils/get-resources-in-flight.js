@@ -1,12 +1,12 @@
 'use strict';
-var _cachedResources = null;
+var _cachedInflightResources = null;
 
 window.uipp_getResourcesInFlight = function uipp_getResourcesInFlight() {
-  if (_cachedResources) {
-    return _cachedResources;
+  if (_cachedInflightResources) {
+    return _cachedInflightResources;
   }
 
-  _cachedResources = { metal: 0, crystal: 0, deuterium: 0 };
+  _cachedInflightResources = { metal: 0, crystal: 0, deuterium: 0 };
 
   var missions = [];
   $('#eventContent .tooltip.tooltipClose').each(function () {
@@ -20,18 +20,25 @@ window.uipp_getResourcesInFlight = function uipp_getResourcesInFlight() {
       metal:
         window._gfNumberToJsNumber(
           $tooltip
-            .find('tr:nth-child(' + (trCount - 2) + ') td')
+            .find('tr:nth-child(' + (trCount - 3) + ') td')
             .last()
             .text()
         ) || 0,
       crystal:
         window._gfNumberToJsNumber(
           $tooltip
-            .find('tr:nth-child(' + (trCount - 1) + ') td')
+            .find('tr:nth-child(' + (trCount - 2) + ') td')
             .last()
             .text()
         ) || 0,
       deuterium:
+        window._gfNumberToJsNumber(
+          $tooltip
+            .find('tr:nth-child(' + (trCount - 1) + ') td')
+            .last()
+            .text()
+        ) || 0,
+      food:
         window._gfNumberToJsNumber(
           $tooltip
             .find('tr:nth-child(' + trCount + ') td')
@@ -89,10 +96,10 @@ window.uipp_getResourcesInFlight = function uipp_getResourcesInFlight() {
   });
 
   missions.forEach(function (mission) {
-    _cachedResources.metal += mission.metal;
-    _cachedResources.crystal += mission.crystal;
-    _cachedResources.deuterium += mission.deuterium;
+    _cachedInflightResources.metal += mission.metal;
+    _cachedInflightResources.crystal += mission.crystal;
+    _cachedInflightResources.deuterium += mission.deuterium;
   });
 
-  return _cachedResources;
+  return _cachedInflightResources;
 };
