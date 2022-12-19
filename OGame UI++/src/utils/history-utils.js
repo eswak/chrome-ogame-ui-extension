@@ -21,7 +21,7 @@ window._getPlayerScoreTrend = function _getPlayerScoreTrend(playerId, type, minE
       hasEnoughHistory: false,
       n: 0,
       abs: 0,
-      html: '<span class="tooltip" title="Come back tommorow for more stats">?</span>'
+      html: '<span class="tooltip" title="Come back tommorow for more stats"></span>'
     };
   }
 

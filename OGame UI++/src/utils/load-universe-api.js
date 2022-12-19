@@ -61,7 +61,7 @@ window._loadUniverseApi = function _loadUniverseApi(cb) {
                         if (players[$(this).attr('id')]) {
                           players[$(this).attr('id')].militaryPosition = $(this).attr('position');
                           players[$(this).attr('id')].militaryScore = $(this).attr('score');
-                          players[$(this).attr('id')].ships = $(this).attr('ships');
+                          players[$(this).attr('id')].ships = $(this).attr('ships') || '0';
                         }
                       });
 

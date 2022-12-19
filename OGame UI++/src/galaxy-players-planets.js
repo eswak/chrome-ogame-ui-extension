@@ -87,7 +87,7 @@ window._addGalaxyPlayersPlanetsInterval = function _addGalaxyPlayersPlanetsInter
             '<img src="' + uipp_images.score.fleet + '" style="height:20px"/>',
             '<span style="vertical-align:7px">',
             ' ' + window._getPlayerScoreTrend(playerId, 's').html,
-            ' ' + window.uipp_scoreHumanReadable(player.ships),
+            ' ' + window.uipp_scoreHumanReadable(player.ships || 0),
             '</span>',
             '<br>',
 
