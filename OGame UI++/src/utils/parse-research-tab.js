@@ -14,6 +14,8 @@ window._parseResearchTab = function _parseResearchTab() {
   window.config.hyperspaceTech = Number($('.hyperspaceTechnology.small .level').text().match(/\d+/g)[0]);
   window.config.energyTech = Number($('.energyTechnology.small .level').text().match(/\d+/g)[0]);
   window.config.espionageTech = Number($('.espionageTechnology.small .level').text().match(/\d+/g)[0]);
+  window.config.laserTech = Number($('.laserTechnology.small .level').text().match(/\d+/g)[0]);
+  window.config.ionTech = Number($('.ionTechnology.small .level').text().match(/\d+/g)[0]);
 
   window._saveConfig();
 };

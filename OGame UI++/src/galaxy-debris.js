@@ -26,7 +26,7 @@ window._addGalaxyDebrisInterval = function _addGalaxyDebrisInterval() {
     }
 
     // Expedition debris
-    $('.expeditionDebrisSlot:not(.enhanced)').each(function () {
+    $('.expeditionDebrisSlotBox:not(.enhanced)').each(function () {
       $(this).addClass('enhanced');
 
       var debrisAmount = 0;
@@ -34,9 +34,8 @@ window._addGalaxyDebrisInterval = function _addGalaxyDebrisInterval() {
         debrisAmount += window._gfNumberToJsNumber(e.innerHTML.split(': ')[1]);
       });
 
-      var $el = $(this).find('p.name');
-      $el.css('line-height', '15px');
-      $el.append($('<div class="enhancement">' + window.gfNumberGetHumanReadable(debrisAmount) + '</div>'));
+      var $el = $(this).find('div.name');
+      $el.append($('<span class="enhancement">' + window.gfNumberGetHumanReadable(debrisAmount) + '</span>'));
     });
   }, 100);
 };

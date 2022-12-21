@@ -29,6 +29,8 @@ window._addCostsHelperInterval = function _addCostsHelperInterval() {
       if (window.config.features.minetext) {
         _addProductionRentabilityTimeTextHelper(costs);
       }
+
+      //_addProductionBuildableInTextHelper(_getAvailableIn(resources, missingResources));
     }
   });
 
@@ -140,12 +142,15 @@ window._addCostsHelperInterval = function _addCostsHelperInterval() {
   function _addProductionRentabilityTimeTextHelper() {
     var tradeRateStr = window.config.tradeRate.map(String).join(' / ');
 
+    var currentPlanetCoordinatesStr = '[' + window._getCurrentPlanetCoordinates().join(':') + ']';
+    var planet = window.config.my.planets[currentPlanetCoordinatesStr];
+
     // if we are viewing a metal mine, computes rentability time
     if ($('.building.metalMine:not(.enhanced)').length > 0) {
       $('.content .information .narrow').append(
         '<li class="enhancement">' +
           window._translate('ROI', {
-            time: window._time(window._getRentabilityTime('metal', resources.metal.prod, resources.metal.level)),
+            time: window._time(window._getRentabilityTime('metal', resources.metal.prod, resources.metal.level, resources.metal.level + 1, planet.averageTemp, planet.coords)),
             tradeRate: tradeRateStr
           }) +
           '</li>'
@@ -158,7 +163,7 @@ window._addCostsHelperInterval = function _addCostsHelperInterval() {
       $('.content .information .narrow').append(
         '<li class="enhancement">' +
           window._translate('ROI', {
-            time: window._time(window._getRentabilityTime('crystal', resources.crystal.prod, resources.crystal.level)),
+            time: window._time(window._getRentabilityTime('crystal', resources.crystal.prod, resources.crystal.level, resources.crystal.level + 1, planet.averageTemp, planet.coords)),
             tradeRate: tradeRateStr
           }) +
           '</li>'
@@ -172,7 +177,7 @@ window._addCostsHelperInterval = function _addCostsHelperInterval() {
         '<li class="enhancement">' +
           window._translate('ROI', {
             time: window._time(
-              window._getRentabilityTime('deuterium', resources.deuterium.prod, resources.deuterium.level)
+              window._getRentabilityTime('deuterium', resources.deuterium.prod, resources.deuterium.level, resources.deuterium.level + 1, planet.averageTemp, planet.coords)
             ),
             tradeRate: tradeRateStr
           }) +

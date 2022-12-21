@@ -64,7 +64,23 @@ window._addTabStats = function _addTabStats() {
         rentabilityTimes.push({
           coords: planet.coords,
           resource: resource,
-          time: window._getRentabilityTime(resource, planet.resources[resource].prod, planet.resources[resource].level),
+          time: window._getRentabilityTime(
+            resource,
+            // instead of planet.resources[resource].prod,
+            // use theoretical production to not account for full storages
+            // and other temporary modifiers like boosts
+            window.uipp_getProduction(
+              resource,
+              planet.resources[resource].level,
+              planet.averageTemp,
+              0,
+              planet.coords
+            ) / 3600,
+            planet.resources[resource].level,
+            planet.resources[resource].level + 1,
+            planet.averageTemp,
+            planet.coords
+          ),
           level: planet.resources[resource].level + 1,
           inprog: window.config.inprog['[' + planet.coords.join(':') + ']-' + resource] || null
         });
@@ -155,7 +171,8 @@ window._addTabStats = function _addTabStats() {
                 resource,
                 planet.resources[resource].level,
                 planet.averageTemp,
-                n
+                n,
+                planet.coords
               );
               if (Math.abs(1 - estimatedProd / 3600 / planet.resources[resource].prod) < 0.03) {
                 return true;
@@ -338,7 +355,6 @@ window._addTabStats = function _addTabStats() {
 
     // in flight
     var inflight = window.uipp_getResourcesInFlight();
-    console.log('inflight', inflight);
 
     if (inflight.metal || inflight.crystal || inflight.deuterium) {
       globalStats.current.metal += inflight.metal;
@@ -624,12 +640,12 @@ window._addTabStats = function _addTabStats() {
               divisor: 5,
               labelInterpolationFnc: function (value) {
                 return window.uipp_scoreHumanReadable(value);
-              }
+              },
+              low: 0
             },
             showArea: true,
             showLine: false,
-            showPoint: false,
-            low: 0
+            showPoint: false
           }
         );
 
@@ -771,15 +787,16 @@ window._addTabStats = function _addTabStats() {
         (window.uipp_getProduction('deuterium', medianMineLevels.deuterium) * worth.deuterium) / 3600;
       var mineRentabilityTime = (cummulativeMineCostsWorth + astroCostWorth) / newPlanetProductionWorth;
 
+      var totalTime = astroTime + mineEconomyTime + mineRentabilityTime + dependenciesTime;
       rentabilityTimes.push({
         coords: [],
         resource: 'astrophysics',
         level: nextAstroLevelForPlanetUnlock,
-        time: astroTime + mineEconomyTime + mineRentabilityTime,
-        dependenciesTime: dependenciesTime,
+        time: totalTime,
         astroTime: astroTime,
         mineEconomyTime: mineEconomyTime,
         mineRentabilityTime: mineRentabilityTime,
+        dependenciesTime: dependenciesTime,
         dependenciesCost: dependenciesCost,
         astroCost: astroCost,
         mineCost: [
@@ -795,7 +812,7 @@ window._addTabStats = function _addTabStats() {
 
       nextAstroLevelForPlanetUnlock += 2;
       astroLevel += 2;
-      pushNextAstro = mineRentabilityTime < maxRentability;
+      pushNextAstro = totalTime < maxRentability;
       if (astroLevel > 50) pushNextAstro = false; // safe exit condition
     }
 
@@ -804,20 +821,40 @@ window._addTabStats = function _addTabStats() {
     var plasmaLevel = window.config.plasmaTech || 0;
     if (isNaN(plasmaLevel) || !plasmaLevel) plasmaLevel = 0;
     while (pushNextPlasma) {
+      // Plasma dependencies (10 laser, 8 energy, 5 ion)
+      var laserCost = window.uipp_getCummulativeCost('laser', config.laserTech || 0, 10);
+      var energyCost = window.uipp_getCummulativeCost('energy', config.energyTech || 0, 8);
+      var ionCost = window.uipp_getCummulativeCost('ion', config.ionTech || 0, 5);
+      var dependenciesCost = [
+        laserCost[0] + energyCost[0] + ionCost[0],
+        laserCost[1] + energyCost[1] + ionCost[1],
+        laserCost[2] + energyCost[2] + ionCost[2]
+      ];
+      var dependenciesCostWorth = 0;
+      dependenciesCostWorth += dependenciesCost[0] * worth.metal;
+      dependenciesCostWorth += dependenciesCost[1] * worth.crystal;
+      dependenciesCostWorth += dependenciesCost[2] * worth.deuterium;
+      var dependenciesTime = dependenciesCostWorth / globalProdWorth;
+
       var nextPlasmaRentabilityTime = window._getRentabilityTime('plasma', null, plasmaLevel);
-      if (nextPlasmaRentabilityTime >= maxRentability) {
-        pushNextPlasma = false;
-      }
+      var totalTime = nextPlasmaRentabilityTime + dependenciesTime;
 
       rentabilityTimes.push({
         coords: [],
         resource: 'plasma',
         level: plasmaLevel + 1,
-        time: nextPlasmaRentabilityTime,
-        totalCost: window.uipp_getCost('plasma', plasmaLevel),
+        time: totalTime,
+        plasmaTime: nextPlasmaRentabilityTime,
+        plasmaCost: window.uipp_getCost('plasma', plasmaLevel),
+        dependenciesCost: dependenciesCost,
+        dependenciesTime: dependenciesTime,
         inprog: (window.config.inprog.plasma && plasmaLevel === window.config.plasmaTech) || null
       });
+
       plasmaLevel++;
+      if (totalTime >= maxRentability) {
+        pushNextPlasma = false;
+      }
       if (plasmaLevel > 50) pushNextPlasma = false; // safe exit condition
     }
 
@@ -882,7 +919,10 @@ window._addTabStats = function _addTabStats() {
             '<br>' +
             window._translate('RENTABILITY_PLASMA', {
               level: rentability.level,
-              totalCost: window._num(rentability.totalCost).join(' / ')
+              plasmaTime: window._time(rentability.plasmaTime),
+              plasmaCost: window._num(rentability.plasmaCost).join(' / '),
+              dependenciesTime: window._time(rentability.dependenciesTime),
+              dependenciesCost: window._num(rentability.dependenciesCost).join(' / ')
             });
           tooltip = tooltip.replace(/<\/?span[^>]*>/g, '');
           $rentabilityWrapper.append(

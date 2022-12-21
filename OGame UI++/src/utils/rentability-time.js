@@ -1,5 +1,5 @@
 'use strict';
-window._getRentabilityTime = function _getRentabilityTime(type, currentProd, level, targetLevel) {
+window._getRentabilityTime = function _getRentabilityTime(type, currentProd, level, targetLevel, averageTemp, coords) {
   var currentHourlyProd = currentProd * 3600;
   var rentabilityTime = 0;
   var worth = window.uipp_getResourcesWorth();
@@ -9,10 +9,10 @@ window._getRentabilityTime = function _getRentabilityTime(type, currentProd, lev
     case 'metal':
     case 'crystal':
     case 'deuterium':
-      var calculatedProduction = window.uipp_getProduction(type, level);
+      var calculatedProduction = window.uipp_getProduction(type, level, averageTemp, 0, coords);
       var ratio = currentHourlyProd / calculatedProduction; // used for boosts, deuterium temperature, etc
-      var calculatedNextLevelproduction = window.uipp_getProduction(type, targetLevel) * ratio;
-      var calculatedCurrentLevelproduction = window.uipp_getProduction(type, targetLevel - 1) * ratio;
+      var calculatedNextLevelproduction = window.uipp_getProduction(type, targetLevel, averageTemp, 0, coords) * ratio;
+      var calculatedCurrentLevelproduction = window.uipp_getProduction(type, targetLevel - 1, averageTemp, 0, coords) * ratio;
       var productionDiff = calculatedNextLevelproduction - calculatedCurrentLevelproduction;
       var productionDiffWorth = productionDiff * worth[type];
       var costs = window.uipp_getCost(type, targetLevel - 1);
@@ -42,6 +42,5 @@ window._getRentabilityTime = function _getRentabilityTime(type, currentProd, lev
       rentabilityTime = plasmaCostsWorth / (nextLevelGlobalProdWorth - currentGlobalProdWorth);
       break;
   }
-
   return Math.floor(rentabilityTime);
 };

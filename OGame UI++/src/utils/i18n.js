@@ -16,14 +16,14 @@ var translations = {
     TOTAL_STORAGE_TIME: 'Capacité de stockage',
     NEXT_MOST_RENTABLE_BUILDS: 'Prochaines actions les plus rentables',
     RENTABILITY_ASTRO:
-      "Montez astrophysique niveau {level}, et colonisez.<br>Montez les mines niveau : {mineLevel}<br><br>Temps d'économies pour les dépendances (Tech/Vaisseau) : {dependenciesTime}<br>Temps d'économies pour Astrophysique : {astroTime}<br>Coût pour les dépendances : {dependenciesCost}<br>Coût pour Astrophysique : {astroCost}<br><br>Temps d'économies pour les mines : {mineEconomyTime}<br>Coût total des mines : {mineCost}<br><br>Temps de rentabilité des mines de la nouvelle colonie : {mineTime}",
+      "Montez astrophysique niveau {level}, et colonisez.<br>Montez les mines niveau : {mineLevel}<br><br>Temps d'économies pour les dépendances (Tech/Vaisseau) : {dependenciesTime}<br>Coût pour les dépendances : {dependenciesCost}<br><br>Temps d'économies pour Astrophysique : {astroTime}<br>Coût pour Astrophysique : {astroCost}<br><br>Temps d'économies pour les mines : {mineEconomyTime}<br>Coût total des mines : {mineCost}<br><br>Temps de rentabilité des mines de la nouvelle colonie : {mineTime}",
     RENTABILITY_MINE_METAL:
       "Montez votre mine de métal niveau {level} sur {coords}.<br><br>Temps d'économies pour lancer la construction : {economyTime}<br>Coût : {totalCost}",
     RENTABILITY_MINE_CRYSTAL:
       "Montez votre mine de cristal niveau {level} sur {coords}.<br><br>Temps d'économies pour lancer la construction : {economyTime}<br>Coût : {totalCost}",
     RENTABILITY_MINE_DEUTERIUM:
       "Montez votre synthétiseur de deutérium niveau {level} sur {coords}.<br><br>Temps d'économies pour lancer la construction : {economyTime}<br>Coût : {totalCost}",
-    RENTABILITY_PLASMA: 'Montez la technologies plasma au niveau {level}.<br><br>Coût : {totalCost}',
+    RENTABILITY_PLASMA: 'Montez la technologies plasma au niveau {level}.<br><br>Coût des dépendances (Laser/Energie/Ion): {dependenciesCost}<br><br>Coût tech Plasma: {plasmaCost}',
     RETURN_TRIP_DURATION: "Durée d'un aller-retour avec des grands transporteurs",
     TRADE_RATE: "Taux d'échange",
     RESET_ALL_TEXT:
@@ -63,6 +63,8 @@ var translations = {
     MENU_NEIGHBOURS_ACTIVE: 'Voisins actifs',
     MENU_NEIGHBOURS_INACTIVE: 'Inactifs proches',
     MENU_STATS: 'Statistiques',
+    MENU_COMPETITION: 'Compétition',
+    COMPETITION_EXPLAINATION: 'Cette page affiche votre progression comparée à celle d\'autres joueurs ayant un niveau similaire au votre. Les joueurs inactifs, bannis, ou en mode vacance, sont exclus de la compétition. Sont inclus dans la compétition les joueurs ayant un score 30% supérieur ou inférieur au votre lors du premier jour du graphique, ainsi que 30% supérieur ou inférieur au votre lors du dernier jour du graphique. Si votre courbe de progression (en gras blanc) grimpe plus vite que celle des autres, félicitations, vous êtes de ceux qui progressent le plus vite :-) sinon, n\'hésitez pas à prendre contact avec les joueurs qui progressent plus vite, ils pourraient vous partager des astuces... Sinon, regardez comment leur score progresse et espionnez leurs planètes pour tenter de comprendre ce qu\'ils font.',
     MENU_FIGHTSIM: 'Sim. Combat',
     STATS_ALL: 'Statistiques pour toutes les planètes',
     STATS_DAILY: 'Production journalière',
@@ -86,14 +88,14 @@ var translations = {
     TOTAL_STORAGE_TIME: 'Total storage time',
     NEXT_MOST_RENTABLE_BUILDS: 'Next best ROI',
     RENTABILITY_ASTRO:
-      "Level up astrophysics to level {level}, and make a new colony.<br>Level up the new colony's mines to {mineLevel}<br><br>Time for resource-gathering of dependencies (tech/ship) : {dependenciesTime}<br>Time for resource-gathering of astrophysics : {astroTime}<br>Cost of dependencies : {dependenciesCost}<br>Cost of astrophysics : {astroCost}<br><br>Time for resource-gathering of mines (total) : {mineEconomyTime}<br>Total mine cost : {mineCost}<br><br>New colony mines ROI : {mineTime}",
+      "Level up astrophysics to level {level}, and make a new colony.<br>Level up the new colony's mines to {mineLevel}<br><br>Time for resource-gathering of dependencies (tech/ship) : {dependenciesTime}<br>Cost of dependencies : {dependenciesCost}<br><br>Time for resource-gathering of astrophysics : {astroTime}<br>Cost of astrophysics : {astroCost}<br><br>Time for resource-gathering of mines (total) : {mineEconomyTime}<br>Total mine cost : {mineCost}<br><br>New colony mines ROI : {mineTime}",
     RENTABILITY_MINE_METAL:
       'Level up your metal mine to level {level} on {coords}<br><br>Time for resource-gathering : {economyTime}<br>Cost : {totalCost}',
     RENTABILITY_MINE_CRYSTAL:
       'Level up your crystal mine to level {level} on {coords}<br><br>Time for resource-gathering : {economyTime}<br>Cost : {totalCost}',
     RENTABILITY_MINE_DEUTERIUM:
       'Level up your deuterium synthetizer to level {level} on {coords}<br><br>Time for resource-gathering : {economyTime}<br>Cost : {totalCost}',
-    RENTABILITY_PLASMA: 'Level up your plasma tech to level {level}<br><br>Cost : {totalCost}',
+    RENTABILITY_PLASMA: 'Level up your plasma tech to level {level}.<br><br>Dependencies cost (Laser/Energy/Ion): {dependenciesCost}<br><br>Plasma cost: {plasmaCost}',
     RETURN_TRIP_DURATION: 'Duration of a return trip with Large Cargo Ship',
     TRADE_RATE: 'Trade rate',
     RESET_ALL_TEXT:
@@ -133,6 +135,8 @@ var translations = {
     MENU_NEIGHBOURS_ACTIVE: 'Active neighbours',
     MENU_NEIGHBOURS_INACTIVE: 'Nearby idles',
     MENU_STATS: 'Statistics',
+    MENU_COMPETITION: 'Competition',
+    COMPETITION_EXPLAINATION: 'This page shows how your score progression compares to other players that have a level similar to yours. Players with inactive or banned status are excluded from the competition, as well as players that are in vacation mode. The chart includes players that had a score 30% above or below yours on the first day of the chart, and players that have a score 30% above or below yours on the last day of the chart. If your line (bold white) progresses faster than the others, congrats, you\'re among the top performers :-) if not, feel free to reach out to other players that are performing better, they might be willing to share some tips... Or try to understand what they are doing by looking at their score progression and the activity of their planets.',
     MENU_FIGHTSIM: 'Fight simulator',
     STATS_ALL: 'Statistics for all planets',
     STATS_DAILY: 'Daily production',
@@ -247,7 +251,6 @@ var translations = {
       'Ulepsz Kopalnię krzyształu do poziomu {level} na {coords}<br><br>Czas zbierania surowców : {economyTime}<br>Koszt : {totalCost}',
     RENTABILITY_MINE_DEUTERIUM:
       'Ulepsz Ekstraktor deuteru do poziomu {level} on {coords}<br><br>Czas zbierania surowców : {economyTime}<br>Koszt : {totalCost}',
-    RENTABILITY_PLASMA: 'Ulepsz Technologię plazmową do poziomu {level}<br><br>Koszt : {totalCost}',
     RETURN_TRIP_DURATION: 'Czas podróży w obie strony Dużym Transporterem.',
     TRADE_RATE: 'Kurs wymiany',
     RESET_ALL_TEXT:

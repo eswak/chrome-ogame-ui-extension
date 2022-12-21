@@ -409,7 +409,7 @@ window._addTabSettings = function _addTabSettings() {
         var $this = $(this);
         switch ($this.data('name')) {
           case 'all':
-            window._resetConfig();
+            window.config = {};
             break;
           case 'history':
             delete window.config.history;

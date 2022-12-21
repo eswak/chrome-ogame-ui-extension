@@ -114,6 +114,7 @@
         "src/ship-resources-helper.js",
         "src/solarsat-helper.js",
         "src/tab-alliance.js",
+        "src/tab-competition.js",
         "src/tab-expeditions.js",
         "src/tab-links.js",
         "src/tab-settings.js",
@@ -152,8 +153,8 @@
   "manifest_version": 3,
   "permissions": [
     "background",
-    "alarms",
-    "notifications",
+    "storage",
+    "unlimitedStorage",
     "scripting"
   ],
   "action": {

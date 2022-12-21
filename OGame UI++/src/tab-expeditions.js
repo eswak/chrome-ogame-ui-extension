@@ -332,15 +332,18 @@ window._addTabExpeditions = function _addTabExpeditions() {
 
     // Add list
     $wrapper.append($table);
-    $wrapper.append(
-      [
-        '<div style="text-align:center;padding:10px 0 30px">',
-        '<span style="cursor:pointer;" onclick="uipp_showMoreExpe()">',
-        '... +100 ...',
-        '</span>',
-        '</div>'
-      ].join('')
-    );
+
+    if (pastExpe.length > displayedExpe) {
+      $wrapper.append(
+        [
+          '<div style="text-align:center;padding:10px 0 30px">',
+          '<span style="cursor:pointer;" onclick="uipp_showMoreExpe()">',
+          '--- + ---',
+          '</span>',
+          '</div>'
+        ].join('')
+      );
+    }
 
     setTimeout(function () {
       updateSelection();

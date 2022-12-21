@@ -27,6 +27,7 @@ window._setConfigMyPlanets = function _setConfigMyPlanets() {
           return Number(temp.replace('°C', '').trim());
         });
         window.config.my.planets[onlyPlanetCoords].averageTemp = (temperatures[0] + temperatures[1]) / 2;
+        window.config.my.planets[onlyPlanetCoords].maxTemp = temperatures[1];
       }
     }
   } else {
@@ -52,6 +53,7 @@ window._setConfigMyPlanets = function _setConfigMyPlanets() {
               return Number(temp.replace('°C', '').trim());
             });
             window.config.my.planets[planetCoords].averageTemp = (temperatures[0] + temperatures[1]) / 2;
+            window.config.my.planets[planetCoords].maxTemp = temperatures[1];
           }
         }
 

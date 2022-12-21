@@ -92,17 +92,16 @@ Promise.all(
     });
   })
 ).then(function () {
-  console.log('Loaded all OGame UI++ files.');
+  console.log('OGame UI++: loaded all files.');
 
   var imagesEvent = document.createEvent('CustomEvent');
   imagesEvent.initCustomEvent('UIPPImages', true, true, uipp_images);
   document.dispatchEvent(imagesEvent);
 
+  console.log('OGame UI++: starting.');
   var startEvent = document.createEvent('Event');
   startEvent.initEvent('UIPPStart', true, true);
   document.dispatchEvent(startEvent);
-
-  console.log('Starting OGame UI++.');
 });
 
 /*
@@ -132,5 +131,22 @@ document.addEventListener('UIPPNotification', function (evt) {
       message: message,
       iconUrl: img
     }
+  });
+});
+
+document.addEventListener('UIPPSaveConfig', function (evt) {
+  console.log('OGame UI++: saving config...');
+  chrome.storage.local.set({ config: evt.detail }).then(() => {
+    console.log('OGame UI++: saved config.');
+  });
+});
+
+document.addEventListener('UIPPGetConfig', function () {
+  console.log('OGame UI++: loading config...');
+  chrome.storage.local.get(['config']).then((result) => {
+    console.log('OGame UI++: loaded config.');
+    var evt = document.createEvent('CustomEvent');
+    evt.initCustomEvent("UIPPGetConfigResponse", true, true, result.config);
+    document.dispatchEvent(evt);
   });
 });

@@ -31,6 +31,15 @@ var costsFunctions = {
   astrophysics: function (level) {
     return [4000 * Math.pow(1.75, level), 8000 * Math.pow(1.75, level), 4000 * Math.pow(1.75, level)];
   },
+  energy: function (level) {
+    return [0, 800 * Math.pow(2, level), 400 * Math.pow(2, level)];
+  },
+  laser: function (level) {
+    return [200 * Math.pow(2, level), 100 * Math.pow(2, level), 0];
+  },
+  ion: function (level) {
+    return [1000 * Math.pow(2, level), 300 * Math.pow(2, level), 100 * Math.pow(2, level)];
+  },
   plasma: function (level) {
     return [2000 * Math.pow(2, level), 4000 * Math.pow(2, level), 1000 * Math.pow(2, level)];
   },
@@ -68,10 +77,26 @@ function uipp_getCummulativeCost(type, fromLevel, toLevel) {
   return totalCost;
 }
 
-window.uipp_getProduction = function uipp_getProduction(type, level, averageTemp, additionalMultiplier) {
+window.uipp_getProduction = function uipp_getProduction(type, level, averageTemp, additionalMultiplier, coords) {
   var speed = Number(window.config.universe.speed);
 
+  var positionMultiplier = 0;
+  if (coords) {
+    if (type == 'crystal' && coords[2] == 1) positionMultiplier = 0.4;
+    if (type == 'crystal' && coords[2] == 2) positionMultiplier = 0.3;
+    if (type == 'crystal' && coords[2] == 3) positionMultiplier = 0.2;
+    if (type == 'metal' && coords[2] == 6) positionMultiplier = 0.17;
+    if (type == 'metal' && coords[2] == 7) positionMultiplier = 0.23;
+    if (type == 'metal' && coords[2] == 8) positionMultiplier = 0.35;
+    if (type == 'metal' && coords[2] == 9) positionMultiplier = 0.23;
+    if (type == 'metal' && coords[2] == 10) positionMultiplier = 0.17;
+  }
+  speed = speed * (1 + positionMultiplier);
+
   var multiplier = 1 + (additionalMultiplier || 0);
+  if ($('.characterclass.miner').length) {
+    multiplier += 0.25;
+  }
   if ($('.geologist.on').length) {
     multiplier += 0.1;
   }
