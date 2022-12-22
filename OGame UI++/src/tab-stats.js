@@ -822,9 +822,9 @@ window._addTabStats = function _addTabStats() {
     if (isNaN(plasmaLevel) || !plasmaLevel) plasmaLevel = 0;
     while (pushNextPlasma) {
       // Plasma dependencies (10 laser, 8 energy, 5 ion)
-      var laserCost = window.uipp_getCummulativeCost('laser', config.laserTech || 0, 10);
-      var energyCost = window.uipp_getCummulativeCost('energy', config.energyTech || 0, 8);
-      var ionCost = window.uipp_getCummulativeCost('ion', config.ionTech || 0, 5);
+      var laserCost = window.uipp_getCummulativeCost('laser', (config.laserTech || 0) + 1, 10);
+      var energyCost = window.uipp_getCummulativeCost('energy', (config.energyTech || 0) + 1, 8);
+      var ionCost = window.uipp_getCummulativeCost('ion', (config.ionTech || 0) + 1, 5);
       var dependenciesCost = [
         laserCost[0] + energyCost[0] + ionCost[0],
         laserCost[1] + energyCost[1] + ionCost[1],
@@ -866,9 +866,14 @@ window._addTabStats = function _addTabStats() {
     var inprogPoints = 0;
     rentabilityTimes.forEach(function (rentability) {
       if (rentability.inprog) {
-        inprogPoints += (rentability.totalCost || rentability.astroCost)[0];
-        inprogPoints += (rentability.totalCost || rentability.astroCost)[1];
-        inprogPoints += (rentability.totalCost || rentability.astroCost)[2];
+        try {
+          inprogPoints += (rentability.totalCost || rentability.astroCost)[0];
+          inprogPoints += (rentability.totalCost || rentability.astroCost)[1];
+          inprogPoints += (rentability.totalCost || rentability.astroCost)[2];
+        }
+        catch(e) {
+          console.log('OGame UI++: Error parsing in-progress');
+        }
       }
     });
     inprogPoints = Math.floor(inprogPoints / 1000);
