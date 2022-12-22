@@ -135,18 +135,27 @@ document.addEventListener('UIPPNotification', function (evt) {
 });
 
 document.addEventListener('UIPPSaveConfig', function (evt) {
-  console.log('OGame UI++: saving config...');
-  chrome.storage.local.set({ config: evt.detail }).then(() => {
-    console.log('OGame UI++: saved config.');
+  var parsedDetail = JSON.parse(evt.detail);
+  var toStore = {};
+  toStore[parsedDetail.key] = parsedDetail.value;
+  chrome.storage.local.set(toStore).then(() => {
+    console.log('OGame UI++: saved config', parsedDetail.key);
   });
 });
 
-document.addEventListener('UIPPGetConfig', function () {
-  console.log('OGame UI++: loading config...');
-  chrome.storage.local.get(['config']).then((result) => {
-    console.log('OGame UI++: loaded config.');
+document.addEventListener('UIPPGetConfig', function (evt) {
+  var configKey = evt.detail;
+  chrome.storage.local.get([configKey]).then((result) => {
+    var config = result[configKey] || {};
+    console.log('OGame UI++: loaded config', configKey);
     var evt = document.createEvent('CustomEvent');
-    evt.initCustomEvent("UIPPGetConfigResponse", true, true, result.config);
+    evt.initCustomEvent("UIPPGetConfigResponse", true, true, JSON.stringify(config));
     document.dispatchEvent(evt);
+  });
+});
+
+document.addEventListener('UIPPGetStorage', function () {
+  chrome.storage.local.get(null, function(items) {
+    console.log('UIPPGetStorage', items);
   });
 });

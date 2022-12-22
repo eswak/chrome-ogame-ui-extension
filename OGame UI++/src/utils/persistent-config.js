@@ -2,6 +2,13 @@
 window._getConfigAsync = getConfigAsync;
 window._saveConfig = saveConfigBuffer;
 
+// e.g. s192-fr.ogame.gameforge.com:100123
+var configKey = [
+  $('meta[name="ogame-universe"]').attr('content'),
+  ':',
+  $('meta[name="ogame-player-id"]').attr('content')
+].join('');
+
 var saveConfigTimeout = null;
 function saveConfigBuffer() {
   if (saveConfigTimeout) {
@@ -12,9 +19,12 @@ function saveConfigBuffer() {
 }
 
 function saveConfig() {
-  var configStr = JSON.stringify(window.config);
+  var payload = JSON.stringify({
+    key: configKey,
+    value: window.config
+  });
   var evt = document.createEvent('CustomEvent');
-  evt.initCustomEvent("UIPPSaveConfig", true, true, configStr);
+  evt.initCustomEvent("UIPPSaveConfig", true, true, payload);
   document.dispatchEvent(evt);
 }
 
@@ -28,6 +38,6 @@ function getConfigAsync(cb) {
 
   // get config
   var evt = document.createEvent('CustomEvent');
-  evt.initCustomEvent("UIPPGetConfig", true, true);
+  evt.initCustomEvent("UIPPGetConfig", true, true, configKey);
   document.dispatchEvent(evt);
 }

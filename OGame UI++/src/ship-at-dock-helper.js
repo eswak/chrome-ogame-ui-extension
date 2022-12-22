@@ -69,11 +69,13 @@ function _parseCurrentPlanetShips() {
     currentPlanetCoordinatesStr += 'L';
   }
 
-  window.config.my.planets[currentPlanetCoordinatesStr].shipPoints = currentPoints;
-  window.config.my.planets[currentPlanetCoordinatesStr].ships = shipsAtDock;
-  window.config.my.planets[currentPlanetCoordinatesStr].shipsLastUpdate = Date.now();
-  window.config.my.planets[currentPlanetCoordinatesStr].shipsNeedUpdate = Date.now() + 7 * 24 * 36e5;
-  window._saveConfig();
+  if (window.config.my.planets[currentPlanetCoordinatesStr]) {
+    window.config.my.planets[currentPlanetCoordinatesStr].shipPoints = currentPoints;
+    window.config.my.planets[currentPlanetCoordinatesStr].ships = shipsAtDock;
+    window.config.my.planets[currentPlanetCoordinatesStr].shipsLastUpdate = Date.now();
+    window.config.my.planets[currentPlanetCoordinatesStr].shipsNeedUpdate = Date.now() + 7 * 24 * 36e5;
+    window._saveConfig();
+  }
 }
 
 function _addPlanetListHelpers() {
@@ -86,9 +88,10 @@ function _addPlanetListHelpers() {
 
   $('.shipsatdockhelper').remove();
   $('#planetList > div').each(function () {
-    var shipPoints = window.config.my.planets[$(this).find('.planet-koords').text()].shipPoints || 0;
+    var planet = window.config.my.planets[$(this).find('.planet-koords').text()] || {};
+    var shipPoints = planet.shipPoints || 0;
     var cp = $(this).find('.planetlink').attr('href').split('cp=')[1];
-    var shipsNeedUpdate = window.config.my.planets[$(this).find('.planet-koords').text()].shipsNeedUpdate <= Date.now();
+    var shipsNeedUpdate = planet.shipsNeedUpdate <= Date.now();
 
     if (shipPoints > threshold || shipsNeedUpdate) {
       var img = uipp_images.atk;
@@ -96,14 +99,14 @@ function _addPlanetListHelpers() {
       tooltip +=
         window._translate('LAST_UPDATE') +
         ' : ' +
-        _time((Date.now() - window.config.my.planets[$(this).find('.planet-koords').text()].shipsLastUpdate) / 1000) +
+        _time((Date.now() - planet.shipsLastUpdate) / 1000) +
         '<br><br>';
       tooltip += '<table class=&quot;marketitem_price_tooltip&quot;>';
-      for (var key in window.config.my.planets[$(this).find('.planet-koords').text()].ships) {
+      for (var key in planet.ships) {
         tooltip += [
           '<tr>',
           '<th>' + window.config.labels[key] + '</th>',
-          '<td>' + window.config.my.planets[$(this).find('.planet-koords').text()].ships[key] + '</td>',
+          '<td>' + planet.ships[key] + '</td>',
           '</tr>'
         ].join('');
       }
@@ -114,7 +117,7 @@ function _addPlanetListHelpers() {
         tooltip +=
           window._translate('LAST_UPDATE') +
           ' : ' +
-          _time((Date.now() - window.config.my.planets[$(this).find('.planet-koords').text()].shipsLastUpdate) / 1000) +
+          _time((Date.now() - planet.shipsLastUpdate) / 1000) +
           '<br><br>';
         tooltip += window._translate('SHIP_AT_DOCK_THRESHOLD_NEED_UPDATE');
         img = uipp_images.atkunk;
@@ -228,11 +231,13 @@ function _handleMissionsInProg() {
       }
 
       // don't put the need for update at a later date
-      if (m.t > config.my.planets[toCoords].shipsNeedUpdate) return;
+      if (config.my.planets[toCoords] && m.t > config.my.planets[toCoords].shipsNeedUpdate) return;
 
       // update values
-      config.my.planets[toCoords].shipsNeedUpdate = m.t;
-      setTimeout(_addPlanetListHelpers, m.t - Date.now() + 1000);
+      if (config.my.planets[toCoords]) {
+        config.my.planets[toCoords].shipsNeedUpdate = m.t;
+        setTimeout(_addPlanetListHelpers, m.t - Date.now() + 1000);
+      }
     }
   });
   _saveConfig();
