@@ -79,21 +79,23 @@ function uipp_getCummulativeCost(type, fromLevel, toLevel) {
 
 window.uipp_getProduction = function uipp_getProduction(type, level, averageTemp, additionalMultiplier, coords) {
   var speed = Number(window.config.universe.speed);
+  // additionalMultiplier is for boosts, lifeforms tech, and other unparsed bonuses
+  additionalMultiplier = additionalMultiplier || 0;
 
-  var positionMultiplier = 0;
+  var positionMultiplier = 1;
   if (coords) {
-    if (type == 'crystal' && coords[2] == 1) positionMultiplier = 0.4;
-    if (type == 'crystal' && coords[2] == 2) positionMultiplier = 0.3;
-    if (type == 'crystal' && coords[2] == 3) positionMultiplier = 0.2;
-    if (type == 'metal' && coords[2] == 6) positionMultiplier = 0.17;
-    if (type == 'metal' && coords[2] == 7) positionMultiplier = 0.23;
-    if (type == 'metal' && coords[2] == 8) positionMultiplier = 0.35;
-    if (type == 'metal' && coords[2] == 9) positionMultiplier = 0.23;
-    if (type == 'metal' && coords[2] == 10) positionMultiplier = 0.17;
+    if (type == 'crystal' && coords[2] == 1) positionMultiplier = 1.4;
+    if (type == 'crystal' && coords[2] == 2) positionMultiplier = 1.3;
+    if (type == 'crystal' && coords[2] == 3) positionMultiplier = 1.2;
+    if (type == 'metal' && coords[2] == 6) positionMultiplier = 1.17;
+    if (type == 'metal' && coords[2] == 7) positionMultiplier = 1.23;
+    if (type == 'metal' && coords[2] == 8) positionMultiplier = 1.35;
+    if (type == 'metal' && coords[2] == 9) positionMultiplier = 1.23;
+    if (type == 'metal' && coords[2] == 10) positionMultiplier = 1.17;
   }
-  speed = speed * (1 + positionMultiplier);
 
-  var multiplier = 1 + (additionalMultiplier || 0);
+  // multiplier is for miner class, geologist, officer council
+  var multiplier = 0;
   if ($('.characterclass.miner').length) {
     multiplier += 0.25;
   }
@@ -108,14 +110,26 @@ window.uipp_getProduction = function uipp_getProduction(type, level, averageTemp
 
   switch (type) {
     case 'metal':
-      multiplier += (window.config.plasmaTech || 0) * 0.01;
-      return Math.round(30 * level * Math.pow(1.1, level) * speed * multiplier + 30 * speed);
+      var baseProd = 30 * speed * positionMultiplier;
+      var mineProd = Math.floor(30 * level * Math.pow(1.1, level) * speed * positionMultiplier);
+      var bonusProd = multiplier * (baseProd + mineProd);
+      var additionalProd = additionalMultiplier * mineProd;
+      var plasmaProd = (window.config.plasmaTech || 0) * 0.01 * (mineProd);
+      return baseProd + mineProd + bonusProd + additionalProd + plasmaProd;
     case 'crystal':
-      multiplier += (window.config.plasmaTech || 0) * 0.0066;
-      return Math.round(20 * level * Math.pow(1.1, level) * speed * multiplier + 15 * speed);
+      var baseProd = 15 * speed * positionMultiplier;
+      var mineProd = Math.floor(20 * level * Math.pow(1.1, level) * speed * positionMultiplier);
+      var bonusProd = multiplier * (baseProd + mineProd);
+      var additionalProd = additionalMultiplier * mineProd;
+      var plasmaProd = (window.config.plasmaTech || 0) * 0.0066 * (mineProd);
+      return baseProd + mineProd + bonusProd + additionalProd + plasmaProd;
     case 'deuterium':
-      multiplier += (window.config.plasmaTech || 0) * 0.0033;
-      return Math.round(10 * level * Math.pow(1.1, level) * speed * multiplier * (1.36 - 0.004 * averageTemp));
+      var baseProd = 0;
+      var mineProd = Math.floor(10 * level * Math.pow(1.1, level) * speed * (1.36 - 0.004 * averageTemp));
+      var bonusProd = multiplier * (baseProd + mineProd);
+      var additionalProd = additionalMultiplier * mineProd;
+      var plasmaProd = (window.config.plasmaTech || 0) * 0.0033 * (mineProd);
+      return baseProd + mineProd + bonusProd + additionalProd + plasmaProd;
     default:
       return null;
   }
