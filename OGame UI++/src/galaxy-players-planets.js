@@ -28,7 +28,7 @@ window._addGalaxyPlayersPlanetsInterval = function _addGalaxyPlayersPlanetsInter
       var system = $('#system_input').val();
       var position = $galaxyRow.find('.galaxyCell.cellPosition').text();
       var planetName = $galaxyRow.find('.cellPlanetName').text();
-      var moon = $galaxyRow.find('.cellMoon').html().length > 0 ? 1 : 0;
+      var moon = ($galaxyRow.find('.cellMoon').html() || '').length > 0 ? 1 : 0;
       var planetFound = (window.config.players[playerId].planets || []).reduce(function (found, planet) {
         if (planet.coords.join(',') == [galaxy, system, position].join(',')) {
           found = true;
