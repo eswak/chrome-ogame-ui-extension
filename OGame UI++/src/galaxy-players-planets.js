@@ -41,7 +41,7 @@ window._addGalaxyPlayersPlanetsInterval = function _addGalaxyPlayersPlanetsInter
           coords: [galaxy, system, position].map(Number),
           moon: moon
         });
-        window._saveConfig();
+        window._savePlayers();
       }
 
       var playerPlanets = player.planets;

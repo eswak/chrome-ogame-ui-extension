@@ -18,6 +18,49 @@ window._addTabExpeditions = function _addTabExpeditions() {
     var $wrapper = window._onMenuClick('expeditions');
     if (!$wrapper) return;
 
+    var $headerwrapper = $('<div class="uipp-box" style="height:260px;padding:0;background:url(' + uipp_images.wings + ');background-size:cover;text-align:center;"></div>');
+    $headerwrapper.append(
+      [
+        '<h3 style="margin:0">' + window.config.labels[15] + '</h3>',
+        '<span class="expefilter" id="expefilter-1d" onclick="uipp_expefilter(\'1d\');" style="cursor: pointer; position: absolute; padding: 5px 10px; border-radius: 3px; font-size: 11px; left: 50%; margin-left: -150px; top: 63px; background: #333; color: white;">1' +
+          window._translate('TIME_DAY') +
+          '</span>',
+        '<span class="expefilter" id="expefilter-7d" onclick="uipp_expefilter(\'7d\');" style="cursor:pointer;position:absolute;padding:5px 10px;border-radius:3px;font-size:11px;left:50%;margin-left:-150px;top:106px;background:#333;color:white;">7' +
+          window._translate('TIME_DAY') +
+          '</span>',
+        '<span class="expefilter" id="expefilter-30d" onclick="uipp_expefilter(\'30d\');" style="cursor:pointer;position:absolute;padding:5px 10px;border-radius:3px;font-size:11px;left:50%;margin-left:-157px;top:149px;background:#333;color:white;">30' +
+          window._translate('TIME_DAY') +
+          '</span>',
+        '<span class="expefilter" id="expefilter-res" onclick="uipp_expefilter(\'res\');" style="cursor:pointer;position:absolute;padding:2px 5px;border-radius:3px;font-size:9px;left:50%;margin-left:117px;top:64px;background:#333;color:white;">',
+        '<img src="' + uipp_images.resources.mix + '" style="height:16px" />',
+        '</span>',
+        '<span class="expefilter" id="expefilter-ship" onclick="uipp_expefilter(\'ship\');" style="cursor:pointer;position:absolute;padding:2px 5px;border-radius:3px;font-size:9px;left:50%;margin-left:117px;top:108px;background:#333;color:white;">',
+        '<img src="' + uipp_images.inflight + '" style="vertical-align:-2px" />',
+        '</span>',
+        '<span class="expefilter" id="expefilter-debris" onclick="uipp_expefilter(\'debris\');" style="cursor:pointer;position:absolute;padding:2px 5px;border-radius:3px;font-size:9px;left:50%;margin-left:117px;top:151px;background:#333;color:white;">',
+        '<figure class="planetIcon tf"></figure>',
+        '</span>',
+        '<div style="position:absolute;bottom:0; width: 100%;">',
+        ['am', 'metal', 'crystal', 'deuterium', 'item']
+          .map(function (res) {
+            return [
+              '<div style="margin:10px; position: relative; display: inline-block;">',
+              '<img src="' + uipp_images.resources[res + 'big'] + '" style="height:60px"/>',
+              '<div id="expestat-' +
+                res +
+                '" style="position:absolute;top:50%;margin-top:-10px;font-size:9px;height:20px;line-height:20px;width:100%;background:rgba(0,0,0,.7);color:white;">?</div>',
+              '</div>'
+            ].join('');
+          })
+          .join(''),
+        '</div>'
+      ].join('')
+    );
+    $wrapper.append($headerwrapper);
+
+    var $tablewrapper = $('<div class="uipp-box"></div>');
+    $wrapper.append($tablewrapper);
+
     var pastExpe = [];
     for (var key in window.config.expeditionResults) {
       pastExpe.push({
@@ -53,7 +96,6 @@ window._addTabExpeditions = function _addTabExpeditions() {
     );
 
     pastExpe.forEach(function (expe, i) {
-      var value = 0;
       var content = '';
       if (Object.keys(expe.data).length === 0) {
         content += '-';
@@ -290,51 +332,11 @@ window._addTabExpeditions = function _addTabExpeditions() {
 
     $table.find('tbody').append(tbody);
 
-    $wrapper.append(
-      [
-        '<div style="text-align:center; position: relative; user-select: none;">',
-        '<img src="' + uipp_images.wings + '" style=""/>',
-        '<span class="expefilter" id="expefilter-1d" onclick="uipp_expefilter(\'1d\');" style="cursor:pointer;position:absolute;padding:2px 5px;border-radius:3px;font-size:9px;left:50%;margin-left:-132px;top:57px;background:#333;color:white;">1' +
-          window._translate('TIME_DAY') +
-          '</span>',
-        '<span class="expefilter" id="expefilter-7d" onclick="uipp_expefilter(\'7d\');" style="cursor:pointer;position:absolute;padding:2px 5px;border-radius:3px;font-size:9px;left:50%;margin-left:-132px;top:95px;background:#333;color:white;">7' +
-          window._translate('TIME_DAY') +
-          '</span>',
-        '<span class="expefilter" id="expefilter-30d" onclick="uipp_expefilter(\'30d\');" style="cursor:pointer;position:absolute;padding:2px 5px;border-radius:3px;font-size:9px;left:50%;margin-left:-134px;top:133px;background:#333;color:white;">30' +
-          window._translate('TIME_DAY') +
-          '</span>',
-        '<span class="expefilter" id="expefilter-res" onclick="uipp_expefilter(\'res\');" style="cursor:pointer;position:absolute;padding:2px 5px;border-radius:3px;font-size:9px;left:50%;margin-left:106px;top:57px;background:#333;color:white;">',
-        '<img src="' + uipp_images.resources.mix + '" style="height:16px" />',
-        '</span>',
-        '<span class="expefilter" id="expefilter-ship" onclick="uipp_expefilter(\'ship\');" style="cursor:pointer;position:absolute;padding:2px 5px;border-radius:3px;font-size:9px;left:50%;margin-left:106px;top:95px;background:#333;color:white;">',
-        '<img src="' + uipp_images.inflight + '" style="vertical-align:-2px" />',
-        '</span>',
-        '<span class="expefilter" id="expefilter-debris" onclick="uipp_expefilter(\'debris\');" style="cursor:pointer;position:absolute;padding:2px 5px;border-radius:3px;font-size:9px;left:50%;margin-left:106px;top:130px;background:#333;color:white;">',
-        '<figure class="planetIcon tf"></figure>',
-        '</span>',
-        '<div style="position:absolute;bottom:0; width: 100%;">',
-        ['am', 'metal', 'crystal', 'deuterium', 'item']
-          .map(function (res) {
-            return [
-              '<div style="margin:10px; position: relative; display: inline-block;">',
-              '<img src="' + uipp_images.resources[res + 'big'] + '" style="height:60px"/>',
-              '<div id="expestat-' +
-                res +
-                '" style="position:absolute;top:50%;margin-top:-10px;font-size:9px;height:20px;line-height:20px;width:100%;background:rgba(0,0,0,.7);color:white;">?</div>',
-              '</div>'
-            ].join('');
-          })
-          .join(''),
-        '</div>',
-        '</div>'
-      ].join('')
-    );
-
     // Add list
-    $wrapper.append($table);
+    $tablewrapper.append($table);
 
     if (pastExpe.length > displayedExpe) {
-      $wrapper.append(
+      $tablewrapper.append(
         [
           '<div style="text-align:center;padding:10px 0 30px">',
           '<span style="cursor:pointer;" onclick="uipp_showMoreExpe()">',
@@ -354,7 +356,9 @@ window._addTabExpeditions = function _addTabExpeditions() {
 };
 
 function _date(timestamp) {
-  return new Date(Number(timestamp)).toISOString().split('T').join(' ').replace('.000Z', '');
+  // use gameforge-injected function
+  return getFormatedDate(timestamp, '[Y]-[m]-[d] [H]:[i]:[s]');
+  //return new Date(Number(timestamp)).toISOString().split('T').join(' ').replace('.000Z', '');
 }
 
 function _getExpeditionResources(data) {

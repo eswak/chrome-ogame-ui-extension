@@ -32,7 +32,7 @@ window._onMenuClick = function (menuClass) {
   } else {
     $('.' + uippClassName).remove();
     uippActiveTab = menuClass;
-    return $('<div class="' + uippClassName + ' clearfix"></div>');
+    return $('<div class="' + uippClassName + '"></div>');
   }
   return;
 };

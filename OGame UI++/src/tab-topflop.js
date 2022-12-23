@@ -34,6 +34,7 @@ window._addTabTopflop = function _addTabTopflop() {
     }
 
     sections.forEach(function (scoreType) {
+      var $sectionWrapper = $('<div class="uipp-box"></div>');
       var entries = [];
       for (var playerId in PLAYER_POOL) {
         var current = Number((window.config.players[playerId] || {})[scoreType] || 0);
@@ -65,18 +66,20 @@ window._addTabTopflop = function _addTabTopflop() {
       };
 
       if (scoreType === 'globalScore') {
-        $wrapper.append($('<div style="text-align:center"><img src="' + uipp_images.score.global + '"/></div>'));
+        $sectionWrapper.append($('<h3><img style="height: 18px; vertical-align: -5px; margin-right: 5px;" src="' + uipp_images.score.global + '"/>Top / Flop</h3>'));
       } else if (scoreType === 'economyScore') {
-        $wrapper.append($('<div style="text-align:center"><img src="' + uipp_images.score.economy + '"/></div>'));
+        $sectionWrapper.append($('<h3><img style="height: 18px; vertical-align: -5px; margin-right: 5px;" src="' + uipp_images.score.economy + '"/>Top / Flop</h3>'));
       } else if (scoreType === 'militaryScore') {
-        $wrapper.append($('<div style="text-align:center"><img src="' + uipp_images.score.military + '"/></div>'));
+        $sectionWrapper.append($('<h3><img style="height: 18px; vertical-align: -5px; margin-right: 5px;" src="' + uipp_images.score.military + '"/>Top / Flop</h3>'));
       } else if (scoreType === 'researchScore') {
-        $wrapper.append($('<div style="text-align:center"><img src="' + uipp_images.score.research + '"/></div>'));
+        $sectionWrapper.append($('<h3><img style="height: 18px; vertical-align: -5px; margin-right: 5px;" src="' + uipp_images.score.research + '"/>Top / Flop</h3>'));
         delete topflop.flop;
       }
 
+      var $tableWrapper = $('<div class="clearfix"></div>');
+      $sectionWrapper.append($tableWrapper);
       for (var key in topflop) {
-        $wrapper.append(
+        $tableWrapper.append(
           $(
             [
               '<div class="halfsection"' + (!topflop.flop ? 'style="width:calc(100% - 18px)"' : '') + '>',
@@ -90,7 +93,7 @@ window._addTabTopflop = function _addTabTopflop() {
                       ? '(' + window.config.players[entry.playerId][scoreType.replace('Score', 'Position')] + ')'
                       : '',
                     '</td>',
-                    '<td>',
+                    '<td style="white-space: nowrap; max-width: 100px; overflow: hidden; text-overflow: ellipsis;" title="' + ((window.config.players[entry.playerId] || {}).name || window._translate('DELETED_PLAYER')) + '">',
                     (window.config.players[entry.playerId] || {}).name || window._translate('DELETED_PLAYER'),
                     '</td>',
                     '<td>',
@@ -112,6 +115,8 @@ window._addTabTopflop = function _addTabTopflop() {
           )
         );
       }
+
+      $wrapper.append($sectionWrapper);
     });
 
     window._insertHtml($wrapper);

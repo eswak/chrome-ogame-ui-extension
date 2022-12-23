@@ -1,5 +1,60 @@
 document.addEventListener('UIPPImages', function (evt, a, b, c) {
   window.uipp_images = evt.detail;
+
+  // uipp-box style
+  var style = document.createElement('style');
+  style.textContent = `
+    .uipp-box {
+      color: #f1f1f1;
+      background: #0d1014;
+      position: relative;
+      width: calc(100% - 14px);
+      box-sizing: border-box;
+      border: 2px solid #000;
+      margin: 5px auto 10px auto;
+      padding: 15px;
+    }
+    .uipp-box::before {
+      pointer-events: none;
+      content: "";
+      position: absolute; left: -9px; top: -3px; width: calc(100% + 18px); height: 28px;
+      background: url(${uipp_images.box.boxTopLeft}) bottom left no-repeat, url(${uipp_images.box.boxTopRight}) bottom right no-repeat;
+    }
+    .uipp-box::after {
+      pointer-events: none;
+      content: "";
+      position: absolute; left: -9px; bottom: -4px; width: calc(100% + 18px); height: 50px;
+      background: url(${uipp_images.box.boxBottomLeft}) bottom left no-repeat, url(${uipp_images.box.boxBottomRight}) bottom right no-repeat;
+    }
+    .uipp-box h3 {
+      position: relative;
+      margin: -17px -15px 10px;
+      background: url(${uipp_images.box.boxTitleBg});
+      color: #AB7AFF;
+      font: bold 12px/27px Verdana,Arial,Helvetica,sans-serif;
+      text-align: center;
+    }
+    .uipp-box h3::before {
+      color: #AB7AFF;
+      position: absolute;
+      top: 0;
+      width: 26px;
+      height: 27px;
+      content: "";
+      left: -5px;
+      background: url(${uipp_images.box.boxTitleLeft});
+    }
+    .uipp-box h3::after {
+      position: absolute;
+      top: 0;
+      width: 26px;
+      height: 27px;
+      content: "";
+      right: -5px;
+      background: url(${uipp_images.box.boxTitleRight});
+    }
+  `;
+  (document.head || document.documentElement).appendChild(style);
 });
 
 document.addEventListener('UIPPStart', function (evt) {

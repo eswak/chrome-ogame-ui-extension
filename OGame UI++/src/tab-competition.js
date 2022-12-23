@@ -27,7 +27,7 @@ window._addCompetitionTab = function _addCompetitionTab() {
   $competitionsEntry.click(function () {
     var $wrapper = window._onMenuClick('competition');
     if (!$wrapper) return;
-    $wrapper.append('<div id="competition-tab"></div>');
+    $wrapper.append('<div id="competition-tab" class="uipp-box"></div>');
     window._insertHtml($wrapper);
     window.uipp_displayCompetition();
   });
@@ -35,7 +35,7 @@ window._addCompetitionTab = function _addCompetitionTab() {
 
 window.uipp_displayCompetition = function () {
   var $tabContent = $('#competition-tab');
-  $tabContent.html('');
+  $tabContent.html('<h3>' + window._translate('MENU_COMPETITION') + '</h3>');
 
   // create series of score of all players
   var series = {};
@@ -228,15 +228,15 @@ window.uipp_displayCompetition = function () {
         historyDates.map(function(date, i) {
           return [
             '<tr>',
-            '<td style="padding:5px">' + date + '</td>',
+            '<td style="padding:5px;border-right:1px solid #25394c">' + date + '</td>',
             '<td style="padding:5px">' + window.uipp_scoreHumanReadable(history[date].g) + '</td>',
-            '<td style="padding:5px">' + getProgress((history[historyDates[i + 1]] || {}).g, history[date].g) + '</td>',
+            '<td style="padding:5px;border-right:1px solid #25394c">' + getProgress((history[historyDates[i + 1]] || {}).g, history[date].g) + '</td>',
             '<td style="padding:5px">' + window.uipp_scoreHumanReadable(history[date].e) + '</td>',
-            '<td style="padding:5px">' + getProgress((history[historyDates[i + 1]] || {}).e, history[date].e) + '</td>',
+            '<td style="padding:5px;border-right:1px solid #25394c">' + getProgress((history[historyDates[i + 1]] || {}).e, history[date].e) + '</td>',
             '<td style="padding:5px">' + window.uipp_scoreHumanReadable(history[date].r) + '</td>',
-            '<td style="padding:5px">' + getProgress((history[historyDates[i + 1]] || {}).r, history[date].r) + '</td>',
+            '<td style="padding:5px;border-right:1px solid #25394c">' + getProgress((history[historyDates[i + 1]] || {}).r, history[date].r) + '</td>',
             '<td style="padding:5px">' + window.uipp_scoreHumanReadable(history[date].m) + '</td>',
-            '<td style="padding:5px">' + getProgress((history[historyDates[i + 1]] || {}).m, history[date].m) + '</td>',
+            '<td style="padding:5px;border-right:1px solid #25394c">' + getProgress((history[historyDates[i + 1]] || {}).m, history[date].m) + '</td>',
             '<td style="padding:5px">' + window.uipp_scoreHumanReadable(history[date].s) + '</td>',
             '<td style="padding:5px">' + getProgress((history[historyDates[i + 1]] || {}).s, history[date].s) + '</td>',
             '</tr>',
@@ -341,7 +341,7 @@ window.uipp_competitionSettings = function() {
   });
   // add tracked player
   html += '<li>';
-  html += '<select id="select-track-player" style="padding: 5px; margin: 10px 5px 0 0; border-radius: 5px;">';
+  html += '<select id="select-track-player" style="padding: 5px; margin: 10px 5px 0 0; border-radius: 5px; visibility:visible!important">';
   html += '<option value=""/> --- Select a player ---';
   var players = [];
   for (var key in config.players) {

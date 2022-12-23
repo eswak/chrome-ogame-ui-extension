@@ -15,6 +15,15 @@ var uipp_images = {
   deuterium: chrome.runtime.getURL('img/mine-deuterium.png'),
   astrophysics: chrome.runtime.getURL('img/tech-astro.png'),
   plasma: chrome.runtime.getURL('img/tech-plasma.png'),
+  box: {
+    boxTopLeft: chrome.runtime.getURL('img/box/box-top-left.png'),
+    boxTopRight: chrome.runtime.getURL('img/box/box-top-right.png'),
+    boxBottomLeft: chrome.runtime.getURL('img/box/box-bottom-left.png'),
+    boxBottomRight: chrome.runtime.getURL('img/box/box-bottom-right.png'),
+    boxTitleBg: chrome.runtime.getURL('img/box/box-title-bg.png'),
+    boxTitleLeft: chrome.runtime.getURL('img/box/box-title-left.png'),
+    boxTitleRight: chrome.runtime.getURL('img/box/box-title-right.png')
+  },
   features: {
     alliance: chrome.runtime.getURL('img/features/alliance.png'),
     charts: chrome.runtime.getURL('img/features/charts.png'),

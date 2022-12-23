@@ -10,6 +10,17 @@ window._addTabStats = function _addTabStats() {
     var $wrapper = window._onMenuClick('stats');
     if (!$wrapper) return;
 
+    var $wrapperStats = $('<div class="uipp-box"><h3>' + window._translate('STATS_PRODUCTION') + '</h3></div>');
+    var $wrapperProgression = $('<div class="uipp-box"><h3>' + window._translate('STATS_PROGRESSION') + '</h3></div>');
+    var $wrapperRentability = $('<div class="uipp-box"><h3>' + window._translate('NEXT_MOST_RENTABLE_BUILDS') + '</h3></div>');
+    if (window.config.features.stats) {
+      $wrapper.append($wrapperStats);
+    }
+    $wrapper.append($wrapperProgression);
+    if (window.config.features.nextbuilds) {
+      $wrapper.append($wrapperRentability);
+    }
+
     // clear decolonized planets from the list
     var planetOrder = $('#planetList .planet-koords').text();
     for (var key in window.config.my.planets) {
@@ -534,7 +545,9 @@ window._addTabStats = function _addTabStats() {
       $('.uipp-selected').removeClass('uipp-selected');
       $('.uipp-stat-resource').css('outline', 'none');
 
+      $('.uiEnhancementWindow .uipp-table').css('background', 'black');
       window._getScreenshotLink($('.uiEnhancementWindow .uipp-table')[0], function (err, link) {
+        $('.uiEnhancementWindow .uipp-table').css('background', 'inherit');
         if (err) {
           return window.fadeBox('Error while uploading screenshot', true);
         }
@@ -544,9 +557,7 @@ window._addTabStats = function _addTabStats() {
       });
     };
 
-    if (window.config.features.stats) {
-      $wrapper.append($('<table class="uipp-table">' + planetStatsHtml + '</table>'));
-    }
+    $wrapperStats.append($('<table class="uipp-table">' + planetStatsHtml + '</table>'));
 
     // score charts
     var hasEnoughHistory = window._getPlayerScoreTrend(
@@ -559,10 +570,10 @@ window._addTabStats = function _addTabStats() {
       var current = window.config.players[playerId];
       var history = window.config.history[playerId];
 
-      $wrapper.append(
+      $wrapperProgression.append(
         $(
           [
-            '<div class="clearfix" style="margin-top:50px;">',
+            '<div class="clearfix">',
             '<div id="chart-history" style="width:70%;height:200px;float:left;"></div>',
             '<div id="chart-pie" style="width:30%;height:170px;float:left;margin-top:5px;position:relative;">',
             '<span id="highscoreContent" style="font-size:11px;">',
@@ -895,12 +906,9 @@ window._addTabStats = function _addTabStats() {
           return score > Number(currentPlayer.globalScore) + inprogPoints;
         }).length;
 
-        $wrapper.append(
+        $wrapperRentability.append(
           $(
             [
-              '<div style="margin-top:50px;text-align: center;;font-size: 15px;padding-bottom: 10px;">',
-              window._translate('NEXT_MOST_RENTABLE_BUILDS'),
-              '</div>',
               '<div style="text-align: center">',
               '<span class="icon12px icon_wrench"></span> ',
               '<span class="undermark">+' + inprogPoints + '</span> ',
@@ -1022,7 +1030,7 @@ window._addTabStats = function _addTabStats() {
         }
       });
 
-      $wrapper.append($rentabilityWrapper);
+      $wrapperRentability.append($rentabilityWrapper);
 
       // allow to simulate next builds
       var simulatedNextBuilds = {};
@@ -1094,7 +1102,7 @@ window._addTabStats = function _addTabStats() {
       };
     }
 
-    $wrapper.append(
+    $wrapperRentability.append(
       ['<div style="padding: 2em; opacity: 0.5;">', window._translate('RENTABILITY_EXPLAINATION'), '</div>'].join('')
     );
 

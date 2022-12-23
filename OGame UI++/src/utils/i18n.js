@@ -14,6 +14,8 @@ var translations = {
     SEND: 'Envoyer',
     CURRENT_STORAGE_TIME: 'Hangar plein dans',
     TOTAL_STORAGE_TIME: 'Capacité de stockage',
+    STATS_PRODUCTION: 'Production de toutes les planètes',
+    STATS_PROGRESSION: 'Progression des points',
     NEXT_MOST_RENTABLE_BUILDS: 'Prochaines actions les plus rentables',
     RENTABILITY_ASTRO:
       "Montez astrophysique niveau {level}, et colonisez.<br>Montez les mines niveau : {mineLevel}<br><br>Temps d'économies pour les dépendances (Tech/Vaisseau) : {dependenciesTime}<br>Coût pour les dépendances : {dependenciesCost}<br><br>Temps d'économies pour Astrophysique : {astroTime}<br>Coût pour Astrophysique : {astroCost}<br><br>Temps d'économies pour les mines : {mineEconomyTime}<br>Coût total des mines : {mineCost}<br><br>Temps de rentabilité des mines de la nouvelle colonie : {mineTime}",
@@ -55,6 +57,7 @@ var translations = {
     MILITARY_SCORE_LONG: '{scoreMilitary} points militaires ({ships} vaisseaux)',
     COORDINATES: 'Position',
     PLAYER: 'Joueur',
+    ALLIANCE_PLAYER_SCORES: 'Score des joueurs de l\'alliance',
     NOTE: 'Note',
     ACTIONS: 'Actions',
     PLANETS: 'Planètes',
@@ -90,6 +93,8 @@ var translations = {
     SEND: 'Send',
     CURRENT_STORAGE_TIME: 'Time until full',
     TOTAL_STORAGE_TIME: 'Total storage time',
+    STATS_PRODUCTION: 'Production of all planets',
+    STATS_PROGRESSION: 'Points progression',
     NEXT_MOST_RENTABLE_BUILDS: 'Next best ROI',
     RENTABILITY_ASTRO:
       "Level up astrophysics to level {level}, and make a new colony.<br>Level up the new colony's mines to {mineLevel}<br><br>Time for resource-gathering of dependencies (tech/ship) : {dependenciesTime}<br>Cost of dependencies : {dependenciesCost}<br><br>Time for resource-gathering of astrophysics : {astroTime}<br>Cost of astrophysics : {astroCost}<br><br>Time for resource-gathering of mines (total) : {mineEconomyTime}<br>Total mine cost : {mineCost}<br><br>New colony mines ROI : {mineTime}",
@@ -131,6 +136,7 @@ var translations = {
     MILITARY_SCORE_LONG: '{scoreMilitary} military points ({ships} ships)',
     COORDINATES: 'Position',
     PLAYER: 'Player',
+    ALLIANCE_PLAYER_SCORES: 'Alliance player scores',
     NOTE: 'Note',
     ACTIONS: 'Actions',
     PLANETS: 'Planets',

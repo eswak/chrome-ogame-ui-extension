@@ -35,7 +35,8 @@ window._addTabAlliance = function _addTabAlliance() {
   }
 
   var tabhtml = [
-    '<div style="float: left; margin: 2em 0 4em; width: 100%">',
+    '<div class="uipp-box" style="margin-bottom: 3em">',
+    '<h3>' + window._translate('ALLIANCE_PLAYER_SCORES') + '</h3>',
     '<table class="uipp-table bordered">',
     '<thead id="highscoreContent">',
     '<tr>',

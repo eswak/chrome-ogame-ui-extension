@@ -2,6 +2,13 @@
   "web_accessible_resources": [
     {
       "resources": [
+        "img/box/box-top-left.png",
+        "img/box/box-top-right.png",
+        "img/box/box-bottom-left.png",
+        "img/box/box-bottom-right.png",
+        "img/box/box-title-bg.png",
+        "img/box/box-title-left.png",
+        "img/box/box-title-right.png",
         "img/features/alliance.png",
         "img/features/charts.png",
         "img/features/deploytransport.png",

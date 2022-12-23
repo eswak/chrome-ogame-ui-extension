@@ -17,6 +17,8 @@ window._addTabSettings = function _addTabSettings() {
     var $wrapper = window._onMenuClick('settings');
     if (!$wrapper) return;
 
+    $wrapper.addClass('uipp-box');
+
     // trade rate window.config
     $wrapper.append(
       $(
