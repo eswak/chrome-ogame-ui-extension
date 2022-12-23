@@ -125,9 +125,6 @@ var userscript = function () {
     // Refresh universe data (config.players)
     window._refreshUniverseData();
 
-    // Add historical point logger
-    window._logHistoryData();
-
     if (document.location.href.indexOf('fleetdispatch') !== -1 && window.config.autoProbes) {
       // check if fleets have returned
       setInterval(function () {

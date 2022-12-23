@@ -134,28 +134,28 @@ document.addEventListener('UIPPNotification', function (evt) {
   });
 });
 
-document.addEventListener('UIPPSaveConfig', function (evt) {
+document.addEventListener('UIPPSaveData', function (evt) {
   var parsedDetail = JSON.parse(evt.detail);
   var toStore = {};
   toStore[parsedDetail.key] = parsedDetail.value;
   chrome.storage.local.set(toStore).then(() => {
-    console.log('OGame UI++: saved config', parsedDetail.key);
+    console.log('OGame UI++: saved data', parsedDetail.key);
   });
 });
 
-document.addEventListener('UIPPGetConfig', function (evt) {
-  var configKey = evt.detail;
-  chrome.storage.local.get([configKey]).then((result) => {
-    var config = result[configKey] || {};
-    console.log('OGame UI++: loaded config', configKey);
+document.addEventListener('UIPPGetData', function (evt) {
+  var keys = (evt.detail || '').split(',');
+  chrome.storage.local.get(keys).then((result) => {
+    console.log('OGame UI++: loaded data :\n  - ' + keys.join('\n  - '));
     var evt = document.createEvent('CustomEvent');
-    evt.initCustomEvent("UIPPGetConfigResponse", true, true, JSON.stringify(config));
+    evt.initCustomEvent('UIPPGetDataResponse:' + keys.join(','), true, true, JSON.stringify(result));
     document.dispatchEvent(evt);
   });
 });
 
-document.addEventListener('UIPPGetStorage', function () {
-  chrome.storage.local.get(null, function(items) {
-    console.log('UIPPGetStorage', items);
-  });
-});
+/*chrome.storage.local.get(null, function(items) {
+  var allKeys = Object.keys(items);
+  console.log('OGame UI++ storage keys\n' + allKeys.map(function(key) {
+    return '  ' + key + ' : ' + JSON.stringify(items[key]).length
+  }).join('\n'));
+});*/
