@@ -109,14 +109,19 @@ window.uipp_displayCompetition = function () {
 
   // build timeseries for all series
   var seriesArray = Object.values(series);
-  seriesArray.forEach(function(serie) {
+  seriesArray.forEach(function(serie, i) {
     var playerId = serie.name;
-    historyDates.forEach(function(date) {
-      series[playerId].data.push({
-        x: config.history[playerId][date].t,
-        y: config.history[playerId][date].g
+    if (config.history[playerId]) {
+      historyDates.forEach(function(date) {
+        series[playerId].data.push({
+          x: config.history[playerId][date].t || new Date(date).getTime(),
+          y: config.history[playerId][date].g || 0
+        });
       });
-    });
+    } else {
+      // handle deleted players
+      seriesArray.splice(i, 1);
+    }
   });
 
   // add player serie as the last entry
@@ -158,9 +163,11 @@ window.uipp_displayCompetition = function () {
           type: window.Chartist.FixedScaleAxis,
           divisor: 5,
           labelInterpolationFnc: function (value) {
-            var dayOfMonthStr = new Date(value).toISOString().split('T')[0].split('-')[2];
+            // use gameforge-injected function
+            return getFormatedDate(value, '[d]/[m]-[H]' + window._translate('TIME_HOUR') + '[i]');
+            /*var dayOfMonthStr = new Date(value).toISOString().split('T')[0].split('-')[2];
             var monthStr = new Date(value).toISOString().split('T')[0].split('-')[1];
-            return dayOfMonthStr + '/' + monthStr;
+            return dayOfMonthStr + '/' + monthStr;*/
           }
         },
         axisY: {
@@ -251,6 +258,7 @@ window.uipp_displayCompetition = function () {
     // gray out stagnant players
     seriesArray.forEach(function(serie, i) {
       if (i == seriesArray.length - 1) return;
+      if (!serie.data.length) return; // handle deleted players
       var firstPoint = serie.data[0].y;
       var lastPoint = serie.data[serie.data.length - 1].y;
       var growth = lastPoint / firstPoint - 1;
@@ -335,8 +343,10 @@ window.uipp_competitionSettings = function() {
   watchList.forEach(function(playerId) {
     html += '<li style="margin-left:20px;padding-top:10px;">';
     html += '<span class="icon icon_trash" style="cursor:pointer;vertical-align:-3px" id="untrack-player-' + playerId + '" onClick="onUippSettingsChanged(this)"></span> ';
-    html += config.players[playerId].name;
-    html += ' [' + config.players[playerId].globalPosition + ']';
+    html += (config.players[playerId] || {}).name || 'Deleted Player';
+    if (config.players[playerId]) {
+      html += ' [' + config.players[playerId].globalPosition + ']';
+    }
     html += '</li>';
   });
   // add tracked player
