@@ -188,7 +188,7 @@ window._addCostsHelperInterval = function _addCostsHelperInterval() {
 
     // if we are viewing a plasma technology, computes rentability time
     else if ($('.building.plasmaTechnology:not(.enhanced)').length > 0) {
-      var technologyLevel = Number($('#content span.level').text().trim().split(' ').pop()) || 0;
+      var technologyLevel = Number($('#technologydetails_content span.level').text().trim().split(' ').pop()) || 0;
       var rentabilityTime = window._getRentabilityTime('plasma', null, technologyLevel);
       $('.content .information > ul').append(
         '<li class="enhancement">' +

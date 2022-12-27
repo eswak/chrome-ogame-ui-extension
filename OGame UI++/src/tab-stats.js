@@ -562,121 +562,144 @@ window._addTabStats = function _addTabStats() {
     $wrapperStats.append($('<table class="uipp-table">' + planetStatsHtml + '</table>'));
 
     // score charts
-    var hasEnoughHistory = window._getPlayerScoreTrend(
-      $('[name=ogame-player-id]').attr('content'),
-      'g',
-      2
-    ).hasEnoughHistory;
+    var hasEnoughHistory = window._getPlayerScoreTrend(config.playerId, 'g', 2).hasEnoughHistory;
     if (hasEnoughHistory && window.config.features.charts) {
-      var playerId = $('[name=ogame-player-id]').attr('content');
-      var current = window.config.players[playerId];
-      var history = window.config.history[playerId];
+      $wrapperProgression.append('<div id="progression-content"></div>');
+      var $wrapperProgressionContent = $wrapperProgression.find('#progression-content');
 
-      $wrapperProgression.append(
-        $(
+      var drawPlayerProgress = function(playerId) {
+        var current = window.config.players[playerId];
+        var history = window.config.history[playerId];
+
+        // player selection
+        var playerSelectHtml = '<select id="select-history-player" style="padding: 5px; margin: 10px 5px 0 0; border-radius: 5px; visibility:visible!important">';
+        var players = [];
+        for (var key in config.players) {
+          players.push({
+            gp: config.players[key].globalPosition,
+            id: key,
+            name: config.players[key].name
+          });
+        }
+        players.sort(function(a, b) {
+          return a.name > b.name ? 1 : -1;
+        }).forEach(function(player) {
+          playerSelectHtml += '<option value="' + player.id + '" ' + (player.id == playerId ? 'selected' : '') + '/> ' + player.name + ' [' + player.gp + ']';
+        });
+        playerSelectHtml += '</select>';
+
+        $wrapperProgressionContent.html(
           [
             '<div class="clearfix">',
             '<div id="chart-history" style="width:70%;height:200px;float:left;"></div>',
             '<div id="chart-pie" style="width:30%;height:170px;float:left;margin-top:5px;position:relative;">',
             '<span id="highscoreContent" style="font-size:11px;">',
             '<img src="' +
-              uipp_images.score.economy +
+              uipp_images.score.military +
               '" style="position:absolute;height:20px;top:42px;left:65px;"></span>',
             '<img src="' +
               uipp_images.score.research +
               '" style="position:absolute;height:20px;top:72px;left:65px;"></span>',
             '<img src="' +
-              uipp_images.score.military +
+              uipp_images.score.economy +
               '" style="position:absolute;height:20px;top:102px;left:65px;"></span>',
             '<span style="position:absolute;top:45px;left:90px;">',
-            window._getPlayerScoreTrend(playerId, 'e', 2, 10).html,
+            window._getPlayerScoreTrend(playerId, 'm', 2, 10).html,
             '</span>',
             '<span style="position:absolute;top:75px;left:90px;">',
             window._getPlayerScoreTrend(playerId, 'r', 2, 10).html,
             '</span>',
             '<span style="position:absolute;top:105px;left:90px;">',
-            window._getPlayerScoreTrend(playerId, 'm', 2, 10).html,
+            window._getPlayerScoreTrend(playerId, 'e', 2, 10).html,
             '</span>',
             '</span>',
             '</div>',
+            '<div style="text-align: center">' + playerSelectHtml + '</div>',
             '</div>'
           ].join('')
-        )
-      );
-      setTimeout(function () {
-        var labels = Object.keys(history);
-        var series = [
-          {
-            name: 'economy',
-            data: []
-          },
-          {
-            name: 'research',
-            data: []
-          },
-          {
-            name: 'military',
-            data: []
-          },
-          {
-            name: 'general',
-            data: []
-          }
-        ];
-        labels.forEach(function (day) {
-          series[0].data.push({
-            x: history[day].t,
-            y: (history[day].e || 0) + (history[day].r || 0) + (history[day].m || 0)
+        );
+        setTimeout(function () {
+          var labels = Object.keys(history);
+          var series = [
+            {
+              name: 'military',
+              data: []
+            },
+            {
+              name: 'research',
+              data: []
+            },
+            {
+              name: 'economy',
+              data: []
+            }
+          ];
+          labels.forEach(function (day) {
+            series[0].data.push({
+              x: history[day].t,
+              y: (history[day].e || 0) + (history[day].r || 0) + (history[day].m || 0)
+            });
+            series[1].data.push({ x: history[day].t, y: (history[day].r || 0) + (history[day].e || 0) });
+            series[2].data.push({ x: history[day].t, y: history[day].e || 0 });
           });
-          series[1].data.push({ x: history[day].t, y: (history[day].r || 0) + (history[day].m || 0) });
-          series[2].data.push({ x: history[day].t, y: history[day].m || 0 });
+
+          new window.Chartist.Line(
+            '#chart-history',
+            {
+              labels: labels,
+              series: series
+            },
+            {
+              axisX: {
+                type: window.Chartist.FixedScaleAxis,
+                divisor: 5,
+                labelInterpolationFnc: function (value) {
+                  var dayOfMonthStr = new Date(value).toISOString().split('T')[0].split('-')[2];
+                  var monthStr = new Date(value).toISOString().split('T')[0].split('-')[1];
+                  return dayOfMonthStr + '/' + monthStr;
+                }
+              },
+              axisY: {
+                type: window.Chartist.FixedScaleAxis,
+                divisor: 5,
+                labelInterpolationFnc: function (value) {
+                  return window.uipp_scoreHumanReadable(value);
+                },
+                low: 0
+              },
+              showArea: true,
+              showLine: false,
+              showPoint: false
+            }
+          );
+
+          new window.Chartist.Pie(
+            '#chart-pie',
+            {
+              series: [current.militaryScore, current.researchScore, current.economyScore]
+            },
+            {
+              donut: true,
+              donutWidth: 15,
+              donutSolid: false,
+              startAngle: 0,
+              showLabel: false
+            }
+          );
         });
 
-        new window.Chartist.Line(
-          '#chart-history',
-          {
-            labels: labels,
-            series: series
-          },
-          {
-            axisX: {
-              type: window.Chartist.FixedScaleAxis,
-              divisor: 5,
-              labelInterpolationFnc: function (value) {
-                var dayOfMonthStr = new Date(value).toISOString().split('T')[0].split('-')[2];
-                var monthStr = new Date(value).toISOString().split('T')[0].split('-')[1];
-                return dayOfMonthStr + '/' + monthStr;
-              }
-            },
-            axisY: {
-              type: window.Chartist.FixedScaleAxis,
-              divisor: 5,
-              labelInterpolationFnc: function (value) {
-                return window.uipp_scoreHumanReadable(value);
-              },
-              low: 0
-            },
-            showArea: true,
-            showLine: false,
-            showPoint: false
-          }
-        );
+        // on select change, redraw area for the selected player
+        setTimeout(function() {
+          $('#select-history-player').change(function() {
+            var playerId = $(this).val();
+            drawPlayerProgress(playerId);
+          }).focus();
+        });
+      }; // end function drawPlayerProgress
 
-        new window.Chartist.Pie(
-          '#chart-pie',
-          {
-            series: [current.economyScore, current.researchScore, current.militaryScore]
-          },
-          {
-            donut: true,
-            donutWidth: 15,
-            donutSolid: false,
-            startAngle: 0,
-            showLabel: false
-          }
-        );
-      });
-    }
+      var playerId = $('[name=ogame-player-id]').attr('content');
+      drawPlayerProgress(playerId);
+    };
 
     var globalProdWorth = 0;
     globalProdWorth += globalStats.prod.metal * worth.metal;

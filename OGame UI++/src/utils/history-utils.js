@@ -50,7 +50,15 @@ window._getPlayerScoreTrend = function _getPlayerScoreTrend(playerId, type, minE
 
   var str;
   if (diffPerDay > 0) {
-    str = '<span style="color:#9c0;">+' + diffPerDay + '%</span>';
+    if (diffPerDay >= 500) {
+      var multiplier = Math.floor(100 * (1+diffPerDay/100)) / 100;
+      if (diffPerDay >= 5000) {
+        multiplier = Math.floor(1+diffPerDay/100);
+      }
+      str = '<span style="color:#9c0;">x' + multiplier + '</span>';
+    } else {
+      str = '<span style="color:#9c0;">+' + diffPerDay + '%</span>';
+    }
   } else if (diffPerDay < 0) {
     str = '<span style="color:#d43635;">' + diffPerDay + '%</span>';
   } else {
