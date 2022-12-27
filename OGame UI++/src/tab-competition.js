@@ -113,10 +113,12 @@ window.uipp_displayCompetition = function () {
     var playerId = serie.name;
     if (config.history[playerId]) {
       historyDates.forEach(function(date) {
-        series[playerId].data.push({
-          x: config.history[playerId][date].t || new Date(date).getTime(),
-          y: config.history[playerId][date].g || 0
-        });
+        if (config.history[playerId][date]) {
+          series[playerId].data.push({
+            x: config.history[playerId][date].t || new Date(date).getTime(),
+            y: config.history[playerId][date].g || 0
+          });
+        }
       });
     } else {
       // handle deleted players

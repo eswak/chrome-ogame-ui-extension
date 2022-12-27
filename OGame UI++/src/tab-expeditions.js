@@ -10,7 +10,7 @@ window._addTabExpeditions = function _addTabExpeditions() {
     '<li class="expeditions enhanced"><span class="menu_icon"><div class="menuImage overview"></div></span><a style="position:relative" class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">' +
       window.config.labels[15] +
       '<img src="' +
-      window.uipp_images.expedition +
+      window.uipp_images.expeditionMission +
       '" style="height: 27px; position: absolute; right: -29px; top: 0; filter: grayscale(1) brightness(0.3);"/></span></a></li>'
   );
   $('#menuTable').append($tab);
@@ -67,8 +67,7 @@ window._addTabExpeditions = function _addTabExpeditions() {
         index: pastExpe.length,
         coords: key.split('|')[1],
         timestamp: key.split('|')[0],
-        data: window.config.expeditionResults[key],
-        resources: _getExpeditionResources(window.config.expeditionResults[key])
+        data: window.config.expeditionResults[key]
       });
     }
     pastExpe = pastExpe
@@ -97,17 +96,98 @@ window._addTabExpeditions = function _addTabExpeditions() {
 
     pastExpe.forEach(function (expe, i) {
       var content = '';
-      if (Object.keys(expe.data).length === 0) {
-        content += '-';
-      } else if (expe.data['AM']) {
+
+      // old format to new format
+      if (expe.data.AM) {
+        expe.data.flags = { x: 1 };
+        expe.data.result = { AM: expe.data.AM };
+      }
+      if (expe.data.item) {
+        expe.data.flags = { i: 1 };
+        expe.data.result = { item: expe.data.item };
+      }
+      ['metal', 'crystal', 'deuterium'].forEach(function(resource) {
+        if (expe.data[resource]) {
+          expe.data.flags = { r: 1 };
+          expe.data.result = {};
+          expe.data.result[resource] = expe.data[resource];
+        }
+      });
+      for (var key in expe.data) {
+        if (uipp_images.ships[key]) {
+          expe.data.flags = { f: 1 };
+          expe.data.result = {};
+          expe.data.result[key] = expe.data[key];
+        }
+      }
+
+      expe.resources = { metal: 0, crystal: 0, deuterium: 0 };
+      // Display for each case
+      // Debris field
+      if (expe.data.debris) {
+        ['metal', 'crystal'].forEach(function (res) {
+          content += '<div style="display:inline-block; width: 120px; overflow: visible; white-space: nowrap;">';
+          content +=
+            '<img src="' +
+            uipp_images.resources[res] +
+            '" style="height:28px; margin-right: 8px; vertical-align: -9px" /> ';
+          content +=
+            '<span style="color:' +
+            (expe.data.debris[res] ? 'white' : '#555') +
+            '">' +
+            window._num(expe.data.debris[res] || 0) +
+            '</span>';
+          content += '</div>';
+          expe.resources[res] += expe.data.debris[res] || 0;
+        });
         content +=
-          '<img src="' + uipp_images.resources.am + '" style="height:28px; margin-right: 8px; vertical-align: -9px" />';
-        content += window._num(expe.data.AM);
-      } else if (expe.data['item']) {
+            '<figure class="planetIcon tf tooltip js_hideTipOnMobile tpd-hideOnClickOutside" style="float: right; margin-top: 6px; margin-right: 5px;"></figure>';
+      }
+      // Nothing
+      else if (expe.data.flags && expe.data.flags.n) {
+        content += '<span style="opacity:0.5">' + window._translate('EXPEDITION_FIND_NOTHING') + '</span>';
+      }
+      // Black Hole
+      else if (expe.data.flags && expe.data.flags.l) {
+        content +=
+          '<img src="' + uipp_images.expedition.blackhole + '" style="height:28px; margin-right: 8px; vertical-align: -9px" />';
+        content += '<span style="color:#F44336">' + window._translate('EXPEDITION_LOSE_FLEET') + '</span>';
+      }
+      // Pirates
+      else if (expe.data.flags && expe.data.flags.p) {
+        content +=
+          '<img src="' + uipp_images.expedition.pirates + '" style="height:28px; margin-right: 8px; vertical-align: -9px" />';
+        content += '<span style="color:#FFEB3B">' + window._translate('EXPEDITION_FIND_PIRATES') + '</span>';
+      }
+      // Aliens
+      else if (expe.data.flags && expe.data.flags.a) {
+        content +=
+          '<img src="' + uipp_images.expedition.aliens + '" style="height:28px; margin-right: 8px; vertical-align: -9px" />';
+        content += '<span style="color:#FBC02D">' + window._translate('EXPEDITION_FIND_ALIENS') + '</span>';
+      }
+      // Merchant
+      else if (expe.data.flags && expe.data.flags.t) {
+        content +=
+          '<img src="' + uipp_images.expedition.merchant + '" style="height:28px; margin-right: 8px; vertical-align: -9px" />';
+        content += '<span style="color:#00BCD4">' + window._translate('EXPEDITION_FIND_MERCHANT') + '</span>';
+      }
+      // Item
+      else if (expe.data.flags && expe.data.flags.i) {
         content +=
           '<img src="' + uipp_images.item + '" style="height:28px; margin-right: 8px; vertical-align: -9px" />';
-        content += expe.data['item'];
-      } else {
+        content += expe.data.result.item;
+      }
+      // Early
+      else if (expe.data.flags && expe.data.flags.e) {
+        content += '<span style="opacity:0.5">' + window._translate('EXPEDITION_RETURN_EARLY') + '</span>';
+      }
+      // Late
+      else if (expe.data.flags && expe.data.flags.d) {
+        content += '<span style="opacity:0.5">' + window._translate('EXPEDITION_RETURN_LATE') + '</span>';
+      }
+      // Fleet
+      else if (expe.data.flags && expe.data.flags.f) {
+        var fleetResources = _getFleetResources(expe.data.result);
         ['metal', 'crystal', 'deuterium'].forEach(function (res) {
           content += '<div style="display:inline-block; width: 120px; overflow: visible; white-space: nowrap;">';
           content +=
@@ -116,24 +196,22 @@ window._addTabExpeditions = function _addTabExpeditions() {
             '" style="height:28px; margin-right: 8px; vertical-align: -9px" /> ';
           content +=
             '<span style="color:' +
-            (expe.resources[res] ? 'white' : '#555') +
+            (fleetResources[res] ? 'white' : '#555') +
             '">' +
-            window._num(expe.resources[res]) +
+            window._num(fleetResources[res] || 0) +
             '</span>';
           content += '</div>';
+          expe.resources[res] += fleetResources[res] || 0;
         });
-
-        // ships
-        if (!expe.data.metal && !expe.data.crystal && !expe.data.deuterium) {
-          var tooltip = '<div id="tooltip-expe-' + expe.index + '" style="display:none">';
+        var tooltip = '<div id="tooltip-expe-' + expe.index + '" style="display:none">';
           var nShips = 0;
-          for (var key in expe.data) {
+          for (var key in expe.data.result) {
             if (uipp_images.ships[key]) {
               tooltip += '<div style="white-space: nowrap; min-width: 120px; line-height: 40px; font-size: 13px;">';
               tooltip +=
                 '<img src="' + uipp_images.ships[key] + '" style="height: 40px; margin-right: 8px; float: left" />';
-              tooltip += expe.data[key];
-              nShips += expe.data[key];
+              tooltip += expe.data.result[key];
+              nShips += expe.data.result[key];
               tooltip += '</div>';
             }
           }
@@ -149,12 +227,39 @@ window._addTabExpeditions = function _addTabExpeditions() {
             '" style="transform:rotate(180deg); margin-left: 8px; vertical-align: -4px"/>';
           content += '</div>';
           content += tooltip;
-        }
-
-        if (expe.data.debris) {
+      }
+      // Resources
+      else if (expe.data.flags && expe.data.flags.r) {
+        ['metal', 'crystal', 'deuterium'].forEach(function (res) {
+          content += '<div style="display:inline-block; width: 120px; overflow: visible; white-space: nowrap;">';
           content +=
-            '<figure class="planetIcon tf tooltip js_hideTipOnMobile tpd-hideOnClickOutside" style="float: right; margin-top: 6px; margin-right: 5px;"></figure>';
-        }
+            '<img src="' +
+            uipp_images.resources[res] +
+            '" style="height:28px; margin-right: 8px; vertical-align: -9px" /> ';
+          content +=
+            '<span style="color:' +
+            (expe.data.result[res] ? 'white' : '#555') +
+            '">' +
+            window._num(expe.data.result[res] || 0) +
+            '</span>';
+          content += '</div>';
+          expe.resources[res] += expe.data.result[res] || 0;
+        });
+      }
+      // Dark Matter
+      else if (expe.data.flags && expe.data.flags.x) {
+        content +=
+          '<img src="' + uipp_images.resources.am + '" style="height:28px; margin-right: 8px; vertical-align: -9px" />';
+        content += window._num(expe.data.result.AM);
+      }
+      // Else... display text
+      else if (expe.data.text) {
+        content += '<p>' + expe.data.text + '</p>';
+      }
+      // Should never happen
+      else {
+        content += 'Unknown expedition result (could not parse message)';
+        console.log('Unknown expedition result', expe);
       }
 
       var worth = uipp_getResourcesWorth();
@@ -163,11 +268,15 @@ window._addTabExpeditions = function _addTabExpeditions() {
         worth.crystal * expe.resources.crystal +
         worth.deuterium * expe.resources.deuterium;
 
+      // add a separator if >10min between 2 actions
+      var separator = false;
+      if (pastExpe[i - 1] && pastExpe[i - 1].timestamp - 36e5/6 > expe.timestamp) separator = true;
+
       tbody += [
-        '<tr class="expe-row" id="expe-' +
+        '<tr class="expe-row' + (separator ? ' separator' : '') + '" id="expe-' +
           i +
           '" style="cursor:pointer; ' +
-          (i > displayedExpe ? 'display:none' : '') +
+          (i > displayedExpe ? 'display:none;' : '') +
           '" onclick="uipp_toggleExpeSelection(' +
           i +
           ')">',
@@ -175,7 +284,10 @@ window._addTabExpeditions = function _addTabExpeditions() {
         _date(expe.timestamp),
         '</td>',
         '<td>',
+        '<span class="tooltip uipp-expe-overuse overuse-' + (expe.data.flags ? (expe.data.flags.o || 'x') : 'x') + '" title="' + window._translate('EXPEDITION_OVERUSE_' + (expe.data.flags ? (expe.data.flags.o || 'x') : 'x').toUpperCase()) + '">&nbsp;</span>',
         expe.coords,
+        '<br>',
+        '<span class="tooltip uipp-expe-size size-' + (expe.data.flags ? (expe.data.flags.s || 'x') : 'x') + '" title="' + window._translate('EXPEDITION_SIZE_' + (expe.data.flags ? (expe.data.flags.s || 'x') : 'x').toUpperCase()) + '">' + (expe.data.flags ? (expe.data.flags.s || '').toUpperCase() : '') + '</span>',
         '</td>',
         '<td style="text-align:left" data-value="' + expeWorth + '">',
         content,
@@ -194,6 +306,9 @@ window._addTabExpeditions = function _addTabExpeditions() {
           $(this).css('display', 'table-row');
         }
       });
+      if (displayedExpe >= pastExpe.length) {
+        $('#show-more-expe').css('display', 'none');
+      }
     };
 
     var selection = {};
@@ -258,11 +373,11 @@ window._addTabExpeditions = function _addTabExpeditions() {
         var type = null;
         if (e.data.debris) {
           type = 'debris';
-        } else if (e.data.metal || e.data.crystal || e.data.deuterium) {
+        } else if (e.data.flags.r) {
           type = 'res';
-        } else if (e.data.item || e.data.AM) {
-        } else {
+        } else if (e.data.flags.f) {
           type = 'ship';
+        } else {
         }
 
         var keep = false;
@@ -335,10 +450,10 @@ window._addTabExpeditions = function _addTabExpeditions() {
     // Add list
     $tablewrapper.append($table);
 
-    if (pastExpe.length > displayedExpe) {
+    if (pastExpe.length >= displayedExpe) {
       $tablewrapper.append(
         [
-          '<div style="text-align:center;padding:10px 0 30px">',
+          '<div id="show-more-expe" style="text-align:center;padding:10px 0 30px">',
           '<span style="cursor:pointer;" onclick="uipp_showMoreExpe()">',
           '--- + ---',
           '</span>',
@@ -361,11 +476,8 @@ function _date(timestamp) {
   //return new Date(Number(timestamp)).toISOString().split('T').join(' ').replace('.000Z', '');
 }
 
-function _getExpeditionResources(data) {
+function _getFleetResources(data) {
   var resources = { metal: 0, crystal: 0, deuterium: 0 };
-  if (data.metal) resources.metal += data.metal;
-  if (data.crystal) resources.crystal += data.crystal;
-  if (data.deuterium) resources.deuterium += data.deuterium;
   var shipValues = {
     202: { metal: 2000, crystal: 2000, deuterium: 0 },
     203: { metal: 6000, crystal: 6000, deuterium: 0 },

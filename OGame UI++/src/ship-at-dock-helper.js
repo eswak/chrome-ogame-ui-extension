@@ -130,7 +130,7 @@ function _addPlanetListHelpers() {
             img +
             '" class="tooltipHTML" title="' +
             tooltip +
-            '" style="position: absolute; top: 3px; left: 3px; height: 18px; width: 18px;"/>',
+            '" style="position: absolute; top: 3px; left: 22px; height: 18px; width: 18px;"/>',
           '</a>'
         ].join('')
       );

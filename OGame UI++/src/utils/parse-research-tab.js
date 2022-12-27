@@ -4,6 +4,9 @@ window._parseResearchTab = function _parseResearchTab() {
   if (document.location.href.indexOf('research') === -1) {
     return;
   }
+  if (document.location.href.indexOf('lfresearch') !== -1) {
+    return;
+  }
 
   window.config.combustionDrive = Number($('.combustionDriveTechnology.small .level').text().match(/\d+/g)[0]);
   window.config.impulseDrive = Number($('.impulseDriveTechnology.small .level').text().match(/\d+/g)[0]);

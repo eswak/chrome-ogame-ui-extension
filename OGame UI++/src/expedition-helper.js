@@ -51,7 +51,7 @@ window._addExpeditionHelperInterval = function _addExpeditionHelperInterval() {
               maxExpeditionPoints +
               '</span>',
             '&nbsp<span id="uipp-current-expedition-points-percent">(0%)</span>',
-            '<img src="' + uipp_images.expedition + '" style="height:26px; vertical-align: -8px; margin-left: 5px;"/>',
+            '<img src="' + uipp_images.expeditionMission + '" style="height:26px; vertical-align: -8px; margin-left: 5px;"/>',
             '</div>'
           ].join('')
         );
@@ -96,20 +96,22 @@ window._addExpeditionHelperInterval = function _addExpeditionHelperInterval() {
       window.uipp_autoFillExpedition = function () {
         var nExplorers = Number($('.explorer .amount').attr('data-value'));
         if (nExplorers > 0) {
-          $('input[name=explorer]').val(1);
-          $('input[name=explorer]').keyup();
+          $('input[name=explorer]').val(1).keyup();
         }
         var nReapers = Number($('.reaper .amount').attr('data-value'));
         if (nReapers > 0) {
-          $('input[name=reaper]').val(1);
-          $('input[name=reaper]').keyup();
+          $('input[name=reaper]').val(1).keyup();
         }
         var nProbe = Number($('.espionageProbe .amount').attr('data-value'));
         if (nProbe > 0) {
-          $('input[name=espionageProbe]').val(1);
-          $('input[name=espionageProbe]').keyup();
+          $('input[name=espionageProbe]').val(1).keyup();
         }
         var maxBigTransport = Math.ceil(maxExpeditionPoints / shipPoints.transporterLarge);
+        var maxSmallMetalDiscovery = 50 * maxExpeditionPoints * config.universe.speed * (nExplorers > 0 ? 2 : 1) * ($('.characterclass.small.explorer').length ? 1.5 : 1);
+        var maxBigTransportForSmallMetalDiscovery = Math.ceil(maxSmallMetalDiscovery / ((1 + (config.hyperspaceTech || 0) * 0.05) * 25000));
+        if (maxBigTransportForSmallMetalDiscovery > maxBigTransport) {
+          maxBigTransport = maxBigTransportForSmallMetalDiscovery;
+        }
         if (nExplorers > 0) {
           maxBigTransport -= 2; // remove 2 cargo because expedition points are given by explorer
         }
@@ -120,8 +122,13 @@ window._addExpeditionHelperInterval = function _addExpeditionHelperInterval() {
         var ownedBigTransport = Number($('.transporterLarge .amount').attr('data-value'));
 
         var nBigTransport = Math.min(maxBigTransport, ownedBigTransport);
-        $('input[name=transporterLarge]').val(nBigTransport);
-        $('input[name=transporterLarge]').keyup();
+        $('input[name=transporterLarge]').val(nBigTransport).keyup();
+
+        // select position 16
+        $('input#position').val('16').keyup();
+
+        // select expedition mission
+        $('#missionButton15').click()
       };
     }
   }, 100);

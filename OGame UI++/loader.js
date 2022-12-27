@@ -7,7 +7,7 @@ var uipp_images = {
   stay: chrome.runtime.getURL('img/mission-stay.jpg'),
   ship: chrome.runtime.getURL('img/mission-ship.jpg'),
   datetime: chrome.runtime.getURL('img/datetime.png'),
-  expedition: chrome.runtime.getURL('img/expedition.png'),
+  expeditionMission: chrome.runtime.getURL('img/expedition.png'),
   yield: chrome.runtime.getURL('img/yield.png'),
   item: chrome.runtime.getURL('img/item.png'),
   metal: chrome.runtime.getURL('img/mine-metal.png'),
@@ -15,6 +15,12 @@ var uipp_images = {
   deuterium: chrome.runtime.getURL('img/mine-deuterium.png'),
   astrophysics: chrome.runtime.getURL('img/tech-astro.png'),
   plasma: chrome.runtime.getURL('img/tech-plasma.png'),
+  expedition: {
+    aliens: chrome.runtime.getURL('img/expedition/aliens.png'),
+    pirates: chrome.runtime.getURL('img/expedition/pirates.png'),
+    merchant: chrome.runtime.getURL('img/expedition/merchant.png'),
+    blackhole: chrome.runtime.getURL('img/expedition/blackhole.png'),
+  },
   box: {
     boxTopLeft: chrome.runtime.getURL('img/box/box-top-left.png'),
     boxTopRight: chrome.runtime.getURL('img/box/box-top-right.png'),

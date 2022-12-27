@@ -106,7 +106,10 @@ window.uipp_getProduction = function uipp_getProduction(type, level, averageTemp
     multiplier += 0.02;
   }
 
-  averageTemp = averageTemp || 30;
+  // for unspecified temperature, take an arbitrary temperature of 30° average
+  if (averageTemp !== 0 && !averageTemp) {
+    averageTemp = 30;
+  }
 
   switch (type) {
     case 'metal':
