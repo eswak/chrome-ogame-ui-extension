@@ -5,7 +5,7 @@
     <style>
       body {
         width: 375px;
-        height: 500px;
+        max-height: 500px;
         padding: 1em;
         background: #00111b;
         color: #AB7AFF;
@@ -20,8 +20,94 @@
         font-weight: bold;
         line-height: 32px;
       }
-      .content {
-        padding-top: 1em;
+      #content {
+        padding: 1em 0;
+      }
+      select {
+        width: 100%;
+        padding: 5px;
+        background: #333;
+        color: white;
+        border: 1px solid #555;
+        border-radius: 3px;
+      }
+      select:focus-visible {
+        outline: none;
+      }
+      h3 {
+        font-size: 18px;
+        margin: 15px 0 0;
+      }
+      #exchangerate img {
+        height: 32px;
+        vertical-align: bottom;
+      }
+      #exchangerate input {
+        height: 26px;
+        width: 50px;
+        border: 1px solid black;
+        background: #aaa;
+        font-weight: bold;
+        padding: 2px 5px;
+        text-align: center;
+        font-size: 20px;
+      }
+      .pending-notification {
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #AB7AFF;
+        cursor: pointer;
+        user-select: none;
+      }
+      .pending-notification img {
+        float: left;
+        height: 32px;
+        margin-right: 10px;
+      }
+      .pending-notification .date {
+        color: white;
+      }
+      .pending-notification .message {
+        display: block;
+        color: #bbb;
+      }
+      .feature {
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #AB7AFF;
+        cursor: pointer;
+        user-select: none;
+        min-height: 75px;
+      }
+      .feature .feature-status::before {
+        float: right;
+        padding: 1px 5px;
+        border-radius: 3px;
+        background: #D32F2F;
+        color: white;
+        display: inline-block;
+        content: 'OFF';
+      }
+      .feature .feature-status.on::before {
+        background: #388E3C;
+        color: white;
+        content: 'ON';
+      }
+      .feature img {
+        float: left;
+        height: 75px;
+        margin-right: 10px;
+      }
+      .feature .feature-name {
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+      }
+      .feature .feature-description {
+        display: block;
+        color: #bbb;
       }
     </style>
   </head>
@@ -29,8 +115,8 @@
     <div class="title">
       <img src="metalmine.32.jpeg"/> OGame UI++
     </div>
-    <div class="content">
-      Thanks for using :-)
+    <div id="content">
+      <center>Loading data...</center>
     </div>
     <script src="popup.js" type="text/javascript"></script>
   </body>

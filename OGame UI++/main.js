@@ -78,6 +78,7 @@ var userscript = function () {
       alliance: true,
       charts: true,
       deploytransport: true,
+      reminders: true,
       expeditionpoints: true,
       expeditiontab: true,
       competitiontab: true,
@@ -127,9 +128,6 @@ var userscript = function () {
       window._addCompetitionTab();
     }
 
-    window._addTabSettings();
-    window._addLinkTabs();
-
     // Add static helpers
     window._addInprogParser();
 
@@ -171,6 +169,10 @@ var userscript = function () {
 
     if (features.expeditionpoints) {
       window._addExpeditionHelperInterval();
+    }
+
+    if (features.reminders) {
+      window._addReminderHelpers();
     }
 
     if (features.solarsat) {

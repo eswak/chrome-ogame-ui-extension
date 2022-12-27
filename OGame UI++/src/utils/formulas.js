@@ -51,6 +51,9 @@ var costsFunctions = {
   },
   deuterium: function (level) {
     return [225 * Math.pow(1.5, level), 75 * Math.pow(1.5, level), 0];
+  },
+  solarplant: function (level) {
+    return [75 * Math.pow(1.5, level), 30 * Math.pow(1.5, level), 0];
   }
 };
 

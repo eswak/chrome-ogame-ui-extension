@@ -130,9 +130,9 @@ evt.initCustomEvent("UIPPNotification", true, true, {
 document.dispatchEvent(evt);
 */
 document.addEventListener('UIPPNotification', function (evt) {
-  var when = evt.when || Date.now();
-  var title = evt.detail.title || 'OGame UI++ Notification';
-  var message = evt.detail.title || 'OGame UI++ Message';
+  var when = evt.detail.when || (Date.now() + 1);
+  var title = evt.detail.title || 'OGame UI++';
+  var message = evt.detail.message || 'Reminder to check OGame.';
   var img = evt.detail.img || 'metalmine.48.jpeg';
 
   chrome.runtime.sendMessage(chrome.runtime.id, {
@@ -141,6 +141,28 @@ document.addEventListener('UIPPNotification', function (evt) {
     options: {
       type: 'basic',
       silent: false,
+      requireInteraction: true,
+      priority: 2,
+      title: title,
+      message: message,
+      iconUrl: img
+    }
+  });
+});
+
+document.addEventListener('UIPPNotificationDelete', function (evt) {
+  var when = evt.detail.when || (Date.now() + 1);
+  var title = evt.detail.title || 'OGame UI++';
+  var message = evt.detail.message || 'Reminder to check OGame.';
+  var img = evt.detail.img || 'metalmine.48.jpeg';
+
+  chrome.runtime.sendMessage(chrome.runtime.id, {
+    type: 'notification-delete',
+    when: when,
+    options: {
+      type: 'basic',
+      silent: false,
+      requireInteraction: true,
       priority: 2,
       title: title,
       message: message,

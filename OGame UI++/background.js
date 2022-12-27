@@ -7,6 +7,9 @@ chrome.runtime.onMessage.addListener((data) => {
       when: data.when || Date.now()
     });
   }
+  if (data.type === 'notification-delete') {
+    chrome.alarms.clear(JSON.stringify(data.options));
+  }
 });
 
 chrome.alarms.onAlarm.addListener((data) => {

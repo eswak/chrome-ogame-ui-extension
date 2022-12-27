@@ -15,6 +15,7 @@
         "img/expedition/blackhole.png",
         "img/features/alliance.png",
         "img/features/charts.png",
+        "img/features/competitiontab.png",
         "img/features/deploytransport.png",
         "img/features/expeditionpoints.png",
         "img/features/expeditiontab.png",
@@ -114,6 +115,7 @@
         "src/utils/dom-events.js",
         "src/costs-helper.js",
         "src/current-planet-storage-helper.js",
+        "src/reminder-helpers.js",
         "src/expedition-helper.js",
         "src/expedition-message-parser.js",
         "src/galaxy-players-planets.js",
@@ -127,7 +129,6 @@
         "src/tab-competition.js",
         "src/tab-expeditions.js",
         "src/tab-links.js",
-        "src/tab-settings.js",
         "src/tab-stats.js",
         "src/tab-topflop.js",
         "style.js",
@@ -164,6 +165,8 @@
   "permissions": [
     "background",
     "storage",
+    "notifications",
+    "alarms",
     "unlimitedStorage",
     "scripting"
   ],

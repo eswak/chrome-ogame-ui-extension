@@ -16,7 +16,9 @@ window._addTabStats = function _addTabStats() {
     if (window.config.features.stats) {
       $wrapper.append($wrapperStats);
     }
-    $wrapper.append($wrapperProgression);
+    if (window.config.features.charts) {
+      $wrapper.append($wrapperProgression);
+    }
     if (window.config.features.nextbuilds) {
       $wrapper.append($wrapperRentability);
     }

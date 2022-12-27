@@ -19,6 +19,7 @@ window._saveConfig = function saveConfigBuffered() {
   saveConfigTimeout = setTimeout(actuallyDoSaveConfig, 100);
 }
 function actuallyDoSaveConfig() {
+  window.config.lastUpdate = Date.now();
   var configToSave = JSON.parse(JSON.stringify(window.config));
   delete configToSave['players'];
   delete configToSave['history'];
