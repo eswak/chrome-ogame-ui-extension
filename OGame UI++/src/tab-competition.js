@@ -39,11 +39,21 @@ window.uipp_displayCompetition = function () {
 
   // create series of score of all players
   var series = {};
+
+  // watch list
+  config.competition.watchList.forEach(function(playerId) {
+    series[playerId] = {
+      name: playerId,
+      data: []
+    };
+    console.log('[ADD] WatchList   ', playerId, config.players[playerId].name);
+  });
+
+  // series of players that had a similar score at player's start date
+  // series of players that have a similar score to player today
   var threshold = 1.3; // 30% near scores
   // use player id 1 because it's present in all universes
   var historyDates = Object.keys((config.history || {})['1'] || {});
-  // series of players that had a similar score at player's start date
-  // series of players that have a similar score to player today
   for (var playerId in config.players) {
     var playerFirstDayHistory = config.history[config.playerId][historyDates[0]];
     var playerLastDayHistory = config.history[config.playerId][historyDates[historyDates.length - 1]];
@@ -56,6 +66,7 @@ window.uipp_displayCompetition = function () {
       otherFirstDayHistory.g < playerFirstDayHistory.g * threshold &&
       otherFirstDayHistory.g > playerFirstDayHistory.g / threshold
     ) {
+      console.log('[ADD] SimilarStart', playerId, config.players[playerId].name);
       addPlayerHistory = true;
     }
     if (
@@ -65,6 +76,7 @@ window.uipp_displayCompetition = function () {
       otherLastDayHistory.g < playerLastDayHistory.g * threshold &&
       otherLastDayHistory.g > playerLastDayHistory.g / threshold
     ) {
+      console.log('[ADD] SimilarNow  ', playerId, config.players[playerId].name);
       addPlayerHistory = true;
     }
 
@@ -93,18 +105,14 @@ window.uipp_displayCompetition = function () {
     ].indexOf(config.players[playerId].status) !== -1;
     if (exclude) {
       delete series[playerId];
+      console.log('[DEL] Status      ', playerId, config.players[playerId].name, '->', config.players[playerId].status);
     }
   }
-  
-  // watch & exclude list
-  config.competition.watchList.forEach(function(playerId) {
-    series[playerId] = {
-      name: playerId,
-      data: []
-    };
-  });
+
+  // exclude list
   config.competition.excludeList.forEach(function(playerId) {
     delete series[playerId];
+    console.log('[DEL] BlackList   ', playerId, config.players[playerId].name);
   });
 
   // build timeseries for all series
@@ -123,6 +131,7 @@ window.uipp_displayCompetition = function () {
     } else {
       // handle deleted players
       seriesArray.splice(i, 1);
+      console.log('[DEL] Unknown     ', playerId, config.players[playerId].name);
     }
   });
 
@@ -237,7 +246,7 @@ window.uipp_displayCompetition = function () {
         historyDates.map(function(date, i) {
           return [
             '<tr>',
-            '<td style="padding:5px;border-right:1px solid #25394c">' + date + '</td>',
+            '<td style="padding:5px;border-right:1px solid #25394c;white-space:nowrap">' + date + '</td>',
             '<td style="padding:5px">' + window.uipp_scoreHumanReadable(history[date].g) + '</td>',
             '<td style="padding:5px;border-right:1px solid #25394c">' + getProgress((history[historyDates[i + 1]] || {}).g, history[date].g) + '</td>',
             '<td style="padding:5px">' + window.uipp_scoreHumanReadable(history[date].e) + '</td>',
