@@ -92,7 +92,52 @@ var uipp_images = {
   }
 };
 
-var scripts = chrome.runtime.getManifest().web_accessible_resources[1].resources;
+var scripts = [
+  'lib/chartist.min.js',
+  'lib/dom-to-image.min.js',
+  'src/utils/formatter-number.js',
+  'src/utils/formatter-time.js',
+  'src/utils/get-current-planet-coordinates.js',
+  'src/utils/get-current-planet-resources.js',
+  'src/utils/get-resources-in-flight.js',
+  'src/utils/get-resources-worth.js',
+  'src/utils/gf-number-to-js-number.js',
+  'src/utils/gf-time-to-timestamp.js',
+  'src/utils/history-utils.js',
+  'src/utils/i18n.js',
+  'src/utils/inprog-parser.js',
+  'src/utils/load-universe-api.js',
+  'src/utils/persistent-config.js',
+  'src/utils/refresh-universe-data.js',
+  'src/utils/rentability-time.js',
+  'src/utils/set-config-my-planets.js',
+  'src/utils/set-config-trade-rate.js',
+  'src/utils/parse-research-tab.js',
+  'src/utils/upload-image.js',
+  'src/utils/xml2json.js',
+  'src/utils/formulas.js',
+  'src/utils/on-menu-click.js',
+  'src/utils/dom-events.js',
+  'src/costs-helper.js',
+  'src/current-planet-storage-helper.js',
+  'src/reminder-helpers.js',
+  'src/expedition-helper.js',
+  'src/expedition-message-parser.js',
+  'src/galaxy-players-planets.js',
+  'src/galaxy-debris.js',
+  'src/planet-fleet-shortcuts.js',
+  'src/ship-at-dock-helper.js',
+  'src/ship-helper.js',
+  'src/ship-resources-helper.js',
+  'src/solarsat-helper.js',
+  'src/tab-alliance.js',
+  'src/tab-competition.js',
+  'src/tab-expeditions.js',
+  'src/tab-links.js',
+  'src/tab-stats.js',
+  'src/tab-topflop.js',
+  'main.js'
+];
 Promise.all(
   scripts.map(function (scriptPath) {
     return new Promise(function (resolve) {
@@ -122,7 +167,7 @@ Promise.all(
 /*
 // Send an event:
 var evt = document.createEvent('CustomEvent');
-evt.initCustomEvent("UIPPNotification", true, true, {
+evt.initCustomEvent('UIPPNotification', true, true, {
     title: 'Plasma is great',
     message: 'How great it is!',
     img: uipp_images.plasma

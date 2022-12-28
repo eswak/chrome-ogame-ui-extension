@@ -693,11 +693,17 @@ window._addTabStats = function _addTabStats() {
           $('#select-history-player').change(function() {
             var playerId = $(this).val();
             drawPlayerProgress(playerId);
-          }).focus();
+          });
+          if (!window.firstStatsDraw) {
+            $('#select-history-player').focus();
+          } else {
+            window.firstStatsDraw = false;
+          }
         });
       }; // end function drawPlayerProgress
 
       var playerId = $('[name=ogame-player-id]').attr('content');
+      window.firstStatsDraw = true;
       drawPlayerProgress(playerId);
     };
 

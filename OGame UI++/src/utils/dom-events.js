@@ -26,4 +26,6 @@ var obsConfig = {
   attributeOldValue: false,
   characterDataOldValue: false
 };
-myObserver.observe(document.body, obsConfig);
+setTimeout(function() {
+  myObserver.observe(document.body, obsConfig);
+});
