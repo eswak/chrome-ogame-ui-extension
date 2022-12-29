@@ -54,7 +54,49 @@ var costsFunctions = {
   },
   solarplant: function (level) {
     return [75 * Math.pow(1.5, level), 30 * Math.pow(1.5, level), 0];
-  }
+  },
+  lftechmech1: function (level) {
+    return [10000 * Math.pow(1.5, level) * (level + 1), 6000 * Math.pow(1.5, level) * (level + 1), 1000 * Math.pow(1.5, level) * (level + 1)];
+  },
+  lftechhuma2: function (level) {
+    return [7000 * Math.pow(1.5, level) * (level + 1), 10000 * Math.pow(1.5, level) * (level + 1), 5000 * Math.pow(1.5, level) * (level + 1)];
+  },
+  lftechrock2: function (level) {
+    return [7500 * Math.pow(1.5, level) * (level + 1), 12500 * Math.pow(1.5, level) * (level + 1), 5000 * Math.pow(1.5, level) * (level + 1)];
+  },
+  lftechkael2: function (level) {
+    return [7500 * Math.pow(1.5, level) * (level + 1), 12500 * Math.pow(1.5, level) * (level + 1), 5000 * Math.pow(1.5, level) * (level + 1)];
+  },
+  lftechrock3: function (level) {
+    return [15000 * Math.pow(1.5, level) * (level + 1), 10000 * Math.pow(1.5, level) * (level + 1), 5000 * Math.pow(1.5, level) * (level + 1)];
+  },
+  lftechrock5: function (level) {
+    return [25000 * Math.pow(1.5, level) * (level + 1), 20000 * Math.pow(1.5, level) * (level + 1), 10000 * Math.pow(1.5, level) * (level + 1)];
+  },
+  lftechmech6: function (level) {
+    return [50000 * Math.pow(1.5, level) * (level + 1), 50000 * Math.pow(1.5, level) * (level + 1), 20000 * Math.pow(1.5, level) * (level + 1)];
+  },
+  lftechrock7: function (level) {
+    return [70000 * Math.pow(1.5, level) * (level + 1), 40000 * Math.pow(1.5, level) * (level + 1), 20000 * Math.pow(1.5, level) * (level + 1)];
+  },
+  lftechhuma8: function (level) {
+    return [80000 * Math.pow(1.5, level) * (level + 1), 50000 * Math.pow(1.5, level) * (level + 1), 20000 * Math.pow(1.5, level) * (level + 1)];
+  },
+  lftechrock10: function (level) {
+    return [85000 * Math.pow(1.5, level) * (level + 1), 40000 * Math.pow(1.5, level) * (level + 1), 35000 * Math.pow(1.5, level) * (level + 1)];
+  },
+  lftechrock11: function (level) {
+    return [120000 * Math.pow(1.5, level) * (level + 1), 30000 * Math.pow(1.5, level) * (level + 1), 25000 * Math.pow(1.5, level) * (level + 1)];
+  },
+  lftechrock12: function (level) {
+    return [100000 * Math.pow(1.5, level) * (level + 1), 40000 * Math.pow(1.5, level) * (level + 1), 30000 * Math.pow(1.5, level) * (level + 1)];
+  },
+  lftechkael12: function (level) {
+    return [100000 * Math.pow(1.5, level) * (level + 1), 40000 * Math.pow(1.5, level) * (level + 1), 30000 * Math.pow(1.5, level) * (level + 1)];
+  },
+  lftechmech13: function (level) {
+    return [200000 * Math.pow(1.5, level) * (level + 1), 100000 * Math.pow(1.5, level) * (level + 1), 100000 * Math.pow(1.5, level) * (level + 1)];
+  },
 };
 
 function uipp_getCost(type, level) {

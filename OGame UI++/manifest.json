@@ -2,6 +2,7 @@
   "web_accessible_resources": [
     {
       "resources": [
+        "img/*.gif",
         "img/*.jpg",
         "img/*.png"
       ],
@@ -34,12 +35,12 @@
     "matches": [
       "*://*.ogame.gameforge.com/game/*"
     ],
-    "run_at": "document_start"
+    "run_at": "document_idle"
   } ],
   "background" : {
     "service_worker" : "background.js"
   },
-  "version": "4.0.1",
+  "version": "4.0.3",
   "name": "__MSG_appName__",
   "description": "__MSG_appDesc__",
   "default_locale": "en",

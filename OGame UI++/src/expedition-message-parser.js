@@ -57,6 +57,29 @@ window._addExpeditionMessageParserInterval = function _addExpeditionMessageParse
 window.uipp_parseExpeditionMessage = function($el) {
   var text = $el.find('.msg_content').text().replace(/\./g, '');
 
+  var ret = {
+    flags: {
+      o: null, // overused flag ['n', 'l', 'm', 'h']
+      s: null, // size flag ['s', 'm', 'l']
+      n: 0, // nothing flag 0/1
+      l: 0, // loss flag 0/1
+      p: 0, // pirate flag 0/1
+      a: 0, // alien flag 0/1
+      t: 0, // trader flag 0/1
+      i: 0, // item flag 0/1
+      e: 0, // early flag 0/1
+      d: 0, // delay flag 0/1
+      f: 0, // fleet flag 0/1
+      r: 0, // resource flag 0/1
+      x: 0  // dark matter flag 0/1
+    },
+    result: {
+      // can contain keys: 'item', 'metal', 'crystal', 'deuterium', 'AM', and ship numbers e.g. '203'
+      // where value is the amount of the resource/ship found.
+    },
+    text: $el.find('.msg_content').html()
+  };
+
   // debris fields
   if ($el.find('figure.planetIcon').length) {
     var debris = text
@@ -64,18 +87,18 @@ window.uipp_parseExpeditionMessage = function($el) {
       .match(/[0-9]+/g)
       .map(Number);
     if (debris[0] > 0) {
-      expeditionContent.debris = expeditionContent.debris || {
+      ret.debris = ret.debris || {
         metal: 0,
         crystal: 0
       };
-      expeditionContent.debris.metal += debris[0];
+      ret.debris.metal += debris[0];
     }
     if (debris[1] > 0) {
-      expeditionContent.debris = expeditionContent.debris || {
+      ret.debris = ret.debris || {
         metal: 0,
         crystal: 0
       };
-      expeditionContent.debris.crystal += debris[1];
+      ret.debris.crystal += debris[1];
     }
   }
 
@@ -379,28 +402,6 @@ window.uipp_parseExpeditionMessage = function($el) {
     }
   };
 
-  var ret = {
-    flags: {
-      o: null, // overused flag ['n', 'l', 'm', 'h']
-      s: null, // size flag ['s', 'm', 'l']
-      n: 0, // nothing flag 0/1
-      l: 0, // loss flag 0/1
-      p: 0, // pirate flag 0/1
-      a: 0, // alien flag 0/1
-      t: 0, // trader flag 0/1
-      i: 0, // item flag 0/1
-      e: 0, // early flag 0/1
-      d: 0, // delay flag 0/1
-      f: 0, // fleet flag 0/1
-      r: 0, // resource flag 0/1
-      x: 0  // dark matter flag 0/1
-    },
-    result: {
-      // can contain keys: 'item', 'metal', 'crystal', 'deuterium', 'AM', and ship numbers e.g. '203'
-      // where value is the amount of the resource/ship found.
-    },
-    text: $el.find('.msg_content').html()
-  };
   strings = strings[config.universe.language];
   if (!strings) {
     return ret;

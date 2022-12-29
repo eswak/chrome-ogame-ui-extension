@@ -347,7 +347,7 @@ var translations = {
 };
 
 window._translate = function _translate(key, args) {
-  var lang = window.config.language || window.constants.language || 'en';
+  var lang = (window.config || {}).language || (window.constants || {}).language || 'en';
   if (!translations[lang]) {
     lang = 'en';
   }

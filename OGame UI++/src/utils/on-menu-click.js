@@ -67,6 +67,7 @@ function _getContentWrapper() {
       '#overviewcomponent',
       '#suppliescomponent',
       '#lfbuildingscomponent', // lifeforms
+      '#lfresearchcomponent', // lifeforms
       '#facilitiescomponent',
       '#inhalt', // merchant, officers, shop
       '#researchcomponent',

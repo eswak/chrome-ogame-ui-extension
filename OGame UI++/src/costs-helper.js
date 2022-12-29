@@ -144,6 +144,7 @@ window._addCostsHelperInterval = function _addCostsHelperInterval() {
 
     var currentPlanetCoordinatesStr = '[' + window._getCurrentPlanetCoordinates().join(':') + ']';
     var planet = window.config.my.planets[currentPlanetCoordinatesStr];
+    var appendedContent = false;
 
     // if we are viewing a metal mine, computes rentability time
     if ($('.building.metalMine:not(.enhanced)').length > 0) {
@@ -156,6 +157,7 @@ window._addCostsHelperInterval = function _addCostsHelperInterval() {
           '</li>'
       );
       $('.building.metalMine').addClass('enhanced');
+      appendedContent = true;
     }
 
     // if we are viewing a crystal mine, computes rentability time
@@ -169,6 +171,7 @@ window._addCostsHelperInterval = function _addCostsHelperInterval() {
           '</li>'
       );
       $('.building.crystalMine').addClass('enhanced');
+      appendedContent = true;
     }
 
     // if we are viewing a deuterium mine, computes rentability time
@@ -184,6 +187,7 @@ window._addCostsHelperInterval = function _addCostsHelperInterval() {
           '</li>'
       );
       $('.building.deuteriumSynthesizer').addClass('enhanced');
+      appendedContent = true;
     }
 
     // if we are viewing a plasma technology, computes rentability time
@@ -199,10 +203,50 @@ window._addCostsHelperInterval = function _addCostsHelperInterval() {
           '</li>'
       );
       $('.building.plasmaTechnology').addClass('enhanced');
+      appendedContent = true;
+    }
+
+    // if we are viewing a lifeform tech that boosts production, computes rentability time
+    else {
+      var lftech = {
+        'lftechmech1': 'lifeformTech13201',
+        'lftechhuma2': 'lifeformTech11202',
+        'lftechrock2': 'lifeformTech12202',
+        'lftechkael2': 'lifeformTech14202',
+        'lftechrock3': 'lifeformTech12203',
+        'lftechrock5': 'lifeformTech12205',
+        'lftechmech6': 'lifeformTech13206',
+        'lftechrock7': 'lifeformTech12207',
+        'lftechhuma8': 'lifeformTech11208',
+        'lftechrock10': 'lifeformTech12210',
+        'lftechrock11': 'lifeformTech12211',
+        'lftechrock12': 'lifeformTech12212',
+        'lftechkael12': 'lifeformTech14212',
+        'lftechmech13': 'lifeformTech13213',
+      };
+      for (var key in lftech) {
+        if ($('#technologydetails .' + lftech[key] + ':not(.enhanced)').length > 0) {
+          var technologyLevel = Number($('#technologydetails_content span.level').text().trim().split(' ').pop()) || 0;
+          var rentabilityTime = window._getRentabilityTime(key, null, technologyLevel);
+          $('.content .information > ul').append(
+            '<li class="enhancement">' +
+              window._translate('ROI', {
+                time: window._time(rentabilityTime),
+                tradeRate: tradeRateStr
+              }) +
+              '</li>'
+          );
+          $('#technologydetails .' + lftech[key]).addClass('enhanced');
+          appendedContent = true;
+        }
+      }
     }
 
     // vanilla CSS fixes to allow display of additional info
-    $('.content .information > ul').css('width', 'auto');
-    $('.content .information .narrow li').css('margin-bottom', '6px');
+    if (appendedContent) {
+      $('.content .information > ul').css('width', 'auto');
+      $('.content .information .narrow li').css('margin-bottom', '6px');
+      $('.information li:not(.resource)').css('margin-bottom', '4px'); // reduce margin to fit a 4th line
+    }
   }
 };
