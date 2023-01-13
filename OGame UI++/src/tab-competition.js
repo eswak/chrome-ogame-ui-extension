@@ -1,4 +1,7 @@
 'use strict';
+
+var allianceId = $('[name=ogame-alliance-id]').attr('content');
+
 window._addCompetitionTab = function _addCompetitionTab() {
   var $competitionsEntry = $(
     '<li class="competition enhanced"><span class="menu_icon"><div class="menuImage rewarding"></div></span><a class="menubutton" href="#" accesskey="" target="_self"><span class="textlabel enhancement">' +
@@ -16,12 +19,19 @@ window._addCompetitionTab = function _addCompetitionTab() {
   if (config.competition.watchSimilarStart === undefined) {
     config.competition.watchSimilarStart = true;
   } else {
-    config.competition.watchSimilarStart = false;
+    config.competition.watchSimilarStart = config.competition.watchSimilarStart || false;
   }
   if (config.competition.watchSimilarNow === undefined) {
     config.competition.watchSimilarNow = true;
   } else {
-    config.competition.watchSimilarNow = false;
+    config.competition.watchSimilarNow = config.competition.watchSimilarNow || false;
+  }
+  if (allianceId) {
+    if (config.competition.watchAlliance === undefined) {
+      config.competition.watchAlliance = true;
+    } else {
+      config.competition.watchAlliance = config.competition.watchAlliance || false;
+    }
   }
 
   $competitionsEntry.click(function () {
@@ -63,6 +73,7 @@ window.uipp_displayCompetition = function () {
     if (
       config.competition.watchSimilarStart &&
       otherFirstDayHistory &&
+      playerFirstDayHistory && 
       otherFirstDayHistory.g < playerFirstDayHistory.g * threshold &&
       otherFirstDayHistory.g > playerFirstDayHistory.g / threshold
     ) {
@@ -72,11 +83,19 @@ window.uipp_displayCompetition = function () {
     if (
       config.competition.watchSimilarNow &&
       otherLastDayHistory &&
+      playerLastDayHistory && 
       otherLastDayHistory.g != 0 && // no players that deleted account
       otherLastDayHistory.g < playerLastDayHistory.g * threshold &&
       otherLastDayHistory.g > playerLastDayHistory.g / threshold
     ) {
       console.log('[ADD] SimilarNow  ', playerId, config.players[playerId].name);
+      addPlayerHistory = true;
+    }
+    if (
+      config.competition.watchAlliance &&
+      config.players[playerId].alliance == allianceId
+    ) {
+      console.log('[ADD] Alliance    ', playerId, config.players[playerId].name);
       addPlayerHistory = true;
     }
 
@@ -103,7 +122,7 @@ window.uipp_displayCompetition = function () {
       'ib',
       'Ib'
     ].indexOf(config.players[playerId].status) !== -1;
-    if (exclude) {
+    if (exclude && config.competition.watchList.indexOf(playerId) == -1) {
       delete series[playerId];
       console.log('[DEL] Status      ', playerId, config.players[playerId].name, '->', config.players[playerId].status);
     }
@@ -141,10 +160,12 @@ window.uipp_displayCompetition = function () {
     data: []
   });
   historyDates.forEach(function(date) {
-    seriesArray[seriesArray.length - 1].data.push({
-      x: config.history[config.playerId][date].t,
-      y: config.history[config.playerId][date].g
-    });
+    if (config.history[config.playerId][date]) {
+      seriesArray[seriesArray.length - 1].data.push({
+        x: config.history[config.playerId][date].t,
+        y: config.history[config.playerId][date].g
+      });
+    }
   });
 
   // draw chart
@@ -304,6 +325,7 @@ window.uipp_displayCompetition = function () {
 window.onUippSettingsChanged = function(el) {
   if (el.id == 'cb-watchsimilarstart') window.config.competition.watchSimilarStart = el.checked || false;
   if (el.id == 'cb-watchsimilarnow') window.config.competition.watchSimilarNow = el.checked || false;
+  if (el.id == 'cb-watchalliance') window.config.competition.watchAlliance = el.checked || false;
   if (el.id.indexOf('untrack-player-') == 0) {
     var playerId = el.id.replace('untrack-player-', '');
     var index = config.competition.watchList.indexOf(playerId);
@@ -329,8 +351,15 @@ window.uipp_competitionSettings = function() {
   var $settingsContent = $('#competition-settings');
   var html = '';
 
+  // Checkbox: alliance players
+  if (allianceId) {
+    html += '<div style="margin-top:10px">';
+    html += '<input id="cb-watchalliance" type="checkbox" ' + (config.competition.watchAlliance ? 'checked' : '') + ' onchange="onUippSettingsChanged(this)"/>';
+    html += '<label for="cb-watchalliance">' + window._translate('COMPETITION_SETTING_ALLIANCE') + '</div>';
+    html += '</div>';
+  }
   // Checkbox: players with similar start
-  html += '<div>';
+  html += '<div style="margin-top:10px">';
   html += '<input id="cb-watchsimilarstart" type="checkbox" ' + (config.competition.watchSimilarStart ? 'checked' : '') + ' onchange="onUippSettingsChanged(this)"/>';
   html += '<label for="cb-watchsimilarstart">' + window._translate('COMPETITION_SETTING_SIMILAR_START') + '</div>';
   html += '</div>';

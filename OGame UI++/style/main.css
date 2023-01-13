@@ -78,15 +78,6 @@ left: -150%; width: 400%; font-size: 1.1em; padding-bottom: 1px;
 .uipp-filterbar {
   padding: 5px 0;
 }
-.uipp-score {
-  height: 17px; width: 50px; display: inline-block; vertical-align: -3px;
-}
-.uipp-score-bar {
-  background: #694d98; display: inline-block; border-right: 1px solid black;
-}
-#highscoreContent .navButton.uipp-score {
-  display: inline-block; transform: scale(0.5); margin: -18px; float: none;
-}
 .uiEnhancementWindow .halfsection {
   float: left; width: calc(50% - 18px); padding: 5px; margin: 3px; border: 1px dotted #555;
   border-radius: 4px; font-size: 10px

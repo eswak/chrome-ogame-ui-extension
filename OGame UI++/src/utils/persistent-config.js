@@ -37,21 +37,28 @@ window._saveHistory = function _savePlayers() {
 };
 
 // Get config as a consolidated object containing players & history
-window._getConfigAsync = function getConfigAsync(cb) {
-  getDataAsync([
-    configKey,
-    configKey + ':players',
-    configKey + ':history'
-  ], function(data) {
+window._getConfigAsync = function getConfigAsync(cbConfig, cbPlayers, cbHistory) {
+  getDataAsync([configKey], function(data) {
     var config = data[configKey] || {};
-    config.players = data[configKey + ':players'] || {};
-    config.history = data[configKey + ':history'] || {};
     config.universe = config.universe || {};
     config.labels = config.labels || {};
     config.lastPlayersUpdate = config.lastPlayersUpdate || 0;
     config.lastUpdate = config.lastUpdate || 0;
     config.inprog = config.inprog || 0;
-    cb(config);
+    config.playerId = $('[name=ogame-player-id]').attr('content');
+    cbConfig && cbConfig(config);
+
+    // get players
+    getDataAsync([configKey + ':players'], function(data) {
+      var players = data[configKey + ':players'] || {};
+      cbPlayers && cbPlayers(players);
+
+      // get history
+      getDataAsync([configKey + ':history'], function(data) {
+        var history = data[configKey + ':history'] || {};
+        cbHistory && cbHistory(history);
+      });
+    });
   });
 };
 

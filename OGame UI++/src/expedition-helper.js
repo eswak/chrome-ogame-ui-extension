@@ -7,10 +7,14 @@ window._addExpeditionHelperInterval = function _addExpeditionHelperInterval() {
       $el.addClass('enhanced-expedition');
 
       var topScore = 0;
-      for (var playerId in config.players) {
-        var player = config.players[playerId];
-        if (player.globalPosition === '1') {
-          topScore = Number(player.globalScore);
+      if (config.universe.topScore) {
+        topScore = Number(config.universe.topScore);
+      } else if (config.players) {
+        for (var playerId in config.players) {
+          var player = config.players[playerId];
+          if (player.globalPosition === '1') {
+            topScore = Number(player.globalScore);
+          }
         }
       }
 
@@ -46,7 +50,7 @@ window._addExpeditionHelperInterval = function _addExpeditionHelperInterval() {
         .find('#technologies')
         .append(
           [
-            '<div style="position: absolute;bottom: 3px;right: 17px; cursor:pointer" onclick="uipp_autoFillExpedition()">',
+            '<div style="position: absolute;bottom: 3px;right: 17px; cursor:pointer" onclick="uipp_autoFillExpedition()" onmousedown="uipp_sendExpedition(event)" oncontextmenu="uipp_autoFillMilitaryExpedition(event)" class="tooltip tooltipHTML" title="' + getTooltip() + '">',
             '<span class="enhancement"><span id="uipp-current-expedition-points"></span> / ' +
               maxExpeditionPoints +
               '</span>',
@@ -55,6 +59,24 @@ window._addExpeditionHelperInterval = function _addExpeditionHelperInterval() {
             '</div>'
           ].join('')
         );
+
+      function getTooltip() {
+        var ret = 'Optimal expedition fleet :|';
+        ret += '<div style=&quot;width:200px&quot;>';
+
+        var nExplorers = Number($('.explorer .amount').attr('data-value'));
+        var maxSmallMetalDiscovery = 50 * maxExpeditionPoints * config.universe.speed * (nExplorers > 0 ? 2 : 1) * ($('.characterclass.small.explorer').length ? 1.5 : 1);
+        ret += 'Left click to select ships with enough cargo to return the largest common metal find (' + uipp_scoreHumanReadable(maxSmallMetalDiscovery) + ') or to reach the maximum expedition points (' + maxExpeditionPoints + '), whichever is higher.';
+        ret += '<hr style=&quot;border: none; border-top: 1px solid #394959; outline: none; margin: 10px 0;&quot;>';
+        var expeSlotsUsed = $('#slots .fleft:nth-child(2)').text().match(/[0-9]+/g)[0];
+        var expeSlotsTotal = $('#slots .fleft:nth-child(2)').text().match(/[0-9]+/g)[1];
+        var fleetDivider = ((expeSlotsTotal - expeSlotsUsed) || 1);
+        ret += 'Right click to select ' + (fleetDivider == 1 ? 'all' : fleetDivider == 2 ? 'half of' : fleetDivider == 3 ? 'a third of' : ('1/' + fleetDivider + 'th of')) + ' your military and transport fleet with 1 pathfinder and 1 spy probe, to be sent on a military expedition (excludes bombers, death stars, colony ships, and recyclers).';
+        ret += '<hr style=&quot;border: none; border-top: 1px solid #394959; outline: none; margin: 10px 0;&quot;>';
+        ret += 'Middle click to directly send selected ships to your system\'s 16th position for an expedition that lasts 1h.';
+        ret += '</div>';
+        return ret;
+      }
 
       setInterval(function () {
         var currentPoints = 0;
@@ -99,8 +121,20 @@ window._addExpeditionHelperInterval = function _addExpeditionHelperInterval() {
           $('input[name=explorer]').val(1).keyup();
         }
         var nReapers = Number($('.reaper .amount').attr('data-value'));
+        var nDestroyers = Number($('.destroyer .amount').attr('data-value'));
+        var nBattlecruisers = Number($('.interceptor .amount').attr('data-value'));
+        var nBattleships = Number($('.battleship .amount').attr('data-value'));
+        var nCruisers = Number($('.cruiser .amount').attr('data-value'));
         if (nReapers > 0) {
           $('input[name=reaper]').val(1).keyup();
+        } else if (nDestroyers > 0) {
+          $('input[name=destroyer]').val(1).keyup();
+        } else if (nBattlecruisers > 0) {
+          $('input[name=interceptor]').val(1).keyup();
+        } else if (nBattleships > 0) {
+          $('input[name=battleship]').val(1).keyup();
+        } else if (nCruisers > 0) {
+          $('input[name=cruiser]').val(1).keyup();
         }
         var nProbe = Number($('.espionageProbe .amount').attr('data-value'));
         if (nProbe > 0) {
@@ -111,12 +145,6 @@ window._addExpeditionHelperInterval = function _addExpeditionHelperInterval() {
         var maxBigTransportForSmallMetalDiscovery = Math.ceil(maxSmallMetalDiscovery / ((1 + (config.hyperspaceTech || 0) * 0.05) * 25000));
         if (maxBigTransportForSmallMetalDiscovery > maxBigTransport) {
           maxBigTransport = maxBigTransportForSmallMetalDiscovery;
-        }
-        if (nExplorers > 0) {
-          maxBigTransport -= 2; // remove 2 cargo because expedition points are given by explorer
-        }
-        if (nReapers > 0) {
-          maxBigTransport -= 11; // remove 11 cargo because expedition points are given by reaper
         }
 
         var ownedBigTransport = Number($('.transporterLarge .amount').attr('data-value'));
@@ -130,6 +158,58 @@ window._addExpeditionHelperInterval = function _addExpeditionHelperInterval() {
         // select expedition mission
         $('#missionButton15').click()
       };
+
+      window.uipp_sendExpedition = function(event) {
+        if (event.which == 2) { // middle mouse click
+          $('#continueToFleet2').click();
+          setTimeout(function() {
+            $('#sendFleet').click();
+          }, 300);
+          event.preventDefault();
+          return false;
+        }
+      }
+
+      window.uipp_autoFillMilitaryExpedition = function(event) {
+        var expeSlotsUsed = $('#slots .fleft:nth-child(2)').text().match(/[0-9]+/g)[0];
+        var expeSlotsTotal = $('#slots .fleft:nth-child(2)').text().match(/[0-9]+/g)[1];
+        var fleetDivider = ((expeSlotsTotal - expeSlotsUsed) || 1);
+
+        [
+          'fighterLight',
+          'fighterHeavy',
+          'cruiser',
+          'battleship',
+          'interceptor',
+          'destroyer',
+          'reaper',
+          'explorer',
+          'transporterSmall',
+          'transporterLarge',
+          'espionageProbe',
+        ].forEach(function(shipName) {
+          var nShips = Number($('.' + shipName + ' .amount').attr('data-value'));
+          if (nShips > 0) {
+            $('input[name=' + shipName + ']').val(Math.floor(nShips / fleetDivider)).keyup();
+          }
+
+          if (shipName == 'explorer' && nShips> 0) {
+            $('input[name=' + shipName + ']').val(1).keyup();
+          }
+          if (shipName == 'espionageProbe' && nShips> 0) {
+            $('input[name=' + shipName + ']').val(1).keyup();
+          }
+        });
+
+        // select position 16
+        $('input#position').val('16').keyup();
+
+        // select expedition mission
+        $('#missionButton15').click()
+
+        event.preventDefault();
+        return false;
+      }
     }
   }, 100);
 };

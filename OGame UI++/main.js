@@ -66,10 +66,9 @@ var userscript = function () {
   'use strict';
 
   // window.config default values
-  window.config = window._getConfigAsync(function(config) {
+  window._getConfigAsync(function(config) {
     window.config = config;
-    window.config.playerId = $('[name=ogame-player-id]').attr('content');
-    window._setConfigTradeRate();
+    window.config.tradeRate = window.config.tradeRate || [2.0, 1.5, 1.0];
     window._setConfigMyPlanets();
     window._parseResearchTab();
 
@@ -107,25 +106,10 @@ var userscript = function () {
     var features = window.config.features;
 
     // Add tabs in the left menu
-    if (features.alliance) {
-      window._addTabAlliance();
-    }
-
-    if (features.stats || features.charts || features.nextbuilds) {
-      window._addTabStats();
-    }
-
-    if (features.topeco || features.topfleet || features.topgeneral || features.topresearch) {
-      window._addTabTopflop();
-    }
 
     if (features.expeditiontab) {
       window._addExpeditionMessageParserInterval();
       window._addTabExpeditions();
-    }
-
-    if (features.competitiontab) {
-      window._addCompetitionTab();
     }
 
     // Add static helpers
@@ -140,10 +124,6 @@ var userscript = function () {
     }
 
     // Add interval checkers
-    if (features.galaxy) {
-      window._addGalaxyPlayersPlanetsInterval();
-    }
-
     if (features.galaxydebris) {
       window._addGalaxyDebrisInterval();
     }
@@ -156,19 +136,8 @@ var userscript = function () {
       window._addShipHelperInterval();
     }
 
-    if (features.shipatdock) {
-      if (window.config.shipsAtDockThreshold == null) {
-        window.config.shipsAtDockThreshold = 0.1 / 100;
-      }
-      window._addShipAtDockHelper();
-    }
-
     if (features.shipresources) {
       window._addShipResourcesHelperInterval();
-    }
-
-    if (features.expeditionpoints) {
-      window._addExpeditionHelperInterval();
     }
 
     if (features.reminders) {
@@ -179,83 +148,46 @@ var userscript = function () {
       window._addSolarSatHelperInterval();
     }
 
+    if (config.features.expeditionpoints && config.universe.topScore) {
+      window._addExpeditionHelperInterval();
+    }
+  }, function(players) {
+    config.players = players;
+
+    if (config.features.expeditionpoints && !config.universe.topScore) {
+      window._addExpeditionHelperInterval();
+    }
+
+    if (config.features.shipatdock) {
+      if (window.config.shipsAtDockThreshold == null) {
+        window.config.shipsAtDockThreshold = 0.1 / 100;
+      }
+      window._addShipAtDockHelper();
+    }
+  }, function(history) {
+    config.history = history;
+
+    if (config.features.stats || config.features.charts || config.features.nextbuilds) {
+      window._addTabStats();
+    }
+
+    if (config.features.topeco || config.features.topfleet || config.features.topgeneral || config.features.topresearch) {
+      window._addTabTopflop();
+    }
+
+    if (config.features.competitiontab) {
+      window._addCompetitionTab();
+    }
+
+    if (config.features.galaxy) {
+      window._addGalaxyPlayersPlanetsInterval();
+    }
+
+    if (config.features.alliance) {
+      window._addAllianceTable();
+    }
+
     // Refresh universe data (config.players)
     window._refreshUniverseData();
-
-    if (document.location.href.indexOf('fleetdispatch') !== -1 && window.config.autoProbes) {
-      // check if fleets have returned
-      setInterval(function () {
-        var current = Number(
-          $('.event_list .undermark')
-            .text()
-            .replace(/[^0-9]*/g, '')
-        );
-        var atPageLoad = Number($('#slots .advice').first().text().split(':')[1].split('/')[0]);
-        if (current !== atPageLoad) {
-          console.log('reload');
-          document.location.href = document.location.href;
-        } else {
-          console.log('same');
-        }
-      }, 5000);
-
-      // if not enough probes, return
-      var fleets = config.fleetProbes || 5;
-      var probes = config.nProbes || 20000;
-      var nProbesPerFleet = Math.floor(probes / fleets);
-      var nProbes = Number($('.espionageProbe .amount').text().replace(/\./g, '').trim());
-      if (nProbes < nProbesPerFleet) {
-        return;
-      }
-
-      // if at max fleet, return
-      if (maxFleetCount === fleetCount) {
-        return;
-      }
-
-      var targets = [];
-      for (var key in config.players) {
-        var player = config.players[key];
-        if (
-          player.status &&
-          player.status.toLowerCase().indexOf('i') !== -1 &&
-          player.status.indexOf('v') === -1 &&
-          player.militaryScore === '0' &&
-          Number(player.economyScore) > 10000
-        ) {
-          player.planets.forEach(function (p) {
-            targets.push({ score: Number(player.economyScore), coords: p.coords });
-          });
-        }
-      }
-      targets = targets.sort(function (a, b) {
-        return a.score > b.score ? -1 : 1;
-      });
-      var index = Math.floor(Math.random() * Math.random() * targets.length);
-      var target = targets[index].coords;
-
-      $('input[name=espionageProbe]').val(nProbesPerFleet).keyup();
-      fleetDispatcher.mission = 1;
-      fleetDispatcher.targetPlanet.galaxy = target[0];
-      fleetDispatcher.targetPlanet.system = target[1];
-      fleetDispatcher.targetPlanet.position = target[2];
-      setTimeout(function () {
-        $('#continueToFleet2').click();
-      }, 10);
-      setTimeout(function () {
-        $('a#pbutton.planet').click();
-      }, 20);
-      setTimeout(function () {
-        $('#continueToFleet3').click();
-      }, 30);
-      setTimeout(function () {
-        if (fleetDispatcher.targetPlayerColorClass === 'inactive') {
-          $('#sendFleet').click();
-        }
-      }, 1000);
-      setTimeout(function () {
-        document.location.href = document.location.href;
-      }, 2000);
-    }
   });
 };

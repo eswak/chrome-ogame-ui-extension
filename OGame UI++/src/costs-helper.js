@@ -35,7 +35,7 @@ window._addCostsHelperInterval = function _addCostsHelperInterval() {
   });
 
   function _addRessourceCountHelper() {
-    resNames.forEach(function (res) {
+    [...resNames, 'energy', 'population'].forEach(function (res) {
       var $element = $('.costs .' + res + ':not(.enhanced)').first();
       if ($element.length > 0) {
         $('.costs').css('top', 'auto');

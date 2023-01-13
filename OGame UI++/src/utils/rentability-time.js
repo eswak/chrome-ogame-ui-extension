@@ -10,10 +10,10 @@ window._getRentabilityTime = function _getRentabilityTime(type, currentProd, lev
     case 'metal':
     case 'crystal':
     case 'deuterium':
-      var calculatedProduction = window.uipp_getProduction(type, level, averageTemp, 0, coords);
+      var calculatedProduction = window.uipp_getProduction(type, level, averageTemp, coords);
       var ratio = currentHourlyProd / calculatedProduction; // used for boosts, deuterium temperature, etc
-      var calculatedNextLevelproduction = window.uipp_getProduction(type, targetLevel, averageTemp, 0, coords) * ratio;
-      var calculatedCurrentLevelproduction = window.uipp_getProduction(type, targetLevel - 1, averageTemp, 0, coords) * ratio;
+      var calculatedNextLevelproduction = window.uipp_getProduction(type, targetLevel, averageTemp, coords) * ratio;
+      var calculatedCurrentLevelproduction = window.uipp_getProduction(type, targetLevel - 1, averageTemp, coords) * ratio;
       var productionDiff = calculatedNextLevelproduction - calculatedCurrentLevelproduction;
       var productionDiffWorth = productionDiff * worth[type];
       var costs = window.uipp_getCost(type, targetLevel - 1);

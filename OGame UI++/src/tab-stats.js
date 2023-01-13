@@ -86,8 +86,8 @@ window._addTabStats = function _addTabStats() {
               resource,
               planet.resources[resource].level,
               planet.averageTemp,
-              0,
-              planet.coords
+              planet.coords,
+              { plasma: true }
             ) / 3600,
             planet.resources[resource].level,
             planet.resources[resource].level + 1,
@@ -179,32 +179,40 @@ window._addTabStats = function _addTabStats() {
               ].join('');
             }
 
-            function _hasBonus(n) {
-              var estimatedProd = window.uipp_getProduction(
-                resource,
-                planet.resources[resource].level,
-                planet.averageTemp,
-                n,
-                planet.coords
-              );
-              if (Math.abs(1 - estimatedProd / 3600 / planet.resources[resource].prod) < 0.03) {
-                return true;
-              }
-              return false;
-            }
             var outline = 'none';
-            var colors = {
-              10: '#a25419',
-              20: '#a9a7b0',
-              30: '#da9f1c',
-              40: '#7e3d8e'
-            };
-            [10, 20, 30, 40].forEach(function (bonus) {
-              if (_hasBonus(bonus / 100)) {
-                tooltip += ['<br><br>', '⇧ +' + bonus + '%'].join('');
-                outline = '2px solid ' + colors[bonus];
+            var thresholds = [-1000, 0, 0.5, 5, 7.5, 10, 15, 20, 25, 30, 35, 40, 50, 60];
+            var colors = [
+              '#FF0000',
+              '#000000',
+              '#2a2929',
+              '#404040',
+              '#6c4223',
+              '#a25419',
+              '#9b7c65',
+              '#a9a7b0',
+              '#a98d4f',
+              '#da9f1c',
+              '#bf8598',
+              '#7e3d8e',
+              '#aa80b5',
+              '#ffffff'
+            ];
+            var estimatedProd = window.uipp_getProduction(
+              resource,
+              planet.resources[resource].level,
+              planet.averageTemp,
+              planet.coords,
+              { plasma: false, class: false, geologist: false, officers: false }
+            );
+            var boost = Math.floor(1000 * (planet.resources[resource].prod * 3600 / estimatedProd - 1)) / 10;
+            var tooltipAppend = '';
+            thresholds.forEach(function(threshold, i) {
+              if (boost >= threshold) {
+                tooltipAppend = ['<br><br>', boost >= 0 ? '⇧ +' : '⇓ ', boost, '%'].join('');
+                outline = '2px solid ' + colors[i];
               }
             });
+            tooltip += tooltipAppend;
 
             var moonResource = 0;
             if (planet.moon) {
@@ -593,7 +601,7 @@ window._addTabStats = function _addTabStats() {
             '<div class="clearfix">',
             '<div id="chart-history" style="width:70%;height:200px;float:left;"></div>',
             '<div id="chart-pie" style="width:30%;height:170px;float:left;margin-top:5px;position:relative;">',
-            '<span id="highscoreContent" style="font-size:11px;">',
+            '<span style="font-size:11px;">',
             '<img src="' +
               uipp_images.score.military +
               '" style="position:absolute;height:20px;top:42px;left:65px;"></span>',

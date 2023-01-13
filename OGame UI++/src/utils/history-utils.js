@@ -81,36 +81,3 @@ window._getPlayerScoreTrend = function _getPlayerScoreTrend(playerId, type, minE
     html: str
   };
 };
-
-window._getPlayerHistoryChart = function _getPlayerHistoryChart(playerId, type) {
-  var playerScores = [];
-  for (var day in window.config.history[playerId]) {
-    playerScores.push({
-      t: day,
-      v: window.config.history[playerId][day][type]
-    });
-  }
-
-  if (playerScores.length < 3) {
-    return '';
-  }
-
-  var maxScore = playerScores.reduce(function (max, score) {
-    return score.v > max ? score.v : max;
-  }, 0);
-
-  return [
-    '<div class="uipp-score">',
-    playerScores
-      .map(function (score) {
-        return [
-          '<div class="uipp-score-bar tooltip"',
-          'style="width: calc(' + 100 / playerScores.length + '% - 1px); height:' + (score.v / maxScore) * 100 + '%"',
-          'title="' + score.t + ' : ' + score.v + '"',
-          '></div>'
-        ].join('');
-      })
-      .join(''),
-    '</div>'
-  ].join('');
-};

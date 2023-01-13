@@ -3,9 +3,9 @@ window._addShipAtDockHelper = function _addShipAtDockHelper() {
   for (var key in config.my.planets) {
     if (!config.my.planets[key].shipsLastUpdate) {
       config.my.planets[key].shipsNeedUpdate = 1;
+      _saveConfig();
     }
   }
-  _saveConfig();
 
   _parseCurrentPlanetShips();
   _addPlanetListHelpers();
@@ -13,7 +13,7 @@ window._addShipAtDockHelper = function _addShipAtDockHelper() {
 };
 
 function _parseCurrentPlanetShips() {
-  if (document.location.href.indexOf('fleetdispatch') === -1) {
+  if (document.location.href.indexOf('fleetdispatch') === -1 && document.location.href.indexOf('shipyard') === -1) {
     return;
   }
 
@@ -36,6 +36,25 @@ function _parseCurrentPlanetShips() {
     210: 1
   };
 
+  var shipResources = {
+    204: [3000, 1000, 0], // lf
+    205: [6000, 4000, 0], // hf
+    206: [20000, 7000, 2000], // c
+    207: [45000, 15000, 0], // bs
+    215: [30000, 40000, 15000], // bc
+    211: [50000, 25000, 15000], // bo
+    213: [60000, 50000, 15000], // des
+    214: [5000000, 4000000, 1000000], // ds
+    218: [85000, 55000, 20000], // reaper
+    219: [8000, 15000, 8000], // pf
+
+    202: [2000, 2000, 0], // small cargo
+    203: [6000, 6000, 0], // large cargo
+    208: [10000, 20000, 10000], // colony ship
+    209: [10000, 6000, 2000], // recycler
+    210: [0, 1000, 0] // spy sat
+  };
+
   var currentPoints = 0;
   var shipsAtDock = {
     204: Number($('.fighterLight .amount').attr('data-value')) || 0,
@@ -55,12 +74,16 @@ function _parseCurrentPlanetShips() {
     209: Number($('.recycler .amount').attr('data-value')) || 0,
     210: Number($('.espionageProbe .amount').attr('data-value')) || 0
   };
+  var currentShipResources = [0, 0, 0];
 
   for (var key in shipsAtDock) {
     if (shipsAtDock[key] === 0) {
       delete shipsAtDock[key];
     } else {
       currentPoints += shipsAtDock[key] * shipPoints[key];
+      currentShipResources[0] += shipsAtDock[key] * shipResources[key][0];
+      currentShipResources[1] += shipsAtDock[key] * shipResources[key][1];
+      currentShipResources[2] += shipsAtDock[key] * shipResources[key][2];
     }
   }
 
@@ -71,6 +94,7 @@ function _parseCurrentPlanetShips() {
 
   if (window.config.my.planets[currentPlanetCoordinatesStr]) {
     window.config.my.planets[currentPlanetCoordinatesStr].shipPoints = currentPoints;
+    window.config.my.planets[currentPlanetCoordinatesStr].shipResources = currentShipResources;
     window.config.my.planets[currentPlanetCoordinatesStr].ships = shipsAtDock;
     window.config.my.planets[currentPlanetCoordinatesStr].shipsLastUpdate = Date.now();
     window.config.my.planets[currentPlanetCoordinatesStr].shipsNeedUpdate = Date.now() + 7 * 24 * 36e5;
@@ -137,14 +161,21 @@ function _addPlanetListHelpers() {
     }
 
     if ($(this).find('.moonlink').length) {
-      var shipPointsMoon = window.config.my.planets[$(this).find('.planet-koords').text() + 'L'].shipPoints || 0;
+      var myPlanet = window.config.my.planets[$(this).find('.planet-koords').text() + 'L'];
+      var shipPointsMoon = myPlanet.shipPoints || 0;
       var cpMoon = $(this).find('.moonlink').attr('href').split('cp=')[1];
-      var shipsNeedUpdateMoon =
-        window.config.my.planets[$(this).find('.planet-koords').text() + 'L'].shipsNeedUpdate <= Date.now();
+      var shipsNeedUpdateMoon = myPlanet.shipsNeedUpdate <= Date.now();
 
       if (shipPointsMoon > threshold || shipsNeedUpdateMoon) {
         var tooltip = window._translate('SHIP_AT_DOCK') + ' : ' + _num(shipPointsMoon * 1000) + '|';
         var img = uipp_images.atk;
+        if (myPlanet.shipResources) {
+          tooltip += '<figure class=\'tf planetIcon\'></figure> ';
+          tooltip += window.uipp_scoreHumanReadable(config.universe.debrisFactor * myPlanet.shipResources[0]);
+          tooltip += ' / ';
+          tooltip += window.uipp_scoreHumanReadable(config.universe.debrisFactor * myPlanet.shipResources[1]);
+          tooltip += ' / 0<br><br>';
+        }
         tooltip +=
           window._translate('LAST_UPDATE') +
           ' : ' +
@@ -234,11 +265,11 @@ function _handleMissionsInProg() {
       if (config.my.planets[toCoords] && m.t > config.my.planets[toCoords].shipsNeedUpdate) return;
 
       // update values
-      if (config.my.planets[toCoords]) {
+      if (config.my.planets[toCoords] && config.my.planets[toCoords].shipsNeedUpdate != m.t) {
         config.my.planets[toCoords].shipsNeedUpdate = m.t;
         setTimeout(_addPlanetListHelpers, m.t - Date.now() + 1000);
+        _saveConfig();
       }
     }
   });
-  _saveConfig();
 }

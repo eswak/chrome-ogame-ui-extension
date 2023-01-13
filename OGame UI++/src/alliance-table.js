@@ -1,5 +1,5 @@
 'use strict';
-window._addTabAlliance = function _addTabAlliance() {
+window._addAllianceTable = function _addAllianceTable() {
   if (document.location.href.indexOf('component=alliance') === -1) {
     return;
   }
@@ -38,7 +38,7 @@ window._addTabAlliance = function _addTabAlliance() {
     '<div class="uipp-box" style="margin-bottom: 3em">',
     '<h3>' + window._translate('ALLIANCE_PLAYER_SCORES') + '</h3>',
     '<table class="uipp-table bordered">',
-    '<thead id="highscoreContent">',
+    '<thead>',
     '<tr>',
     '<th>' + window._translate('PLAYER') + '</th>',
     '<th><img src="' + uipp_images.score.global + '" style="height:26px"/></th>',

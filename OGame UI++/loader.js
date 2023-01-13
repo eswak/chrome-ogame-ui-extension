@@ -111,7 +111,6 @@ var scripts = [
   'src/utils/refresh-universe-data.js',
   'src/utils/rentability-time.js',
   'src/utils/set-config-my-planets.js',
-  'src/utils/set-config-trade-rate.js',
   'src/utils/parse-research-tab.js',
   'src/utils/upload-image.js',
   'src/utils/xml2json.js',
@@ -130,7 +129,7 @@ var scripts = [
   'src/ship-helper.js',
   'src/ship-resources-helper.js',
   'src/solarsat-helper.js',
-  'src/tab-alliance.js',
+  'src/alliance-table.js',
   'src/tab-competition.js',
   'src/tab-expeditions.js',
   'src/tab-links.js',
@@ -138,6 +137,7 @@ var scripts = [
   'src/tab-topflop.js',
   'main.js'
 ];
+var start = Date.now();
 Promise.all(
   scripts.map(function (scriptPath) {
     return new Promise(function (resolve) {
@@ -152,13 +152,12 @@ Promise.all(
     });
   })
 ).then(function () {
-  console.log('OGame UI++: loaded all files.');
+  console.log('OGame UI++: loaded all files in', Date.now() - start, 'ms.');
 
   var imagesEvent = document.createEvent('CustomEvent');
   imagesEvent.initCustomEvent('UIPPImages', true, true, uipp_images);
   document.dispatchEvent(imagesEvent);
 
-  console.log('OGame UI++: starting.');
   var startEvent = document.createEvent('Event');
   startEvent.initEvent('UIPPStart', true, true);
   document.dispatchEvent(startEvent);
@@ -227,8 +226,9 @@ document.addEventListener('UIPPSaveData', function (evt) {
 
 document.addEventListener('UIPPGetData', function (evt) {
   var keys = (evt.detail || '').split(',');
+  var start = Date.now();
   chrome.storage.local.get(keys).then((result) => {
-    console.log('OGame UI++: loaded data :\n  - ' + keys.join('\n  - '));
+    console.log('OGame UI++: loaded data in', Date.now() - start, 'ms.\n  - ' + keys.join('\n  - '));
     var evt = document.createEvent('CustomEvent');
     evt.initCustomEvent('UIPPGetDataResponse:' + keys.join(','), true, true, JSON.stringify(result));
     document.dispatchEvent(evt);

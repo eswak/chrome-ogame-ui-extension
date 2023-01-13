@@ -88,6 +88,19 @@ window._addShipHelperInterval = function _addShipHelperInterval() {
         pt: 5000 * (1 + 0.05 * (window.config.hyperspaceTech || 0)),
         gt: 25000 * (1 + 0.05 * (window.config.hyperspaceTech || 0))
       };
+      // attempt parsing from fleetDispatcher
+      cargo.pt = (fleetDispatcher.shipsOnPlanet || []).reduce(function(acc, cur) {
+        if (cur.id == 202) {
+          acc = cur.baseCargoCapacity;
+        }
+        return acc;
+      }, 0) || cargo.pt;
+      cargo.gt = (fleetDispatcher.shipsOnPlanet || []).reduce(function(acc, cur) {
+        if (cur.id == 203) {
+          acc = cur.baseCargoCapacity;
+        }
+        return acc;
+      }, 0) || cargo.gt;
       var elements = { pt: $el.find('input[name=transporterSmall]'), gt: $el.find('input[name=transporterLarge]') };
       var resources = window._getCurrentPlanetResources();
 
@@ -107,12 +120,17 @@ window._addShipHelperInterval = function _addShipHelperInterval() {
             $('#' + type + '-' + res2).css('opacity', 1);
           }
         }
-        elements[type].val(Math.ceil(totalResources / cargo[type]));
-        elements[type].keyup();
+        elements[type].val(Math.ceil(totalResources / cargo[type])).keyup().blur();
 
         var field = { metal: 'cargoMetal', crystal: 'cargoCrystal', deuterium: 'cargoDeuterium' };
-        field = field[resource];
-        fleetDispatcher[field] = Math.min(resources[res].now, elements[type].val() * cargo[type]);
+        for (var res in selected[type]) {
+          var resField = field[res];
+          if (selected[type][res]) {
+            window.fleetDispatcher[resField] = Math.min(Math.floor(resources[res].now), elements[type].val() * cargo[type]);
+          } else {
+            window.fleetDispatcher[resField] = 0;
+          }
+        }
       };
     }
   }, 100);

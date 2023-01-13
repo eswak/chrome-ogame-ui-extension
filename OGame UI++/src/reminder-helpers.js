@@ -65,11 +65,16 @@ window._addReminderHelpers = function _addReminderHelpers() {
         
         $countdown.append('&nbsp;<span class="icon icon_chat tooltip tooltipBottom" style="user-select: none;filter: hue-rotate(45deg) saturate(2);cursor: pointer;' + (alreadySet ? 'opacity:1;' : 'opacity:0.5;') + '" title="Set a reminder at ' + getFormatedDate(timestamp, '[Y]-[m]-[d] [H]:[i]:[s]') + '">&nbsp;</span>&nbsp;');
 
-        $countdown.find('.icon.icon_chat').click(function() {
+        $countdown.find('.icon.icon_chat').click(async function() {
           alreadySet = (window.config.notifications || {})[timestamp] != null;
           var coords = '[' + _getCurrentPlanetCoordinates().join(':') + ']';
           var planetName = config.my.planets[coords].name;
-          var img = $countdown.parent().parent().find('.queuePic').attr('src');
+          var imgElement = $countdown.parent().parent().find('.queuePic');
+          var img = imgElement.attr('src');
+          if (!img) {
+            img = await window.domtoimage.toPng(imgElement[0]);
+          }
+          img = img || uipp_images.datetime;
 
           var opts = {
             when: timestamp,

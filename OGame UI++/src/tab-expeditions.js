@@ -425,10 +425,10 @@ window._addTabExpeditions = function _addTabExpeditions() {
         ['metal', 'crystal', 'deuterium'].forEach(function (res) {
           sum[res] += expe.resources[res];
         });
-        if (expe.data.AM) {
-          sum.am += expe.data.AM;
+        if (expe.data.AM || (expe.data.result && expe.data.result.AM)) {
+          sum.am += (expe.data.AM || (expe.data.result ? expe.data.result.AM : 0));
         }
-        if (expe.data.item) {
+        if (expe.data.item || (expe.data.result && expe.data.result.item)) {
           sum.item++;
         }
       });
