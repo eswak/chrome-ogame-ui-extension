@@ -19,7 +19,7 @@ var uipp_images = {
     aliens: chrome.runtime.getURL('img/expedition/aliens.png'),
     pirates: chrome.runtime.getURL('img/expedition/pirates.png'),
     merchant: chrome.runtime.getURL('img/expedition/merchant.png'),
-    blackhole: chrome.runtime.getURL('img/expedition/blackhole.png'),
+    blackhole: chrome.runtime.getURL('img/expedition/blackhole.png')
   },
   box: {
     boxTopLeft: chrome.runtime.getURL('img/box/box-top-left.png'),
@@ -174,7 +174,7 @@ evt.initCustomEvent('UIPPNotification', true, true, {
 document.dispatchEvent(evt);
 */
 document.addEventListener('UIPPNotification', function (evt) {
-  var when = evt.detail.when || (Date.now() + 1);
+  var when = evt.detail.when || Date.now() + 1;
   var title = evt.detail.title || 'OGame UI++';
   var message = evt.detail.message || 'Reminder to check OGame.';
   var img = evt.detail.img || 'metalmine.48.jpeg';
@@ -195,7 +195,7 @@ document.addEventListener('UIPPNotification', function (evt) {
 });
 
 document.addEventListener('UIPPNotificationDelete', function (evt) {
-  var when = evt.detail.when || (Date.now() + 1);
+  var when = evt.detail.when || Date.now() + 1;
   var title = evt.detail.title || 'OGame UI++';
   var message = evt.detail.message || 'Reminder to check OGame.';
   var img = evt.detail.img || 'metalmine.48.jpeg';

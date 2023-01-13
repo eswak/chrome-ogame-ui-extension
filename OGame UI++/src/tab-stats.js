@@ -12,7 +12,9 @@ window._addTabStats = function _addTabStats() {
 
     var $wrapperStats = $('<div class="uipp-box"><h3>' + window._translate('STATS_PRODUCTION') + '</h3></div>');
     var $wrapperProgression = $('<div class="uipp-box"><h3>' + window._translate('STATS_PROGRESSION') + '</h3></div>');
-    var $wrapperRentability = $('<div class="uipp-box"><h3>' + window._translate('NEXT_MOST_RENTABLE_BUILDS') + '</h3></div>');
+    var $wrapperRentability = $(
+      '<div class="uipp-box"><h3>' + window._translate('NEXT_MOST_RENTABLE_BUILDS') + '</h3></div>'
+    );
     if (window.config.features.stats) {
       $wrapper.append($wrapperStats);
     }
@@ -82,13 +84,9 @@ window._addTabStats = function _addTabStats() {
             // instead of planet.resources[resource].prod,
             // use theoretical production to not account for full storages
             // and other temporary modifiers like boosts
-            window.uipp_getProduction(
-              resource,
-              planet.resources[resource].level,
-              planet.averageTemp,
-              planet.coords,
-              { plasma: true }
-            ) / 3600,
+            window.uipp_getProduction(resource, planet.resources[resource].level, planet.averageTemp, planet.coords, {
+              plasma: true
+            }) / 3600,
             planet.resources[resource].level,
             planet.resources[resource].level + 1,
             planet.averageTemp,
@@ -204,9 +202,9 @@ window._addTabStats = function _addTabStats() {
               planet.coords,
               { plasma: false, class: false, geologist: false, officers: false }
             );
-            var boost = Math.floor(1000 * (planet.resources[resource].prod * 3600 / estimatedProd - 1)) / 10;
+            var boost = Math.floor(1000 * ((planet.resources[resource].prod * 3600) / estimatedProd - 1)) / 10;
             var tooltipAppend = '';
-            thresholds.forEach(function(threshold, i) {
+            thresholds.forEach(function (threshold, i) {
               if (boost >= threshold) {
                 tooltipAppend = ['<br><br>', boost >= 0 ? '⇧ +' : '⇓ ', boost, '%'].join('');
                 outline = '2px solid ' + colors[i];
@@ -575,12 +573,13 @@ window._addTabStats = function _addTabStats() {
       $wrapperProgression.append('<div id="progression-content"></div>');
       var $wrapperProgressionContent = $wrapperProgression.find('#progression-content');
 
-      var drawPlayerProgress = function(playerId) {
+      var drawPlayerProgress = function (playerId) {
         var current = window.config.players[playerId];
         var history = window.config.history[playerId];
 
         // player selection
-        var playerSelectHtml = '<select id="select-history-player" style="padding: 5px; margin: 10px 5px 0 0; border-radius: 5px; visibility:visible!important">';
+        var playerSelectHtml =
+          '<select id="select-history-player" style="padding: 5px; margin: 10px 5px 0 0; border-radius: 5px; visibility:visible!important">';
         var players = [];
         for (var key in config.players) {
           players.push({
@@ -589,11 +588,22 @@ window._addTabStats = function _addTabStats() {
             name: config.players[key].name
           });
         }
-        players.sort(function(a, b) {
-          return a.name > b.name ? 1 : -1;
-        }).forEach(function(player) {
-          playerSelectHtml += '<option value="' + player.id + '" ' + (player.id == playerId ? 'selected' : '') + '/> ' + player.name + ' [' + player.gp + ']';
-        });
+        players
+          .sort(function (a, b) {
+            return a.name > b.name ? 1 : -1;
+          })
+          .forEach(function (player) {
+            playerSelectHtml +=
+              '<option value="' +
+              player.id +
+              '" ' +
+              (player.id == playerId ? 'selected' : '') +
+              '/> ' +
+              player.name +
+              ' [' +
+              player.gp +
+              ']';
+          });
         playerSelectHtml += '</select>';
 
         $wrapperProgressionContent.html(
@@ -697,8 +707,8 @@ window._addTabStats = function _addTabStats() {
         });
 
         // on select change, redraw area for the selected player
-        setTimeout(function() {
-          $('#select-history-player').change(function() {
+        setTimeout(function () {
+          $('#select-history-player').change(function () {
             var playerId = $(this).val();
             drawPlayerProgress(playerId);
           });
@@ -713,7 +723,7 @@ window._addTabStats = function _addTabStats() {
       var playerId = $('[name=ogame-player-id]').attr('content');
       window.firstStatsDraw = true;
       drawPlayerProgress(playerId);
-    };
+    }
 
     var globalProdWorth = 0;
     globalProdWorth += globalStats.prod.metal * worth.metal;
@@ -920,8 +930,7 @@ window._addTabStats = function _addTabStats() {
           inprogPoints += (rentability.totalCost || rentability.astroCost)[0];
           inprogPoints += (rentability.totalCost || rentability.astroCost)[1];
           inprogPoints += (rentability.totalCost || rentability.astroCost)[2];
-        }
-        catch(e) {
+        } catch (e) {
           console.log('OGame UI++: Error parsing in-progress');
         }
       }

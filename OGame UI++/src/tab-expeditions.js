@@ -18,7 +18,11 @@ window._addTabExpeditions = function _addTabExpeditions() {
     var $wrapper = window._onMenuClick('expeditions');
     if (!$wrapper) return;
 
-    var $headerwrapper = $('<div class="uipp-box" style="height:260px;padding:0;background:url(' + uipp_images.wings + ');background-size:cover;text-align:center;"></div>');
+    var $headerwrapper = $(
+      '<div class="uipp-box" style="height:260px;padding:0;background:url(' +
+        uipp_images.wings +
+        ');background-size:cover;text-align:center;"></div>'
+    );
     $headerwrapper.append(
       [
         '<h3 style="margin:0">' + window.config.labels[15] + '</h3>',
@@ -106,7 +110,7 @@ window._addTabExpeditions = function _addTabExpeditions() {
         expe.data.flags = { i: 1 };
         expe.data.result = { item: expe.data.item };
       }
-      ['metal', 'crystal', 'deuterium'].forEach(function(resource) {
+      ['metal', 'crystal', 'deuterium'].forEach(function (resource) {
         if (expe.data[resource]) {
           expe.data.flags = { r: 1 };
           expe.data.result = {};
@@ -141,7 +145,7 @@ window._addTabExpeditions = function _addTabExpeditions() {
           expe.resources[res] += expe.data.debris[res] || 0;
         });
         content +=
-            '<figure class="planetIcon tf tooltip js_hideTipOnMobile tpd-hideOnClickOutside" style="float: right; margin-top: 6px; margin-right: 5px;"></figure>';
+          '<figure class="planetIcon tf tooltip js_hideTipOnMobile tpd-hideOnClickOutside" style="float: right; margin-top: 6px; margin-right: 5px;"></figure>';
       }
       // Nothing
       else if (expe.data.flags && expe.data.flags.n) {
@@ -150,25 +154,33 @@ window._addTabExpeditions = function _addTabExpeditions() {
       // Black Hole
       else if (expe.data.flags && expe.data.flags.l) {
         content +=
-          '<img src="' + uipp_images.expedition.blackhole + '" style="height:28px; margin-right: 8px; vertical-align: -9px" />';
+          '<img src="' +
+          uipp_images.expedition.blackhole +
+          '" style="height:28px; margin-right: 8px; vertical-align: -9px" />';
         content += '<span style="color:#F44336">' + window._translate('EXPEDITION_LOSE_FLEET') + '</span>';
       }
       // Pirates
       else if (expe.data.flags && expe.data.flags.p) {
         content +=
-          '<img src="' + uipp_images.expedition.pirates + '" style="height:28px; margin-right: 8px; vertical-align: -9px" />';
+          '<img src="' +
+          uipp_images.expedition.pirates +
+          '" style="height:28px; margin-right: 8px; vertical-align: -9px" />';
         content += '<span style="color:#FFEB3B">' + window._translate('EXPEDITION_FIND_PIRATES') + '</span>';
       }
       // Aliens
       else if (expe.data.flags && expe.data.flags.a) {
         content +=
-          '<img src="' + uipp_images.expedition.aliens + '" style="height:28px; margin-right: 8px; vertical-align: -9px" />';
+          '<img src="' +
+          uipp_images.expedition.aliens +
+          '" style="height:28px; margin-right: 8px; vertical-align: -9px" />';
         content += '<span style="color:#FBC02D">' + window._translate('EXPEDITION_FIND_ALIENS') + '</span>';
       }
       // Merchant
       else if (expe.data.flags && expe.data.flags.t) {
         content +=
-          '<img src="' + uipp_images.expedition.merchant + '" style="height:28px; margin-right: 8px; vertical-align: -9px" />';
+          '<img src="' +
+          uipp_images.expedition.merchant +
+          '" style="height:28px; margin-right: 8px; vertical-align: -9px" />';
         content += '<span style="color:#00BCD4">' + window._translate('EXPEDITION_FIND_MERCHANT') + '</span>';
       }
       // Item
@@ -204,29 +216,29 @@ window._addTabExpeditions = function _addTabExpeditions() {
           expe.resources[res] += fleetResources[res] || 0;
         });
         var tooltip = '<div id="tooltip-expe-' + expe.index + '" style="display:none">';
-          var nShips = 0;
-          for (var key in expe.data.result) {
-            if (uipp_images.ships[key]) {
-              tooltip += '<div style="white-space: nowrap; min-width: 120px; line-height: 40px; font-size: 13px;">';
-              tooltip +=
-                '<img src="' + uipp_images.ships[key] + '" style="height: 40px; margin-right: 8px; float: left" />';
-              tooltip += expe.data.result[key];
-              nShips += expe.data.result[key];
-              tooltip += '</div>';
-            }
+        var nShips = 0;
+        for (var key in expe.data.result) {
+          if (uipp_images.ships[key]) {
+            tooltip += '<div style="white-space: nowrap; min-width: 120px; line-height: 40px; font-size: 13px;">';
+            tooltip +=
+              '<img src="' + uipp_images.ships[key] + '" style="height: 40px; margin-right: 8px; float: left" />';
+            tooltip += expe.data.result[key];
+            nShips += expe.data.result[key];
+            tooltip += '</div>';
           }
-          tooltip += '</div>';
-          content +=
-            '<div style="display:inline-block; float:right; margin-top: 6px;" class="tooltipRel tooltipClose tooltipRight js_hideTipOnMobile" rel="tooltip-expe-' +
-            expe.index +
-            '">';
-          content += nShips;
-          content +=
-            '<img src="' +
-            uipp_images.inflight +
-            '" style="transform:rotate(180deg); margin-left: 8px; vertical-align: -4px"/>';
-          content += '</div>';
-          content += tooltip;
+        }
+        tooltip += '</div>';
+        content +=
+          '<div style="display:inline-block; float:right; margin-top: 6px;" class="tooltipRel tooltipClose tooltipRight js_hideTipOnMobile" rel="tooltip-expe-' +
+          expe.index +
+          '">';
+        content += nShips;
+        content +=
+          '<img src="' +
+          uipp_images.inflight +
+          '" style="transform:rotate(180deg); margin-left: 8px; vertical-align: -4px"/>';
+        content += '</div>';
+        content += tooltip;
       }
       // Resources
       else if (expe.data.flags && expe.data.flags.r) {
@@ -270,10 +282,12 @@ window._addTabExpeditions = function _addTabExpeditions() {
 
       // add a separator if >10min between 2 actions
       var separator = false;
-      if (pastExpe[i - 1] && pastExpe[i - 1].timestamp - 36e5/6 > expe.timestamp) separator = true;
+      if (pastExpe[i - 1] && pastExpe[i - 1].timestamp - 36e5 / 6 > expe.timestamp) separator = true;
 
       tbody += [
-        '<tr class="expe-row' + (separator ? ' separator' : '') + '" id="expe-' +
+        '<tr class="expe-row' +
+          (separator ? ' separator' : '') +
+          '" id="expe-' +
           i +
           '" style="cursor:pointer; ' +
           (i > displayedExpe ? 'display:none;' : '') +
@@ -284,10 +298,20 @@ window._addTabExpeditions = function _addTabExpeditions() {
         _date(expe.timestamp),
         '</td>',
         '<td>',
-        '<span class="tooltip uipp-expe-overuse overuse-' + (expe.data.flags ? (expe.data.flags.o || 'x') : 'x') + '" title="' + window._translate('EXPEDITION_OVERUSE_' + (expe.data.flags ? (expe.data.flags.o || 'x') : 'x').toUpperCase()) + '">&nbsp;</span>',
+        '<span class="tooltip uipp-expe-overuse overuse-' +
+          (expe.data.flags ? expe.data.flags.o || 'x' : 'x') +
+          '" title="' +
+          window._translate('EXPEDITION_OVERUSE_' + (expe.data.flags ? expe.data.flags.o || 'x' : 'x').toUpperCase()) +
+          '">&nbsp;</span>',
         expe.coords,
         '<br>',
-        '<span class="tooltip uipp-expe-size size-' + (expe.data.flags ? (expe.data.flags.s || 'x') : 'x') + '" title="' + window._translate('EXPEDITION_SIZE_' + (expe.data.flags ? (expe.data.flags.s || 'x') : 'x').toUpperCase()) + '">' + (expe.data.flags ? (expe.data.flags.s || '').toUpperCase() : '') + '</span>',
+        '<span class="tooltip uipp-expe-size size-' +
+          (expe.data.flags ? expe.data.flags.s || 'x' : 'x') +
+          '" title="' +
+          window._translate('EXPEDITION_SIZE_' + (expe.data.flags ? expe.data.flags.s || 'x' : 'x').toUpperCase()) +
+          '">' +
+          (expe.data.flags ? (expe.data.flags.s || '').toUpperCase() : '') +
+          '</span>',
         '</td>',
         '<td style="text-align:left" data-value="' + expeWorth + '">',
         content,
@@ -426,7 +450,7 @@ window._addTabExpeditions = function _addTabExpeditions() {
           sum[res] += expe.resources[res];
         });
         if (expe.data.AM || (expe.data.result && expe.data.result.AM)) {
-          sum.am += (expe.data.AM || (expe.data.result ? expe.data.result.AM : 0));
+          sum.am += expe.data.AM || (expe.data.result ? expe.data.result.AM : 0);
         }
         if (expe.data.item || (expe.data.result && expe.data.result.item)) {
           sum.item++;

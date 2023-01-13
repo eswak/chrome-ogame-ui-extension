@@ -66,13 +66,37 @@ window._addTabTopflop = function _addTabTopflop() {
       };
 
       if (scoreType === 'globalScore') {
-        $sectionWrapper.append($('<h3><img style="height: 18px; vertical-align: -5px; margin-right: 5px;" src="' + uipp_images.score.global + '"/>Top / Flop</h3>'));
+        $sectionWrapper.append(
+          $(
+            '<h3><img style="height: 18px; vertical-align: -5px; margin-right: 5px;" src="' +
+              uipp_images.score.global +
+              '"/>Top / Flop</h3>'
+          )
+        );
       } else if (scoreType === 'economyScore') {
-        $sectionWrapper.append($('<h3><img style="height: 18px; vertical-align: -5px; margin-right: 5px;" src="' + uipp_images.score.economy + '"/>Top / Flop</h3>'));
+        $sectionWrapper.append(
+          $(
+            '<h3><img style="height: 18px; vertical-align: -5px; margin-right: 5px;" src="' +
+              uipp_images.score.economy +
+              '"/>Top / Flop</h3>'
+          )
+        );
       } else if (scoreType === 'militaryScore') {
-        $sectionWrapper.append($('<h3><img style="height: 18px; vertical-align: -5px; margin-right: 5px;" src="' + uipp_images.score.military + '"/>Top / Flop</h3>'));
+        $sectionWrapper.append(
+          $(
+            '<h3><img style="height: 18px; vertical-align: -5px; margin-right: 5px;" src="' +
+              uipp_images.score.military +
+              '"/>Top / Flop</h3>'
+          )
+        );
       } else if (scoreType === 'researchScore') {
-        $sectionWrapper.append($('<h3><img style="height: 18px; vertical-align: -5px; margin-right: 5px;" src="' + uipp_images.score.research + '"/>Top / Flop</h3>'));
+        $sectionWrapper.append(
+          $(
+            '<h3><img style="height: 18px; vertical-align: -5px; margin-right: 5px;" src="' +
+              uipp_images.score.research +
+              '"/>Top / Flop</h3>'
+          )
+        );
         delete topflop.flop;
       }
 
@@ -93,7 +117,9 @@ window._addTabTopflop = function _addTabTopflop() {
                       ? '(' + window.config.players[entry.playerId][scoreType.replace('Score', 'Position')] + ')'
                       : '',
                     '</td>',
-                    '<td style="white-space: nowrap; max-width: 100px; overflow: hidden; text-overflow: ellipsis;" title="' + ((window.config.players[entry.playerId] || {}).name || window._translate('DELETED_PLAYER')) + '">',
+                    '<td style="white-space: nowrap; max-width: 100px; overflow: hidden; text-overflow: ellipsis;" title="' +
+                      ((window.config.players[entry.playerId] || {}).name || window._translate('DELETED_PLAYER')) +
+                      '">',
                     (window.config.players[entry.playerId] || {}).name || window._translate('DELETED_PLAYER'),
                     '</td>',
                     '<td>',

@@ -151,7 +151,16 @@ window._addCostsHelperInterval = function _addCostsHelperInterval() {
       $('.content .information .narrow').append(
         '<li class="enhancement">' +
           window._translate('ROI', {
-            time: window._time(window._getRentabilityTime('metal', resources.metal.prod, resources.metal.level, resources.metal.level + 1, planet.averageTemp, planet.coords)),
+            time: window._time(
+              window._getRentabilityTime(
+                'metal',
+                resources.metal.prod,
+                resources.metal.level,
+                resources.metal.level + 1,
+                planet.averageTemp,
+                planet.coords
+              )
+            ),
             tradeRate: tradeRateStr
           }) +
           '</li>'
@@ -165,7 +174,16 @@ window._addCostsHelperInterval = function _addCostsHelperInterval() {
       $('.content .information .narrow').append(
         '<li class="enhancement">' +
           window._translate('ROI', {
-            time: window._time(window._getRentabilityTime('crystal', resources.crystal.prod, resources.crystal.level, resources.crystal.level + 1, planet.averageTemp, planet.coords)),
+            time: window._time(
+              window._getRentabilityTime(
+                'crystal',
+                resources.crystal.prod,
+                resources.crystal.level,
+                resources.crystal.level + 1,
+                planet.averageTemp,
+                planet.coords
+              )
+            ),
             tradeRate: tradeRateStr
           }) +
           '</li>'
@@ -180,7 +198,14 @@ window._addCostsHelperInterval = function _addCostsHelperInterval() {
         '<li class="enhancement">' +
           window._translate('ROI', {
             time: window._time(
-              window._getRentabilityTime('deuterium', resources.deuterium.prod, resources.deuterium.level, resources.deuterium.level + 1, planet.averageTemp, planet.coords)
+              window._getRentabilityTime(
+                'deuterium',
+                resources.deuterium.prod,
+                resources.deuterium.level,
+                resources.deuterium.level + 1,
+                planet.averageTemp,
+                planet.coords
+              )
             ),
             tradeRate: tradeRateStr
           }) +
@@ -209,20 +234,20 @@ window._addCostsHelperInterval = function _addCostsHelperInterval() {
     // if we are viewing a lifeform tech that boosts production, computes rentability time
     else {
       var lftech = {
-        'lftechmech1': 'lifeformTech13201',
-        'lftechhuma2': 'lifeformTech11202',
-        'lftechrock2': 'lifeformTech12202',
-        'lftechkael2': 'lifeformTech14202',
-        'lftechrock3': 'lifeformTech12203',
-        'lftechrock5': 'lifeformTech12205',
-        'lftechmech6': 'lifeformTech13206',
-        'lftechrock7': 'lifeformTech12207',
-        'lftechhuma8': 'lifeformTech11208',
-        'lftechrock10': 'lifeformTech12210',
-        'lftechrock11': 'lifeformTech12211',
-        'lftechrock12': 'lifeformTech12212',
-        'lftechkael12': 'lifeformTech14212',
-        'lftechmech13': 'lifeformTech13213',
+        lftechmech1: 'lifeformTech13201',
+        lftechhuma2: 'lifeformTech11202',
+        lftechrock2: 'lifeformTech12202',
+        lftechkael2: 'lifeformTech14202',
+        lftechrock3: 'lifeformTech12203',
+        lftechrock5: 'lifeformTech12205',
+        lftechmech6: 'lifeformTech13206',
+        lftechrock7: 'lifeformTech12207',
+        lftechhuma8: 'lifeformTech11208',
+        lftechrock10: 'lifeformTech12210',
+        lftechrock11: 'lifeformTech12211',
+        lftechrock12: 'lifeformTech12212',
+        lftechkael12: 'lifeformTech14212',
+        lftechmech13: 'lifeformTech13213'
       };
       for (var key in lftech) {
         if ($('#technologydetails .' + lftech[key] + ':not(.enhanced)').length > 0) {

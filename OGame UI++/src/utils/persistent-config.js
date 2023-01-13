@@ -17,7 +17,7 @@ window._saveConfig = function saveConfigBuffered() {
   }
 
   saveConfigTimeout = setTimeout(actuallyDoSaveConfig, 100);
-}
+};
 function actuallyDoSaveConfig() {
   window.config.lastUpdate = Date.now();
   var configToSave = JSON.parse(JSON.stringify(window.config));
@@ -38,7 +38,7 @@ window._saveHistory = function _savePlayers() {
 
 // Get config as a consolidated object containing players & history
 window._getConfigAsync = function getConfigAsync(cbConfig, cbPlayers, cbHistory) {
-  getDataAsync([configKey], function(data) {
+  getDataAsync([configKey], function (data) {
     var config = data[configKey] || {};
     config.universe = config.universe || {};
     config.labels = config.labels || {};
@@ -49,12 +49,12 @@ window._getConfigAsync = function getConfigAsync(cbConfig, cbPlayers, cbHistory)
     cbConfig && cbConfig(config);
 
     // get players
-    getDataAsync([configKey + ':players'], function(data) {
+    getDataAsync([configKey + ':players'], function (data) {
       var players = data[configKey + ':players'] || {};
       cbPlayers && cbPlayers(players);
 
       // get history
-      getDataAsync([configKey + ':history'], function(data) {
+      getDataAsync([configKey + ':history'], function (data) {
         var history = data[configKey + ':history'] || {};
         cbHistory && cbHistory(history);
       });
@@ -66,7 +66,7 @@ window._getConfigAsync = function getConfigAsync(cbConfig, cbPlayers, cbHistory)
 function saveData(key, value) {
   var payload = JSON.stringify({ key, value });
   var evt = document.createEvent('CustomEvent');
-  evt.initCustomEvent("UIPPSaveData", true, true, payload);
+  evt.initCustomEvent('UIPPSaveData', true, true, payload);
   document.dispatchEvent(evt);
 }
 
@@ -79,6 +79,6 @@ function getDataAsync(keys, cb) {
   document.addEventListener('UIPPGetDataResponse:' + keys.join(','), listener);
 
   var evt = document.createEvent('CustomEvent');
-  evt.initCustomEvent("UIPPGetData", true, true, keys.join(','));
+  evt.initCustomEvent('UIPPGetData', true, true, keys.join(','));
   document.dispatchEvent(evt);
 }

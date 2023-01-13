@@ -69,18 +69,20 @@ window.uipp_setShipResourceHelper = function (type) {
   };
 
   // attempt parsing from fleetDispatcher
-  cargo.pt = (fleetDispatcher.shipsOnPlanet || []).reduce(function(acc, cur) {
-    if (cur.id == 202) {
-      acc = cur.baseCargoCapacity;
-    }
-    return acc;
-  }, 0) || cargo.pt;
-  cargo.gt = (fleetDispatcher.shipsOnPlanet || []).reduce(function(acc, cur) {
-    if (cur.id == 203) {
-      acc = cur.baseCargoCapacity;
-    }
-    return acc;
-  }, 0) || cargo.gt;
+  cargo.pt =
+    (fleetDispatcher.shipsOnPlanet || []).reduce(function (acc, cur) {
+      if (cur.id == 202) {
+        acc = cur.baseCargoCapacity;
+      }
+      return acc;
+    }, 0) || cargo.pt;
+  cargo.gt =
+    (fleetDispatcher.shipsOnPlanet || []).reduce(function (acc, cur) {
+      if (cur.id == 203) {
+        acc = cur.baseCargoCapacity;
+      }
+      return acc;
+    }, 0) || cargo.gt;
 
   if (type === 'gt') {
     $('.transporterLarge input')

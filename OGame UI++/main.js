@@ -66,128 +66,137 @@ var userscript = function () {
   'use strict';
 
   // window.config default values
-  window._getConfigAsync(function(config) {
-    window.config = config;
-    window.config.tradeRate = window.config.tradeRate || [2.0, 1.5, 1.0];
-    window._setConfigMyPlanets();
-    window._parseResearchTab();
+  window._getConfigAsync(
+    function (config) {
+      window.config = config;
+      window.config.tradeRate = window.config.tradeRate || [2.0, 1.5, 1.0];
+      window._setConfigMyPlanets();
+      window._parseResearchTab();
 
-    window.config.features = window.config.features || {};
-    var defaultFeatures = {
-      alliance: true,
-      charts: true,
-      deploytransport: true,
-      reminders: true,
-      expeditionpoints: true,
-      expeditiontab: true,
-      competitiontab: true,
-      galaxy: true,
-      galaxydebris: true,
-      minetext: true,
-      missingresources: true,
-      nextbuilds: true,
-      ship: true,
-      shipatdock: true,
-      shipresources: true,
-      solarsat: true,
-      stats: true,
-      storagetime: true,
-      topeco: true,
-      topfleet: true,
-      topgeneral: true,
-      topresearch: true
-    };
-    for (var featureKey in defaultFeatures) {
-      if (typeof window.config.features[featureKey] !== 'boolean') {
-        window.config.features[featureKey] = defaultFeatures[featureKey];
+      window.config.features = window.config.features || {};
+      var defaultFeatures = {
+        alliance: true,
+        charts: true,
+        deploytransport: true,
+        reminders: true,
+        expeditionpoints: true,
+        expeditiontab: true,
+        competitiontab: true,
+        galaxy: true,
+        galaxydebris: true,
+        minetext: true,
+        missingresources: true,
+        nextbuilds: true,
+        ship: true,
+        shipatdock: true,
+        shipresources: true,
+        solarsat: true,
+        stats: true,
+        storagetime: true,
+        topeco: true,
+        topfleet: true,
+        topgeneral: true,
+        topresearch: true
+      };
+      for (var featureKey in defaultFeatures) {
+        if (typeof window.config.features[featureKey] !== 'boolean') {
+          window.config.features[featureKey] = defaultFeatures[featureKey];
+        }
       }
-    }
 
-    var features = window.config.features;
+      var features = window.config.features;
 
-    // Add tabs in the left menu
+      // Add tabs in the left menu
 
-    if (features.expeditiontab) {
-      window._addExpeditionMessageParserInterval();
-      window._addTabExpeditions();
-    }
-
-    // Add static helpers
-    window._addInprogParser();
-
-    if (features.storagetime) {
-      window._addCurrentPlanetStorageHelper();
-    }
-
-    if (features.deploytransport) {
-      window._addPlanetFleetShortcuts();
-    }
-
-    // Add interval checkers
-    if (features.galaxydebris) {
-      window._addGalaxyDebrisInterval();
-    }
-
-    if (features.minetext || features.missingresources) {
-      window._addCostsHelperInterval();
-    }
-
-    if (features.ship) {
-      window._addShipHelperInterval();
-    }
-
-    if (features.shipresources) {
-      window._addShipResourcesHelperInterval();
-    }
-
-    if (features.reminders) {
-      window._addReminderHelpers();
-    }
-
-    if (features.solarsat) {
-      window._addSolarSatHelperInterval();
-    }
-
-    if (config.features.expeditionpoints && config.universe.topScore) {
-      window._addExpeditionHelperInterval();
-    }
-  }, function(players) {
-    config.players = players;
-
-    if (config.features.expeditionpoints && !config.universe.topScore) {
-      window._addExpeditionHelperInterval();
-    }
-
-    if (config.features.shipatdock) {
-      if (window.config.shipsAtDockThreshold == null) {
-        window.config.shipsAtDockThreshold = 0.1 / 100;
+      if (features.expeditiontab) {
+        window._addExpeditionMessageParserInterval();
+        window._addTabExpeditions();
       }
-      window._addShipAtDockHelper();
-    }
-  }, function(history) {
-    config.history = history;
 
-    if (config.features.stats || config.features.charts || config.features.nextbuilds) {
-      window._addTabStats();
-    }
+      // Add static helpers
+      window._addInprogParser();
 
-    if (config.features.topeco || config.features.topfleet || config.features.topgeneral || config.features.topresearch) {
-      window._addTabTopflop();
-    }
+      if (features.storagetime) {
+        window._addCurrentPlanetStorageHelper();
+      }
 
-    if (config.features.competitiontab) {
-      window._addCompetitionTab();
-    }
+      if (features.deploytransport) {
+        window._addPlanetFleetShortcuts();
+      }
 
-    if (config.features.galaxy) {
-      window._addGalaxyPlayersPlanetsInterval();
-    }
+      // Add interval checkers
+      if (features.galaxydebris) {
+        window._addGalaxyDebrisInterval();
+      }
 
-    if (config.features.alliance) {
-      window._addAllianceTable();
-    }
+      if (features.minetext || features.missingresources) {
+        window._addCostsHelperInterval();
+      }
 
-    // Refresh universe data (config.players)
-    window._refreshUniverseData();
-  });
+      if (features.ship) {
+        window._addShipHelperInterval();
+      }
+
+      if (features.shipresources) {
+        window._addShipResourcesHelperInterval();
+      }
+
+      if (features.reminders) {
+        window._addReminderHelpers();
+      }
+
+      if (features.solarsat) {
+        window._addSolarSatHelperInterval();
+      }
+
+      if (config.features.expeditionpoints && config.universe.topScore) {
+        window._addExpeditionHelperInterval();
+      }
+    },
+    function (players) {
+      config.players = players;
+
+      if (config.features.expeditionpoints && !config.universe.topScore) {
+        window._addExpeditionHelperInterval();
+      }
+
+      if (config.features.shipatdock) {
+        if (window.config.shipsAtDockThreshold == null) {
+          window.config.shipsAtDockThreshold = 0.1 / 100;
+        }
+        window._addShipAtDockHelper();
+      }
+    },
+    function (history) {
+      config.history = history;
+
+      if (config.features.stats || config.features.charts || config.features.nextbuilds) {
+        window._addTabStats();
+      }
+
+      if (
+        config.features.topeco ||
+        config.features.topfleet ||
+        config.features.topgeneral ||
+        config.features.topresearch
+      ) {
+        window._addTabTopflop();
+      }
+
+      if (config.features.competitiontab) {
+        window._addCompetitionTab();
+      }
+
+      if (config.features.galaxy) {
+        window._addGalaxyPlayersPlanetsInterval();
+      }
+
+      if (config.features.alliance) {
+        window._addAllianceTable();
+      }
+
+      // Refresh universe data (config.players)
+      window._refreshUniverseData();
+    }
+  );
 };

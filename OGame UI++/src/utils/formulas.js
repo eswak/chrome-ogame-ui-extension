@@ -62,47 +62,103 @@ var costsFunctions = {
     return [75 * Math.pow(1.5, level), 30 * Math.pow(1.5, level), 0];
   },
   lftechmech1: function (level) {
-    return [10000 * Math.pow(1.5, level) * (level + 1), 6000 * Math.pow(1.5, level) * (level + 1), 1000 * Math.pow(1.5, level) * (level + 1)];
+    return [
+      10000 * Math.pow(1.5, level) * (level + 1),
+      6000 * Math.pow(1.5, level) * (level + 1),
+      1000 * Math.pow(1.5, level) * (level + 1)
+    ];
   },
   lftechhuma2: function (level) {
-    return [7000 * Math.pow(1.5, level) * (level + 1), 10000 * Math.pow(1.5, level) * (level + 1), 5000 * Math.pow(1.5, level) * (level + 1)];
+    return [
+      7000 * Math.pow(1.5, level) * (level + 1),
+      10000 * Math.pow(1.5, level) * (level + 1),
+      5000 * Math.pow(1.5, level) * (level + 1)
+    ];
   },
   lftechrock2: function (level) {
-    return [7500 * Math.pow(1.5, level) * (level + 1), 12500 * Math.pow(1.5, level) * (level + 1), 5000 * Math.pow(1.5, level) * (level + 1)];
+    return [
+      7500 * Math.pow(1.5, level) * (level + 1),
+      12500 * Math.pow(1.5, level) * (level + 1),
+      5000 * Math.pow(1.5, level) * (level + 1)
+    ];
   },
   lftechkael2: function (level) {
-    return [7500 * Math.pow(1.5, level) * (level + 1), 12500 * Math.pow(1.5, level) * (level + 1), 5000 * Math.pow(1.5, level) * (level + 1)];
+    return [
+      7500 * Math.pow(1.5, level) * (level + 1),
+      12500 * Math.pow(1.5, level) * (level + 1),
+      5000 * Math.pow(1.5, level) * (level + 1)
+    ];
   },
   lftechrock3: function (level) {
-    return [15000 * Math.pow(1.5, level) * (level + 1), 10000 * Math.pow(1.5, level) * (level + 1), 5000 * Math.pow(1.5, level) * (level + 1)];
+    return [
+      15000 * Math.pow(1.5, level) * (level + 1),
+      10000 * Math.pow(1.5, level) * (level + 1),
+      5000 * Math.pow(1.5, level) * (level + 1)
+    ];
   },
   lftechrock5: function (level) {
-    return [25000 * Math.pow(1.5, level) * (level + 1), 20000 * Math.pow(1.5, level) * (level + 1), 10000 * Math.pow(1.5, level) * (level + 1)];
+    return [
+      25000 * Math.pow(1.5, level) * (level + 1),
+      20000 * Math.pow(1.5, level) * (level + 1),
+      10000 * Math.pow(1.5, level) * (level + 1)
+    ];
   },
   lftechmech6: function (level) {
-    return [50000 * Math.pow(1.5, level) * (level + 1), 50000 * Math.pow(1.5, level) * (level + 1), 20000 * Math.pow(1.5, level) * (level + 1)];
+    return [
+      50000 * Math.pow(1.5, level) * (level + 1),
+      50000 * Math.pow(1.5, level) * (level + 1),
+      20000 * Math.pow(1.5, level) * (level + 1)
+    ];
   },
   lftechrock7: function (level) {
-    return [70000 * Math.pow(1.5, level) * (level + 1), 40000 * Math.pow(1.5, level) * (level + 1), 20000 * Math.pow(1.5, level) * (level + 1)];
+    return [
+      70000 * Math.pow(1.5, level) * (level + 1),
+      40000 * Math.pow(1.5, level) * (level + 1),
+      20000 * Math.pow(1.5, level) * (level + 1)
+    ];
   },
   lftechhuma8: function (level) {
-    return [80000 * Math.pow(1.5, level) * (level + 1), 50000 * Math.pow(1.5, level) * (level + 1), 20000 * Math.pow(1.5, level) * (level + 1)];
+    return [
+      80000 * Math.pow(1.5, level) * (level + 1),
+      50000 * Math.pow(1.5, level) * (level + 1),
+      20000 * Math.pow(1.5, level) * (level + 1)
+    ];
   },
   lftechrock10: function (level) {
-    return [85000 * Math.pow(1.5, level) * (level + 1), 40000 * Math.pow(1.5, level) * (level + 1), 35000 * Math.pow(1.5, level) * (level + 1)];
+    return [
+      85000 * Math.pow(1.5, level) * (level + 1),
+      40000 * Math.pow(1.5, level) * (level + 1),
+      35000 * Math.pow(1.5, level) * (level + 1)
+    ];
   },
   lftechrock11: function (level) {
-    return [120000 * Math.pow(1.5, level) * (level + 1), 30000 * Math.pow(1.5, level) * (level + 1), 25000 * Math.pow(1.5, level) * (level + 1)];
+    return [
+      120000 * Math.pow(1.5, level) * (level + 1),
+      30000 * Math.pow(1.5, level) * (level + 1),
+      25000 * Math.pow(1.5, level) * (level + 1)
+    ];
   },
   lftechrock12: function (level) {
-    return [100000 * Math.pow(1.5, level) * (level + 1), 40000 * Math.pow(1.5, level) * (level + 1), 30000 * Math.pow(1.5, level) * (level + 1)];
+    return [
+      100000 * Math.pow(1.5, level) * (level + 1),
+      40000 * Math.pow(1.5, level) * (level + 1),
+      30000 * Math.pow(1.5, level) * (level + 1)
+    ];
   },
   lftechkael12: function (level) {
-    return [100000 * Math.pow(1.5, level) * (level + 1), 40000 * Math.pow(1.5, level) * (level + 1), 30000 * Math.pow(1.5, level) * (level + 1)];
+    return [
+      100000 * Math.pow(1.5, level) * (level + 1),
+      40000 * Math.pow(1.5, level) * (level + 1),
+      30000 * Math.pow(1.5, level) * (level + 1)
+    ];
   },
   lftechmech13: function (level) {
-    return [200000 * Math.pow(1.5, level) * (level + 1), 100000 * Math.pow(1.5, level) * (level + 1), 100000 * Math.pow(1.5, level) * (level + 1)];
-  },
+    return [
+      200000 * Math.pow(1.5, level) * (level + 1),
+      100000 * Math.pow(1.5, level) * (level + 1),
+      100000 * Math.pow(1.5, level) * (level + 1)
+    ];
+  }
 };
 
 function uipp_getCost(type, level) {
@@ -173,21 +229,21 @@ window.uipp_getProduction = function uipp_getProduction(type, level, averageTemp
       var mineProd = Math.floor(30 * level * Math.pow(1.1, level) * speed * positionMultiplier);
       var bonusProd = multiplier * (baseProd + mineProd);
       var additionalProd = opts.bonus * mineProd;
-      var plasmaProd = opts.plasma ? ((window.config.plasmaTech || 0) * 0.01 * (mineProd)) : 0;
+      var plasmaProd = opts.plasma ? (window.config.plasmaTech || 0) * 0.01 * mineProd : 0;
       return baseProd + mineProd + bonusProd + additionalProd + plasmaProd;
     case 'crystal':
       var baseProd = 15 * speed * positionMultiplier;
       var mineProd = Math.floor(20 * level * Math.pow(1.1, level) * speed * positionMultiplier);
       var bonusProd = multiplier * (baseProd + mineProd);
       var additionalProd = opts.bonus * mineProd;
-      var plasmaProd = opts.plasma ? ((window.config.plasmaTech || 0) * 0.0066 * (mineProd)) : 0;
+      var plasmaProd = opts.plasma ? (window.config.plasmaTech || 0) * 0.0066 * mineProd : 0;
       return baseProd + mineProd + bonusProd + additionalProd + plasmaProd;
     case 'deuterium':
       var baseProd = 0;
       var mineProd = Math.floor(10 * level * Math.pow(1.1, level) * speed * (1.36 - 0.004 * averageTemp));
       var bonusProd = multiplier * (baseProd + mineProd);
       var additionalProd = opts.bonus * mineProd;
-      var plasmaProd = opts.plasma ? ((window.config.plasmaTech || 0) * 0.0033 * (mineProd)) : 0;
+      var plasmaProd = opts.plasma ? (window.config.plasmaTech || 0) * 0.0033 * mineProd : 0;
       return baseProd + mineProd + bonusProd + additionalProd + plasmaProd;
     default:
       return null;

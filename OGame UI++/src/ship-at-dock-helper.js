@@ -121,10 +121,7 @@ function _addPlanetListHelpers() {
       var img = uipp_images.atk;
       var tooltip = window._translate('SHIP_AT_DOCK') + ' : ' + _num(shipPoints * 1000) + '|';
       tooltip +=
-        window._translate('LAST_UPDATE') +
-        ' : ' +
-        _time((Date.now() - planet.shipsLastUpdate) / 1000) +
-        '<br><br>';
+        window._translate('LAST_UPDATE') + ' : ' + _time((Date.now() - planet.shipsLastUpdate) / 1000) + '<br><br>';
       tooltip += '<table class=&quot;marketitem_price_tooltip&quot;>';
       for (var key in planet.ships) {
         tooltip += [
@@ -139,10 +136,7 @@ function _addPlanetListHelpers() {
       if (shipsNeedUpdate) {
         tooltip = window._translate('SHIP_AT_DOCK') + ' : ???|';
         tooltip +=
-          window._translate('LAST_UPDATE') +
-          ' : ' +
-          _time((Date.now() - planet.shipsLastUpdate) / 1000) +
-          '<br><br>';
+          window._translate('LAST_UPDATE') + ' : ' + _time((Date.now() - planet.shipsLastUpdate) / 1000) + '<br><br>';
         tooltip += window._translate('SHIP_AT_DOCK_THRESHOLD_NEED_UPDATE');
         img = uipp_images.atkunk;
       }
@@ -170,7 +164,7 @@ function _addPlanetListHelpers() {
         var tooltip = window._translate('SHIP_AT_DOCK') + ' : ' + _num(shipPointsMoon * 1000) + '|';
         var img = uipp_images.atk;
         if (myPlanet.shipResources) {
-          tooltip += '<figure class=\'tf planetIcon\'></figure> ';
+          tooltip += "<figure class='tf planetIcon'></figure> ";
           tooltip += window.uipp_scoreHumanReadable(config.universe.debrisFactor * myPlanet.shipResources[0]);
           tooltip += ' / ';
           tooltip += window.uipp_scoreHumanReadable(config.universe.debrisFactor * myPlanet.shipResources[1]);

@@ -24,7 +24,10 @@ window._addSolarSatHelperInterval = function _addSolarSatHelperInterval() {
     // Solar satellite counter near energy consumption
     // ==========================================================================
     var energyProducedPerSat = Math.floor(
-      (((((config.my || {}).planets || {})['[' + _getCurrentPlanetCoordinates().join(':') + ']'] || {}).averageTemp || 0) + 160) / 6
+      (((((config.my || {}).planets || {})['[' + _getCurrentPlanetCoordinates().join(':') + ']'] || {}).averageTemp ||
+        0) +
+        160) /
+        6
     );
     $('li.additional_energy_consumption:not(.enhanced)').each(function () {
       $(this).addClass('enhanced');

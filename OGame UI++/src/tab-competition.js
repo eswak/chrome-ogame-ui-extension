@@ -51,7 +51,7 @@ window.uipp_displayCompetition = function () {
   var series = {};
 
   // watch list
-  config.competition.watchList.forEach(function(playerId) {
+  config.competition.watchList.forEach(function (playerId) {
     series[playerId] = {
       name: playerId,
       data: []
@@ -73,7 +73,7 @@ window.uipp_displayCompetition = function () {
     if (
       config.competition.watchSimilarStart &&
       otherFirstDayHistory &&
-      playerFirstDayHistory && 
+      playerFirstDayHistory &&
       otherFirstDayHistory.g < playerFirstDayHistory.g * threshold &&
       otherFirstDayHistory.g > playerFirstDayHistory.g / threshold
     ) {
@@ -83,7 +83,7 @@ window.uipp_displayCompetition = function () {
     if (
       config.competition.watchSimilarNow &&
       otherLastDayHistory &&
-      playerLastDayHistory && 
+      playerLastDayHistory &&
       otherLastDayHistory.g != 0 && // no players that deleted account
       otherLastDayHistory.g < playerLastDayHistory.g * threshold &&
       otherLastDayHistory.g > playerLastDayHistory.g / threshold
@@ -91,10 +91,7 @@ window.uipp_displayCompetition = function () {
       console.log('[ADD] SimilarNow  ', playerId, config.players[playerId].name);
       addPlayerHistory = true;
     }
-    if (
-      config.competition.watchAlliance &&
-      config.players[playerId].alliance == allianceId
-    ) {
+    if (config.competition.watchAlliance && config.players[playerId].alliance == allianceId) {
       console.log('[ADD] Alliance    ', playerId, config.players[playerId].name);
       addPlayerHistory = true;
     }
@@ -109,19 +106,8 @@ window.uipp_displayCompetition = function () {
 
   // filter out players with inactive, banned, or vacation mode
   for (var playerId in series) {
-    var exclude = [
-      'i',
-      'I',
-      'v',
-      'b',
-      'vi',
-      'vI',
-      'vib',
-      'vIb',
-      'vb',
-      'ib',
-      'Ib'
-    ].indexOf(config.players[playerId].status) !== -1;
+    var exclude =
+      ['i', 'I', 'v', 'b', 'vi', 'vI', 'vib', 'vIb', 'vb', 'ib', 'Ib'].indexOf(config.players[playerId].status) !== -1;
     if (exclude && config.competition.watchList.indexOf(playerId) == -1) {
       delete series[playerId];
       console.log('[DEL] Status      ', playerId, config.players[playerId].name, '->', config.players[playerId].status);
@@ -129,17 +115,17 @@ window.uipp_displayCompetition = function () {
   }
 
   // exclude list
-  config.competition.excludeList.forEach(function(playerId) {
+  config.competition.excludeList.forEach(function (playerId) {
     delete series[playerId];
     console.log('[DEL] BlackList   ', playerId, config.players[playerId].name);
   });
 
   // build timeseries for all series
   var seriesArray = Object.values(series);
-  seriesArray.forEach(function(serie, i) {
+  seriesArray.forEach(function (serie, i) {
     var playerId = serie.name;
     if (config.history[playerId]) {
-      historyDates.forEach(function(date) {
+      historyDates.forEach(function (date) {
         if (config.history[playerId][date]) {
           series[playerId].data.push({
             x: config.history[playerId][date].t || new Date(date).getTime(),
@@ -159,7 +145,7 @@ window.uipp_displayCompetition = function () {
     name: config.playerId,
     data: []
   });
-  historyDates.forEach(function(date) {
+  historyDates.forEach(function (date) {
     if (config.history[config.playerId][date]) {
       seriesArray[seriesArray.length - 1].data.push({
         x: config.history[config.playerId][date].t,
@@ -169,12 +155,8 @@ window.uipp_displayCompetition = function () {
   });
 
   // draw chart
-  $tabContent.append(
-    '<div id="chart-all-players" style="width:100%;height:400px;user-select:none;"></div>'
-  );
-  $tabContent.append(
-    '<div id="chart-all-players-text"></div>'
-  );
+  $tabContent.append('<div id="chart-all-players" style="width:100%;height:400px;user-select:none;"></div>');
+  $tabContent.append('<div id="chart-all-players-text"></div>');
   $tabContent.append(
     [
       '<style>',
@@ -218,7 +200,7 @@ window.uipp_displayCompetition = function () {
     );
   });
 
-  setTimeout(function() {
+  setTimeout(function () {
     var $detail = $('#chart-all-players-text');
 
     var getProgress = function (oldValue, newValue) {
@@ -235,23 +217,39 @@ window.uipp_displayCompetition = function () {
       return str.replace('Infinity', '∞');
     };
 
-    var getTooltip = function(playerId, color) {
+    var getTooltip = function (playerId, color) {
       color = color || '#fff';
       var player = config.players[playerId];
       var history = config.history[playerId];
       var historyDates = Object.keys(history).reverse();
       return [
         '<div style="text-align:center;background:#0a141d;border-radius:10px;padding:10px;">',
-        '<div style="font-weight:bold;font-size:14px;padding-bottom:10px;color:' + color + '">' + player.name + '</div>',
-        player.planets.length ? (
-          [
-            '<div style="padding-bottom:10px;">',
-            player.planets.map(function(planet) {
-              return '<a href="?page=ingame&component=galaxy&galaxy=' + planet.coords[0] + '&system=' + planet.coords[1] + '&position=' + planet.coords[2] + '">[' + planet.coords.join(':') + ']</a>';
-            }).join(' '),
-            '</div>'
-          ].join('')
-        ) : '',
+        '<div style="font-weight:bold;font-size:14px;padding-bottom:10px;color:' +
+          color +
+          '">' +
+          player.name +
+          '</div>',
+        player.planets.length
+          ? [
+              '<div style="padding-bottom:10px;">',
+              player.planets
+                .map(function (planet) {
+                  return (
+                    '<a href="?page=ingame&component=galaxy&galaxy=' +
+                    planet.coords[0] +
+                    '&system=' +
+                    planet.coords[1] +
+                    '&position=' +
+                    planet.coords[2] +
+                    '">[' +
+                    planet.coords.join(':') +
+                    ']</a>'
+                  );
+                })
+                .join(' '),
+              '</div>'
+            ].join('')
+          : '',
         '<table style="width:100%;">',
         '<thead>',
         '<tr>',
@@ -264,23 +262,35 @@ window.uipp_displayCompetition = function () {
         '</tr>',
         '</thead>',
         '<tbody>',
-        historyDates.map(function(date, i) {
-          return [
-            '<tr>',
-            '<td style="padding:5px;border-right:1px solid #25394c;white-space:nowrap">' + date + '</td>',
-            '<td style="padding:5px">' + window.uipp_scoreHumanReadable(history[date].g) + '</td>',
-            '<td style="padding:5px;border-right:1px solid #25394c">' + getProgress((history[historyDates[i + 1]] || {}).g, history[date].g) + '</td>',
-            '<td style="padding:5px">' + window.uipp_scoreHumanReadable(history[date].e) + '</td>',
-            '<td style="padding:5px;border-right:1px solid #25394c">' + getProgress((history[historyDates[i + 1]] || {}).e, history[date].e) + '</td>',
-            '<td style="padding:5px">' + window.uipp_scoreHumanReadable(history[date].r) + '</td>',
-            '<td style="padding:5px;border-right:1px solid #25394c">' + getProgress((history[historyDates[i + 1]] || {}).r, history[date].r) + '</td>',
-            '<td style="padding:5px">' + window.uipp_scoreHumanReadable(history[date].m) + '</td>',
-            '<td style="padding:5px;border-right:1px solid #25394c">' + getProgress((history[historyDates[i + 1]] || {}).m, history[date].m) + '</td>',
-            '<td style="padding:5px">' + window.uipp_scoreHumanReadable(history[date].s) + '</td>',
-            '<td style="padding:5px">' + getProgress((history[historyDates[i + 1]] || {}).s, history[date].s) + '</td>',
-            '</tr>',
-          ].join('');
-        }).join(''),
+        historyDates
+          .map(function (date, i) {
+            return [
+              '<tr>',
+              '<td style="padding:5px;border-right:1px solid #25394c;white-space:nowrap">' + date + '</td>',
+              '<td style="padding:5px">' + window.uipp_scoreHumanReadable(history[date].g) + '</td>',
+              '<td style="padding:5px;border-right:1px solid #25394c">' +
+                getProgress((history[historyDates[i + 1]] || {}).g, history[date].g) +
+                '</td>',
+              '<td style="padding:5px">' + window.uipp_scoreHumanReadable(history[date].e) + '</td>',
+              '<td style="padding:5px;border-right:1px solid #25394c">' +
+                getProgress((history[historyDates[i + 1]] || {}).e, history[date].e) +
+                '</td>',
+              '<td style="padding:5px">' + window.uipp_scoreHumanReadable(history[date].r) + '</td>',
+              '<td style="padding:5px;border-right:1px solid #25394c">' +
+                getProgress((history[historyDates[i + 1]] || {}).r, history[date].r) +
+                '</td>',
+              '<td style="padding:5px">' + window.uipp_scoreHumanReadable(history[date].m) + '</td>',
+              '<td style="padding:5px;border-right:1px solid #25394c">' +
+                getProgress((history[historyDates[i + 1]] || {}).m, history[date].m) +
+                '</td>',
+              '<td style="padding:5px">' + window.uipp_scoreHumanReadable(history[date].s) + '</td>',
+              '<td style="padding:5px">' +
+                getProgress((history[historyDates[i + 1]] || {}).s, history[date].s) +
+                '</td>',
+              '</tr>'
+            ].join('');
+          })
+          .join(''),
         '</tbody>',
         '</table>',
         '</div>'
@@ -288,7 +298,7 @@ window.uipp_displayCompetition = function () {
     };
 
     // gray out stagnant players
-    seriesArray.forEach(function(serie, i) {
+    seriesArray.forEach(function (serie, i) {
       if (i == seriesArray.length - 1) return;
       if (!serie.data.length) return; // handle deleted players
       var firstPoint = serie.data[0].y;
@@ -303,8 +313,8 @@ window.uipp_displayCompetition = function () {
     });
 
     $detail.html(getTooltip(config.playerId));
-    $('#chart-all-players .ct-line').each(function() {
-      $(this).mouseenter(function() {
+    $('#chart-all-players .ct-line').each(function () {
+      $(this).mouseenter(function () {
         var color = $(this).css('stroke');
         var playerId = $(this).parent().attr('ct:series-name');
         $detail.html(getTooltip(playerId, color));
@@ -318,11 +328,15 @@ window.uipp_displayCompetition = function () {
   setTimeout(window.uipp_competitionSettings, 100);
 
   $tabContent.append(
-    ['<div style="padding: 2em; opacity: 0.5;text-align:justify">', window._translate('COMPETITION_EXPLAINATION'), '</div>'].join('')
+    [
+      '<div style="padding: 2em; opacity: 0.5;text-align:justify">',
+      window._translate('COMPETITION_EXPLAINATION'),
+      '</div>'
+    ].join('')
   );
 };
 
-window.onUippSettingsChanged = function(el) {
+window.onUippSettingsChanged = function (el) {
   if (el.id == 'cb-watchsimilarstart') window.config.competition.watchSimilarStart = el.checked || false;
   if (el.id == 'cb-watchsimilarnow') window.config.competition.watchSimilarNow = el.checked || false;
   if (el.id == 'cb-watchalliance') window.config.competition.watchAlliance = el.checked || false;
@@ -347,25 +361,34 @@ window.onUippSettingsChanged = function(el) {
   window.uipp_displayCompetition();
 };
 
-window.uipp_competitionSettings = function() {
+window.uipp_competitionSettings = function () {
   var $settingsContent = $('#competition-settings');
   var html = '';
 
   // Checkbox: alliance players
   if (allianceId) {
     html += '<div style="margin-top:10px">';
-    html += '<input id="cb-watchalliance" type="checkbox" ' + (config.competition.watchAlliance ? 'checked' : '') + ' onchange="onUippSettingsChanged(this)"/>';
+    html +=
+      '<input id="cb-watchalliance" type="checkbox" ' +
+      (config.competition.watchAlliance ? 'checked' : '') +
+      ' onchange="onUippSettingsChanged(this)"/>';
     html += '<label for="cb-watchalliance">' + window._translate('COMPETITION_SETTING_ALLIANCE') + '</div>';
     html += '</div>';
   }
   // Checkbox: players with similar start
   html += '<div style="margin-top:10px">';
-  html += '<input id="cb-watchsimilarstart" type="checkbox" ' + (config.competition.watchSimilarStart ? 'checked' : '') + ' onchange="onUippSettingsChanged(this)"/>';
+  html +=
+    '<input id="cb-watchsimilarstart" type="checkbox" ' +
+    (config.competition.watchSimilarStart ? 'checked' : '') +
+    ' onchange="onUippSettingsChanged(this)"/>';
   html += '<label for="cb-watchsimilarstart">' + window._translate('COMPETITION_SETTING_SIMILAR_START') + '</div>';
   html += '</div>';
   // Checkbox: players similar today
   html += '<div style="margin-top:10px">';
-  html += '<input id="cb-watchsimilarnow" type="checkbox" ' + (config.competition.watchSimilarNow ? 'checked' : '') + ' onchange="onUippSettingsChanged(this)"/>';
+  html +=
+    '<input id="cb-watchsimilarnow" type="checkbox" ' +
+    (config.competition.watchSimilarNow ? 'checked' : '') +
+    ' onchange="onUippSettingsChanged(this)"/>';
   html += '<label for="cb-watchsimilarnow">' + window._translate('COMPETITION_SETTING_SIMILAR_NOW') + '</div>';
   html += '</div>';
   // List of tracked players
@@ -380,9 +403,12 @@ window.uipp_competitionSettings = function() {
   html += ' [' + config.players[config.playerId].globalPosition + ']';
   html += '</li>';
   // other players
-  watchList.forEach(function(playerId) {
+  watchList.forEach(function (playerId) {
     html += '<li style="margin-left:20px;padding-top:10px;">';
-    html += '<span class="icon icon_trash" style="cursor:pointer;vertical-align:-3px" id="untrack-player-' + playerId + '" onClick="onUippSettingsChanged(this)"></span> ';
+    html +=
+      '<span class="icon icon_trash" style="cursor:pointer;vertical-align:-3px" id="untrack-player-' +
+      playerId +
+      '" onClick="onUippSettingsChanged(this)"></span> ';
     html += (config.players[playerId] || {}).name || 'Deleted Player';
     if (config.players[playerId]) {
       html += ' [' + config.players[playerId].globalPosition + ']';
@@ -391,7 +417,8 @@ window.uipp_competitionSettings = function() {
   });
   // add tracked player
   html += '<li>';
-  html += '<select id="select-track-player" style="padding: 5px; margin: 10px 5px 0 0; border-radius: 5px; visibility:visible!important">';
+  html +=
+    '<select id="select-track-player" style="padding: 5px; margin: 10px 5px 0 0; border-radius: 5px; visibility:visible!important">';
   html += '<option value=""/> --- Select a player ---';
   var players = [];
   for (var key in config.players) {
@@ -401,13 +428,18 @@ window.uipp_competitionSettings = function() {
       name: config.players[key].name
     });
   }
-  players.sort(function(a, b) {
-    return a.name > b.name ? 1 : -1;
-  }).forEach(function(player) {
-    html += '<option value="' + player.id + '"/> ' + player.name + ' [' + player.gp + ']';
-  });
+  players
+    .sort(function (a, b) {
+      return a.name > b.name ? 1 : -1;
+    })
+    .forEach(function (player) {
+      html += '<option value="' + player.id + '"/> ' + player.name + ' [' + player.gp + ']';
+    });
   html += '</select>';
-  html += '<button style="4px 7px" class="btn_blue" id="track-player" onClick="onUippSettingsChanged(this)">' + window._translate('COMPETITION_SETTING_WATCHLIST_ADD') + '</button>';
+  html +=
+    '<button style="4px 7px" class="btn_blue" id="track-player" onClick="onUippSettingsChanged(this)">' +
+    window._translate('COMPETITION_SETTING_WATCHLIST_ADD') +
+    '</button>';
   html += '</li>';
   html += '</ul>';
   html += '</div>';
