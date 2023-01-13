@@ -40,7 +40,7 @@
   "background" : {
     "service_worker" : "background.js"
   },
-  "version": "4.0.3",
+  "version": "4.1.0",
   "name": "__MSG_appName__",
   "description": "__MSG_appDesc__",
   "default_locale": "en",
