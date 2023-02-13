@@ -61,6 +61,48 @@ var costsFunctions = {
   solarplant: function (level) {
     return [75 * Math.pow(1.5, level), 30 * Math.pow(1.5, level), 0];
   },
+  lfbuildrock6: function (level) {
+    return [
+      10000 * Math.pow(1.4, level) * (level + 1),
+      8000 * Math.pow(1.4, level) * (level + 1),
+      1000 * Math.pow(1.4, level) * (level + 1)
+    ];
+  },
+  lfbuildrock9: function (level) {
+    return [
+      85000 * Math.pow(1.4, level) * (level + 1),
+      44000 * Math.pow(1.4, level) * (level + 1),
+      25000 * Math.pow(1.4, level) * (level + 1)
+    ];
+  },
+  lfbuildrock10: function (level) {
+    return [
+      120000 * Math.pow(1.4, level) * (level + 1),
+      50000 * Math.pow(1.4, level) * (level + 1),
+      20000 * Math.pow(1.4, level) * (level + 1)
+    ];
+  },
+  lfbuildhuma6: function (level) {
+    return [
+      9000 * Math.pow(1.5, level) * (level + 1),
+      6000 * Math.pow(1.5, level) * (level + 1),
+      3000 * Math.pow(1.5, level) * (level + 1)
+    ];
+  },
+  lfbuildhuma8: function (level) {
+    return [
+      50000 * Math.pow(1.5, level) * (level + 1),
+      25000 * Math.pow(1.5, level) * (level + 1),
+      15000 * Math.pow(1.5, level) * (level + 1)
+    ];
+  },
+  lfbuildmech10: function (level) {
+    return [
+      100000 * Math.pow(1.4, level) * (level + 1),
+      40000 * Math.pow(1.4, level) * (level + 1),
+      20000 * Math.pow(1.4, level) * (level + 1)
+    ];
+  },
   lftechmech1: function (level) {
     return [
       10000 * Math.pow(1.5, level) * (level + 1),

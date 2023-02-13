@@ -12,6 +12,7 @@ window._getCurrentPlanetCoordinates = function _getCurrentPlanetCoordinates() {
       .replace('[', '')
       .replace(']', '')
       .split(':');
+    coordinates.isMoon = true;
   } else {
     coordinates = $('.planetlink').find('.planet-koords').text().replace('[', '').replace(']', '').split(':');
   }

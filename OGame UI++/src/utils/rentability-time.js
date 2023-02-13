@@ -21,6 +21,35 @@ window._getRentabilityTime = function _getRentabilityTime(type, currentProd, lev
       var productionCostWorth = costs[0] * worth.metal + costs[1] * worth.crystal;
       rentabilityTime = (productionCostWorth / productionDiffWorth) * 3600; // in seconds
       break;
+    // local production booster buildings
+    case 'lfbuildrock6':
+    case 'lfbuildrock9':
+    case 'lfbuildrock10':
+    case 'lfbuildhuma6':
+    case 'lfbuildhuma8':
+    case 'lfbuildmech10':
+      var multipliers = {
+        lfbuildrock6: [1.02, 1.0, 1.0],
+        lfbuildrock9: [1.0, 1.02, 1.0],
+        lfbuildrock10: [1.0, 1.0, 1.02],
+        lfbuildhuma6: [1.015, 1.0, 1.0],
+        lfbuildhuma8: [1.0, 1.015, 1.01],
+        lfbuildmech10: [1.0, 1.0, 1.02]
+      };
+      var resources = window._getCurrentPlanetResources();
+      var currentProdWorth = 0;
+      currentProdWorth += resources.metal.prod * worth.metal;
+      currentProdWorth += resources.crystal.prod * worth.crystal;
+      currentProdWorth += resources.deuterium.prod * worth.deuterium;
+      var nextLevelProdWorth = 0;
+      nextLevelProdWorth += resources.metal.prod * worth.metal * multipliers[type][0];
+      nextLevelProdWorth += resources.crystal.prod * worth.crystal * multipliers[type][1];
+      nextLevelProdWorth += resources.deuterium.prod * worth.deuterium * multipliers[type][2];
+
+      var techCosts = window.uipp_getCost(type, targetLevel - 1);
+      var techCostsWorth = techCosts[0] * worth.metal + techCosts[1] * worth.crystal + techCosts[2] * worth.deuterium;
+      rentabilityTime = techCostsWorth / (nextLevelProdWorth - currentProdWorth);
+      break;
     // global production booster researches
     case 'plasma':
     case 'lftechmech1':
@@ -76,15 +105,9 @@ window._getRentabilityTime = function _getRentabilityTime(type, currentProd, lev
       break;
 
     // todo:
-    // lifeformTech12106 (rock building) +2% metal/level
-    // lifeformTech12109 (rock building) +2% crystal/level
-    // lifeformTech12110 (rock building) +2% deut/level
-    // lifeformTech11106 (huma building) +1.5% metal/level
-    // lifeformTech11108 (huma building) +1.5% cri/level +1% deut/level
-    // lifeformTech13110 (mech building) +2% deut/level
     // lifeformTech12213 (rock tech 13): crawler boost
     // lifeformTech12218 (rock tech 18): collector class boost
-    // for all these, add formula for cost in src/utils/formulas.js, and
+    // for these, add formula for cost in src/utils/formulas.js, and
     // add DOM insertion in src/costs-helper.js
   }
   return Math.floor(rentabilityTime);

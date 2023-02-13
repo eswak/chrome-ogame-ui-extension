@@ -1,5 +1,5 @@
-  .enhancement {
-  color: #AB7AFF;
+.enhancement {
+  color: #AB7AFF !important;
 }
 ul.production_info {
   height: 66px; padding: .5em 1em;

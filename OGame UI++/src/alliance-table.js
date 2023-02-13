@@ -67,30 +67,30 @@ window._addAllianceTable = function _addAllianceTable() {
           '<td data-value="' + alliancePlayer.globalScore + '">',
           window.uipp_scoreHumanReadable(alliancePlayer.globalScore) + '</td>',
           '<td data-value="' +
-            window._getPlayerScoreTrend(alliancePlayer.id, 'g').n +
+            window._getPlayerScoreTrend(alliancePlayer.id, 'g', 2, 3).n +
             '">' +
-            window._getPlayerScoreTrend(alliancePlayer.id, 'g').html +
+            window._getPlayerScoreTrend(alliancePlayer.id, 'g', 2, 3).html +
             '</td>',
           '<td data-value="' + alliancePlayer.militaryScore + '">',
           window.uipp_scoreHumanReadable(alliancePlayer.militaryScore) + '</td>',
           '<td data-value="' +
-            window._getPlayerScoreTrend(alliancePlayer.id, 'm').n +
+            window._getPlayerScoreTrend(alliancePlayer.id, 'm', 2, 3).n +
             '">' +
-            window._getPlayerScoreTrend(alliancePlayer.id, 'm').html +
+            window._getPlayerScoreTrend(alliancePlayer.id, 'm', 2, 3).html +
             '</td>',
           '<td data-value="' + (alliancePlayer.ships || 0) + '">',
           window.uipp_scoreHumanReadable(alliancePlayer.ships || 0) + '</td>',
           '<td data-value="' +
-            window._getPlayerScoreTrend(alliancePlayer.id, 's').n +
+            window._getPlayerScoreTrend(alliancePlayer.id, 's', 2, 3).n +
             '">' +
-            window._getPlayerScoreTrend(alliancePlayer.id, 's').html +
+            window._getPlayerScoreTrend(alliancePlayer.id, 's', 2, 3).html +
             '</td>',
           '<td data-value="' + alliancePlayer.economyScore + '">',
           window.uipp_scoreHumanReadable(alliancePlayer.economyScore) + '</td>',
           '<td data-value="' +
-            window._getPlayerScoreTrend(alliancePlayer.id, 'e').n +
+            window._getPlayerScoreTrend(alliancePlayer.id, 'e', 2, 3).n +
             '">' +
-            window._getPlayerScoreTrend(alliancePlayer.id, 'e').html +
+            window._getPlayerScoreTrend(alliancePlayer.id, 'e', 2, 3).html +
             '</td>',
           '<td data-value="' + alliancePlayer.planets.length + '">',
           '<span class="tooltip tooltipRel tooltipClose tooltipRight" rel="planets-' + alliancePlayer.id + '">',

@@ -13,17 +13,21 @@ window._addCostsHelperInterval = function _addCostsHelperInterval() {
   window._enhanceOnceOnDomChange('#technologydetails .content', function () {
     var costs = {};
     resNames.forEach(function (res) {
-      (costs[res] = Number(
+      costs[res] = Number(
         $('.resource.' + res + '.tooltip')
           .first()
-          .attr('data-value')
-      )),
-        (missingResources[res] = costs[res] - resources[res].now);
+          .attr('data-value') || '0'
+      );
+      missingResources[res] = Math.max(0, costs[res] - resources[res].now);
     });
 
     if (costs.metal || costs.crystal || costs.deuterium) {
       if (window.config.features.missingresources) {
         _addRessourceCountHelper();
+      }
+
+      if (window.config.features.shipresources) {
+        _addRessourceCountTransportHelper();
       }
 
       if (window.config.features.minetext) {
@@ -43,13 +47,16 @@ window._addCostsHelperInterval = function _addCostsHelperInterval() {
         $element.css('height', 'auto');
         if (missingResources[res] > 0) {
           var $missingCount = $('<div class="enhancement"></div>');
-          $missingCount.html('-' + window._num(missingResources[res], -1 * resources[res].prod));
+          $missingCount.html('-' + window._num(missingResources[res], -1 * resources[res].prod || 0));
           $element.append($missingCount);
 
-          setTimeout(function () {
-            $missingCount.html('&nbsp;');
-            $missingCount.parent().removeClass('insufficient');
-          }, (1000 * missingResources[res]) / resources[res].prod);
+          var readyIn = Math.ceil((1000 * missingResources[res]) / resources[res].prod);
+          if (readyIn < 24 * 36e5) {
+            setTimeout(function () {
+              $missingCount.html('&nbsp;');
+              $missingCount.parent().removeClass('insufficient');
+            }, readyIn);
+          }
         } else {
           $element.append('<div class="enhancement">&nbsp;</div>');
         }
@@ -57,6 +64,59 @@ window._addCostsHelperInterval = function _addCostsHelperInterval() {
         $element.addClass('enhanced');
       }
     });
+  }
+
+  function _addRessourceCountTransportHelper() {
+    if (missingResources.metal > 0 || missingResources.crystal > 0 || missingResources.deuterium > 0) {
+      if ($('.capacity').length) return; // not on storage detail (there is no room)
+
+      var planet = null;
+      var res = 0;
+      for (var key in config.my.planets) {
+        var p = config.my.planets[key];
+        var pKey =
+          '[' + _getCurrentPlanetCoordinates().join(':') + ']' + (_getCurrentPlanetCoordinates().isMoon ? 'L' : '');
+        if (key == pKey) {
+          continue;
+        }
+        if (p.resources) {
+          if (p.resources.metal.now > missingResources['metal']) {
+            if (p.resources.crystal.now > missingResources['crystal']) {
+              if (p.resources.deuterium.now > missingResources['deuterium']) {
+                var res2 = p.resources.metal.now + p.resources.crystal.now + p.resources.deuterium.now;
+                if (res2 > res) {
+                  res = res2;
+                  planet = p;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      if (planet) {
+        $('.description').first().append(`
+        <a href="?page=ingame&component=fleetdispatch&galaxy=${_getCurrentPlanetCoordinates()[0]}&system=${
+          _getCurrentPlanetCoordinates()[1]
+        }&position=${_getCurrentPlanetCoordinates()[2]}&type=1&mission=3&cp=${planet.id}&metal=${
+          missingResources['metal']
+        }&crystal=${missingResources['crystal']}&deuterium=${missingResources['deuterium']}">
+          <div class="txt_box enhancement">
+            <img src="${uipp_images.ship}" style="height:18px;vertical-align:-4px;margin-right:2px;"/>
+            ${config.labels['3']}
+            ${gfNumberGetHumanReadable(missingResources['metal'], false)} ${config.labels.metal}, 
+            ${gfNumberGetHumanReadable(missingResources['crystal'], false)} ${config.labels.crystal}, 
+            ${gfNumberGetHumanReadable(missingResources['deuterium'], false)} ${config.labels.deuterium}
+            (${
+              planet.isMoon
+                ? '<figure class="planetIcon moon" style="vertical-align:-4px;margin-right:2px"></figure>'
+                : ''
+            }${config.my.planets['[' + planet.coords.join(':') + ']'].name})
+          </div>
+        </a>
+        `);
+      }
+    }
   }
 
   function _getAvailableIn(resources, missingResources) {
@@ -234,6 +294,14 @@ window._addCostsHelperInterval = function _addCostsHelperInterval() {
     // if we are viewing a lifeform tech that boosts production, computes rentability time
     else {
       var lftech = {
+        // buildings
+        lfbuildrock6: 'lifeformTech12106',
+        lfbuildrock9: 'lifeformTech12109',
+        lfbuildrock10: 'lifeformTech12110',
+        lfbuildhuma6: 'lifeformTech11106',
+        lfbuildhuma8: 'lifeformTech11108',
+        lfbuildmech10: 'lifeformTech13110',
+        // tech
         lftechmech1: 'lifeformTech13201',
         lftechhuma2: 'lifeformTech11202',
         lftechrock2: 'lifeformTech12202',

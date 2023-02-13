@@ -12,8 +12,13 @@ window._setConfigMyPlanets = function _setConfigMyPlanets() {
     var onlyPlanetLink = $($('#planetList').children()[0]).find('.planetlink');
     var onlyPlanetName = onlyPlanetLink.find('.planet-name').text();
     var onlyPlanetCoords = onlyPlanetLink.find('.planet-koords').text();
+    var onlyPlanetId = onlyPlanetLink
+      .attr('data-link')
+      .match(/cp=[0-9]+/)[0]
+      .replace('cp=', '');
 
     window.config.my.planets[onlyPlanetCoords] = window.config.my.planets[onlyPlanetCoords] || {};
+    window.config.my.planets[onlyPlanetCoords].id = onlyPlanetId;
     window.config.my.planets[onlyPlanetCoords].name = onlyPlanetName;
     window.config.my.planets[onlyPlanetCoords].coords = onlyPlanetCoords.replace(/[[\]]/g, '').split(':').map(Number);
     window.config.my.planets[onlyPlanetCoords].href = onlyPlanetLink.attr('href');
@@ -37,12 +42,16 @@ window._setConfigMyPlanets = function _setConfigMyPlanets() {
         var link = $(this).find('.planetlink');
         var planetName = link.find('.planet-name').text();
         var planetCoords = link.find('.planet-koords').text();
-        if (link.hasClass('active')) {
-          window.config.my.planets[planetCoords] = window.config.my.planets[planetCoords] || {};
-          window.config.my.planets[planetCoords].name = planetName;
-          window.config.my.planets[planetCoords].coords = planetCoords.replace(/[[\]]/g, '').split(':').map(Number);
-          window.config.my.planets[planetCoords].href = link.attr('href');
-        }
+        var planetId = link
+          .attr('data-link')
+          .match(/cp=[0-9]+/)[0]
+          .replace('cp=', '');
+
+        window.config.my.planets[planetCoords] = window.config.my.planets[planetCoords] || {};
+        window.config.my.planets[planetCoords].id = planetId;
+        window.config.my.planets[planetCoords].name = planetName;
+        window.config.my.planets[planetCoords].coords = planetCoords.replace(/[[\]]/g, '').split(':').map(Number);
+        window.config.my.planets[planetCoords].href = link.attr('href');
 
         var tooltiphtml = link.attr('title');
         if (tooltiphtml) {
@@ -59,6 +68,11 @@ window._setConfigMyPlanets = function _setConfigMyPlanets() {
 
         if ($(this).find('.moonlink').length) {
           window.config.my.planets[planetCoords + 'L'] = window.config.my.planets[planetCoords + 'L'] || {};
+          window.config.my.planets[planetCoords + 'L'].id = $(this)
+            .find('.moonlink')
+            .attr('data-link')
+            .match(/cp=[0-9]+/)[0]
+            .replace('cp=', '');
           window.config.my.planets[planetCoords + 'L'].coords = planetCoords
             .replace(/[[\]]/g, '')
             .split(':')
@@ -73,7 +87,7 @@ window._setConfigMyPlanets = function _setConfigMyPlanets() {
   }
 
   for (var key in window.config.my.planets) {
-    if (!window.config.my.planets[key].coords) {
+    if (!window.config.my.planets[key].id) {
       delete window.config.my.planets[key];
     }
   }

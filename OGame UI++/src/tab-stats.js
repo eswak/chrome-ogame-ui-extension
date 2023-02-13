@@ -178,22 +178,36 @@ window._addTabStats = function _addTabStats() {
             }
 
             var outline = 'none';
-            var thresholds = [-1000, 0, 0.5, 5, 7.5, 10, 15, 20, 25, 30, 35, 40, 50, 60];
+            var shadow = 'none';
+            var thresholds = [
+              -1000, 0, 0.5,
+              //5,
+              //7.5,
+              10,
+              //15,
+              20,
+              //25,
+              30,
+              //35,
+              40
+              //50,
+              //60
+            ];
             var colors = [
               '#FF0000',
               '#000000',
               '#2a2929',
-              '#404040',
-              '#6c4223',
+              //'#404040',
+              //'#6c4223',
               '#a25419',
-              '#9b7c65',
+              //'#9b7c65',
               '#a9a7b0',
-              '#a98d4f',
+              //'#a98d4f',
               '#da9f1c',
-              '#bf8598',
-              '#7e3d8e',
-              '#aa80b5',
-              '#ffffff'
+              //'#bf8598',
+              '#7e3d8e'
+              //'#aa80b5',
+              //'#ffffff'
             ];
             var estimatedProd = window.uipp_getProduction(
               resource,
@@ -210,6 +224,23 @@ window._addTabStats = function _addTabStats() {
                 outline = '2px solid ' + colors[i];
               }
             });
+            if (boost >= 50) {
+              // purple shining
+              outline = '2px solid #7e3d8e';
+              shadow = '0 0 10px #7e3d8e, 0 0 15px #7e3d8e';
+            }
+            if (boost >= 70) {
+              // polychromatic shining
+              outline = 'none';
+              shadow =
+                '#fff 0 0 2px, #fff 0 0 2px, #fff 0 0 2px, #fff 0 0 3px, #fff 0 0 2px, #e4ff00aa 3px 3px 4px, #ff0241aa 3px -3px 4px, #0066ffaa -3px -3px 6px, #00ff08aa -3px 3px 4px';
+            }
+            if (boost >= 90) {
+              // epic polychromatic shining
+              outline = 'none';
+              shadow =
+                '#fff 0 0 2px, #fff 0 0 2px, #fff 0 0 2px, #fff 0 0 4px, #fff 0 0 4px, #e4ff00 3px 3px 4px, #ff0241cc 3px -3px 4px, #0066ff -3px -3px 6px, #00ff08 -3px 3px 4px;';
+            }
             tooltip += tooltipAppend;
 
             var moonResource = 0;
@@ -244,6 +275,8 @@ window._addTabStats = function _addTabStats() {
                 window.uipp_images.resources[resource] +
                 '); outline: ' +
                 outline +
+                '; box-shadow: ' +
+                shadow +
                 '" title="' +
                 tooltip +
                 '">',
@@ -551,7 +584,6 @@ window._addTabStats = function _addTabStats() {
         $(this).html($(this).attr('points') + ' points');
       });
       $('.uipp-selected').removeClass('uipp-selected');
-      $('.uipp-stat-resource').css('outline', 'none');
 
       $('.uiEnhancementWindow .uipp-table').css('background', 'black');
       window._getScreenshotLink($('.uiEnhancementWindow .uipp-table')[0], function (err, link) {
@@ -569,6 +601,9 @@ window._addTabStats = function _addTabStats() {
 
     // score charts
     var hasEnoughHistory = window._getPlayerScoreTrend(config.playerId, 'g', 2).hasEnoughHistory;
+    if (!hasEnoughHistory) {
+      $wrapperProgression.append('<div style="text-align:center">Come back tomorrow for historical charts !</div>');
+    }
     if (hasEnoughHistory && window.config.features.charts) {
       $wrapperProgression.append('<div id="progression-content"></div>');
       var $wrapperProgressionContent = $wrapperProgression.find('#progression-content');

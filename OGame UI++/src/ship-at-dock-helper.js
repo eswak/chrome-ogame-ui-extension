@@ -1,41 +1,5 @@
 'use strict';
-window._addShipAtDockHelper = function _addShipAtDockHelper() {
-  for (var key in config.my.planets) {
-    if (!config.my.planets[key].shipsLastUpdate) {
-      config.my.planets[key].shipsNeedUpdate = 1;
-      _saveConfig();
-    }
-  }
-
-  _parseCurrentPlanetShips();
-  _addPlanetListHelpers();
-  _handleMissionsInProg();
-};
-
-function _parseCurrentPlanetShips() {
-  if (document.location.href.indexOf('fleetdispatch') === -1 && document.location.href.indexOf('shipyard') === -1) {
-    return;
-  }
-
-  var shipPoints = {
-    204: 4,
-    205: 10,
-    206: 29,
-    207: 60,
-    215: 70,
-    211: 90,
-    213: 125,
-    214: 10000,
-    218: 160,
-    219: 31,
-
-    202: 4,
-    203: 12,
-    208: 40,
-    209: 18,
-    210: 1
-  };
-
+window.uipp_getShipResources = function (ships) {
   var shipResources = {
     204: [3000, 1000, 0], // lf
     205: [6000, 4000, 0], // hf
@@ -55,7 +19,72 @@ function _parseCurrentPlanetShips() {
     210: [0, 1000, 0] // spy sat
   };
 
+  var currentShipResources = [0, 0, 0];
+
+  for (var key in ships) {
+    if (ships[key] === 0) {
+      delete ships[key];
+    } else {
+      currentShipResources[0] += ships[key] * shipResources[key][0];
+      currentShipResources[1] += ships[key] * shipResources[key][1];
+      currentShipResources[2] += ships[key] * shipResources[key][2];
+    }
+  }
+
+  return currentShipResources;
+};
+
+window.uipp_getShipPoints = function (ships) {
+  var shipPoints = {
+    204: 4,
+    205: 10,
+    206: 29,
+    207: 60,
+    215: 70,
+    211: 90,
+    213: 125,
+    214: 10000,
+    218: 160,
+    219: 31,
+
+    202: 4,
+    203: 12,
+    208: 40,
+    209: 18,
+    210: 1
+  };
+
   var currentPoints = 0;
+
+  for (var key in ships) {
+    if (ships[key] === 0) {
+      delete ships[key];
+    } else {
+      currentPoints += ships[key] * shipPoints[key];
+    }
+  }
+
+  return currentPoints;
+};
+
+window._addShipAtDockHelper = function _addShipAtDockHelper() {
+  for (var key in config.my.planets) {
+    if (!config.my.planets[key].shipsLastUpdate) {
+      config.my.planets[key].shipsNeedUpdate = 1;
+      _saveConfig();
+    }
+  }
+
+  _parseCurrentPlanetShips();
+  _addPlanetListHelpers();
+  _handleMissionsInProg();
+};
+
+function _parseCurrentPlanetShips() {
+  if (document.location.href.indexOf('fleetdispatch') === -1 && document.location.href.indexOf('shipyard') === -1) {
+    return;
+  }
+
   var shipsAtDock = {
     204: Number($('.fighterLight .amount').attr('data-value')) || 0,
     205: Number($('.fighterHeavy .amount').attr('data-value')) || 0,
@@ -74,18 +103,6 @@ function _parseCurrentPlanetShips() {
     209: Number($('.recycler .amount').attr('data-value')) || 0,
     210: Number($('.espionageProbe .amount').attr('data-value')) || 0
   };
-  var currentShipResources = [0, 0, 0];
-
-  for (var key in shipsAtDock) {
-    if (shipsAtDock[key] === 0) {
-      delete shipsAtDock[key];
-    } else {
-      currentPoints += shipsAtDock[key] * shipPoints[key];
-      currentShipResources[0] += shipsAtDock[key] * shipResources[key][0];
-      currentShipResources[1] += shipsAtDock[key] * shipResources[key][1];
-      currentShipResources[2] += shipsAtDock[key] * shipResources[key][2];
-    }
-  }
 
   var currentPlanetCoordinatesStr = '[' + window._getCurrentPlanetCoordinates().join(':') + ']';
   if ($('meta[name=ogame-planet-type]').attr('content') === 'moon') {
@@ -93,8 +110,8 @@ function _parseCurrentPlanetShips() {
   }
 
   if (window.config.my.planets[currentPlanetCoordinatesStr]) {
-    window.config.my.planets[currentPlanetCoordinatesStr].shipPoints = currentPoints;
-    window.config.my.planets[currentPlanetCoordinatesStr].shipResources = currentShipResources;
+    window.config.my.planets[currentPlanetCoordinatesStr].shipPoints = uipp_getShipPoints(shipsAtDock);
+    window.config.my.planets[currentPlanetCoordinatesStr].shipResources = uipp_getShipResources(shipsAtDock);
     window.config.my.planets[currentPlanetCoordinatesStr].ships = shipsAtDock;
     window.config.my.planets[currentPlanetCoordinatesStr].shipsLastUpdate = Date.now();
     window.config.my.planets[currentPlanetCoordinatesStr].shipsNeedUpdate = Date.now() + 7 * 24 * 36e5;

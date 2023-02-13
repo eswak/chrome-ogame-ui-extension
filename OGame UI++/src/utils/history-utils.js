@@ -1,7 +1,7 @@
 'use strict';
 
 window._getPlayerScoreTrend = function _getPlayerScoreTrend(playerId, type, minEntries, maxEntries) {
-  minEntries = minEntries || 2;
+  minEntries = minEntries || 3;
   maxEntries = maxEntries || minEntries;
   window.config.history = window.config.history || {};
   var playerScores = [];
@@ -46,10 +46,10 @@ window._getPlayerScoreTrend = function _getPlayerScoreTrend(playerId, type, minE
 
   var timespan = (new Date(trend.lastDay).getTime() - new Date(trend.firstDay).getTime()) / (24 * 36e5) + 1;
   var diff = trend.lastScore / (trend.firstScore || 1) - 1;
-  var diffPerDay = Math.round(100 * (diff / (timespan - 1 || 1)));
+  var diffPerDay = Math.round(1000 * (diff / (timespan - 1 || 1))) / 10;
 
   var str;
-  if (diffPerDay > 0) {
+  if (diff > 0) {
     if (diffPerDay >= 500) {
       var multiplier = Math.floor(100 * (1 + diffPerDay / 100)) / 100;
       if (diffPerDay >= 5000) {
@@ -59,7 +59,7 @@ window._getPlayerScoreTrend = function _getPlayerScoreTrend(playerId, type, minE
     } else {
       str = '<span style="color:#9c0;">+' + diffPerDay + '%</span>';
     }
-  } else if (diffPerDay < 0) {
+  } else if (diff < 0) {
     str = '<span style="color:#d43635;">' + diffPerDay + '%</span>';
   } else {
     str = '<span style="color:#888;">' + '0%' + '</span>';

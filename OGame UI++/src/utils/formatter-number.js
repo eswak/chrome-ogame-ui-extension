@@ -8,7 +8,7 @@ window._num = function _num(n, increment, max) {
 
   // ogame number formatter
   if (!increment) {
-    return window.gfNumberGetHumanReadable(n, true, 3);
+    return window.uipp_scoreHumanReadable(n);
   }
 
   var id = Math.random().toString(36).replace('.', '');
@@ -28,14 +28,14 @@ window._num = function _num(n, increment, max) {
     var updatedNumber = n + secondsSinceDisplay * increment;
     if (max && updatedNumber > max) {
       // if full
-      setTextIfChanged($el, window.gfNumberGetHumanReadable(n, true, 3));
+      setTextIfChanged($el, window.uipp_scoreHumanReadable(n));
       $el.css('color', '#d43635');
     } else if (max && updatedNumber > max - increment * 3 * 3600) {
       // if less than 3h to full
-      setTextIfChanged($el, window.gfNumberGetHumanReadable(updatedNumber, true, 3));
+      setTextIfChanged($el, window.uipp_scoreHumanReadable(updatedNumber));
       $el.css('color', '#d29d00');
     } else {
-      setTextIfChanged($el, window.gfNumberGetHumanReadable(updatedNumber, true, 3));
+      setTextIfChanged($el, window.uipp_scoreHumanReadable(updatedNumber));
     }
   }, 100);
 

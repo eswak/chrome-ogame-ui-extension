@@ -14,27 +14,28 @@ window.uipp_getResourcesInFlight = function uipp_getResourcesInFlight() {
     var $tr = $(this).parent().parent();
 
     var trCount = $tooltip.find('tr').length;
+    var offset = window.config.universe.lifeformSettings ? 0 : 1; // some universes have no food
     var entry = {
       id: Number($tr.attr('id').replace('eventRow-', '')),
       type: Number($tr.attr('data-mission-type')),
       metal:
         window._gfNumberToJsNumber(
           $tooltip
-            .find('tr:nth-child(' + (trCount - 3) + ') td')
+            .find('tr:nth-child(' + (trCount - 3 + offset) + ') td')
             .last()
             .text()
         ) || 0,
       crystal:
         window._gfNumberToJsNumber(
           $tooltip
-            .find('tr:nth-child(' + (trCount - 2) + ') td')
+            .find('tr:nth-child(' + (trCount - 2 + offset) + ') td')
             .last()
             .text()
         ) || 0,
       deuterium:
         window._gfNumberToJsNumber(
           $tooltip
-            .find('tr:nth-child(' + (trCount - 1) + ') td')
+            .find('tr:nth-child(' + (trCount - 1 + offset) + ') td')
             .last()
             .text()
         ) || 0,
@@ -50,6 +51,7 @@ window.uipp_getResourcesInFlight = function uipp_getResourcesInFlight() {
       nShips: $tr.find('.detailsFleet').text().trim(),
       returnMission: $tr.attr('data-return-flight') === 'true'
     };
+    console.log('entry', trCount, entry);
 
     if (entry.returnMission) {
       var to = entry.to;

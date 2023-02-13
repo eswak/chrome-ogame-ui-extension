@@ -12,11 +12,14 @@ window._refreshUniverseData = function _refreshUniverseData(forceRefresh) {
     window.config.universe = universe;
     window.config.labels = labels;
     window.config.lastPlayersUpdate = Date.now();
-    window._parseAndUpdateHistoryData();
-    window._saveConfig();
-    window._savePlayers();
-    window._saveHistory();
-    // todo: in galaxy-players-planets, call _savePlayers(); ?
+    console.debug('Fetch empire data...');
+    window.uipp_parseEmpireData(true, function () {
+      console.debug('Empire data fetched.');
+      window._parseAndUpdateHistoryData();
+      window._saveConfig();
+      window._savePlayers();
+      window._saveHistory();
+    });
   });
 };
 

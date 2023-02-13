@@ -111,6 +111,7 @@ var scripts = [
   'src/utils/refresh-universe-data.js',
   'src/utils/rentability-time.js',
   'src/utils/set-config-my-planets.js',
+  'src/utils/parse-empire-data.js',
   'src/utils/parse-research-tab.js',
   'src/utils/upload-image.js',
   'src/utils/xml2json.js',

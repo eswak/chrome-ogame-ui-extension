@@ -46,13 +46,17 @@ window._addExpeditionHelperInterval = function _addExpeditionHelperInterval() {
         espionageProbe: 5
       };
 
-      $el
-        .find('#technologies')
-        .append(
+      $(
+        [
+          '<div class="allornonewrap" style="margin-left:15px;user-select:none;padding:7px;position:relative;height: 0px;margin-bottom: 30px;height:20px">',
           [
-            '<div style="position: absolute;bottom: 3px;right: 17px; cursor:pointer" onclick="uipp_autoFillExpedition()" onmousedown="uipp_sendExpedition(event)" oncontextmenu="uipp_autoFillMilitaryExpedition(event)" class="tooltip tooltipHTML" title="' +
+            '<div style="position: absolute;bottom: 4px;right: 10px; cursor:pointer" onwheel="uipp_changeExpeditionSystemOffset(event)" onclick="uipp_autoFillExpedition()" onmousedown="uipp_sendExpedition(event)" oncontextmenu="uipp_autoFillMilitaryExpedition(event)" class="tooltip tooltipHTML" title="' +
               getTooltip() +
               '">',
+            '<span style="display:inline-block;background: #333; padding: 5px; margin-right: 5px; border-radius: 5px; vertical-align: 1px;"><span id="system-offset" style="font-family: monospace;">' +
+              ((config.expeditionSystemOffset || 0) >= 0 ? '+' : '') +
+              (config.expeditionSystemOffset || 0) +
+              '</span><span style="margin: 0px 3px 0 0" class="galaxy_icons solarsystem"></span></span>',
             '<span class="enhancement"><span id="uipp-current-expedition-points"></span> / ' +
               maxExpeditionPoints +
               '</span>',
@@ -61,8 +65,10 @@ window._addExpeditionHelperInterval = function _addExpeditionHelperInterval() {
               uipp_images.expeditionMission +
               '" style="height:26px; vertical-align: -8px; margin-left: 5px;"/>',
             '</div>'
-          ].join('')
-        );
+          ].join(''),
+          '</div>'
+        ].join('')
+      ).insertAfter($('#allornone'));
 
       function getTooltip() {
         var ret = 'Optimal expedition fleet :|';
@@ -98,10 +104,12 @@ window._addExpeditionHelperInterval = function _addExpeditionHelperInterval() {
             : fleetDivider == 3
             ? 'a third of'
             : '1/' + fleetDivider + 'th of') +
-          ' your military and transport fleet with 1 pathfinder and 1 spy probe, to be sent on a military expedition (excludes bombers, death stars, colony ships, and recyclers).';
+          ' your military and transport fleet with 1 pathfinder and 1 spy probe, to be sent on a military expedition (excludes death stars, colony ships, and recyclers).';
         ret += '<hr style=&quot;border: none; border-top: 1px solid #394959; outline: none; margin: 10px 0;&quot;>';
         ret +=
-          "Middle click to directly send selected ships to your system's 16th position for an expedition that lasts 1h.";
+          "Middle click to directly send selected ships to the system's 16th position for an expedition that lasts 1h.";
+        ret += '<hr style=&quot;border: none; border-top: 1px solid #394959; outline: none; margin: 10px 0;&quot;>';
+        ret += 'Scroll up or down on the box to change the system offset.';
         ret += '</div>';
         return ret;
       }
@@ -142,6 +150,25 @@ window._addExpeditionHelperInterval = function _addExpeditionHelperInterval() {
           $percent.css('color', '#d43635');
         }
       }, 100);
+
+      window.uipp_changeExpeditionSystemOffset = function (event) {
+        var diff = event.deltaY > 0 ? -1 : +1;
+        config.expeditionSystemOffset = (config.expeditionSystemOffset || 0) + diff;
+
+        document.getElementById('system-offset').innerHTML =
+          ((config.expeditionSystemOffset || 0) >= 0 ? '+' : '') + (config.expeditionSystemOffset || 0);
+
+        // select system with offset
+        var system = window._getCurrentPlanetCoordinates()[1] + (config.expeditionSystemOffset || 0);
+        if (system > Number(config.universe.systems)) system = config.universe.systems;
+        if (system < 1) system = 1;
+        $('input#system').val(String(system)).keyup();
+
+        window._saveConfig();
+
+        event.preventDefault();
+        return false;
+      };
 
       window.uipp_autoFillExpedition = function () {
         var nExplorers = Number($('.explorer .amount').attr('data-value'));
@@ -189,6 +216,11 @@ window._addExpeditionHelperInterval = function _addExpeditionHelperInterval() {
 
         // select position 16
         $('input#position').val('16').keyup();
+        // select system with offset
+        var system = window._getCurrentPlanetCoordinates()[1] + (config.expeditionSystemOffset || 0);
+        if (system > Number(config.universe.systems)) system = config.universe.systems;
+        if (system < 1) system = 1;
+        $('input#system').val(String(system)).keyup();
 
         // select expedition mission
         $('#missionButton15').click();
@@ -198,9 +230,13 @@ window._addExpeditionHelperInterval = function _addExpeditionHelperInterval() {
         if (event.which == 2) {
           // middle mouse click
           $('#continueToFleet2').click();
-          setTimeout(function () {
-            $('#sendFleet').click();
-          }, 300);
+          var intervalStart = setInterval(function () {
+            var $btn = $('#sendFleet.on');
+            if ($btn.length) {
+              $btn.click();
+              clearInterval(intervalStart);
+            }
+          }, 50);
           event.preventDefault();
           return false;
         }
@@ -221,6 +257,7 @@ window._addExpeditionHelperInterval = function _addExpeditionHelperInterval() {
           'cruiser',
           'battleship',
           'interceptor',
+          'bomber',
           'destroyer',
           'reaper',
           'explorer',
@@ -231,10 +268,9 @@ window._addExpeditionHelperInterval = function _addExpeditionHelperInterval() {
           var nShips = Number($('.' + shipName + ' .amount').attr('data-value'));
           if (nShips > 0) {
             $('input[name=' + shipName + ']')
-              .val(Math.floor(nShips / fleetDivider))
+              .val(Math.ceil(nShips / fleetDivider))
               .keyup();
           }
-
           if (shipName == 'explorer' && nShips > 0) {
             $('input[name=' + shipName + ']')
               .val(1)
@@ -249,6 +285,11 @@ window._addExpeditionHelperInterval = function _addExpeditionHelperInterval() {
 
         // select position 16
         $('input#position').val('16').keyup();
+        // select system with offset
+        var system = window._getCurrentPlanetCoordinates()[1] + (config.expeditionSystemOffset || 0);
+        if (system > Number(config.universe.systems)) system = config.universe.systems;
+        if (system < 1) system = 1;
+        $('input#system').val(String(system)).keyup();
 
         // select expedition mission
         $('#missionButton15').click();
