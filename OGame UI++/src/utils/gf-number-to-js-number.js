@@ -20,7 +20,7 @@ window._gfNumberToJsNumber = function _gfNumberToJsNumber(num) {
   var decimalMatches = num.match(decimalRegex);
 
   if (decimalMatches && decimalMatches.length > 1) {
-    num = num.replace(decimalRegex, '');
+    num = num.replace(/[.](?=.*[.])/g, '');
   }
 
   num = Number(num);
